@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>DHAFacilitationAPIs.Application</RootNamespace>
+    <AssemblyName>DHAFacilitationAPIs.Application</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Feature\TodoItems\**" />
+    <Compile Remove="Feature\TodoLists\**" />
+    <EmbeddedResource Remove="Feature\TodoItems\**" />
+    <EmbeddedResource Remove="Feature\TodoLists\**" />
+    <None Remove="Feature\TodoItems\**" />
+    <None Remove="Feature\TodoLists\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Feature\User\Commands\ForgetPassword\" />
+    <Folder Include="Feature\User\Commands\RegisterUser\" />
+  </ItemGroup>
+
+</Project>
