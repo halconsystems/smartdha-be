@@ -1,7 +1,9 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.Roles.Queries.GetAssignableRoles;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +36,13 @@ public class ModulesController : BaseApiController
 
         var result = await Mediator.Send(new GetAssignableModulesQuery(currentUserId));
         return Ok(result);
+    }
+
+
+    [HttpPost("add-module"), AllowAnonymous]
+    public async Task<IActionResult> AddModule(AddModuleCommand addModuleCommand)
+    {
+        return Ok(await Mediator.Send(addModuleCommand));
     }
 
 }

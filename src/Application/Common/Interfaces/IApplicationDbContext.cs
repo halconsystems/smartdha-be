@@ -10,5 +10,8 @@ public interface IApplicationDbContext
     DbSet<ApplicationLog> ApplicationLogs { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<RoleAssignment> RoleAssignments { get; }
+    DbSet<Membershipdetail> Membershipdetails { get; }
+
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

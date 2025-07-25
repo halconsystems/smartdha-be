@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 public class UsersController : BaseApiController
 {
-    [HttpPost("GetToken"), AllowAnonymous]
+    [HttpPost("Login"), AllowAnonymous]
     public async Task<IActionResult> GetToken(GenerateTokenCommand request)
     {
         return Ok(await Mediator.Send(request));
