@@ -6,15 +6,27 @@ using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterUser;
+
 public record RegisterUserCommand : IRequest<Guid>
 {
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
-    public string PhoneNumber { get; set; } = default!;
+    public string MobileNo { get; set; } = default!;
     public string CNIC { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string Role { get; set; } = default!;
+    public List<Guid>? ModuleIds { get; set; } = new();
+    public List<SubModulePermissionInput>? SubModulePermissions { get; set; } = new(); // For "User"
 }
+
+public class SubModulePermissionInput
+{
+    public Guid SubModuleId { get; set; }
+    public bool CanRead { get; set; }
+    public bool CanWrite { get; set; }
+    public bool CanDelete { get; set; }
+}
+
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
@@ -31,7 +43,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
         RoleManager<IdentityRole> roleManager)
     {
         _context = context;
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _mapper = mapper;
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _roleManager = roleManager;
@@ -41,16 +53,15 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
     {
         var existingUser = await _userManager.Users
             .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(u => u.Email == request.Email, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == request.Email || u.CNIC == request.CNIC, cancellationToken);
 
         if (existingUser != null)
         {
             if (existingUser.IsDeleted)
             {
-                // Restore soft-deleted user
                 existingUser.IsDeleted = false;
                 existingUser.Name = request.Name;
-                existingUser.PhoneNumber = request.PhoneNumber;
+                existingUser.MobileNo = request.MobileNo;
                 existingUser.CNIC = request.CNIC;
                 existingUser.UserName = request.Email;
                 existingUser.NormalizedUserName = request.Email.ToUpper();
@@ -58,38 +69,25 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
 
                 var updateResult = await _userManager.UpdateAsync(existingUser);
                 if (!updateResult.Succeeded)
-                {
-                    var errors = updateResult.Errors.Select(e => e.Description);
-                    throw new DBOperationException("Failed to restore user. Errors: " + string.Join(", ", errors));
-                }
+                    throw new DBOperationException("Failed to restore user: " + string.Join(", ", updateResult.Errors.Select(e => e.Description)));
 
                 await _userManager.RemovePasswordAsync(existingUser);
-                var passwordResult = await _userManager.AddPasswordAsync(existingUser, request.Password);
-                if (!passwordResult.Succeeded)
-                {
-                    var errors = passwordResult.Errors.Select(e => e.Description);
-                    throw new DBOperationException("Failed to set password for restored user. Errors: " + string.Join(", ", errors));
-                }
+                var pwdResult = await _userManager.AddPasswordAsync(existingUser, request.Password);
+                if (!pwdResult.Succeeded)
+                    throw new DBOperationException("Failed to reset password: " + string.Join(", ", pwdResult.Errors.Select(e => e.Description)));
 
-                if (!string.IsNullOrWhiteSpace(request.Role))
-                {
-                    var currentRoles = await _userManager.GetRolesAsync(existingUser);
-                    if (currentRoles.Any())
-                    {
-                        await _userManager.RemoveFromRolesAsync(existingUser, currentRoles);
-                    }
+                var currentRoles = await _userManager.GetRolesAsync(existingUser);
+                if (currentRoles.Any())
+                    await _userManager.RemoveFromRolesAsync(existingUser, currentRoles);
 
-                    if (!await _roleManager.RoleExistsAsync(request.Role))
-                        throw new DBOperationException($"Role '{request.Role}' does not exist.");
+                if (!await _roleManager.RoleExistsAsync(request.Role))
+                    throw new DBOperationException($"Role '{request.Role}' does not exist.");
 
-                    var roleResult = await _userManager.AddToRoleAsync(existingUser, request.Role);
-                    if (!roleResult.Succeeded)
-                    {
-                        var errors = roleResult.Errors.Select(e => e.Description);
-                        throw new DBOperationException("Failed to assign role to restored user. Errors: " + string.Join(", ", errors));
-                    }
-                }
+                var roleAddResult = await _userManager.AddToRoleAsync(existingUser, request.Role);
+                if (!roleAddResult.Succeeded)
+                    throw new DBOperationException("Failed to assign role: " + string.Join(", ", roleAddResult.Errors.Select(e => e.Description)));
 
+                await AssignModulesAndPermissions(existingUser.Id, request, cancellationToken);
                 return Guid.Parse(existingUser.Id);
             }
             else
@@ -107,31 +105,74 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
             NormalizedUserName = request.Email.ToUpper(),
             Email = request.Email,
             NormalizedEmail = request.Email.ToUpper(),
-            PhoneNumber = request.PhoneNumber,
+            MobileNo = request.MobileNo,
             CNIC = request.CNIC,
             EmailConfirmed = true,
-            UserType = UserType.Web
+            AppType = AppType.Web,
+            UserType = UserType.Employee
         };
 
         var createResult = await _userManager.CreateAsync(newUser, request.Password);
         if (!createResult.Succeeded)
-        {
-            var errors = createResult.Errors.Select(e => e.Description);
-            throw new DBOperationException("Failed to create user. Errors: " + string.Join(", ", errors));
-        }
+            throw new DBOperationException("User creation failed: " + string.Join(", ", createResult.Errors.Select(e => e.Description)));
 
         if (!await _roleManager.RoleExistsAsync(request.Role))
             throw new DBOperationException($"Role '{request.Role}' does not exist.");
 
-        var roleResultAdd = await _userManager.AddToRoleAsync(newUser, request.Role);
-        if (!roleResultAdd.Succeeded)
-        {
-            var errors = roleResultAdd.Errors.Select(e => e.Description);
-            throw new DBOperationException("Failed to assign role to new user. Errors: " + string.Join(", ", errors));
-        }
+        var roleResult = await _userManager.AddToRoleAsync(newUser, request.Role);
+        if (!roleResult.Succeeded)
+            throw new DBOperationException("Failed to assign role: " + string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
-
-
+        await AssignModulesAndPermissions(newUser.Id, request, cancellationToken);
         return Guid.Parse(newUser.Id);
     }
+
+    private async Task AssignModulesAndPermissions(string userId, RegisterUserCommand request, CancellationToken cancellationToken)
+    {
+        // Assign modules
+        if (request.ModuleIds != null)
+        {
+            foreach (var moduleId in request.ModuleIds)
+            {
+                _context.UserModuleAssignments.Add(new UserModuleAssignment
+                {
+                    UserId = userId,
+                    ModuleId = moduleId
+                });
+            }
+        }
+
+        // Assign submodule permissions if role is "User"
+        if (request.Role == "User" && request.SubModulePermissions != null)
+        {
+            foreach (var sub in request.SubModulePermissions)
+            {
+                _context.RolePermissions.Add(new RolePermission
+                {
+                    RoleName = "User",
+                    SubModuleId = sub.SubModuleId,
+                    CanRead = sub.CanRead,
+                    CanWrite = sub.CanWrite,
+                    CanDelete = sub.CanDelete
+                });
+            }
+        }
+        else if(request.SubModulePermissions != null)
+        {
+            foreach (var sub in request.SubModulePermissions)
+            {
+                _context.RolePermissions.Add(new RolePermission
+                {
+                    RoleName = request.Role,
+                    SubModuleId = sub.SubModuleId,
+                    CanRead = true,
+                    CanWrite = true,
+                    CanDelete = true
+                });
+            }
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }
+

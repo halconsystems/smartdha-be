@@ -25,6 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<UserModuleAssignment> UserModuleAssignments => Set<UserModuleAssignment>();
     public DbSet<ApplicationLog> ApplicationLogs => Set<ApplicationLog>();
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
 
 
     protected override void OnModelCreating(ModelBuilder builder)

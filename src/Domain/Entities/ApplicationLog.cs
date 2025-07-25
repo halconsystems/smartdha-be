@@ -10,6 +10,7 @@ public class ApplicationLog : BaseEntity
     public string Email { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string? DeviceId { get; set; } = default!;
+    public AppType AppType { get; set; }
     public UserType UserType { get; set; }
     public string Action { get; set; } = default!;
     public string Message { get; set; } = default!;

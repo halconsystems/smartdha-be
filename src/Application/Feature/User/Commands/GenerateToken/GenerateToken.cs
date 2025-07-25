@@ -9,6 +9,7 @@ using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 public record GenerateTokenCommand : IRequest<AuthenticationDto>
@@ -39,16 +40,27 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
 
         if (user == null)
         {
-            throw new UnAuthorizedException("Invalid Email Or Password");
+            throw new UnAuthorizedException("Invalid Email");
+        }
+        else if(user.AppType != AppType.Web)
+        {
+            throw new UnAuthorizedException("User not authorized for this portal.");
+        }
+        else  if (user.IsActive ==false)
+        {
+            throw new UnAuthorizedException("User marked InActive contact with administrator");
+        }
+        else if (user.IsDeleted == true)
+        {
+            throw new UnAuthorizedException("User is deleted contact with administrator");
         }
 
         SignInResult result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
 
         if (!result.Succeeded && !result.RequiresTwoFactor)
         {
-            throw new UnAuthorizedException("Invalid Email Or Password");
+            throw new UnAuthorizedException("Invalid Password");
         }
-
         string token = await _authenticationService.GenerateToken(user);
 
         IList<string> roles = await _userManager.GetRolesAsync(user);

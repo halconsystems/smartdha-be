@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Enums;
-public enum UserType
+public enum AppType
 {
-    Member = 1,
-    NonMember = 2,
-    Employee = 3
+    Web = 1,
+    Mobile = 2
 }
-

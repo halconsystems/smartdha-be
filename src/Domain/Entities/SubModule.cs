@@ -11,6 +11,9 @@ public class SubModule : BaseAuditableEntity
     [Required]
     [MaxLength(100)]
     public string Name { get; set; } = default!;
+
+    [MaxLength(100)]
+    public string Description { get; set; } = default!;
     public Guid? ModuleId { get; set; }
     public Module Module { get; set; } = default!;
 }

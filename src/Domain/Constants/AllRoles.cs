@@ -1,11 +1,12 @@
 ﻿namespace DHAFacilitationAPIs.Domain.Constants;
 
-public abstract class Roles
+public abstract class AllRoles
 {
     // Web Roles (used in admin panel, system access)
     public const string SuperAdministrator = nameof(SuperAdministrator);
     public const string Administrator = nameof(Administrator);
     public const string Admin = nameof(Admin);
+    public const string User = nameof(User);
 
     // Mobile App Roles (for mobile API access)
     public const string Member = nameof(Member);
@@ -15,7 +16,8 @@ public abstract class Roles
     {
         SuperAdministrator,
         Administrator,
-        Admin
+        Admin,
+        User
     };
 
     public static IEnumerable<string> GetMobileRoles() => new[]

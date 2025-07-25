@@ -70,7 +70,7 @@ public class ApplicationDbContextInitialiser
     public async Task TrySeedAsync()
     {
         // 1️⃣ Seed Roles
-        foreach (var role in Roles.GetAllRoles())
+        foreach (var role in AllRoles.GetAllRoles())
         {
             if (!await _roleManager.RoleExistsAsync(role))
             {
@@ -82,6 +82,24 @@ public class ApplicationDbContextInitialiser
                         string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
             }
+        }
+
+        var assignments = new List<RoleAssignment>
+        {
+            new() { ParentRole = "SuperAdministrator", ChildRole = "Administrator" },
+            new() { ParentRole = "SuperAdministrator", ChildRole = "Admin" },
+            new() { ParentRole = "SuperAdministrator", ChildRole = "User" },
+        
+            new() { ParentRole = "Administrator", ChildRole = "Admin" },
+            new() { ParentRole = "Administrator", ChildRole = "User" },
+        
+            new() { ParentRole = "Admin", ChildRole = "User" }
+        };
+
+        if (!_context.RoleAssignments.Any())
+        {
+            _context.RoleAssignments.AddRange(assignments);
+            await _context.SaveChangesAsync();
         }
 
         // 2️⃣ Seed Users
@@ -98,7 +116,8 @@ public class ApplicationDbContextInitialiser
                 UserName = email,
                 CNIC = cnic,
                 EmailConfirmed = true,
-                UserType = UserType.Web
+                AppType = AppType.Web,
+                UserType = UserType.Employee
             };
 
             var result = await _userManager.CreateAsync(user, $"{role}123!");
@@ -112,9 +131,9 @@ public class ApplicationDbContextInitialiser
             return null!;
         }
 
-        var superAdmin = await SeedUser("Super Admin", "superadministrator@dhakarachi.org", Roles.SuperAdministrator, "1234567890123");
-        var administrator = await SeedUser("Administrator", "administrator@dhakarachi.org", Roles.Administrator, "1234567890124");
-        var admin = await SeedUser("Admin", "admin@dhakarachi.org", Roles.Admin, "1234567890125");
+        var superAdmin = await SeedUser("Super Admin", "superadministrator@dhakarachi.org", AllRoles.SuperAdministrator, "1234567890123");
+        var administrator = await SeedUser("Administrator", "administrator@dhakarachi.org", AllRoles.Administrator, "1234567890124");
+        var admin = await SeedUser("Admin", "admin@dhakarachi.org", AllRoles.Admin, "1234567890125");
 
         // 3️⃣ Seed Modules + SubModules
 
@@ -122,41 +141,41 @@ public class ApplicationDbContextInitialiser
         {
             var webModules = new List<Module>
         {
-            new() { Name = "HR", AppType = UserType.Web, SubModules = new List<SubModule> {
+            new() { Name = "HR", AppType = AppType.Web, SubModules = new List<SubModule> {
                 new() { Name = "Employee Management" }, new() { Name = "Leave Requests" }
             }},
-            new() { Name = "Finance", AppType = UserType.Web, SubModules = new List<SubModule> {
+            new() { Name = "Finance", AppType = AppType.Web, SubModules = new List<SubModule> {
                 new() { Name = "Budget" }, new() { Name = "Invoices" }
             }},
-            new() { Name = "Members Approvel", AppType = UserType.Web, SubModules = new List<SubModule> {
+            new() { Name = "Members Approvel", AppType = AppType.Web, SubModules = new List<SubModule> {
                 new() { Name = "Pending Requests" }, new() { Name = "Approved Members" }
             }},
-            new() { Name = "Club Management", AppType = UserType.Web, SubModules = new List<SubModule> {
+            new() { Name = "Club Management", AppType = AppType.Web, SubModules = new List<SubModule> {
                 new() { Name = "Events" }, new() { Name = "Staff Management" }
             }},
         };
 
             var mobileModules = new List<Module>
         {
-            new() { Name = "Club Management", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "Club Management", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Club Events" }, new() { Name = "News" }
             }},
-            new() { Name = "Bowser", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "Bowser", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Track Bowser" }, new() { Name = "Request Bowser" }
             }},
-            new() { Name = "Property", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "Property", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "My Properties" }, new() { Name = "Listings" }
             }},
-            new() { Name = "Panic Button", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "Panic Button", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Trigger Alert" }, new() { Name = "Alert History" }
             }},
-            new() { Name = "GIS", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "GIS", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Map View" }, new() { Name = "Nearby Locations" }
             }},
-            new() { Name = "Worker", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "Worker", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Request Worker" }, new() { Name = "My Requests" }
             }},
-            new() { Name = "QR Code", AppType = UserType.Mobile, SubModules = new List<SubModule> {
+            new() { Name = "QR Code", AppType = AppType.Mobile, SubModules = new List<SubModule> {
                 new() { Name = "Scan" }, new() { Name = "History" }
             }},
         };
@@ -188,13 +207,13 @@ public class ApplicationDbContextInitialiser
 
         // 5️⃣ Assign FULL PERMISSIONS to SuperAdmin for all SubModules
 
-        if (!_context.RolePermissions.Any(x => x.RoleName == Roles.SuperAdministrator))
+        if (!_context.RolePermissions.Any(x => x.RoleName == AllRoles.SuperAdministrator))
         {
             var allSubModules = await _context.SubModules.ToListAsync();
 
             var permissions = allSubModules.Select(sm => new RolePermission
             {
-                RoleName = Roles.SuperAdministrator,
+                RoleName = AllRoles.SuperAdministrator,
                 SubModuleId = sm.Id,
                 CanRead = true,
                 CanWrite = true,
