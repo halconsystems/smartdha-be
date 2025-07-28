@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
+using DHAFacilitationAPIs.Application.Feature.Modules.Commands.DeleteModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.Roles.Queries.GetAssignableRoles;
@@ -51,5 +52,17 @@ public class ModulesController : BaseApiController
     {
         return Ok(await Mediator.Send(updateModuleCommand));
     }
+
+
+    [HttpPost("delete-module"), AllowAnonymous]
+    public async Task<IActionResult> DeleteModule(DeleteModuleCommand deleteModuleCommand)
+    {
+        var result = await Mediator.Send(deleteModuleCommand);
+        return result 
+            ? Ok(new { message = "Module deleted (soft delete) successfully." })
+            : BadRequest(new { message = "Failed to delete Module." });
+    }
+
+
 
 }
