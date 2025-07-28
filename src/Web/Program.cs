@@ -1,17 +1,25 @@
 using System.Net;
 using DHAFacilitationAPIs.Application;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Infrastructure;
 using DHAFacilitationAPIs.Infrastructure.Data;
+using DHAFacilitationAPIs.Infrastructure.Service;
 using DHAFacilitationAPIs.Web;
 using DHAFacilitationAPIs.Web.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // Add services to the container.
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
+
+builder.Services.AddHttpClient<ISmsService, SmsService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

@@ -37,7 +37,7 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
             var info = new OpenApiInfo()
             {
                 Version = "v1",
-                Title = "BackendAPI - Test",
+                Title = "BackendAPI",
                 Description = "Implementing",
             };
 

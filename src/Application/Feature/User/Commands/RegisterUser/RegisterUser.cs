@@ -31,20 +31,17 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
     public RegisterUserCommandHandler(
         IApplicationDbContext context,
         IMapper mapper,
-        IUnitOfWork unitOfWork,
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
         _context = context;
         _mapper = mapper;
-        _unitOfWork = unitOfWork;
         _userManager = userManager;
         _roleManager = roleManager;
     }

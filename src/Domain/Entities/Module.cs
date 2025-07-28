@@ -16,10 +16,8 @@ public class Module : BaseAuditableEntity
     
     [MaxLength(100)]
     public string Description { get; set; } = default!;
-
     public string Remarks { get; set; } = default!;
-
-    public AppType AppType { get; set; } // Web or Mobile
+    public AppType AppType { get; set; } = default!; // Web or Mobile
 
     public ICollection<SubModule> SubModules { get; set; } = new List<SubModule>();
     public ICollection<UserModuleAssignment> UserAssignments { get; set; } = new List<UserModuleAssignment>();

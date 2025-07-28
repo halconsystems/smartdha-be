@@ -1,8 +1,5 @@
-﻿using Azure.Core;
-using DHAFacilitationAPIs.Application.Common.Exceptions;
+﻿using DHAFacilitationAPIs.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace MobileAPI.Infrastructure;
 
@@ -23,45 +20,69 @@ public sealed class CustomExceptionMiddleware
         }
         catch (ValidationException exception)
         {
-            var problemDetails = new ProblemDetails();
-            //{
-            //    Status = StatusCodes.Status400BadRequest,
-            //    Type = "ValidationFailure",
-            //    Title = "Validation error",
-            //    Detail = "One or more validation errors has occurred"
-            //};
-
-            if (exception.Errors is not null)
+            var problemDetails = new ValidationProblemDetails(exception.Errors)
             {
-                problemDetails.Extensions["errors"] = exception.Errors;
-            }
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Validation Error",
+                Detail = "One or more validation errors occurred."
+            };
 
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
+            context.Response.StatusCode = problemDetails.Status.Value;
+            context.Response.ContentType = "application/problem+json";
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
         catch (UnAuthorizedException exception)
         {
-            var problemDetails = new ProblemDetails();
-            if (exception is not null)
+            var problemDetails = new ProblemDetails
             {
-                problemDetails.Extensions["error"] = exception.Message;
-            }
+                Status = StatusCodes.Status401Unauthorized,
+                Title = "Unauthorized",
+                Detail = exception.Message
+            };
 
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-
+            context.Response.StatusCode = problemDetails.Status.Value;
+            context.Response.ContentType = "application/problem+json";
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
+        catch (ConflictException exception)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status409Conflict,
+                Title = "Conflict",
+                Detail = exception.Message
+            };
+
+            context.Response.StatusCode = problemDetails.Status.Value;
+            context.Response.ContentType = "application/problem+json";
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        }
+        catch (DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException exception)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "Not Found",
+                Detail = exception.Message
+            };
+
+            context.Response.StatusCode = problemDetails.Status.Value;
+            context.Response.ContentType = "application/problem+json";
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        }
+
+
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails();
-            if (exception is not null)
+            var problemDetails = new ProblemDetails
             {
-                problemDetails.Extensions["error"] = exception.Message;
-            }
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "Internal Server Error",
+                Detail = exception.Message
+            };
 
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
+            context.Response.StatusCode = problemDetails.Status.Value;
+            context.Response.ContentType = "application/problem+json";
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
     }
