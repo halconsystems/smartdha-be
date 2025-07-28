@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
+using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.Roles.Queries.GetAssignableRoles;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
@@ -43,6 +44,12 @@ public class ModulesController : BaseApiController
     public async Task<IActionResult> AddModule(AddModuleCommand addModuleCommand)
     {
         return Ok(await Mediator.Send(addModuleCommand));
+    }
+
+    [HttpPost("update-module"), AllowAnonymous]
+    public async Task<IActionResult> UpdateModule(UpdateModuleCommand updateModuleCommand)
+    {
+        return Ok(await Mediator.Send(updateModuleCommand));
     }
 
 }
