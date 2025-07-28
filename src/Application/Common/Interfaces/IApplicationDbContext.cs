@@ -17,7 +17,9 @@ public interface IApplicationDbContext
     DbSet<MembershipPurpose> MembershipPurposes { get; }
     DbSet<NonMemberVerification> NonMemberVerifications { get; }
     DbSet<NonMemberVerificationDocument> NonMemberVerificationDocuments { get; }
-
+    DbSet<MemberTypeModuleAssignment> MemberTypeModuleAssignments { get; }
+    DbSet<Announcement> Announcements { get; }
+    
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
 }

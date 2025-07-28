@@ -16,7 +16,9 @@ public class ApplicationUser : IdentityUser
     [Required]
     [RegularExpression(@"^\d{11,15}$", ErrorMessage = "Mobile number must be between 11 and 15 digits.")]
     public string MobileNo { get; set; } = default!;
-    
+
+    public string MEMPK { get; set; } = default!;
+
     [Required]
     public AppType AppType { get; set; }  // <-- Web or Mobile
     [Required]
@@ -34,5 +36,7 @@ public class ApplicationUser : IdentityUser
     public bool IsDeleted { get; set; } = false;
     public bool IsVerified { get; set; } = false;
     public bool IsOtpRequired { get; set; } = false;
+
+    
 
 }

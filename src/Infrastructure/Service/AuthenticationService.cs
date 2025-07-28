@@ -51,8 +51,11 @@ public class AuthenticationService : IAuthenticationService
             {
                 new Claim(ClaimTypes.Name, $"{user.UserName}"),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Email, user.CNIC!),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                // Add these custom claims
+                new Claim("CNIC", user.CNIC ?? ""),
+                new Claim("MobileNo", user.MobileNo ?? ""),
+                new Claim("UserType", user.UserType.ToString())
             };
         claims.AddRange(userClaims);
         claims.AddRange(roleClaims);

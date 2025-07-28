@@ -33,7 +33,6 @@ public class OtpAuthenticationDto
     public string Name { get; set; } = default!;
     public string AccessToken { get; set; } = default!;
     public string ResponseMessage { get; set; } = default!;
-    public List<MobileModule> MobileModules { get; set; } = default!;
     public string MobileNumber { get; set; } = default!;
     public bool isOtpVerified { get; set; } = default!;
     public string Type { get; set; } = default!;

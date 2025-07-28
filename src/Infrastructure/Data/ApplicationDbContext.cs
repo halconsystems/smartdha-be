@@ -32,6 +32,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<MembershipPurpose> MembershipPurposes => Set<MembershipPurpose>();
     public DbSet<NonMemberVerification> NonMemberVerifications => Set<NonMemberVerification>();
     public DbSet<NonMemberVerificationDocument> NonMemberVerificationDocuments => Set<NonMemberVerificationDocument>();
+    public DbSet<MemberTypeModuleAssignment> MemberTypeModuleAssignments => Set<MemberTypeModuleAssignment>();
+    public DbSet<Announcement> Announcements => Set<Announcement>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

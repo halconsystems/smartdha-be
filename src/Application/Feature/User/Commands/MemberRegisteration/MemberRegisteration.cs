@@ -98,30 +98,33 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             throw new ConflictException("User already exists");
         }
        
+       
+
         var p = new DynamicParameters();
         p.Add("@CNICNO", request.CNIC, DbType.String, size: 150);
         p.Add("@CellNo", request.MobileNo, DbType.String, size: 15);
-        p.Add("@msg", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
+
+        // Output parameters
+        //p.Add("@MEMPK", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
+        //p.Add("@Name", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
         p.Add("@OTP", dbType: DbType.Int32, direction: ParameterDirection.Output);
         p.Add("@OutCellNo", dbType: DbType.String, size: 15, direction: ParameterDirection.Output);
+        p.Add("@msg", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
 
-        // 2) execute
+        // Execute stored procedure
         await _sp.ExecuteAsync(
             "USP_ApplyForRegistration",
             p,
-            cancellationToken
+            cancellationToken: cancellationToken
         );
-        //Procedure need some extra parameter
-        
-        //RegisteredMobileNo = "",
-        //RegisteredEmail = "",
-        //RegistrationDate = DateTime.Now,
-        //RegistrationNo = ""
 
+        // Read output parameters
+        //string memPk = p.Get<string>("@MEMPK") ?? "0";
+        //string name = p.Get<string>("@Name") ?? "";
+        string userOtp = p.Get<int>("@OTP").ToString();
         string outCellNo = p.Get<string>("@OutCellNo") ?? request.MobileNo;
         string message = p.Get<string>("@msg") ?? "No message";
-        string userOtp = p.Get<int>("@OTP").ToString();
-        string requestEmail = "user@dhakarachi.org";
+        string requestEmail = "user@dhakarachi.org"; // Static or derived email if needed
 
         outCellNo = (outCellNo ?? string.Empty)
                 .Replace("-", "")              // remove dashes
@@ -152,7 +155,9 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 AppType = AppType.Mobile,
                 UserType = UserType.Member,
                 RegisteredMobileNo= outCellNo,
-                IsVerified=true
+                IsVerified=true,
+                IsOtpRequired=true,
+                MEMPK= "test"
             };
             await _userManager.CreateAsync(newUser);
             // Send OTP to MobileNo

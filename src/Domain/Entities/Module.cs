@@ -16,6 +16,7 @@ public class Module : BaseAuditableEntity
     
     [MaxLength(100)]
     public string Description { get; set; } = default!;
+    public string Title { get; set; } = default!;
     public string Remarks { get; set; } = default!;
     public AppType AppType { get; set; } = default!; // Web or Mobile
 
