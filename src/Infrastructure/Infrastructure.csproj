@@ -14,6 +14,8 @@
   <ItemGroup>
     <Compile Remove="Data\Configurations\TodoItemConfiguration.cs" />
     <Compile Remove="Data\Configurations\TodoListConfiguration.cs" />
+    <Compile Remove="Repository\TodoListRepository.cs" />
+    <Compile Remove="Repository\UnitOfWork.cs" />
   </ItemGroup>
 
   <!--#if ('True' == 'False')-->
@@ -34,6 +36,7 @@
     <!--#endif-->
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
   </ItemGroup>
 
@@ -43,6 +46,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Configurations\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

@@ -32,5 +32,7 @@ public class ApplicationUser : IdentityUser
     public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
+    public bool IsVerified { get; set; } = false;
+    public bool IsOtpRequired { get; set; } = false;
 
 }

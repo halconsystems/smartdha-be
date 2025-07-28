@@ -37,7 +37,7 @@ namespace MobileAPI.Infrastructure
             var info = new OpenApiInfo()
             {
                 Version = "v1",
-                Title = "BackendAPI - Test",
+                Title = "MobileApp-APIs",
                 Description = "Implementing",
             };
 

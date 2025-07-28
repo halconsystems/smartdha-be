@@ -26,6 +26,20 @@ public class AuthenticationService : IAuthenticationService
         _userManager = userManager;
         _jwtSettings = jwtSettings.Value;
     }
+
+    public async Task<string> GenerateTemporaryToken(ApplicationUser user, string purpose, TimeSpan expiresIn)
+    {
+        IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.MobilePhone, user.MobileNo),
+            new Claim("purpose", purpose)  // 👈 Add purpose: "set_password"
+        };
+
+        return GenerateAccessToken(claims, expiresIn);
+    }
+
     public async Task<string> GenerateToken(ApplicationUser user)
     {
         IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
@@ -57,11 +71,28 @@ public class AuthenticationService : IAuthenticationService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
+            expires: DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes),
             signingCredentials: signinCredentials
         );
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
         return tokenString;
+    }
+
+
+    private string GenerateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiryOverride = null)
+    {
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+        var tokenOptions = new JwtSecurityToken(
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
+            claims: claims,
+            expires: DateTime.Now.Add(expiryOverride ?? TimeSpan.FromMinutes(_jwtSettings.DurationInMinutes)),
+            signingCredentials: signinCredentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
 
     #endregion

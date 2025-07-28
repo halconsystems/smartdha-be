@@ -13,9 +13,37 @@ public class AuthenticationVM
 
 public class AuthenticationDto
 {
-    public string AccessToken { get; set; } = default!;
     public string Role { get; set; } = default!;
+    public string AccessToken { get; set; } = default!;
     public string ResponseMessage { get; set; } = default!;
+}
+
+public class MobileAuthenticationDto
+{
+    public string Name { get; set; } = default!;
+    public Boolean isOtpRequired { get; set; } = default!;
+    public string AccessToken { get; set; } = default!;
+    public string ResponseMessage { get; set; } = default!;
+    public string MobileNumber { get; set; } = default!;
+    
+}
+
+public class OtpAuthenticationDto
+{
+    public string Name { get; set; } = default!;
+    public string AccessToken { get; set; } = default!;
+    public string ResponseMessage { get; set; } = default!;
+    public List<MobileModule> MobileModules { get; set; } = default!;
+    public string MobileNumber { get; set; } = default!;
+    public bool isOtpVerified { get; set; } = default!;
+    public string Type { get; set; } = default!;
+    public string UserType { get; set; } = default!;
+}
+
+public class MobileModule
+{
+    public string Name { get; set; } = default!;
+    public string Description { get; set; } = default!;
 }
 
 public class SecretKeyDto

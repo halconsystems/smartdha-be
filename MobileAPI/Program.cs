@@ -1,16 +1,37 @@
 using System.Net;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Infrastructure.Data;
+using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Diagnostics;
 using MobileAPI;
 using MobileAPI.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+var options = new WebApplicationOptions
+{
+    ContentRootPath = Directory.GetCurrentDirectory(),
+    WebRootPath = "wwwroot" //ensure this matches your actual web root folder
+};
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(options);
+
+
 // Add services to the container.
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddMobileAPIServices(builder.Configuration);
+
+
+
+builder.Services.AddHttpClient<ISmsService, SmsService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SetPasswordPolicy", policy =>
+    {
+        policy.RequireClaim("purpose", "set_password");
+    });
+});
 
 
 builder.Services.AddControllers();

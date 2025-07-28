@@ -84,6 +84,20 @@ public class ApplicationDbContextInitialiser
             }
         }
 
+        var purposes = new List<MembershipPurpose>
+        {
+            new() { Title = "Visiting Family" },
+            new() { Title = "Business" },
+            new() { Title = "Property Inquiry" },
+            new() { Title = "Events / Club Access" }
+        };
+
+        if (!_context.MembershipPurposes.Any())
+        {
+            _context.MembershipPurposes.AddRange(purposes);
+            await _context.SaveChangesAsync();
+        }
+
         var assignments = new List<RoleAssignment>
         {
             new() { ParentRole = "SuperAdministrator", ChildRole = "Administrator" },

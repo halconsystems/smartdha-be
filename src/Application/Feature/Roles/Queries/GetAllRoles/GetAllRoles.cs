@@ -24,8 +24,7 @@ public class GetAllRolesHandler : IRequestHandler<GetAllRolesQuery, List<string>
     public async Task<List<string>> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
     {
 
-        var getAllmembership = await _context.Membershipdetails.ToListAsync();
-
+        
         var allWebRoles = AllRoles.GetWebRoles().ToList();
 
         var existingRoles = _roleManager.Roles

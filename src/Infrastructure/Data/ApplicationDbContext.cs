@@ -27,8 +27,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
     public DbSet<Membershipdetail> Membershipdetails => Set<Membershipdetail>();
-
-
+    public DbSet<SMSLog> SMSLogs => Set<SMSLog>();
+    public DbSet<UserOtp> UserOtps => Set<UserOtp>();
+    public DbSet<MembershipPurpose> MembershipPurposes => Set<MembershipPurpose>();
+    public DbSet<NonMemberVerification> NonMemberVerifications => Set<NonMemberVerification>();
+    public DbSet<NonMemberVerificationDocument> NonMemberVerificationDocuments => Set<NonMemberVerificationDocument>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -132,6 +135,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                     case EntityState.Added:
                         entry.Entity.Created = pakistanTime;
                         entry.Entity.CreatedBy = _loggedInUser?.Id;
+                        entry.Entity.IsActive = true;
+                        entry.Entity.IsDeleted = false;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = pakistanTime;

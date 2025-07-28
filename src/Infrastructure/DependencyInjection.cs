@@ -46,6 +46,9 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
+        services.AddScoped<IProcedureService, StoredProcedures>();
+
+
         services.AddIdentityCore<ApplicationUser>(opt =>
         {
             opt.Password.RequiredLength = 8;
@@ -55,6 +58,8 @@ public static class DependencyInjection
         }).AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
            .AddDefaultTokenProviders();
+
+
 
         services.AddAuthentication(options =>
         {
