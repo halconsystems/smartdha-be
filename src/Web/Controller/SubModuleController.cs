@@ -1,9 +1,11 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateModule;
+using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Commands.AddSubModule;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Commands.DeleteSubModule;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Commands.UpdateSubModule;
+using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModuleList;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,19 +23,19 @@ public class SubModuleController : BaseApiController
     }
 
 
-    [HttpPost("add-submodule"), AllowAnonymous]
+    [HttpPost("add-submodule")]
     public async Task<IActionResult> AddSubModule(AddSubModuleCommand addSubModuleCommand)
     {
         return Ok(await Mediator.Send(addSubModuleCommand));
     }
 
-    [HttpPost("update-submodule"), AllowAnonymous]
+    [HttpPost("update-submodule")]
     public async Task<IActionResult> UpdateSubModule(UpdateSubModuleCommand updateSubModuleCommand)
     {
         return Ok(await Mediator.Send(updateSubModuleCommand));
     }
 
-    [HttpPost("delete-submodule"), AllowAnonymous]
+    [HttpPost("delete-submodule")]
     public async Task<IActionResult> deleteSubModule(DeleteSubModuleCommand deleteSubModuleCommand)
     {
         var result=await Mediator.Send(deleteSubModuleCommand);
@@ -41,5 +43,19 @@ public class SubModuleController : BaseApiController
     ? Ok(new { message = "Sub-Module deleted (soft delete) successfully." })
     : BadRequest(new { message = "Failed to delete Sub-Module." });
     }
+
+    [HttpGet("get-submodules"), AllowAnonymous]
+    public async Task<IActionResult> GetSubModuleList([FromQuery] string? id)
+    {
+        Guid? submoduleId = null;
+        if (!string.IsNullOrWhiteSpace(id) && Guid.TryParse(id, out var parsedId))
+        {
+            submoduleId = parsedId;
+        }
+        var result = await Mediator.Send(new SubModuleListQuery { Id = submoduleId });
+        return Ok(result);
+    }
+
+
 
 }

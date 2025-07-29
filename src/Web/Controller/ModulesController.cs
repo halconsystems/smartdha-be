@@ -41,20 +41,20 @@ public class ModulesController : BaseApiController
     }
 
 
-    [HttpPost("add-module"), AllowAnonymous]
+    [HttpPost("add-module")]
     public async Task<IActionResult> AddModule(AddModuleCommand addModuleCommand)
     {
         return Ok(await Mediator.Send(addModuleCommand));
     }
 
-    [HttpPost("update-module"), AllowAnonymous]
+    [HttpPost("update-module")]
     public async Task<IActionResult> UpdateModule(UpdateModuleCommand updateModuleCommand)
     {
         return Ok(await Mediator.Send(updateModuleCommand));
     }
 
 
-    [HttpPost("delete-module"), AllowAnonymous]
+    [HttpPost("delete-module")]
     public async Task<IActionResult> DeleteModule(DeleteModuleCommand deleteModuleCommand)
     {
         var result = await Mediator.Send(deleteModuleCommand);
@@ -62,6 +62,8 @@ public class ModulesController : BaseApiController
             ? Ok(new { message = "Module deleted (soft delete) successfully." })
             : BadRequest(new { message = "Failed to delete Module." });
     }
+
+
 
 
 
