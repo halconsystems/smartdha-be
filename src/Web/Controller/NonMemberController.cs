@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Dashboard.Commands.AddMemberTypeModuleAssignments;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
@@ -35,5 +36,7 @@ public class NonMemberController : BaseApiController
         return Ok(result);
 
     }
+
+    
 
 }

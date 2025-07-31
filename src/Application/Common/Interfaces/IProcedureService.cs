@@ -30,4 +30,12 @@ public interface IProcedureService
     CancellationToken cancellationToken
 );
 
+    /// <summary>
+    /// Executes a stored procedure without parameters and returns a list of results.
+    /// </summary>
+    Task<List<T>> ExecuteWithoutParamsAsync<T>(
+        string name,
+        CancellationToken cancellationToken
+    );
+
 }
