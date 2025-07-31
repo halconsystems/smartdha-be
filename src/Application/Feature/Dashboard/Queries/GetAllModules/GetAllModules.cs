@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DHAFacilitationAPIs.Application.Feature.Dashboard.Queries.GetAllModules;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
-using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllNonMemberPurposes;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
-using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
+namespace DHAFacilitationAPIs.Application.Feature.Dashboard.Queries.GetAllModules;
 public record GetAllModulesQuery : IRequest<SuccessResponse<List<AllModuleDto>>>;
 
 public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, SuccessResponse<List<AllModuleDto>>>

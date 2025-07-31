@@ -110,10 +110,12 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         p.Add("@OTP", dbType: DbType.Int32, direction: ParameterDirection.Output);
         p.Add("@OutCellNo", dbType: DbType.String, size: 15, direction: ParameterDirection.Output);
         p.Add("@msg", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
+        p.Add("@Name", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
+        p.Add("@Email", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
 
         // Execute stored procedure
         await _sp.ExecuteAsync(
-            "USP_ApplyForRegistration",
+            "USP_ApplyForRegistration_Temp",
             p,
             cancellationToken: cancellationToken
         );
@@ -124,7 +126,8 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         string userOtp = p.Get<int>("@OTP").ToString();
         string outCellNo = p.Get<string>("@OutCellNo") ?? request.MobileNo;
         string message = p.Get<string>("@msg") ?? "No message";
-        string requestEmail = "user@dhakarachi.org"; // Static or derived email if needed
+        string FullName = p.Get<string>("@Name") ?? "No message";
+        string requestEmail = p.Get<string>("@Email") ?? "No message";
 
         outCellNo = (outCellNo ?? string.Empty)
                 .Replace("-", "")              // remove dashes
@@ -142,7 +145,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             var newUser = new ApplicationUser
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = "Hello",
+                Name = FullName,
                 UserName = request.CNIC,
                 NormalizedUserName = requestEmail.ToUpper(),
                 Email = requestEmail,
@@ -157,7 +160,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 RegisteredMobileNo= outCellNo,
                 IsVerified=true,
                 IsOtpRequired=true,
-                MEMPK= "test"
+                MEMPK= "DHAM-97563"
             };
             await _userManager.CreateAsync(newUser);
             // Send OTP to MobileNo

@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Dashboard.Commands.AddMemberTypeModuleAssignments;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.DeleteModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateModule;
@@ -63,6 +64,11 @@ public class ModulesController : BaseApiController
             : BadRequest(new { message = "Failed to delete Module." });
     }
 
+    [HttpPost("AssignModuleToUserType"), AllowAnonymous]
+    public async Task<IActionResult> AssignModuleToUserType(AddMemberTypeModuleAssignmentsCommand command)
+    {
+        return Ok(await Mediator.Send(command));
+    }
 
 
 

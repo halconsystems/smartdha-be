@@ -29,6 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Feature\ApprovalProcess\Commands\" />
+    <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\User\Commands\ForgetPassword\" />
     <Folder Include="Feature\User\Commands\RegisterUser\" />
   </ItemGroup>

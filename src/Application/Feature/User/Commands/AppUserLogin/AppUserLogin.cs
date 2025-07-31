@@ -101,7 +101,7 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             }
         }
 
-            SignInResult result = await _signInManager.PasswordSignInAsync(request.CNIC, request.Password, false, lockoutOnFailure: false);
+        SignInResult result = await _signInManager.PasswordSignInAsync(request.CNIC, request.Password, false, lockoutOnFailure: false);
 
         if (!result.Succeeded)
         {

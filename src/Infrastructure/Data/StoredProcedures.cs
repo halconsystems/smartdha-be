@@ -71,4 +71,21 @@ public class StoredProcedures : IProcedureService
         return (parameters, rows);
     }
 
+    public async Task<List<T>> ExecuteWithoutParamsAsync<T>(string name, CancellationToken cancellationToken)
+    {
+        var conn = _context.Database.GetDbConnection();
+        if (conn.State != ConnectionState.Open)
+            await conn.OpenAsync(cancellationToken);
+
+        var cmd = new CommandDefinition(
+            name,
+            null,
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken
+        );
+
+        var rows = (await conn.QueryAsync<T>(cmd)).ToList();
+
+        return rows;
+    }
 }

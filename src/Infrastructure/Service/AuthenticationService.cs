@@ -49,13 +49,15 @@ public class AuthenticationService : IAuthenticationService
 
         var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, $"{user.UserName}"),
+                new Claim(ClaimTypes.Name, $"{user.Name}"),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+
                 // Add these custom claims
                 new Claim("CNIC", user.CNIC ?? ""),
                 new Claim("MobileNo", user.MobileNo ?? ""),
-                new Claim("UserType", user.UserType.ToString())
+                new Claim("UserType", user.UserType.ToString()),
+                new Claim("MemPK", user.MEMPK.ToString())
             };
         claims.AddRange(userClaims);
         claims.AddRange(roleClaims);
@@ -68,13 +70,14 @@ public class AuthenticationService : IAuthenticationService
 
     private string GenerateAccessToken(IEnumerable<Claim> claims)
     {
+        //expires: DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes),
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
         var tokeOptions = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes),
+            expires: DateTime.Now.AddMinutes(2500),
             signingCredentials: signinCredentials
         );
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

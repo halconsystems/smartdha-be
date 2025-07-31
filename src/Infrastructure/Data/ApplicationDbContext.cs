@@ -34,6 +34,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<NonMemberVerificationDocument> NonMemberVerificationDocuments => Set<NonMemberVerificationDocument>();
     public DbSet<MemberTypeModuleAssignment> MemberTypeModuleAssignments => Set<MemberTypeModuleAssignment>();
     public DbSet<Announcement> Announcements => Set<Announcement>();
+    public DbSet<RequestTracking> RequestTrackings => Set<RequestTracking>();
+    public DbSet<RequestProcessStep> RequestProcessSteps => Set<RequestProcessStep>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -104,6 +106,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         .WithMany(m => m.SubModules)
         .HasForeignKey(s => s.ModuleId);
 
+        builder.Entity<RequestProcessStep>()
+     .HasOne(p => p.RequestTracking)
+     .WithMany(t => t.ProcessSteps)
+     .HasForeignKey(p => p.RequestTrackingId)
+     .OnDelete(DeleteBehavior.Cascade); // Optional
+
+
+
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -123,6 +133,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                     case EntityState.Added:
                         entry.Entity.Created = pakistanTime;
                         entry.Entity.CreatedBy = _loggedInUser?.Id;
+                        entry.Entity.IsActive = true;
+                        entry.Entity.IsDeleted = false;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = DateTime.Now;
