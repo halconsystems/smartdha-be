@@ -20,7 +20,6 @@ public class NonMemberRequestsDto
     public DateTime? ApprovedAt { get; set; } = default!;
     public string? ApprovedBy { get; set; } = default!;// Admin UserId
     public Guid PurposeId { get; set; } = default!;
-    public MembershipPurpose Purpose { get; set; } = default!;
 
     public List<NonMemberVerificationDocsDto> VerificationDocs { get; set; }= default!;
 }

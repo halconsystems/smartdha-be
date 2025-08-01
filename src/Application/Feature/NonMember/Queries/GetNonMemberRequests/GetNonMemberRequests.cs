@@ -34,14 +34,7 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
                 p.Remarks,
                 p.Status,
                 p.ApprovedAt,
-                p.ApprovedBy,
-                p.PurposeId,
-                Purpose = new MembershipPurpose
-                {
-                    Id = p.Purpose.Id,
-                    Title = p.Purpose.Title,
-                    Description = p.Purpose.Description
-                }
+                p.ApprovedBy
             })
             .ToListAsync(cancellationToken);
 
@@ -71,8 +64,6 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
             Status = p.Status,
             ApprovedAt = p.ApprovedAt,
             ApprovedBy = p.ApprovedBy,
-            PurposeId = p.PurposeId,
-            Purpose = p.Purpose,
             VerificationDocs = allDocs.Where(d => d.VerificationId == p.Id).ToList()
         }).ToList();
 

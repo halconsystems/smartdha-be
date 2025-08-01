@@ -30,7 +30,7 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public string Password { get; set; } = default!;
 
     [Required]
-    public Guid PurposeId { get; set; }
+    public Guid PurposeId { get; set; } = Guid.NewGuid();
 
     [Required]
     public IFormFile CNICFrontImage { get; set; } = default!;
@@ -106,7 +106,8 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             IsVerified = false,
             UserName = request.CNIC,
             Email = request.Email,
-            IsOtpRequired = true
+            IsOtpRequired = true,
+            MEMPK = "-"
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -119,8 +120,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             UserId = user.Id,
             CNIC = request.CNIC,
             Status = VerificationStatus.Pending,
-            Remarks = "Submitted with documents",
-            PurposeId = request.PurposeId
+            Remarks = "Submitted with documents"
         };
 
         _context.NonMemberVerifications.Add(verification);

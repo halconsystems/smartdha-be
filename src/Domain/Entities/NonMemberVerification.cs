@@ -13,6 +13,4 @@ public class NonMemberVerification : BaseAuditableEntity
     public VerificationStatus Status { get; set; } = VerificationStatus.Pending;
     public DateTime? ApprovedAt { get; set; } = default!;
     public string? ApprovedBy { get; set; } = default!;// Admin UserId
-    public Guid PurposeId { get; set; } = default!;
-    public MembershipPurpose Purpose { get; set; } = default!;
 }
