@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.User.Commands.ActivateDeactivateUs
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterUser;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllUsers;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,7 +55,13 @@ public class UsersController : BaseApiController
             : BadRequest(new { message = "Failed to delete user." });
     }
 
+    [HttpGet("GetUserById"), AllowAnonymous]
+    public async Task<IActionResult> GetUserById([FromQuery]string id)
+    {
+        var result = await Mediator.Send(new GetUserByIdQuery { UserId = id });
+        return result is null ? NotFound() : Ok(result);
+    }
 
-   
+
 
 }

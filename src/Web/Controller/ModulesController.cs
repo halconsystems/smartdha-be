@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.Dashboard.Commands.AddMemberTypeMo
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.DeleteModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateModule;
+using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetModule;
 using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.Roles.Queries.GetAssignableRoles;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
@@ -69,6 +70,14 @@ public class ModulesController : BaseApiController
     {
         return Ok(await Mediator.Send(command));
     }
+
+    [HttpGet,AllowAnonymous]
+    public async Task<IActionResult> GetModules([FromQuery] string? id)
+    {
+        var result = await Mediator.Send(new GetModulesQuery { Id = id });
+        return Ok(result);
+    }
+
 
 
 
