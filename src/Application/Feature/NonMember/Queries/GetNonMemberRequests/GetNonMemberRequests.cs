@@ -9,7 +9,10 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
-public record NonMemberRequestsQuery : IRequest<SuccessResponse<List<NonMemberRequestsDto>>>;
+public record NonMemberRequestsQuery : IRequest<SuccessResponse<List<NonMemberRequestsDto>>>
+{
+    public Domain.Enums.VerificationStatus status { get; set; }
+}
 
 public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQuery, SuccessResponse<List<NonMemberRequestsDto>>>
 {
@@ -25,7 +28,7 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
     {
         // 1. Get all pending verifications (minimal projection with Purpose)
         var pendingRequests = await _context.NonMemberVerifications
-            .Where(p => p.Status == Domain.Enums.VerificationStatus.Pending)
+            .Where(p => p.Status == request.status)
             .Select(p => new
             {
                 p.Id,

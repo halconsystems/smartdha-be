@@ -17,6 +17,8 @@ public record AddModuleCommand : IRequest<Guid>
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public string Remarks { get; set; } = default!;
+
+    public string Title { get; set; }   =default!;
 }
 
 public class AddModuleCommandHandler : IRequestHandler<AddModuleCommand, Guid>
@@ -35,7 +37,8 @@ public class AddModuleCommandHandler : IRequestHandler<AddModuleCommand, Guid>
             Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
-            Remarks = request.Remarks
+            Remarks = request.Remarks,
+            Title=request.Title,
         };
 
         _context.Modules.Add(module);

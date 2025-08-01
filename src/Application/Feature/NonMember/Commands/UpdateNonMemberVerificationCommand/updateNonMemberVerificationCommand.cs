@@ -14,6 +14,8 @@ public class UpdateNonMemberVerificationCommand : IRequest<bool>
     public VerificationStatus Status { get; set; }
     public bool IsActive { get; set; }
 
+    public string remarks { get; set; } = default!;
+
 }
 
 public class UpdateNonMemberVerificationCommandHandler : IRequestHandler<UpdateNonMemberVerificationCommand, bool>
@@ -37,6 +39,7 @@ public class UpdateNonMemberVerificationCommandHandler : IRequestHandler<UpdateN
         }
 
         entity.Status = request.Status;
+        entity.Remarks = request.remarks;
         entity.IsActive = request.IsActive;
 
         await _context.SaveChangesAsync(cancellationToken);

@@ -21,10 +21,10 @@ public class NonMemberController : BaseApiController
         _loggedInUser = loggedInUser;
     }
 
-    [HttpGet("get-nonmember-requests"), AllowAnonymous]
-    public async Task<IActionResult> GetNonMemberRequests()
+    [HttpPost("get-nonmember-requests"), AllowAnonymous]
+    public async Task<IActionResult> GetNonMemberRequests(NonMemberRequestsQuery nonMemberRequestsQuery)
     {
-        var result = await Mediator.Send(new NonMemberRequestsQuery());
+        var result = await Mediator.Send(nonMemberRequestsQuery);
         return Ok(result);
     }
 

@@ -15,6 +15,7 @@ public record RegisterUserCommand : IRequest<Guid>
     public string CNIC { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string Role { get; set; } = default!;
+    public string MEMPK { get; set; } = default!;
     public List<Guid>? ModuleIds { get; set; } = new();
     public List<SubModulePermissionInput>? SubModulePermissions { get; set; } = new(); // For "User"
 }
@@ -106,7 +107,8 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, G
             CNIC = request.CNIC,
             EmailConfirmed = true,
             AppType = AppType.Web,
-            UserType = UserType.Employee
+            UserType = UserType.Employee,
+            MEMPK= request.MEMPK,
         };
 
         var createResult = await _userManager.CreateAsync(newUser, request.Password);
