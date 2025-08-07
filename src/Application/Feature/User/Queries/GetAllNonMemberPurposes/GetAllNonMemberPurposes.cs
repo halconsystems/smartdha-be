@@ -13,14 +13,19 @@ public record GetAllNonMemberPurposesQuery : IRequest<SuccessResponse<List<Membe
 public class GetAllNonMemberPurposesQueryHandler : IRequestHandler<GetAllNonMemberPurposesQuery, SuccessResponse<List<MembershipPurposeDto>>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IOLMRSApplicationDbContext _appContext;
 
-    public GetAllNonMemberPurposesQueryHandler(IApplicationDbContext context)
+    public GetAllNonMemberPurposesQueryHandler(IApplicationDbContext context, IOLMRSApplicationDbContext appContext)
     {
         _context = context;
+        _appContext = appContext;
     }
 
     public async Task<SuccessResponse<List<MembershipPurposeDto>>> Handle(GetAllNonMemberPurposesQuery request, CancellationToken cancellationToken)
     {
+
+        var getALlam = await _appContext.Amenities.ToListAsync(cancellationToken);
+
         var getAll= await _context.MembershipPurposes
             .Where(p => p.IsActive==true)
             .Select(p => new MembershipPurposeDto

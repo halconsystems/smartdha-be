@@ -155,6 +155,10 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                      "OTP Verification Required"
                     );
             }
+            else
+            {
+                throw new UnAuthorizedException("Mobile Number not verified!");
+            }
         }
 
         string token = await _authenticationService.GenerateToken(user);

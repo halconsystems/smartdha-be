@@ -30,15 +30,15 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public string Password { get; set; } = default!;
 
     [Required]
-    public Guid PurposeId { get; set; } = Guid.NewGuid();
-
-    [Required]
     public IFormFile CNICFrontImage { get; set; } = default!;
 
     [Required]
     public IFormFile CNICBackImage { get; set; } = default!;
 
     public IFormFile? SupportingDocument { get; set; }
+
+    public List<Guid>? PurposeIds { get; set; } = new();  // Accept multiple
+
 }
 
 public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMemberCommand, SuccessResponse<string>>
@@ -125,7 +125,20 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
         };
 
         _context.NonMemberVerifications.Add(verification);
-        await _context.SaveChangesAsync(cancellationToken);
+
+        // Store purposes
+        if (request.PurposeIds != null && request.PurposeIds.Any())
+        {
+            var purposeLinks = request.PurposeIds.Select(pid => new UserMembershipPurpose
+            {
+                UserId = user.Id,
+                PurposeId = pid
+            }).ToList();
+
+            await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
+        }
+       
+
 
         // Save documents
         var frontPath = await _fileStorage.SaveFileAsync(request.CNICFrontImage, "cnic", cancellationToken);
@@ -146,7 +159,14 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
         };
 
         _context.NonMemberVerificationDocuments.Add(document);
+
+
+
+        //Final call
         await _context.SaveChangesAsync(cancellationToken);
+
+
+
 
         string finalmsg= "Registration submitted successfully. Your request is pending review.";
         return SuccessResponse<string>.FromMessage(finalmsg);

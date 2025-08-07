@@ -21,6 +21,7 @@ public interface IApplicationDbContext
     DbSet<Announcement> Announcements { get; }
     DbSet<RequestTracking> RequestTrackings { get; }
     DbSet<RequestProcessStep> RequestProcessSteps { get; }
+    DbSet<UserMembershipPurpose> UserMembershipPurposes { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }

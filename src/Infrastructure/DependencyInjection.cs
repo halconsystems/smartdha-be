@@ -44,6 +44,21 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
+        //OLMRS Database
+
+        var olmrConnection = configuration.GetConnectionString("OLMRSConnection");
+        Guard.Against.Null(olmrConnection, message: "Connection string 'OlmrConnection' not found.");
+
+        services.AddDbContext<OLMRSApplicationDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(olmrConnection);
+        });
+
+        services.AddScoped<IOLMRSApplicationDbContext>(provider =>
+            provider.GetRequiredService<OLMRSApplicationDbContext>());
+
+
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IProcedureService, StoredProcedures>();

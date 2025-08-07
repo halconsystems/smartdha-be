@@ -9,43 +9,39 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Infrastructure.Data;
+
 public class StoredProcedures : IProcedureService
 {
-    private readonly IApplicationDbContext _context;
-    public StoredProcedures(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-    public async Task<DynamicParameters> ExecuteAsync(string name, DynamicParameters parameters, CancellationToken cancellationToken)
-    {
-        var conn = _context.Database.GetDbConnection();
-        if (conn.State != ConnectionState.Open)
-            await conn.OpenAsync(cancellationToken);
+    private readonly DapperConnectionFactory _connectionFactory;
 
-        // wrap everything in a CommandDefinition so Dapper picks up the token
-        var cmd = new CommandDefinition(
-            name,
-            parameters,
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken
-        );
+    public StoredProcedures(DapperConnectionFactory connectionFactory)
+    {
+        _connectionFactory = connectionFactory;
+    }
+
+    public async Task<DynamicParameters> ExecuteAsync(
+        string name,
+        DynamicParameters parameters,
+        CancellationToken cancellationToken,
+        string connectionName = "DefaultConnection")
+    {
+        using var conn = _connectionFactory.GetConnection(connectionName);
+
+        var cmd = new CommandDefinition(name, parameters, commandType: CommandType.StoredProcedure, cancellationToken: cancellationToken);
 
         await conn.ExecuteAsync(cmd);
         return parameters;
     }
 
-    public async Task<(DynamicParameters, T?)> ExecuteWithSingleRowAsync<T>(string name, DynamicParameters parameters, CancellationToken cancellationToken)
+    public async Task<(DynamicParameters, T?)> ExecuteWithSingleRowAsync<T>(
+        string name,
+        DynamicParameters parameters,
+        CancellationToken cancellationToken,
+        string connectionName = "DefaultConnection")
     {
-        var conn = _context.Database.GetDbConnection();
-        if (conn.State != ConnectionState.Open)
-            await conn.OpenAsync(cancellationToken);
+        using var conn = _connectionFactory.GetConnection(connectionName);
 
-        var cmd = new CommandDefinition(
-            name,
-            parameters,
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken
-        );
+        var cmd = new CommandDefinition(name, parameters, commandType: CommandType.StoredProcedure, cancellationToken: cancellationToken);
 
         using var multi = await conn.QueryMultipleAsync(cmd);
         var row = await multi.ReadFirstOrDefaultAsync<T>();
@@ -53,39 +49,33 @@ public class StoredProcedures : IProcedureService
         return (parameters, row);
     }
 
-    public async Task<(DynamicParameters, List<T>)> ExecuteWithListAsync<T>(string name, DynamicParameters parameters, CancellationToken cancellationToken)
+    public async Task<(DynamicParameters, List<T>)> ExecuteWithListAsync<T>(
+        string name,
+        DynamicParameters parameters,
+        CancellationToken cancellationToken,
+        string connectionName = "DefaultConnection")
     {
-        var conn = _context.Database.GetDbConnection();
-        if (conn.State != ConnectionState.Open)
-            await conn.OpenAsync(cancellationToken);
+        using var conn = _connectionFactory.GetConnection(connectionName);
 
-        var cmd = new CommandDefinition(
-            name,
-            parameters,
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken
-        );
+        var cmd = new CommandDefinition(name, parameters, commandType: CommandType.StoredProcedure, cancellationToken: cancellationToken);
 
         var rows = (await conn.QueryAsync<T>(cmd)).ToList();
 
         return (parameters, rows);
     }
 
-    public async Task<List<T>> ExecuteWithoutParamsAsync<T>(string name, CancellationToken cancellationToken)
+    public async Task<List<T>> ExecuteWithoutParamsAsync<T>(
+        string name,
+        CancellationToken cancellationToken,
+        string connectionName = "DefaultConnection")
     {
-        var conn = _context.Database.GetDbConnection();
-        if (conn.State != ConnectionState.Open)
-            await conn.OpenAsync(cancellationToken);
+        using var conn = _connectionFactory.GetConnection(connectionName);
 
-        var cmd = new CommandDefinition(
-            name,
-            null,
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken
-        );
+        var cmd = new CommandDefinition(name, null, commandType: CommandType.StoredProcedure, cancellationToken: cancellationToken);
 
         var rows = (await conn.QueryAsync<T>(cmd)).ToList();
 
         return rows;
     }
 }
+

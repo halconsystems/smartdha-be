@@ -43,7 +43,6 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
     {
         var existingUser = await _userManager.Users
             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
-
         if (existingUser != null)
         {
             if (existingUser.PasswordHash == null || String.IsNullOrWhiteSpace(existingUser.PasswordHash))
@@ -98,8 +97,6 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             throw new ConflictException("User already exists");
         }
        
-       
-
         var p = new DynamicParameters();
         p.Add("@CNICNO", request.CNIC, DbType.String, size: 150);
         p.Add("@CellNo", request.MobileNo, DbType.String, size: 15);
@@ -117,7 +114,8 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         await _sp.ExecuteAsync(
             "USP_ApplyForRegistration_Temp",
             p,
-            cancellationToken: cancellationToken
+            cancellationToken: cancellationToken,
+            "DefaultConnection"
         );
 
         // Read output parameters

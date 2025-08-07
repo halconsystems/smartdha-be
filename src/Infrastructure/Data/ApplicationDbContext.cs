@@ -36,6 +36,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Announcement> Announcements => Set<Announcement>();
     public DbSet<RequestTracking> RequestTrackings => Set<RequestTracking>();
     public DbSet<RequestProcessStep> RequestProcessSteps => Set<RequestProcessStep>();
+    public DbSet<UserMembershipPurpose> UserMembershipPurposes => Set<UserMembershipPurpose>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
