@@ -14,14 +14,14 @@ public class Room : BaseAuditableEntity
     public Guid RoomCategoryId { get; set; }
 
     [Required]
-    public Guid RoomTypeId { get; set; }
+    public Guid ResidenceTypeId { get; set; }
 
     [Required]
     [MaxLength(50)]
-    public string RoomNo { get; set; } = default!;
+    public string No { get; set; } = default!;
 
     [MaxLength(100)]
-    public string? RoomName { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     public DateTime BookingDate { get; set; } = DateTime.UtcNow;

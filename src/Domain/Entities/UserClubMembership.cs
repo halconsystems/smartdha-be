@@ -12,6 +12,6 @@ public class UserClubMembership : BaseAuditableEntity
     [Required]
     public Guid ClubId { get; set; }
 
-    public DateTime? MembershipStartDate { get; set; }
-    public DateTime? MembershipEndDate { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
 }

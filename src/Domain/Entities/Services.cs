@@ -8,7 +8,7 @@ public class Services : BaseAuditableEntity
 {
     [Required]
     [MaxLength(100)]
-    public string ServiceName { get; set; } = default!;
+    public string Name { get; set; } = default!;
 
     public string? Description { get; set; }
 }

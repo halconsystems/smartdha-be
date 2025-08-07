@@ -9,6 +9,6 @@ public class ResidenceType : BaseAuditableEntity
 {
     [Required]
     [MaxLength(50)]
-    public string ResidenceTypes { get; set; } = default!;
+    public string Name { get; set; } = default!;
     public string? Description { get; set; }
 }
