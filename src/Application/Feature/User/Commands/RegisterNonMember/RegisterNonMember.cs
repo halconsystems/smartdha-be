@@ -100,6 +100,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             CNIC = request.CNIC,
             MobileNo = request.MobileNo,
             PhoneNumber = request.MobileNo,
+            RegisteredMobileNo = request.MobileNo,
             PhoneNumberConfirmed = true,
             AppType = AppType.Mobile,
             UserType = UserType.NonMember,

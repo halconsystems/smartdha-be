@@ -20,21 +20,49 @@ public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Suc
 
     public async Task<SuccessResponse<List<AllModuleDto>>> Handle(GetAllModulesQuery request, CancellationToken cancellationToken)
     {
-        // Get UserType from token
+        // Get UserType and UserID from token
+        var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         var userTypeClaim = _httpContextAccessor.HttpContext?.User?.FindFirstValue("UserType");
         if (string.IsNullOrEmpty(userTypeClaim) || !Enum.TryParse<UserType>(userTypeClaim, out var userType))
             throw new UnauthorizedAccessException("Invalid or missing UserType in token.");
+        if (string.IsNullOrWhiteSpace(userId))
+            throw new UnauthorizedAccessException("Invalid or missing UserId in token.");
 
-        // Fetch modules assigned to that UserType
-        var modules = await _context.MemberTypeModuleAssignments
-            .Where(x => x.UserType == userType && x.IsDeleted==false && x.IsActive==true)
-            .Select(x => new AllModuleDto
-            {
-                Id = x.Module.Id,
-                Name = x.Module.Name,
-                Title = x.Module.Title,
-            })
-            .ToListAsync(cancellationToken);
+        List<AllModuleDto> modules;
+
+        // Local method for default modules by user type
+        async Task<List<AllModuleDto>> GetDefaultModules(UserType type)
+        {
+            return await _context.MemberTypeModuleAssignments
+                .Where(x => x.UserType == type && x.IsActive == true && x.IsDeleted != true)
+                .Select(x => new AllModuleDto
+                {
+                    Id = x.Module.Id,
+                    Name = x.Module.Name,
+                    Title = x.Module.Title,
+                })
+                .ToListAsync(cancellationToken);
+        }
+        
+        if (userType == UserType.NonMember)
+        {
+            // fetch assigned modules for the non-member else fetches default
+            var assignedModules = await _context.UserModuleAssignments
+                .Where(x => x.UserId == userId && x.IsActive == true && x.IsDeleted != true && x.Module != null)
+                .Select(x => new AllModuleDto
+                {
+                    Id = x.Module!.Id,
+                    Name = x.Module.Name,
+                    Title = x.Module.Title,
+                })
+                .ToListAsync(cancellationToken);
+
+            modules = assignedModules.Any() ? assignedModules : await GetDefaultModules(UserType.NonMember);
+        }
+        else
+        {
+            modules = await GetDefaultModules(UserType.Member);
+        }
 
         // Wrap in SuccessResponse
         return new SuccessResponse<List<AllModuleDto>>(modules);
