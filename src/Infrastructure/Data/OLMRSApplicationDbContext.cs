@@ -17,7 +17,15 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
         _loggedInUser = loggedInUser;
     }
 
-    public DbSet<Amenities> Amenities => Set<Amenities>();
+    // Newly added DbSets
+    public DbSet<Club> Clubs => Set<Club>();
+    public DbSet<RoomCategory> RoomCategories => Set<RoomCategory>();
+    public DbSet<ResidenceType> ResidenceTypes => base.Set<ResidenceType>();
+    public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<Services> Services => Set<Services>();
+    public DbSet<ServiceMapping> ServiceMappings => Set<ServiceMapping>();
+    public DbSet<RoomBooking> RoomBookings => Set<RoomBooking>();
+    public DbSet<UserClubMembership> UserClubMembership => Set<UserClubMembership>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -9,8 +9,17 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface IOLMRSApplicationDbContext
 {
+    // New Room Booking–related DbSets
+    DbSet<Club> Clubs { get; }
+    DbSet<RoomCategory> RoomCategories { get; }
+    DbSet<ResidenceType> ResidenceTypes { get; }
+    DbSet<Room> Rooms { get; }
+    DbSet<Services> Services { get; }
+    DbSet<ServiceMapping> ServiceMappings { get; }
+    DbSet<RoomBooking> RoomBookings { get; }
+    DbSet<UserClubMembership> UserClubMembership { get; }
 
-    DbSet<Amenities> Amenities { get; }
+
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }

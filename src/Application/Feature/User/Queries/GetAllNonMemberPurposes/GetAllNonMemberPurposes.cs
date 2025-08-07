@@ -24,8 +24,7 @@ public class GetAllNonMemberPurposesQueryHandler : IRequestHandler<GetAllNonMemb
     public async Task<SuccessResponse<List<MembershipPurposeDto>>> Handle(GetAllNonMemberPurposesQuery request, CancellationToken cancellationToken)
     {
 
-        var getALlam = await _appContext.Amenities.ToListAsync(cancellationToken);
-
+       
         var getAll= await _context.MembershipPurposes
             .Where(p => p.IsActive==true)
             .Select(p => new MembershipPurposeDto

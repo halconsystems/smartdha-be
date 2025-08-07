@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250807110257_InitialTableCreation")]
+    partial class InitialTableCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,57 +68,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("Clubs");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ResidenceType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResidenceTypes")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ResidenceTypes");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("BookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckInDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CheckOutDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ClubId")
                         .HasColumnType("uniqueidentifier");
@@ -141,9 +98,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("RoomCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("RoomName")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -167,16 +121,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("BookingDate")
-                        .IsRequired()
+                    b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("CheckInDate")
-                        .IsRequired()
+                    b.Property<DateTime>("CheckInDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("CheckOutDate")
-                        .IsRequired()
+                    b.Property<DateTime>("CheckOutDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("ClubId")
@@ -229,6 +180,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -255,10 +209,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("RoomCategories");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ServiceMapping", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomServiceMapping", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClubId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
@@ -279,18 +236,25 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("RoomCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RoomType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("ServiceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ServiceMappings");
+                    b.ToTable("RoomServiceMappings");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Services", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomServices", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,7 +288,47 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("RoomServices");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomTypes", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RoomCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RoomType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoomTypes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubMembership", b =>
