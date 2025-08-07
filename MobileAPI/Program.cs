@@ -20,6 +20,9 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddMobileAPIServices(builder.Configuration);
 
+builder.Services.AddSingleton<DapperConnectionFactory>();
+
+
 
 
 builder.Services.AddHttpClient<ISmsService, SmsService>();

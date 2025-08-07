@@ -25,6 +25,7 @@ public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Suc
         if (string.IsNullOrEmpty(userTypeClaim) || !Enum.TryParse<UserType>(userTypeClaim, out var userType))
             throw new UnauthorizedAccessException("Invalid or missing UserType in token.");
 
+
         // Fetch modules assigned to that UserType
         var modules = await _context.MemberTypeModuleAssignments
             .Where(x => x.UserType == userType && x.IsDeleted==false && x.IsActive==true)

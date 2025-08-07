@@ -8,34 +8,12 @@ using Dapper;
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface IProcedureService
 {
-    /// <summary>
-    /// Executes a stored procedure and returns the same DynamicParameters,
-    /// so you can read any OUTPUT or RETURN values.
-    /// </summary>
-    Task<DynamicParameters> ExecuteAsync(
-        string name,
-        DynamicParameters parameters,
-        CancellationToken cancellationToken
-    );
+    Task<DynamicParameters> ExecuteAsync(string name, DynamicParameters parameters, CancellationToken cancellationToken, string connectionName = "DefaultConnection");
 
-    Task<(DynamicParameters, T?)> ExecuteWithSingleRowAsync<T>(
-       string name,
-       DynamicParameters parameters,
-       CancellationToken cancellationToken
-   );
+    Task<(DynamicParameters, T?)> ExecuteWithSingleRowAsync<T>(string name, DynamicParameters parameters, CancellationToken cancellationToken, string connectionName = "DefaultConnection");
 
-    Task<(DynamicParameters, List<T>)> ExecuteWithListAsync<T>(
-    string name,
-    DynamicParameters parameters,
-    CancellationToken cancellationToken
-);
+    Task<(DynamicParameters, List<T>)> ExecuteWithListAsync<T>(string name, DynamicParameters parameters, CancellationToken cancellationToken, string connectionName = "DefaultConnection");
 
-    /// <summary>
-    /// Executes a stored procedure without parameters and returns a list of results.
-    /// </summary>
-    Task<List<T>> ExecuteWithoutParamsAsync<T>(
-        string name,
-        CancellationToken cancellationToken
-    );
+    Task<List<T>> ExecuteWithoutParamsAsync<T>(string name, CancellationToken cancellationToken, string connectionName = "DefaultConnection");
 
 }
