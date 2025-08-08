@@ -21,6 +21,8 @@ public class NonMemberRequestsDto
     public string? ApprovedBy { get; set; } = default!;// Admin UserId
     public Guid PurposeId { get; set; } = default!;
 
+    public string PurposeTitles { get; set; } = default!;
+
     public List<NonMemberVerificationDocsDto> VerificationDocs { get; set; }= default!;
 }
 
