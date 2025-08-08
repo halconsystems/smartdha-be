@@ -1,6 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.DeleteRoomCategory;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.UpdateRoomCategory;
+using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries.GetRoomCategories;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries.GetRoomCategoryById;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -29,10 +30,10 @@ public class RoomCategoriesController : ControllerBase
         => Ok(await _mediator.Send(new DeleteRoomCategoryCommand(id, hardDelete), ct));
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<DHAFacilitationAPIs.Domain.Entities.RoomCategory?>> GetById(Guid id, CancellationToken ct)
+    public async Task<ActionResult<RoomCategoryDto?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetRoomCategoryByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
+    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
         => Ok(await _mediator.Send(new GetRoomCategoriesQuery(includeInactive, page, pageSize), ct));
 }

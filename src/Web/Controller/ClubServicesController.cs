@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Commands.CreateService;
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Commands.DeleteService;
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Commands.UpdateService;
+using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries;
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries.GetServiceById;
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries.GetServices;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -35,10 +36,10 @@ public class ClubServicesController : BaseApiController
         => Ok(await _mediator.Send(new DeleteServiceCommand(id, hardDelete), ct));
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<DHAFacilitationAPIs.Domain.Entities.Services?>> GetById(Guid id, CancellationToken ct)
+    public async Task<ActionResult<ServiceDto?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetServiceByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
+    public async Task<ActionResult<List<ServiceDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
         => Ok(await _mediator.Send(new GetServicesQuery(includeInactive, page, pageSize), ct));
 }

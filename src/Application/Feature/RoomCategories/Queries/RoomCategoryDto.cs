@@ -8,6 +8,8 @@ namespace DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries;
 public record RoomCategoryDto(
     Guid Id,
     string Name,
-    string? Description
+    string? Description,
+    bool? IsActive,
+    bool? IsDeleted
 );
 

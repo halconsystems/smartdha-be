@@ -8,5 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries;
 public record ResidenceTypeDto(
     Guid Id,
     string Name,
-    string? Description
+    string? Description,
+    bool? IsActive,
+    bool? IsDeleted
 );
