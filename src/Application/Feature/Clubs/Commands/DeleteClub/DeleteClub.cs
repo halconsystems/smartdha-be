@@ -29,7 +29,7 @@ public class DeleteClubCommandHandler : IRequestHandler<DeleteClubCommand, Succe
         }
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Deleted", request.HardDelete ? "Club hard deleted." : "Club soft deleted.");
+        return Success.Delete(entity.Id.ToString());
     }
 }
 

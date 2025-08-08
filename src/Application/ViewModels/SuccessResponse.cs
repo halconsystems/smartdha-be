@@ -17,9 +17,17 @@ public class SuccessResponse<T>
     {
         if (typeof(T) == typeof(string))
         {
-            // For string, treat it as a detail message and keep Data null
-            Detail = data?.ToString();
-            Data = default;
+            // If no explicit detail provided, treat string as message
+            if (string.IsNullOrWhiteSpace(detail))
+            {
+                Detail = data?.ToString();
+                Data = default;
+            }
+            else
+            {
+                Data = data;
+                Detail = detail;
+            }
         }
         else
         {
@@ -31,6 +39,26 @@ public class SuccessResponse<T>
         if (!string.IsNullOrWhiteSpace(title))
             Title = title;
     }
+
+
+    //public SuccessResponse(T? data, string? detail = null, string? title = null)
+    //{
+    //    if (typeof(T) == typeof(string))
+    //    {
+    //        // For string, treat it as a detail message and keep Data null
+    //        Detail = data?.ToString();
+    //        Data = default;
+    //    }
+    //    else
+    //    {
+    //        Data = data;
+    //        if (!string.IsNullOrWhiteSpace(detail))
+    //            Detail = detail;
+    //    }
+
+    //    if (!string.IsNullOrWhiteSpace(title))
+    //        Title = title;
+    //}
 
     public static SuccessResponse<string> FromMessage(string message, string? title = null)
     {

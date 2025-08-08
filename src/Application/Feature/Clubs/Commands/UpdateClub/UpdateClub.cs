@@ -25,9 +25,9 @@ public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, Succe
         entity.Location = request.Location;
         entity.ContactNumber = request.ContactNumber;
         if (request.IsActive.HasValue) entity.IsActive = request.IsActive;
-        entity.LastModified = DateTime.UtcNow;
+        entity.LastModified = DateTime.Now;
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Updated", "Club updated.");
+        return Success.Update(entity.Id.ToString());
     }
 }

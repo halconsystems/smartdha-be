@@ -25,10 +25,10 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
             Location = request.Location,
             ContactNumber = request.ContactNumber
         };
-
         _ctx.Clubs.Add(entity);
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage(entity.Id.ToString()+ "Club created.");
+
+        return Success.Created(entity.Id.ToString());
     }
 }
 
