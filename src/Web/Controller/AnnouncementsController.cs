@@ -1,4 +1,5 @@
-﻿using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.AddAnnouncement;
+﻿using DHAFacilitationAPIs.Application.Feature.Announcement.Queries.GetAllAnnouncements;
+using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.AddAnnouncement;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,4 +17,11 @@ public class AnnouncementsController : BaseApiController
         return Ok(result);
 
     }
+
+    [HttpGet("GetAll-Annoucements"),AllowAnonymous]
+    public async Task<IActionResult> GetAllAnnoucements()
+    {
+        return Ok(await Mediator.Send(new GetAllAnnouncementsQuery()));
+    }
+
 }

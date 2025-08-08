@@ -10,25 +10,23 @@ public class GetAllAnnouncementsQuery : IRequest<SuccessResponse<List<Announceme
 public class GetAllAnnouncementsQueryHandler : IRequestHandler<GetAllAnnouncementsQuery, SuccessResponse<List<AnnouncementDto>>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public GetAllAnnouncementsQueryHandler(IApplicationDbContext context)
+    public GetAllAnnouncementsQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<SuccessResponse<List<AnnouncementDto>>> Handle(GetAllAnnouncementsQuery request, CancellationToken cancellationToken)
     {
         var result = await _context.Announcements
-            .Select(a => new AnnouncementDto
-            {
-                Id = a.Id,
-                Name = a.Name,
-                Title = a.Title,
-                Description = a.Description
-            })
+            .AsNoTracking()
+            .ProjectTo<AnnouncementDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
 
-        return new SuccessResponse<List<AnnouncementDto>>(result);
+        return Success.Ok(result);
+
     }
 }
 
