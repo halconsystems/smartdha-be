@@ -16,6 +16,7 @@ public interface IOLMRSApplicationDbContext
     DbSet<Room> Rooms { get; }
     DbSet<RoomCharges> RoomCharges { get; }
     DbSet<RoomImages> RoomImages { get; }
+    DbSet<RoomRatings> RoomRatings { get; }
     DbSet<Services> Services { get; }
     DbSet<ServiceMapping> ServiceMappings { get; }
     DbSet<ExtraServiceCharges> ExtraServiceCharges { get; }

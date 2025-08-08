@@ -2,6 +2,5 @@
 
 public class UserClubDto
 {
-    public Guid ClubId { get; set; }
-    public string ClubName { get; set; } = default!;
+    public string Name { get; set; } = default!;
 }

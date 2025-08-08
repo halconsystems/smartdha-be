@@ -24,6 +24,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<RoomCharges> RoomCharges => Set<RoomCharges>();
     public DbSet<RoomImages> RoomImages => Set<RoomImages>();
+    public DbSet<RoomRatings> RoomRatings => Set<RoomRatings>();
     public DbSet<Services> Services => Set<Services>();
     public DbSet<ServiceMapping> ServiceMappings => Set<ServiceMapping>();
     public DbSet<ExtraServiceCharges> ExtraServiceCharges => Set<ExtraServiceCharges>();

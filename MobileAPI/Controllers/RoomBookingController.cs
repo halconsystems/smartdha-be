@@ -1,6 +1,11 @@
 ﻿using System.Security.Claims;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ResidenceTypes;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomCategories;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Rooms;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,13 +24,12 @@ public class RoomBookingController : ControllerBase
     [HttpGet("get-user-clubs")]
     public async Task<IActionResult> GetUserClubs()
     {
-        //return Ok(await _mediator.Send(new GetUserClubsQuery()));
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                        ?? User.FindFirst("sub")?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
         {
-            return Unauthorized("User ID not found in token.");
+            return Unauthorized("Invalid or missing user ID in token");
         }
 
         var result = await _mediator.Send(new GetUserClubsQuery { UserId = userId });
@@ -33,4 +37,46 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("search-rooms")]
+    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate, [FromQuery] string bookingType)
+    {
+        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
+        return Ok(result);
+    }
+
+    [HttpGet("get-available-room-categories")]
+    public async Task<IActionResult> GetAvailableRoomCategories([FromQuery] Guid clubId, [FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate)
+    {
+        var result = await _mediator.Send(new GetAvailableRoomCategoriesQuery(clubId, checkInDate, checkOutDate));
+        return Ok(result);
+    }
+
+    [HttpGet("get-available-residence-types")]
+    public async Task<IActionResult> GetAvailableResidenceTypes(Guid clubId, Guid roomCategoryId, DateTime checkIn, DateTime checkOut)
+    {
+        var query = new GetAvailableResidenceTypesQuery(clubId, roomCategoryId, checkIn, checkOut);
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("get-available-rooms")]
+    public async Task<IActionResult> GetAvailableRooms(
+    [FromQuery] Guid clubId,
+    [FromQuery] Guid roomCategoryId,
+    [FromQuery] Guid residenceTypeId,
+    [FromQuery] DateTime checkInDate,
+    [FromQuery] DateTime checkOutDate,
+    [FromQuery] string bookingType
+)
+    {
+        var result = await _mediator.Send(new GetAvailableRoomsQuery(clubId, roomCategoryId, residenceTypeId, checkInDate, checkOutDate, bookingType));
+        return Ok(result);
+    }
+
+    [HttpGet("get-room-details")]
+    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] string bookingType)
+    {
+        var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
+        return Ok(result);
+    }
 }

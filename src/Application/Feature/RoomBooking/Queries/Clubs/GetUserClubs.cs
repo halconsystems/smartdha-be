@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 
-public class GetUserClubsQuery : IRequest<List<UserClubDto>>
+public class GetUserClubsQuery() : IRequest<List<UserClubDto>>
 {
     public Guid UserId { get; set; } = default!;  // Pass this from claims or query param
 }
@@ -25,10 +25,17 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
 
     public async Task<List<UserClubDto>> Handle(GetUserClubsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.UserClubMembership
-            .Include(x => x.ClubId)
-            .Where(x => x.UserId == request.UserId && x.IsActive == true && x.IsDeleted == false)
-            .ProjectTo<UserClubDto>(_mapper.ConfigurationProvider)
+        return await (
+                from membership in _context.UserClubMembership
+                join club in _context.Clubs on membership.ClubId equals club.Id
+                where membership.UserId == request.UserId
+                      && membership.IsActive == true
+                      && !membership.IsDeleted == false
+                select new UserClubDto
+                {
+                    Name = club.Name
+                }
+            )
             .Distinct()
             .ToListAsync(cancellationToken);
     }
