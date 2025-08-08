@@ -1,9 +1,11 @@
 ﻿using Azure.Core;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Dashboard.Commands.AddMemberTypeModuleAssignments;
+using DHAFacilitationAPIs.Application.Feature.Dashboard.Queries.NonMemberApproval;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +16,16 @@ namespace DHAFacilitationAPIs.Web.Controller;
 [ApiController]
 public class NonMemberController : BaseApiController
 {
-    private readonly IUser _loggedInUser;
+    private readonly IMediator _mediator;
 
-    public NonMemberController(IUser loggedInUser)
+    public NonMemberController(IMediator mediator)
     {
-        _loggedInUser = loggedInUser;
+        _mediator = mediator;
     }
+
+    [HttpGet("Dashboard"), AllowAnonymous]
+    public Task<SuccessResponse<NonMemberVerificationDashboardDto>> Get(CancellationToken ct)
+        => _mediator.Send(new GetNonMemberVerificationDashboardQuery(), ct);
 
     [HttpPost("get-nonmember-requests"), AllowAnonymous]
     public async Task<IActionResult> GetNonMemberRequests(NonMemberRequestsQuery nonMemberRequestsQuery)
