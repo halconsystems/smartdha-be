@@ -22,13 +22,4 @@ public class Room : BaseAuditableEntity
 
     [MaxLength(100)]
     public string? Name { get; set; }
-
-    [Required]
-    public DateTime BookingDate { get; set; } = DateTime.UtcNow;
-
-    [Required]
-    public DateTime CheckInDate { get; set; }
-
-    [Required]
-    public DateTime CheckOutDate { get; set; }
 }
