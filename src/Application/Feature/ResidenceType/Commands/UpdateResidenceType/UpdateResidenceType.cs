@@ -26,6 +26,6 @@ public class UpdateResidenceTypeCommandHandler : IRequestHandler<UpdateResidence
         entity.LastModified = DateTime.UtcNow;
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Updated", "ResidenceType updated.");
+        return Success.Update(entity.Id.ToString());
     }
 }

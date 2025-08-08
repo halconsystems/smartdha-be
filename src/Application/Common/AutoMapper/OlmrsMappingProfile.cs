@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
+using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries;
+using DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries;
+using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Common.AutoMapper;
@@ -12,9 +15,9 @@ public class OlmrsMappingProfile : Profile
     public OlmrsMappingProfile()
     {
         CreateMap<Club, ClubDto>();
-        //CreateMap<RoomCategory, RoomCategoryDto>();
-        //CreateMap<ResidenceType, ResidenceTypeDto>();
-        //CreateMap<Services, ServiceDto>();
+        CreateMap<RoomCategory, RoomCategoryDto>();
+        CreateMap<ResidenceType, ResidenceTypeDto>();
+        CreateMap<Services, ServiceDto>();
     }
 }
 

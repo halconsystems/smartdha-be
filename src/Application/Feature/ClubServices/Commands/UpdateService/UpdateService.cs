@@ -26,6 +26,6 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
         entity.LastModified = DateTime.UtcNow;
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Updated", "Service updated.");
+        return Success.Update(entity.Id.ToString());
     }
 }

@@ -26,6 +26,6 @@ public class UpdateRoomCategoryCommandHandler : IRequestHandler<UpdateRoomCatego
         entity.LastModified = DateTime.Now;
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Updated", "RoomCategory updated.");
+        return Success.Update(entity.Id.ToString());
     }
 }

@@ -33,6 +33,6 @@ public class ResidenceTypeController : BaseApiController
         => Ok(await _mediator.Send(new GetResidenceTypeByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<IReadOnlyList<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
+    public async Task<ActionResult<List<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
         => Ok(await _mediator.Send(new GetResidenceTypesQuery(includeInactive, page, pageSize), ct));
 }

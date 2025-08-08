@@ -24,6 +24,6 @@ public class DeleteResidenceTypeCommandHandler : IRequestHandler<DeleteResidence
         else { entity.IsDeleted = true; entity.IsActive = false; entity.LastModified = DateTime.UtcNow; }
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Deleted", request.HardDelete ? "Hard deleted." : "Soft deleted.");
+        return Success.Delete(entity.Id.ToString());
     }
 }

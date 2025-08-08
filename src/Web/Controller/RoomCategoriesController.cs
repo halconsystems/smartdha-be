@@ -33,6 +33,6 @@ public class RoomCategoriesController : ControllerBase
         => Ok(await _mediator.Send(new GetRoomCategoryByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<IReadOnlyList<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
+    public async Task<ActionResult<List<DHAFacilitationAPIs.Domain.Entities.Services>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
         => Ok(await _mediator.Send(new GetRoomCategoriesQuery(includeInactive, page, pageSize), ct));
 }

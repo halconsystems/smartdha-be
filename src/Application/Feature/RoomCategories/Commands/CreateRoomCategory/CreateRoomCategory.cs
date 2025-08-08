@@ -27,7 +27,7 @@ public class CreateRoomCategoryCommandHandler : IRequestHandler<CreateRoomCatego
         };
         _ctx.RoomCategories.Add(entity);
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage(entity.Id + "RoomCategory created.");
+        return Success.Created(entity.Id.ToString());
     }
 }
 

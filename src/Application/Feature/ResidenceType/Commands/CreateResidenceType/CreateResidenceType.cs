@@ -28,6 +28,6 @@ public class CreateResidenceTypeCommandHandler : IRequestHandler<CreateResidence
         };
         _ctx.ResidenceTypes.Add(entity);
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage(entity.Id.ToString(), "ResidenceType created.");
+        return Success.Created(entity.Id.ToString());
     }
 }

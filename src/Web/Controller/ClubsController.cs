@@ -1,6 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
+using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -34,7 +35,7 @@ public class ClubsController : BaseApiController
         => Ok(await _mediator.Send(new GetClubByIdQuery(id), ct));
 
     [HttpGet,AllowAnonymous]
-    public async Task<ActionResult<IReadOnlyList<Club>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
+    public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
         => Ok(await _mediator.Send(new GetClubsQuery(includeInactive, page, pageSize), ct));
 }
 

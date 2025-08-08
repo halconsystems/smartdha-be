@@ -21,9 +21,9 @@ public class DeleteRoomCategoryCommandHandler : IRequestHandler<DeleteRoomCatego
         if (entity is null) throw new KeyNotFoundException("RoomCategory not found.");
 
         if (request.HardDelete) _ctx.RoomCategories.Remove(entity);
-        else { entity.IsDeleted = true; entity.IsActive = false; entity.LastModified = DateTime.UtcNow; }
+        else { entity.IsDeleted = true; entity.IsActive = false; entity.LastModified = DateTime.Now; }
 
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage("Deleted", request.HardDelete ? "Hard deleted." : "Soft deleted.");
+        return Success.Delete(entity.Id.ToString());
     }
 }

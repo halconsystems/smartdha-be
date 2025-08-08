@@ -4,25 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.CreateResidenceType.Queries.GetResidenceTypes;
-public record GetResidenceTypesQuery(bool IncludeInactive = false, int Page = 1, int PageSize = 50)
-    : IRequest<IReadOnlyList<DHAFacilitationAPIs.Domain.Entities.ResidenceType>>;
+public record GetResidenceTypesQuery(
+    bool IncludeInactive = false,
+    int Page = 1,
+    int PageSize = 50
+) : IRequest<SuccessResponse<List<ResidenceTypeDto>>>;
 
-public class GetResidenceTypesQueryHandler : IRequestHandler<GetResidenceTypesQuery, IReadOnlyList<DHAFacilitationAPIs.Domain.Entities.ResidenceType>>
+public class GetResidenceTypesQueryHandler
+    : IRequestHandler<GetResidenceTypesQuery, SuccessResponse<List<ResidenceTypeDto>>>
 {
     private readonly IOLMRSApplicationDbContext _ctx;
-    public GetResidenceTypesQueryHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    private readonly IMapper _mapper;
 
-    public async Task<IReadOnlyList<DHAFacilitationAPIs.Domain.Entities.ResidenceType>> Handle(GetResidenceTypesQuery request, CancellationToken ct)
+    public GetResidenceTypesQueryHandler(IOLMRSApplicationDbContext ctx, IMapper mapper)
     {
-        var q = _ctx.ResidenceTypes.AsNoTracking().Where(x => x.IsDeleted == false || x.IsDeleted == null);
-        if (!request.IncludeInactive) q = q.Where(x => x.IsActive == true || x.IsActive == null);
+        _ctx = ctx;
+        _mapper = mapper;
+    }
 
-        return await q.OrderBy(x => x.Name)
+    public async Task<SuccessResponse<List<ResidenceTypeDto>>> Handle(GetResidenceTypesQuery request, CancellationToken ct)
+    {
+        var q = _ctx.ResidenceTypes
+            .AsNoTracking()
+            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
+
+        if (!request.IncludeInactive)
+            q = q.Where(x => x.IsActive == true || x.IsActive == null);
+
+        var list = await q
+            .OrderBy(x => x.Name)
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)
+            .ProjectTo<ResidenceTypeDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);
+
+        return Success.Ok(list);
+        // If you have the helper: return Success.Ok(list);
     }
 }

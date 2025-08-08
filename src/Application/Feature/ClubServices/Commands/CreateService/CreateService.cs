@@ -28,6 +28,6 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
         };
         _ctx.Services.Add(entity);
         await _ctx.SaveChangesAsync(ct);
-        return SuccessResponse<string>.FromMessage(entity.Id.ToString(), "Service created.");
+        return Success.Created(entity.Id.ToString());
     }
 }
