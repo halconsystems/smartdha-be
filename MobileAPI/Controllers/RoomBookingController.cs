@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Rooms;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MobileAPI.Controller;
@@ -21,7 +22,7 @@ public class RoomBookingController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("get-user-clubs")]
+    [HttpGet("get-user-clubs"), AllowAnonymous]
     public async Task<IActionResult> GetUserClubs()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -37,21 +38,21 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("search-rooms")]
+    [HttpGet("search-rooms"), AllowAnonymous]
     public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate, [FromQuery] string bookingType)
     {
         var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
         return Ok(result);
     }
 
-    [HttpGet("get-available-room-categories")]
+    [HttpGet("get-available-room-categories"), AllowAnonymous]
     public async Task<IActionResult> GetAvailableRoomCategories([FromQuery] Guid clubId, [FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate)
     {
         var result = await _mediator.Send(new GetAvailableRoomCategoriesQuery(clubId, checkInDate, checkOutDate));
         return Ok(result);
     }
 
-    [HttpGet("get-available-residence-types")]
+    [HttpGet("get-available-residence-types"), AllowAnonymous]
     public async Task<IActionResult> GetAvailableResidenceTypes(Guid clubId, Guid roomCategoryId, DateTime checkIn, DateTime checkOut)
     {
         var query = new GetAvailableResidenceTypesQuery(clubId, roomCategoryId, checkIn, checkOut);
@@ -59,7 +60,7 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-available-rooms")]
+    [HttpGet("get-available-rooms"), AllowAnonymous]
     public async Task<IActionResult> GetAvailableRooms(
     [FromQuery] Guid clubId,
     [FromQuery] Guid roomCategoryId,
@@ -73,7 +74,7 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-room-details")]
+    [HttpGet("get-room-details"), AllowAnonymous]
     public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] string bookingType)
     {
         var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
