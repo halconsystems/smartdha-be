@@ -27,7 +27,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
     {
         var availableRooms = await (
             from r in _context.Rooms
-            join ra in _context.RoomsAvailability
+            join ra in _context.RoomAvailabilities
                 on r.Id equals ra.RoomId
             where r.ClubId == request.ClubId
                 && r.IsGloballyAvailable
@@ -57,7 +57,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
                 Ratings = _context.RoomRatings
                     .Where(rr => rr.RoomId == r.Id)
-                    .Select(rr => rr.RoomRating)
+                    .Select(rr => rr.RoomRatings)
                     .FirstOrDefault(),
 
                 DefaultImage = _context.RoomImages
