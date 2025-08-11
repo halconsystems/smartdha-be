@@ -25,17 +25,16 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
     public async Task<List<SearchRoomsDto>> Handle(SearchRoomsQuery request, CancellationToken cancellationToken)
     {
-        var availableRooms = await _context.Rooms
-            .Where(r => r.ClubId == request.ClubId &&
-                        r.IsGloballyAvailable &&
-                        _context.RoomsAvailability.Any(ra =>
-                            ra.RoomId == r.Id &&
-                            ra.FromDate <= request.CheckInDate &&
-                            ra.ToDate >= request.CheckOutDate &&
-                            ra.Action == AvailabilityAction.Available
-                        )
-            )
-            .Select(r => new SearchRoomsDto
+        var availableRooms = await (
+            from r in _context.Rooms
+            join ra in _context.RoomsAvailability
+                on r.Id equals ra.RoomId
+            where r.ClubId == request.ClubId
+                && r.IsGloballyAvailable
+                && ra.FromDate <= request.CheckInDate
+                && ra.ToDate >= request.CheckOutDate
+                && ra.Action == AvailabilityAction.Available
+            select new SearchRoomsDto
             {
                 ResidenceTypeName = _context.ResidenceTypes
                     .Where(rt => rt.Id == r.ResidenceTypeId)
@@ -66,15 +65,8 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                     .Select(img => img.ImageURL)
                     .FirstOrDefault() ?? string.Empty,
 
-                CheckInDate = _context.RoomsAvailability
-                    .Where(a => a.RoomId == r.Id && a.Action == AvailabilityAction.Available)
-                    .Select(a => a.FromDate)
-                    .FirstOrDefault(),
-
-                CheckOutDate = _context.RoomsAvailability
-                    .Where(a => a.RoomId == r.Id && a.Action == AvailabilityAction.Available)
-                    .Select(a => a.ToDate)
-                    .FirstOrDefault()
+                CheckInDate = ra.FromDate,
+                CheckOutDate = ra.ToDate
             })
             .ToListAsync(cancellationToken); // async version
 
