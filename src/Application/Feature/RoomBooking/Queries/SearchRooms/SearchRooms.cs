@@ -22,7 +22,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
     public async Task<List<SearchRoomsDto>> Handle(SearchRoomsQuery request, CancellationToken cancellationToken)
     {
-        var data = await _context.Rooms
+        var availableRooms = await _context.Rooms
             .Where(r => r.ClubId == request.ClubId &&
                         !_context.RoomBookings.Any(rb =>
                             rb.RoomId == r.Id &&
@@ -32,7 +32,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             .Select(g => new
             {
                 g.Key.RoomCategoryId,
-                RoomCategoryName = _context.RoomCategories
+                CategoryName = _context.RoomCategories
                     .Where(rc => rc.Id == g.Key.RoomCategoryId)
                     .Select(rc => rc.Name)
                     .FirstOrDefault(),
@@ -62,12 +62,12 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             })
             .ToListAsync(cancellationToken);
 
-        return data
-            .GroupBy(x => new { x.RoomCategoryId, x.RoomCategoryName })
+        return availableRooms
+            .GroupBy(x => new { x.RoomCategoryId, x.CategoryName })
             .Select(categoryGroup => new SearchRoomsDto
             {
                 CategoryId = categoryGroup.Key.RoomCategoryId,
-                CategoryName = categoryGroup.Key.RoomCategoryName,
+                CategoryName = categoryGroup.Key.CategoryName,
                 ResidenceTypes = categoryGroup
                     .GroupBy(rt => new { rt.ResidenceTypeId, rt.ResidenceTypeName })
                     .Select(rtGroup => new ResidenceTypeDto
@@ -79,3 +79,4 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             }).ToList();
     }
 }
+
