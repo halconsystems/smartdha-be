@@ -130,14 +130,4 @@ public class FileStorageService : IFileStorageService
         return string.IsNullOrWhiteSpace(host) ? urlPath : $"{host.TrimEnd('/')}{urlPath}";
     }
 
-    private string GetCbmsPhysicalBase()
-    {
-        // Prefer ContentRootPath; fallback to AppContext.BaseDirectory
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
-
-        var requestFolder = _opt.RequestPath.Trim('/', '\\'); // "CBMS"
-        return Path.Combine(baseDir, requestFolder);          // <content-root>\CBMS
-    }
 }

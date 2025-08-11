@@ -2,24 +2,14 @@
 
 public class SearchRoomsDto
 {
-    public Guid CategoryId { get; set; }
-    public string? CategoryName { get; set; }
-    public List<ResidenceTypeDto> ResidenceTypes { get; set; } = new();
-}
-
-public class ResidenceTypeDto
-{
-    public Guid ResidenceTypeId { get; set; }
-    public string? ResidenceTypeName { get; set; }
-    public List<RoomDto> Rooms { get; set; } = new();
-}
-
-public class RoomDto
-{
+    public string ResidenceTypeName { get; set; } = default!;
+    public string CategoryName { get; set; } = default!;
     public Guid RoomId { get; set; }
-    public string? Name { get; set; }
-    public string? RoomNo { get; set; }
+    public string Name { get; set; } = default!;
+    public string RoomNo { get; set; } = default!;
     public decimal Price { get; set; }
-    public decimal? Ratings { get; set; }
-    public List<string> Images { get; set; } = new();
+    public decimal Ratings { get; set; }
+    public DateTime CheckInDate { get; set; }
+    public DateTime CheckOutDate { get; set; }
+    public string DefaultImage { get; set; } = string.Empty;
 }

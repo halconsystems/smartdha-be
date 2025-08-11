@@ -1,5 +1,6 @@
 using System.Net;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Diagnostics;
@@ -21,10 +22,6 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddMobileAPIServices(builder.Configuration);
 
 builder.Services.AddSingleton<DapperConnectionFactory>();
-
-
-
-
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
@@ -36,11 +33,15 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.Configure<FileStorageOptions>(
+    builder.Configuration.GetSection("FileStorage"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 
