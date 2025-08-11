@@ -170,13 +170,13 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             Name = user.Name,
             AccessToken = token,
             isOtpRequired = false,
-            ResponseMessage = "Authenticated!"
+            ResponseMessage = "Login successful! You are now authenticated without OTP."
         };
 
         return new SuccessResponse<MobileAuthenticationDto>(
                         dto,
                      "Authentication step completed.",
-                     "OTP Verification Required"
+                     "Login successful! You are now authenticated without OTP."
                     );
     }
 }

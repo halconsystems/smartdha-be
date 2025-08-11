@@ -25,18 +25,23 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
 
     public async Task<List<UserClubDto>> Handle(GetUserClubsQuery request, CancellationToken cancellationToken)
     {
-        return await (
-                from membership in _context.UserClubMembership
-                join club in _context.Clubs on membership.ClubId equals club.Id
-                where membership.UserId == request.UserId
-                      && membership.IsActive == true
-                      && !membership.IsDeleted == false
-                select new UserClubDto
-                {
-                    Name = club.Name
-                }
-            )
-            .Distinct()
-            .ToListAsync(cancellationToken);
+        var clubs = await (
+            from m in _context.UserClubMembership.AsNoTracking()
+            join c in _context.Clubs.AsNoTracking() on m.ClubId equals c.Id
+            where m.UserId == request.UserId
+                  && m.IsActive == true
+                  && m.IsDeleted != true
+            select new UserClubDto
+            {
+                ClubId = c.Id.ToString(), // Assuming ClubId is Guid in DB
+                Name = c.Name
+            }
+        )
+        .Distinct() // Works here because projecting primitive types in DTO
+        .OrderBy(x => x.Name)
+        .ToListAsync(cancellationToken);
+
+        return clubs;
     }
+
 }

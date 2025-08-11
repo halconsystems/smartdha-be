@@ -12,30 +12,38 @@ public record CreateRoomCommand(
     Guid RoomCategoryId,
     Guid ResidenceTypeId,
     string No,
-    string? Name
+    string? Name,
+    string? Description
 ) : IRequest<SuccessResponse<string>>;
 
+// Handler
 public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, SuccessResponse<string>>
 {
     private readonly IOLMRSApplicationDbContext _ctx;
 
-    public CreateRoomCommandHandler(IOLMRSApplicationDbContext ctx)
-    {
-        _ctx = ctx;
-    }
+    public CreateRoomCommandHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<SuccessResponse<string>> Handle(CreateRoomCommand request, CancellationToken ct)
     {
+        var no = request.No.Trim();
+
+        // Ensure uniqueness per Club: (ClubId, No)
+        var exists = await _ctx.Rooms
+            .AsNoTracking()
+            .AnyAsync(r => r.ClubId == request.ClubId && r.No == no, ct);
+
+        if (exists)
+            throw new InvalidOperationException($"Room number '{no}' already exists for this club.");
+
         var entity = new Domain.Entities.Room
         {
             ClubId = request.ClubId,
             RoomCategoryId = request.RoomCategoryId,
             ResidenceTypeId = request.ResidenceTypeId,
-            No = request.No,
-            Name = request.Name,
-            IsActive = true,
-            IsDeleted = false,
-            Created = DateTime.UtcNow
+            No = no,
+            Name = request.Name?.Trim(),
+            Description = request.Description,
+            IsGloballyAvailable = true,   // default as per your model
         };
 
         _ctx.Rooms.Add(entity);
@@ -44,4 +52,5 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Succe
         return Success.Created(entity.Id.ToString());
     }
 }
+
 

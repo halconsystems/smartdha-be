@@ -22,7 +22,7 @@ public interface IOLMRSApplicationDbContext
     DbSet<ExtraServiceCharges> ExtraServiceCharges { get; }
     DbSet<RoomBooking> RoomBookings { get; }
     DbSet<UserClubMembership> UserClubMembership { get; }
-
+    DbSet<RoomAvailability> RoomAvailabilities { get; }
 
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

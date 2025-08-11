@@ -22,4 +22,8 @@ public class Room : BaseAuditableEntity
 
     [MaxLength(100)]
     public string? Name { get; set; }
+    public string? Description { get; set; }
+
+    // Quick global toggle (optional, see #2)
+    public bool IsGloballyAvailable { get; set; } = true;
 }

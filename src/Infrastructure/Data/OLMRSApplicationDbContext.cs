@@ -30,13 +30,41 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<ExtraServiceCharges> ExtraServiceCharges => Set<ExtraServiceCharges>();
     public DbSet<RoomBooking> RoomBookings => Set<RoomBooking>();
     public DbSet<UserClubMembership> UserClubMembership => Set<UserClubMembership>();
+    public DbSet<RoomAvailability> RoomAvailabilities => Set<RoomAvailability>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OLMRSApplicationDbContext).Assembly);
-    }
 
+        // Add custom index for Room: (ClubId + No) must be unique
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => new { r.ClubId, r.No })
+            .IsUnique();
+
+        modelBuilder.Entity<RoomAvailability>()
+            .ToTable("RoomAvailability");
+
+        modelBuilder.Entity<RoomAvailability>()
+            .Property(x => x.FromDate)
+            .HasColumnName("FromDate")
+            .HasColumnType("datetime2");   // SQL Server
+
+        modelBuilder.Entity<RoomAvailability>()
+            .Property(x => x.ToDate)
+            .HasColumnName("ToDate")
+            .HasColumnType("datetime2");
+
+        modelBuilder.Entity<RoomAvailability>()
+            .ToTable(t => t.HasCheckConstraint(
+                "CK_RoomAvailability_FromTo",
+                "[FromDate] < [ToDate]"      // use <= if you want zero-length ranges to be invalid (current is strict)
+            ));
+
+        // (optional) helpful index for range queries
+        modelBuilder.Entity<RoomAvailability>()
+            .HasIndex(x => new { x.RoomId, x.FromDate, x.ToDate });
+    }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         // Define the Pakistan Standard Time zone

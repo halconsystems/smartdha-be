@@ -31,4 +31,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CMBS\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
