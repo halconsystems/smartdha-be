@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CMBS\" />
+    <Folder Include="CBMS\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
