@@ -5,6 +5,7 @@ using DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetImageCategories;
+using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomImages;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -108,6 +109,13 @@ public class RoomController : ControllerBase
     public async Task<ActionResult<SuccessResponse<string>>> DeleteRoom([FromQuery] DeleteRoomCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("RoomImages/{roomId}"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<RoomImageDto>>>> GetRoomImages(Guid roomId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetRoomImagesQuery { RoomId = roomId }, ct);
         return Ok(result);
     }
 
