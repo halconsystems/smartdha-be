@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface IFileStorageService
 {
+    Task<string> SaveFileNonMemeberAsync(IFormFile file, string folderName, CancellationToken ct);
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct);
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
     Task<List<string>> SaveFilesAsync(IEnumerable<IFormFile> files, string folderName, CancellationToken ct, long maxBytes = 10 * 1024 * 1024, string[]? allowedExtensions = null);

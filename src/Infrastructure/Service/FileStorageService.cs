@@ -30,6 +30,20 @@ public class FileStorageService : IFileStorageService
     public Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct)
         => SaveFileAsync(file, folderName, ct, 10 * 1024 * 1024, DefaultAllowedExt);
 
+    public async Task<string> SaveFileNonMemeberAsync(IFormFile file, string folderName, CancellationToken cancellationToken)
+    {
+        var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", folderName);
+        Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await file.CopyToAsync(stream, cancellationToken);
+
+        return Path.Combine("uploads", folderName, fileName); // relative path
+    }
+
     public async Task<string> SaveFileAsync(
     IFormFile file,
     string folderName,

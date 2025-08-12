@@ -1,4 +1,5 @@
-﻿using DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Commands.AddMembershipPurpose;
+﻿using Azure.Core;
+using DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Commands.AddMembershipPurpose;
 using DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Queries.GetAllMembershipPurposes;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
@@ -11,10 +12,10 @@ namespace MobileAPI.Controllers;
 [ApiController]
 public class MembershipPurposesController : BaseApiController
 {
-    [HttpPost("GetMembershipPurposes"), AllowAnonymous]
-    public async Task<IActionResult> GetMembershipPurposes(GetAllMembershipPurposesQuery request)
+    [HttpGet("GetMembershipPurposes"), AllowAnonymous]
+    public async Task<IActionResult> GetMembershipPurposes()
     {
-        return Ok(await Mediator.Send(request));
+        return Ok(await Mediator.Send(new GetAllMembershipPurposesQuery()));
     }
 
     [HttpPost("AddMembershipPurposes"), AllowAnonymous]

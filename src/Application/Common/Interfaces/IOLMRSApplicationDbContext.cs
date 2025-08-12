@@ -22,7 +22,7 @@ public interface IOLMRSApplicationDbContext
     DbSet<ServiceMapping> ServiceMappings { get; }
     DbSet<ExtraServiceCharges> ExtraServiceCharges { get; }
     DbSet<RoomBooking> RoomBookings { get; }
-    DbSet<UserClubMembership> UserClubMembership { get; }
+    DbSet<UserClubMembership> UserClubMemberships { get; }
     DbSet<RoomAvailability> RoomAvailabilities { get; }
 
 

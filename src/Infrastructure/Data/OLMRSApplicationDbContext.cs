@@ -30,7 +30,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<ServiceMapping> ServiceMappings => Set<ServiceMapping>();
     public DbSet<ExtraServiceCharges> ExtraServiceCharges => Set<ExtraServiceCharges>();
     public DbSet<RoomBooking> RoomBookings => Set<RoomBooking>();
-    public DbSet<UserClubMembership> UserClubMembership => Set<UserClubMembership>();
+    public DbSet<UserClubMembership> UserClubMemberships => Set<UserClubMembership>();
     public DbSet<RoomAvailability> RoomAvailabilities => Set<RoomAvailability>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

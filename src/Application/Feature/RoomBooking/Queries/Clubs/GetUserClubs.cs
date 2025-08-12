@@ -26,7 +26,7 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
     public async Task<List<UserClubDto>> Handle(GetUserClubsQuery request, CancellationToken cancellationToken)
     {
         var clubs = await (
-            from m in _context.UserClubMembership.AsNoTracking()
+            from m in _context.UserClubMemberships.AsNoTracking()
             join c in _context.Clubs.AsNoTracking() on m.ClubId equals c.Id
             where m.UserId == request.UserId
                   && m.IsActive == true

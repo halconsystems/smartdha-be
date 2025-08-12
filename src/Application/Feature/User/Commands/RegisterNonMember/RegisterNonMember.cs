@@ -123,7 +123,6 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             Status = VerificationStatus.Pending,
             Remarks = "Submitted with documents"
         };
-
         _context.NonMemberVerifications.Add(verification);
 
         // Store purposes
@@ -138,16 +137,14 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
         }
        
-
-
         // Save documents
-        var frontPath = await _fileStorage.SaveFileAsync(request.CNICFrontImage, "cnic", cancellationToken);
-        var backPath = await _fileStorage.SaveFileAsync(request.CNICBackImage, "cnic", cancellationToken);
+        var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
+        var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
         string? supportPath = null;
 
         if (request.SupportingDocument != null)
         {
-            supportPath = await _fileStorage.SaveFileAsync(request.SupportingDocument, "documents", cancellationToken);
+            supportPath = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
         }
 
         var document = new NonMemberVerificationDocument
@@ -159,14 +156,8 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
         };
 
         _context.NonMemberVerificationDocuments.Add(document);
-
-
-
         //Final call
         await _context.SaveChangesAsync(cancellationToken);
-
-
-
 
         string finalmsg= "Registration submitted successfully. Your request is pending review.";
         return SuccessResponse<string>.FromMessage(finalmsg);

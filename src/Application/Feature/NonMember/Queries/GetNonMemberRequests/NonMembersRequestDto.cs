@@ -12,7 +12,9 @@ public class NonMemberRequestsDto
 {
     public Guid Id { get; set; }
     public string UserId { get; set; } = default!;
-
+    public string Name { get; set; } = default!;
+    public string PhoneNumber { get; set; } = default!;
+    public string Email { get; set; } = default!;
     public string CNIC { get; set; } = default!;
 
     public string Remarks { get; set; } = default!;
