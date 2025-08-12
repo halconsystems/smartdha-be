@@ -7,4 +7,6 @@ public class BookingGuest : BaseAuditableEntity
     [MaxLength(50)] public string? Phone { get; set; }
     [MaxLength(200)] public string? Email { get; set; }
     public string? Address { get; set; }
+
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

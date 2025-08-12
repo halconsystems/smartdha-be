@@ -49,7 +49,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
             .IsUnique();
 
         modelBuilder.Entity<RoomAvailability>()
-            .ToTable("RoomAvailability");
+            .ToTable("RoomAvailabilities");
 
         modelBuilder.Entity<RoomAvailability>()
             .Property(x => x.FromDate)

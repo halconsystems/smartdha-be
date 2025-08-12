@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Reservation : BaseAuditableEntity
 {
-    [Required] public string UserId { get; set; } = default!; // Member making the hold
+    [Required] public Guid UserId { get; set; } = default!; // Member making the hold
     [Required] public Guid ClubId { get; set; }
     public Club Club { get; set; } = default!;
 
@@ -27,6 +27,6 @@ public class Reservation : BaseAuditableEntity
     public Guid? GuestId { get; set; }
     public BookingGuest? Guest { get; set; }
 
-    public ICollection<Room> Rooms { get; set; } = new List<Room>();
+    public ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>();
     public ICollection<PaymentIntent> PaymentIntents { get; set; } = new List<PaymentIntent>();
 }
