@@ -57,7 +57,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
                 Ratings = _context.RoomRatings
                     .Where(rr => rr.RoomId == r.Id)
-                    .Select(rr => rr.RoomRating)
+                    .Select(rr => rr.RoomRatings)
                     .FirstOrDefault(),
 
                 DefaultImage = _context.RoomImages

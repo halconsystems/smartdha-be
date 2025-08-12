@@ -22,16 +22,21 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<RoomCategory> RoomCategories => Set<RoomCategory>();
     public DbSet<ResidenceType> ResidenceTypes => base.Set<ResidenceType>();
     public DbSet<Room> Rooms => Set<Room>();
-    public DbSet<RoomCharges> RoomCharges => Set<RoomCharges>();
-    public DbSet<RoomImages> RoomImages => Set<RoomImages>();
-    public DbSet<RoomRatings> RoomRatings => Set<RoomRatings>();
-    public DbSet<RoomAvailability> RoomsAvailability => Set<RoomAvailability>();
+    public DbSet<RoomCharge> RoomCharges => Set<RoomCharge>();
+    public DbSet<RoomImage> RoomImages => Set<RoomImage>();
+    public DbSet<RoomRating> RoomRatings => Set<RoomRating>();
+    public DbSet<RoomAvailability> RoomAvailabilities => Set<RoomAvailability>();
     public DbSet<Services> Services => Set<Services>();
     public DbSet<ServiceMapping> ServiceMappings => Set<ServiceMapping>();
     public DbSet<ExtraServiceCharges> ExtraServiceCharges => Set<ExtraServiceCharges>();
     public DbSet<RoomBooking> RoomBookings => Set<RoomBooking>();
     public DbSet<UserClubMembership> UserClubMemberships => Set<UserClubMembership>();
-    public DbSet<RoomAvailability> RoomAvailabilities => Set<RoomAvailability>();
+    public DbSet<BookingGuest> BookingGuests => Set<BookingGuest>();
+    public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<ReservationRoom> ReservationRooms => Set<ReservationRoom>();
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<PaymentIntent> PaymentIntents => Set<PaymentIntent>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,7 +49,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
             .IsUnique();
 
         modelBuilder.Entity<RoomAvailability>()
-            .ToTable("RoomAvailability");
+            .ToTable("RoomAvailabilities");
 
         modelBuilder.Entity<RoomAvailability>()
             .Property(x => x.FromDate)

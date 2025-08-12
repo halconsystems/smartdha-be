@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateUserModulePermissions;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ResidenceTypes;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomCategories;
@@ -79,5 +80,12 @@ public class RoomBookingController : ControllerBase
     {
         var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
         return Ok(result);
+    }
+
+    [HttpPost("create-reservation"), AllowAnonymous]
+    public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationDto dto)
+    {
+        var reservationId = await _mediator.Send(new CreateReservationCommand(dto));
+        return Ok(reservationId);
     }
 }

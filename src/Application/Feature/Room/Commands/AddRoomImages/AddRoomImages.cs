@@ -53,7 +53,7 @@ public class AddRoomImagesCommandHandler
         // }
 
         // 3) Map and save
-        var entities = images.Select(i => new Domain.Entities.RoomImages
+        var entities = images.Select(i => new Domain.Entities.RoomImage
         {
             RoomId = request.RoomId,
             ImageURL = i.ImageURL,

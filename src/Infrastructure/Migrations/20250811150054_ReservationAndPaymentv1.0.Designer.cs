@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250811150054_ReservationAndPaymentv1.0")]
+    partial class ReservationAndPaymentv10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,6 +231,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("ReservationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ResidenceTypeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -235,6 +241,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReservationId");
 
                     b.HasIndex("ClubId", "No")
                         .IsUnique();
@@ -287,7 +295,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("RoomId", "FromDate", "ToDate");
 
-                    b.ToTable("RoomAvailabilities", null, t =>
+                    b.ToTable("RoomAvailability", null, t =>
                         {
                             t.HasCheckConstraint("CK_RoomAvailability_FromTo", "[FromDate] < [ToDate]");
                         });
@@ -810,8 +818,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -873,6 +882,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("ReservationRooms");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Room", b =>
+                {
+                    b.HasOne("Reservation", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("ReservationId");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomAvailability", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Room", "Room")
@@ -925,7 +941,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("BookingGuest", "Guest")
-                        .WithMany("Reservations")
+                        .WithMany()
                         .HasForeignKey("GuestId");
 
                     b.Navigation("Club");
@@ -936,7 +952,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
             modelBuilder.Entity("ReservationRoom", b =>
                 {
                     b.HasOne("Reservation", "Reservation")
-                        .WithMany("ReservationRooms")
+                        .WithMany()
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -952,11 +968,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("BookingGuest", b =>
-                {
-                    b.Navigation("Reservations");
-                });
-
             modelBuilder.Entity("PaymentIntent", b =>
                 {
                     b.Navigation("Payments");
@@ -966,7 +977,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                 {
                     b.Navigation("PaymentIntents");
 
-                    b.Navigation("ReservationRooms");
+                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }

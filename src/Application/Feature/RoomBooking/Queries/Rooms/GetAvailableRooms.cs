@@ -43,7 +43,7 @@ public class GetAvailableRoomsQueryHandler : IRequestHandler<GetAvailableRoomsQu
                     .FirstOrDefault(),
                 Ratings = _context.RoomRatings
                         .Where(rate => rate.RoomId == r.Id)
-                        .Select(rate => rate.RoomRating)
+                        .Select(rate => rate.RoomRatings)
                         .FirstOrDefault(),
                 Images = _context.RoomImages
                     .Where(img => img.RoomId == r.Id)
