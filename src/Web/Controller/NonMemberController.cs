@@ -5,6 +5,10 @@ using DHAFacilitationAPIs.Application.Feature.Dashboard.Queries.NonMemberApprova
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
+using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.Assignment;
+using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.DeleteAssignment;
+using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.InactiveAssignment;
+using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Queries.GetAssignedModules;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +46,37 @@ public class NonMemberController : BaseApiController
         return Ok(result);
 
     }
+    [HttpPost("AssignModule"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> AssignModule([FromBody] CreateUserModuleAssignmentCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
 
-    
+    [HttpPut("Inactivate"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> Inactivate([FromBody] InactivateUserModuleAssignmentCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpDelete("Delete"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> Delete([FromQuery] DeleteUserModuleAssignmentCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("GetAssignedModules/{userId}"),AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<AssignedModuleDto>>>> GetAssignedModules(string userId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAssignedModulesQuery { UserId = userId }, ct);
+        return Ok(result);
+    }
 
 }
+
+
+
+
+

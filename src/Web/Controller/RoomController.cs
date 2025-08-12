@@ -97,7 +97,7 @@ public class RoomController : ControllerBase
     public async Task<ActionResult<SuccessResponse<Guid>>> GetRoom([FromQuery] GetRoomsQuery cmd, CancellationToken ct)
      => Ok(await _mediator.Send(cmd, ct));
 
-    [HttpPut("UpdateRoom")]
+    [HttpPut("UpdateRoom"),AllowAnonymous]
     public async Task<IActionResult> UpdateRoom([FromBody] UpdateRoomCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
