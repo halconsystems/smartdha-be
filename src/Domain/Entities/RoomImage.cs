@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
-public class RoomImages : BaseAuditableEntity
+public class RoomImage : BaseAuditableEntity
 {
     [Required]
     public Guid RoomId { get; set; }

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250811144339_ReservationAndPayment")]
+    partial class ReservationAndPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -394,7 +397,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("RoomCategories");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCharge", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCharges", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -433,7 +436,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("RoomCharges");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomImage", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomImages", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -482,7 +485,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("RoomImages");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomRating", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomRatings", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -509,7 +512,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("RoomRatings")
+                    b.Property<decimal>("RoomRating")
                         .HasColumnType("decimal(3,1)");
 
                     b.HasKey("Id");
