@@ -5,26 +5,31 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Common.Settings;
 using DHAFacilitationAPIs.Application.Interface.Service;
+using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Infrastructure.Service;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtSettings _jwtSettings;
+    private readonly IApplicationDbContext _context;
 
     public AuthenticationService(UserManager<ApplicationUser> userManager,
-        IOptions<JwtSettings> jwtSettings)
+        IOptions<JwtSettings> jwtSettings,IApplicationDbContext context)
     {
         _userManager = userManager;
         _jwtSettings = jwtSettings.Value;
+        _context = context;
     }
 
     public async Task<string> GenerateTemporaryToken(ApplicationUser user, string purpose, TimeSpan expiresIn)
@@ -61,10 +66,100 @@ public class AuthenticationService : IAuthenticationService
             };
         claims.AddRange(userClaims);
         claims.AddRange(roleClaims);
+
+        if (user.UserType == UserType.NonMember)
+        {
+            var assignedModuleIds = await _context.UserModuleAssignments
+                .Where(x => x.UserId == user.Id && x.IsActive == true && x.IsDeleted != true && x.Module != null)
+                .Select(x => x.ModuleId.ToString())
+                .ToListAsync();
+            if (assignedModuleIds != null && assignedModuleIds.Count > 0)
+            {
+                foreach (var modId in assignedModuleIds)
+                {
+                    if (modId != null)
+                        claims.Add(new Claim("ModuleAccess", modId));
+                }
+            }
+            else
+            {
+                var nonassignedModuleIds = await _context.MemberTypeModuleAssignments
+               .Where(x => x.UserType == user.UserType)
+               .Select(x => x.ModuleId.ToString())
+               .ToListAsync();
+
+                foreach (var modId in nonassignedModuleIds)
+                {
+                    if (modId != null)
+                        claims.Add(new Claim("ModuleAccess", modId));
+                }
+            }
+        }
+        else
+        {
+            var assignedModuleIds = await _context.MemberTypeModuleAssignments
+                .Where(x => x.UserType == user.UserType)
+                .Select(x => x.ModuleId.ToString())
+                .ToListAsync();
+
+            foreach (var modId in assignedModuleIds)
+            {
+                if (modId != null)
+                    claims.Add(new Claim("ModuleAccess", modId));
+            }
+        }
+
         return GenerateAccessToken(claims);
     }
 
+    public async Task<string> GenerateWebUserToken(ApplicationUser user)
+    {
+        IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
+        IList<string> roles = await _userManager.GetRolesAsync(user);
 
+        List<Claim> roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
+
+        var claims = new List<Claim>()
+    {
+        new Claim(ClaimTypes.Name, user.Name ?? ""),
+        new Claim(ClaimTypes.Email, user.Email!),
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim("UserType", user.UserType.ToString()),
+    };
+        claims.AddRange(userClaims);
+        claims.AddRange(roleClaims);
+
+        // 🔹 Add assigned modules
+        var assignedModuleIds = await _context.UserModuleAssignments
+            .Where(x => x.UserId == user.Id)
+            .Select(x => x.ModuleId.ToString())
+            .ToListAsync();
+
+        foreach (var modId in assignedModuleIds)
+        {
+            if(modId !=null)
+                claims.Add(new Claim("ModuleAccess", modId));
+        }
+
+        // 🔹 Add submodule permissions by role
+        string userRole = roles.FirstOrDefault() ?? "User";
+
+        var subPermissions = await _context.RolePermissions
+            .Where(p => p.RoleName == userRole)
+            .ToListAsync();
+
+        foreach (var perm in subPermissions)
+        {
+            if (perm.CanRead)
+                claims.Add(new Claim("Permission", $"Read:{perm.SubModuleId}"));
+            if (perm.CanWrite)
+                claims.Add(new Claim("Permission", $"Write:{perm.SubModuleId}"));
+            if (perm.CanDelete)
+                claims.Add(new Claim("Permission", $"Delete:{perm.SubModuleId}"));
+        }
+
+        return GenerateAccessToken(claims);
+    }
 
     #region Private Method
 

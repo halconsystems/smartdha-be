@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.Room_Availability.Command.Create;
 using DHAFacilitationAPIs.Application.Feature.Room_Availability.Command.Update;
+using DHAFacilitationAPIs.Application.Feature.Room_Availability.Queries.GetRoomAvailabilities;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,5 +29,14 @@ public class RoomAvailabilityController : ControllerBase
     {
         return Ok(await _mediator.Send(command, ct));
     }
+
+    [HttpGet("Getroom-availabilities"), AllowAnonymous]
+    public async Task<IActionResult> GetRoomAvailabilities(
+    [FromQuery] GetRoomAvailabilitiesQuery query,
+    CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(query, ct));
+    }
+
 }
 

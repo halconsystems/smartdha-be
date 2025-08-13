@@ -9,12 +9,15 @@ public class Room : BaseAuditableEntity
 {
     [Required]
     public Guid ClubId { get; set; }
+    public Club Club { get; set; } = default!;
 
     [Required]
     public Guid RoomCategoryId { get; set; }
+    public RoomCategory RoomCategory { get; set; } = default!;
 
     [Required]
     public Guid ResidenceTypeId { get; set; }
+    public ResidenceType ResidenceType { get; set; } = default!;
 
     [Required]
     [MaxLength(50)]
@@ -26,4 +29,7 @@ public class Room : BaseAuditableEntity
 
     // Quick global toggle (optional, see #2)
     public bool IsGloballyAvailable { get; set; } = true;
+
+    public ICollection<Services> RoomServices { get; set; } = new List<Services>();
+    public ICollection<RoomAvailability> Availabilities { get; set; } = new List<RoomAvailability>();
 }

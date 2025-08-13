@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,15 +19,26 @@ public class NonMemberRequestsDto
     public string CNIC { get; set; } = default!;
 
     public string Remarks { get; set; } = default!;
-    public VerificationStatus Status { get; set; } 
-    public DateTime? ApprovedAt { get; set; } = default!;
-    public string? ApprovedBy { get; set; } = default!;// Admin UserId
-    public Guid PurposeId { get; set; } = default!;
+    public VerificationStatus Status { get; set; }
+    public DateTime? ApprovedAt { get; set; }
+    public string? ApprovedBy { get; set; }
 
-    public string PurposeTitles { get; set; } = default!;
+    // 🔄 Updated for multiple purposes
+    public List<PurposeDto> Purposes { get; set; } = new();
 
-    public List<NonMemberVerificationDocsDto> VerificationDocs { get; set; }= default!;
+    // Optional: display purpose titles as comma-separated string
+    [NotMapped]
+    public string PurposeTitlesDisplay => string.Join(", ", Purposes.Select(p => p.Title));
+
+    public List<NonMemberVerificationDocsDto> VerificationDocs { get; set; } = new();
 }
+
+public class PurposeDto
+{
+    public Guid Id { get; set; }
+    public string Title { get; set; } = default!;
+}
+
 
 public class NonMemberVerificationDocsDto
 {

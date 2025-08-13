@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
-using Microsoft.AspNetCore.Identity;
-using DHAFacilitationAPIs.Application.Interface.Service;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 public record GenerateTokenCommand : IRequest<AuthenticationDto>
@@ -22,53 +24,90 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IAuthenticationService _authenticationService;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IApplicationDbContext _context;
 
-    public GenerateTokenHandler(UserManager<ApplicationUser> userManager,
+    public GenerateTokenHandler(
+        UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IAuthenticationService authenticationService,
-        RoleManager<IdentityRole> roleManager)
+        IApplicationDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _authenticationService = authenticationService;
-        _roleManager = roleManager;
+        _context = context;
     }
+
     public async Task<AuthenticationDto> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
-        {
             throw new UnAuthorizedException("Invalid Email");
-        }
-        else if(user.AppType != AppType.Web)
-        {
-            throw new UnAuthorizedException("User not authorized for this portal.");
-        }
-        else  if (user.IsActive ==false)
-        {
-            throw new UnAuthorizedException("User marked InActive contact with administrator");
-        }
-        else if (user.IsDeleted == true)
-        {
-            throw new UnAuthorizedException("User is deleted contact with administrator");
-        }
 
-        SignInResult result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
+        if (user.AppType != AppType.Web)
+            throw new UnAuthorizedException("User not authorized for this portal.");
+
+        if (!user.IsActive)
+            throw new UnAuthorizedException("User is marked InActive. Contact administrator.");
+
+        if (user.IsDeleted == true)
+            throw new UnAuthorizedException("User is deleted. Contact administrator.");
+
+        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
 
         if (!result.Succeeded && !result.RequiresTwoFactor)
-        {
             throw new UnAuthorizedException("Invalid Password");
-        }
-        string token = await _authenticationService.GenerateToken(user);
 
+        string token = await _authenticationService.GenerateWebUserToken(user);
         IList<string> roles = await _userManager.GetRolesAsync(user);
+        string userRole = roles.FirstOrDefault() ?? "User";
+
+        // -------- Fetch Modules Assigned to User --------
+        var userModuleIds = await _context.UserModuleAssignments
+            .Where(x => x.UserId == user.Id)
+            .Select(x => x.ModuleId)
+            .ToListAsync(cancellationToken);
+
+        var modules = await _context.Modules
+            .Where(m => userModuleIds.Contains(m.Id))
+            .Include(m => m.SubModules)
+            .ToListAsync(cancellationToken);
+
+        var moduleDtos = new List<ModuleDto>();
+
+        foreach (var module in modules)
+        {
+            var moduleDto = new ModuleDto
+            {
+                ModuleId = module.Id,
+                ModuleName = module.Name,
+                SubModules = new List<SubModuleDto>()
+            };
+
+            foreach (var sub in module.SubModules)
+            {
+                var permission = await _context.RolePermissions
+                    .FirstOrDefaultAsync(p => p.RoleName == userRole && p.SubModuleId == sub.Id, cancellationToken);
+
+                moduleDto.SubModules.Add(new SubModuleDto
+                {
+                    SubModuleId = sub.Id,
+                    SubModuleName = sub.Name,
+                    CanRead = permission?.CanRead ?? false,
+                    CanWrite = permission?.CanWrite ?? false,
+                    CanDelete = permission?.CanDelete ?? false
+                });
+            }
+
+            moduleDtos.Add(moduleDto);
+        }
 
         return new AuthenticationDto
         {
             AccessToken = token,
-            Role = roles.FirstOrDefault()!,
+            Role = userRole,
+            Modules = moduleDtos,
             ResponseMessage = "Authenticated!"
         };
     }

@@ -12,6 +12,7 @@ namespace DHAFacilitationAPIs.Application.Interface.Service;
 public interface IAuthenticationService : IServicesType.IScopedService
 {
     Task<string> GenerateToken(ApplicationUser user);
+    Task<string> GenerateWebUserToken(ApplicationUser user);
     Task<string> GenerateTemporaryToken(ApplicationUser user, string purpose, TimeSpan expiresIn);
 
 

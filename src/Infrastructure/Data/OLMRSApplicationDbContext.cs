@@ -48,6 +48,31 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
             .HasIndex(r => new { r.ClubId, r.No })
             .IsUnique();
 
+
+        modelBuilder.Entity<Room>()
+            .HasOne(r => r.Club)
+            .WithMany()
+            .HasForeignKey(r => r.ClubId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Room>()
+            .HasOne(r => r.RoomCategory)
+            .WithMany()
+            .HasForeignKey(r => r.RoomCategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Room>()
+            .HasOne(r => r.ResidenceType)
+            .WithMany()
+            .HasForeignKey(r => r.ResidenceTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<RoomAvailability>()
+            .HasOne(ra => ra.Room)
+            .WithMany(r => r.Availabilities)
+            .HasForeignKey(ra => ra.RoomId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<RoomAvailability>()
             .ToTable("RoomAvailabilities");
 

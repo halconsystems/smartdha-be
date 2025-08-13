@@ -1,9 +1,12 @@
 using System.Net;
+using System.Text;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Infrastructure;
 
@@ -32,6 +35,10 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("purpose", "set_password");
     });
 });
+
+
+
+
 
 builder.Services.Configure<FileStorageOptions>(
     builder.Configuration.GetSection("FileStorage"));

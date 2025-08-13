@@ -104,28 +104,43 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
 
         // 4) Purpose titles per user (active + not deleted)
         var userPurposes = await (
-            from ump in _context.UserMembershipPurposes.AsNoTracking()
-            join mp in _context.MembershipPurposes.AsNoTracking()
-                on ump.PurposeId equals mp.Id
-            where userIds.Contains(ump.UserId)
-                  && (ump.IsDeleted == false) && (ump.IsActive == true)
-                  && (mp.IsDeleted == false) && (mp.IsActive == true)
-            select new { ump.UserId, mp.Title }
-        ).ToListAsync(cancellationToken);
+    from ump in _context.UserMembershipPurposes.AsNoTracking()
+    join mp in _context.MembershipPurposes.AsNoTracking()
+        on ump.PurposeId equals mp.Id
+    where userIds.Contains(ump.UserId)
+          && (ump.IsDeleted == false || ump.IsDeleted == null)
+          && (ump.IsActive == true)
+          && (mp.IsDeleted == false || mp.IsDeleted == null)
+          && (mp.IsActive == true)
+    select new
+    {
+        ump.UserId,
+        mp.Id,
+        mp.Title
+    }
+).ToListAsync(cancellationToken);
 
+        // 🔄 Group into Dictionary<string, List<PurposeDto>>
         var purposesByUser = userPurposes
             .GroupBy(x => x.UserId)
             .ToDictionary(
                 g => g.Key,
-                g => string.Join(", ", g.Select(x => x.Title).Distinct())
+                g => g.Select(p => new PurposeDto
+                {
+                    Id = p.Id,
+                    Title = p.Title
+                }).ToList()
             );
+
 
         // 5) Build DTOs
         var result = pendingRequests.Select(p =>
         {
             usersDict.TryGetValue(p.UserId, out var u);
             var docs = allDocs.Where(d => d.VerificationId == p.Id).ToList();
-            var purposeTitles = purposesByUser.TryGetValue(p.UserId, out var pt) ? pt : string.Empty;
+            var purposes = purposesByUser.TryGetValue(p.UserId, out var userPurposes)
+                ? userPurposes
+                : new List<PurposeDto>();
 
             return new NonMemberRequestsDto
             {
@@ -139,16 +154,11 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
                 Status = p.Status,
                 ApprovedAt = p.ApprovedAt,
                 ApprovedBy = p.ApprovedBy,
-                // If you only keep titles, PurposeId isn't meaningful when multiple purposes exist.
-                // You can remove it from DTO or set Guid.Empty.
-                PurposeId = Guid.Empty,
-                PurposeTitles = purposeTitles,
+                Purposes = purposes,
                 VerificationDocs = docs
             };
-        })
-        // optional: sort (newest first, or by status)
-        .OrderByDescending(x => x.ApprovedAt ?? DateTime.MinValue)
-        .ToList();
+        }).ToList();
+
 
         return new SuccessResponse<List<NonMemberRequestsDto>>(
             result,

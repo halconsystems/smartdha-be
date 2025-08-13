@@ -13,9 +13,26 @@ public class AuthenticationVM
 
 public class AuthenticationDto
 {
-    public string Role { get; set; } = default!;
-    public string AccessToken { get; set; } = default!;
-    public string ResponseMessage { get; set; } = default!;
+    public string AccessToken { get; set; } = string.Empty;
+    public string Role { get; set; } = string.Empty;
+    public string ResponseMessage { get; set; } = string.Empty;
+    public List<ModuleDto> Modules { get; set; } = new(); // include module/submodule with permissions
+}
+
+public class ModuleDto
+{
+    public Guid ModuleId { get; set; }
+    public string ModuleName { get; set; } = string.Empty;
+    public List<SubModuleDto> SubModules { get; set; } = new();
+}
+
+public class SubModuleDto
+{
+    public Guid SubModuleId { get; set; }
+    public string SubModuleName { get; set; } = string.Empty;
+    public bool CanRead { get; set; }
+    public bool CanWrite { get; set; }
+    public bool CanDelete { get; set; }
 }
 
 public class MobileAuthenticationDto

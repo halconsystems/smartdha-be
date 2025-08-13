@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using DHAFacilitationAPIs.Application;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -7,9 +8,11 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using DHAFacilitationAPIs.Web;
 using DHAFacilitationAPIs.Web.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 

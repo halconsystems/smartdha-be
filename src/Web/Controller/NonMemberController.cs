@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Dashboard.Commands.AddMemberTypeModuleAssignments;
 using DHAFacilitationAPIs.Application.Feature.Dashboard.Queries.NonMemberApproval;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
+using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetMobileModules;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Queries.GetNonMemberRequests;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
 using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.Assignment;
@@ -28,6 +29,7 @@ public class NonMemberController : BaseApiController
     }
 
     [HttpGet("Dashboard"), AllowAnonymous]
+    //[AuthorizeModuleAccess("16969A58-982D-45D6-81D8-FBD48627D2CB")]
     public Task<SuccessResponse<NonMemberVerificationDashboardDto>> Get(CancellationToken ct)
         => _mediator.Send(new GetNonMemberVerificationDashboardQuery(), ct);
 
@@ -74,6 +76,12 @@ public class NonMemberController : BaseApiController
         return Ok(result);
     }
 
+    [HttpGet("GetMobileModule"), AllowAnonymous]
+    public async Task<IActionResult> GetMobileModules()
+    {
+        var result = await _mediator.Send(new GetMobileModulesQuery());
+        return Ok(result);
+    }
 }
 
 
