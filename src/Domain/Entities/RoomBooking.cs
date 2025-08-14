@@ -25,6 +25,8 @@ public class RoomBooking : BaseAuditableEntity
     [Required]
     public DateTime? BookingDate { get; set; } = DateTime.UtcNow;
 
+    public BookingStatus Status { get; set; } = BookingStatus.Provisional;
+
     [Required]
     public DateTime? CheckInDate { get; set; }
 

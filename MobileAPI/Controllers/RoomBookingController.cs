@@ -3,6 +3,8 @@ using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateUserModuleP
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationStatus;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationStatus.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ResidenceTypes;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomCategories;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
@@ -94,6 +96,13 @@ public class RoomBookingController : ControllerBase
     public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations(Guid userId)
     {
         var result = await _mediator.Send(new GetAllReservationsQuery(userId));
+        return Ok(result);
+    }
+
+    [HttpGet("get-reservation-status"), AllowAnonymous]
+    public async Task<ActionResult<ReservationStatusDto>> GetReservationStatus(Guid reservationId)
+    {
+        var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
         return Ok(result);
     }
 }
