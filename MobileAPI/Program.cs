@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Infrastructure;
@@ -73,6 +74,13 @@ app.UseExceptionHandler(builder =>
         }
     });
 });
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(app.Environment.ContentRootPath, "wwwroot")),
+    RequestPath = "/wwwroot"
+});
+
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
