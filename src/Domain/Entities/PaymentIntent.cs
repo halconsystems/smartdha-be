@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class PaymentIntent : BaseAuditableEntity
 {
     // Link to Reservation during hold; after conversion we can also link to Booking
-    public Guid? ReservationId { get; set; }
+    [Required] public Guid? ReservationId { get; set; }
     public Reservation? Reservation { get; set; }
 
     public Guid? BookingId { get; set; }
