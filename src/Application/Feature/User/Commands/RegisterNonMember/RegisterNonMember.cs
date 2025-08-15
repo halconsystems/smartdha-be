@@ -138,12 +138,12 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
         }
        
         // Save documents
-        var frontPath = await _fileStorage.SaveFileAsync(request.CNICFrontImage, "cnic", cancellationToken);
-        var backPath = await _fileStorage.SaveFileAsync(request.CNICBackImage, "cnic", cancellationToken);
+        var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
+        var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
         string? supportPath = null;
         if (request.SupportingDocument != null)
         {
-            supportPath = await _fileStorage.SaveFileAsync(request.SupportingDocument, "documents", cancellationToken);
+            supportPath = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
         }
 
         var document = new NonMemberVerificationDocument

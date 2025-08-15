@@ -13,22 +13,22 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Application.Feature.Room_Availability.Command.Create;
 public class CreateRoomAvailabilityCommand : IRequest<SuccessResponse<Guid>>
 {
-    [Required]
-    public Guid RoomId { get; set; }
+    [Required] public Guid RoomId { get; set; }
 
-    [Required]
-    public DateTime FromDate { get; set; }
+    // Separate inputs
+    [Required] public DateOnly FromDate { get; set; }
+    [Required] public TimeOnly FromTime { get; set; }
 
-    [Required]
-    public DateTime ToDate { get; set; }
+    [Required] public DateOnly ToDate { get; set; }
+    [Required] public TimeOnly ToTime { get; set; }
 
-    [Required]
-    public AvailabilityAction Action { get; set; }
-
+    [Required] public AvailabilityAction Action { get; set; }
     public string? Reason { get; set; }
 }
 
-public class CreateRoomAvailabilityCommandHandler : IRequestHandler<CreateRoomAvailabilityCommand, SuccessResponse<Guid>>
+
+public class CreateRoomAvailabilityCommandHandler
+    : IRequestHandler<CreateRoomAvailabilityCommand, SuccessResponse<Guid>>
 {
     private readonly IOLMRSApplicationDbContext _ctx;
 
@@ -39,20 +39,47 @@ public class CreateRoomAvailabilityCommandHandler : IRequestHandler<CreateRoomAv
 
     public async Task<SuccessResponse<Guid>> Handle(CreateRoomAvailabilityCommand request, CancellationToken ct)
     {
-        // Optional: Validate Room exists
+        // 1) Validate room
         var roomExists = await _ctx.Rooms.AnyAsync(r => r.Id == request.RoomId, ct);
-        if (!roomExists)
-            throw new KeyNotFoundException("Room not found.");
+        if (!roomExists) throw new KeyNotFoundException("Room not found.");
 
+        // 2) Combine DateOnly + TimeOnly -> DateTime in PKT (Asia/Karachi)
+        var pktTz = TimeZoneInfo.FindSystemTimeZoneById(
+#if WINDOWS
+            "Pakistan Standard Time"   // Windows ID
+#else
+            "Asia/Karachi"             // Linux/Container ID
+#endif
+        );
+
+        DateTime fromLocal = request.FromDate.ToDateTime(request.FromTime, DateTimeKind.Unspecified);
+        DateTime toLocal = request.ToDate.ToDateTime(request.ToTime, DateTimeKind.Unspecified);
+
+        // Optional: enforce that To >= From
+        if (toLocal < fromLocal)
+            throw new ArgumentException("To date/time must be greater than or equal to From date/time.");
+
+        // If you want UTC storage for the full DateTimes:
+        // var fromUtc = TimeZoneInfo.ConvertTimeToUtc(fromLocal, pktTz);
+        // var toUtc   = TimeZoneInfo.ConvertTimeToUtc(toLocal, pktTz);
+
+        // 3) Create entity (store both combined and split fields)
         var entity = new RoomAvailability
         {
-            Id = Guid.NewGuid(),
             RoomId = request.RoomId,
-            FromDate = request.FromDate,
-            ToDate = request.ToDate,
+
+            // Combined (keep as local PKT; or use fromUtc/toUtc if you prefer UTC)
+            FromDate = fromLocal,
+            ToDate = toLocal,
+
+            // Split fields for exact matching
+            FromDateOnly = request.FromDate,
+            FromTimeOnly = request.FromTime,
+            ToDateOnly = request.ToDate,
+            ToTimeOnly = request.ToTime,
+
             Action = request.Action,
-            Reason = request.Reason,
-            Created = DateTime.UtcNow
+            Reason = request.Reason
         };
 
         await _ctx.RoomAvailabilities.AddAsync(entity, ct);

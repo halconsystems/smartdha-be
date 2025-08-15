@@ -37,11 +37,28 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<PaymentIntent> PaymentIntents => Set<PaymentIntent>();
 
+    public new DbSet<TEntity> Set<TEntity>() where TEntity : class
+        => base.Set<TEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(OLMRSApplicationDbContext).Assembly);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .Property<int>("Ser")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnOrder(1);
+
+                modelBuilder.Entity(entityType.ClrType)
+                    .Property<Guid>("Id")
+                    .HasColumnOrder(2);
+            }
+        }
 
         // Add custom index for Room: (ClubId + No) must be unique
         modelBuilder.Entity<Room>()
@@ -91,6 +108,12 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
                 "CK_RoomAvailability_FromTo",
                 "[FromDate] < [ToDate]"      // use <= if you want zero-length ranges to be invalid (current is strict)
             ));
+
+        modelBuilder.Entity<ServiceMapping>()
+            .HasIndex(x => new { x.RoomId, x.ServiceId })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0"); // SQL Server
+
 
         // (optional) helpful index for range queries
         modelBuilder.Entity<RoomAvailability>()

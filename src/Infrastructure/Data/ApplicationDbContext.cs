@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ApplicationUser = DHAFacilitationAPIs.Domain.Entities.ApplicationUser;
 
 namespace DHAFacilitationAPIs.Infrastructure.Data;
@@ -37,6 +38,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<RequestTracking> RequestTrackings => Set<RequestTracking>();
     public DbSet<RequestProcessStep> RequestProcessSteps => Set<RequestProcessStep>();
     public DbSet<UserMembershipPurpose> UserMembershipPurposes => Set<UserMembershipPurpose>();
+
+    public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -46,6 +49,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     private static void IdentityBuilder(ModelBuilder builder)
     {
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                builder.Entity(entityType.ClrType)
+                    .Property<int>("Ser")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnOrder(1);
+
+                builder.Entity(entityType.ClrType)
+                    .Property<Guid>("Id")
+                    .HasColumnOrder(2);
+            }
+        }
+
         builder.Entity<ApplicationUser>(
             entity =>
             {

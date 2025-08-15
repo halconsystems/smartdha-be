@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
@@ -28,6 +29,7 @@ builder.Services.AddSingleton<DapperConnectionFactory>();
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("SetPasswordPolicy", policy =>
@@ -35,9 +37,6 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("purpose", "set_password");
     });
 });
-
-
-
 
 
 builder.Services.Configure<FileStorageOptions>(

@@ -28,6 +28,7 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                 r.Id,
                 r.Name,
                 r.No,
+                r.Description,
                 Price = _context.RoomCharges
                     .Where(rc => rc.RoomId == r.Id && rc.BookingType == request.BookingType)
                     .Select(rc => rc.Charges)
@@ -40,6 +41,20 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                             join s in _context.Services on m.ServiceId equals s.Id
                             where m.RoomId == r.Id
                             select s.Name).ToList(),
+                ResidenceTypeName = r.ResidenceType != null && r.ResidenceType.Name != null
+    ? r.ResidenceType.Name
+    : _context.ResidenceTypes
+        .Where(rt => rt.Id == r.ResidenceTypeId)
+        .Select(rt => rt.Name)
+        .FirstOrDefault() ?? string.Empty,
+
+                CategoryName = r.RoomCategory != null && r.RoomCategory.Name != null
+    ? r.RoomCategory.Name
+    : _context.RoomCategories
+        .Where(rc => rc.Id == r.RoomCategoryId)
+        .Select(rc => rc.Name)
+        .FirstOrDefault() ?? string.Empty,
+
                 // Just pick the first matching availability range
                 FromDate = _context.RoomAvailabilities
                     .Where(a => a.RoomId == r.Id)
@@ -78,7 +93,10 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
             Images = imageUrls,
             Services = roomData.Services,
             CheckInDate = roomData.FromDate,
-            CheckOutDate = roomData.ToDate
+            CheckOutDate = roomData.ToDate,
+            ResidenceTypeName=roomData.ResidenceTypeName,
+            CategoryName=roomData.CategoryName,
+            Description=roomData.Description
         };
     }
 }

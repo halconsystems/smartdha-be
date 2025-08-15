@@ -40,7 +40,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("search-rooms"), AllowAnonymous]
-    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate, [FromQuery] string bookingType)
+    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] string bookingType)
     {
         var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
         return Ok(result);

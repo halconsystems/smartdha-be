@@ -30,19 +30,67 @@ public class FileStorageService : IFileStorageService
     public Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct)
         => SaveFileAsync(file, folderName, ct, 10 * 1024 * 1024, DefaultAllowedExt);
 
-    public async Task<string> SaveFileNonMemeberAsync(IFormFile file, string folderName, CancellationToken cancellationToken)
+    public async Task<string> SaveFileNonMemeberAsync(
+     IFormFile file,
+     string folderName,
+     CancellationToken ct,
+     long maxBytes = 10 * 1024 * 1024,           // default 10 MB (adjust as you like)
+     string[]? allowedExtensions = null)         // e.g. new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" }
     {
-        var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", folderName);
-        Directory.CreateDirectory(uploadsFolder);
+        // Basic validations
+        if (file is null || file.Length == 0)
+            throw new ArgumentException("Empty file.");
 
-        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-        var filePath = Path.Combine(uploadsFolder, fileName);
+        if (file.Length > maxBytes)
+            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
 
-        await using var stream = new FileStream(filePath, FileMode.Create);
-        await file.CopyToAsync(stream, cancellationToken);
+        // Extension checks
+        var ext = Path.GetExtension(file.FileName);
+        var allowed = allowedExtensions ?? DefaultAllowedExt; // keep your existing default list
+        if (allowed is not null && !allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
 
-        return Path.Combine("uploads", folderName, fileName); // relative path
+        // MIME check (based on filename mapping)
+        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        {
+            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+        }
+
+        // Base physical path: <WebRoot>\uploads
+        var webRoot = _env.WebRootPath;
+        if (string.IsNullOrWhiteSpace(webRoot))
+            throw new InvalidOperationException("WebRootPath is not configured.");
+
+        var baseUploads = Path.Combine(webRoot, "uploads");
+        Directory.CreateDirectory(baseUploads);
+
+        // Normalize/sanitize folderName (prevent traversal)
+        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
+        if (relFolder.Contains("..", StringComparison.Ordinal))
+            throw new InvalidOperationException("Invalid folder name.");
+
+        var absFolder = string.IsNullOrEmpty(relFolder) ? baseUploads : Path.Combine(baseUploads, relFolder);
+        Directory.CreateDirectory(absFolder);
+
+        // Generate a unique file name and save
+        var safeExt = ext.ToLowerInvariant();
+        var fileName = $"{Guid.NewGuid():N}{safeExt}";
+        var absPath = Path.Combine(absFolder, fileName);
+
+        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
+            await file.CopyToAsync(stream, ct);
+
+        // Return a web-relative path like: "uploads/{folder}/{file}"
+        var relPath = string.IsNullOrEmpty(relFolder)
+            ? Path.Combine("uploads", fileName)
+            : Path.Combine("uploads", relFolder, fileName);
+
+        // Normalize to URL-style slashes
+        relPath = relPath.Replace('\\', '/').Replace("//", "/");
+        return relPath;
     }
+
     public async Task<string> SaveFileAsync(
     IFormFile file,
     string folderName,

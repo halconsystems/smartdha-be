@@ -22,7 +22,9 @@ public interface IApplicationDbContext
     DbSet<RequestTracking> RequestTrackings { get; }
     DbSet<RequestProcessStep> RequestProcessSteps { get; }
     DbSet<UserMembershipPurpose> UserMembershipPurposes { get; }
-    
+
+
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
 }

@@ -2,6 +2,9 @@
 
 public class RoomDetailsDto
 {
+    public string ResidenceTypeName { get; set; } = default!;
+    public string CategoryName { get; set; } = default!;
+    public string? Description { get; set; }
     public Guid RoomId { get; set; }
     public string? Name { get; set; } = default!;
     public string No { get; set; } = default!;

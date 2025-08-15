@@ -30,6 +30,7 @@ public interface IOLMRSApplicationDbContext
     DbSet<PaymentIntent> PaymentIntents { get; }
 
 
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
 }

@@ -15,13 +15,21 @@ public class RoomAvailability : BaseAuditableEntity
     public Room Room { get; set; } = default!;
 
     [Required]
-    public DateTime FromDate { get; set; } // PKT stored directly
+    public DateTime FromDate { get; set; } // Full PKT DateTime
+    [Required]
+    public DateOnly FromDateOnly { get; set; } // Just the date portion
+    [Required]
+    public TimeOnly FromTimeOnly { get; set; } // Just the time portion
 
     [Required]
-    public DateTime ToDate { get; set; }
+    public DateTime ToDate { get; set; } // Full PKT DateTime
+    [Required]
+    public DateOnly ToDateOnly { get; set; } // Just the date portion
+    [Required]
+    public TimeOnly ToTimeOnly { get; set; } // Just the time portion
 
     [Required]
     public AvailabilityAction Action { get; set; } = AvailabilityAction.Available;
 
-    public string? Reason { get; set; }          // e.g., “Maintenance”, “Admin Override”
+    public string? Reason { get; set; } // e.g., “Maintenance”, “Admin Override”
 }

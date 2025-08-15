@@ -2,6 +2,7 @@
 using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.AddAnnouncement;
 using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.DeleteAnnouncement;
 using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.UpdateAnnouncement;
+using DHAFacilitationAPIs.Application.Feature.Announcements.Queries.GetAllAnnouncementsById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
 using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
@@ -32,10 +33,18 @@ public class AnnouncementsController : BaseApiController
         return Ok(await Mediator.Send(new GetAllAnnouncementsQuery()));
     }
 
- 
+    [HttpGet("GetAnnouncementById/{id:guid}"), AllowAnonymous]
+    public async Task<IActionResult> GetAnnouncementById(Guid id, CancellationToken ct)
+    {
+        var query = new GetAnnouncementByIdQuery { Id = id };
+        var result = await Mediator.Send(query, ct);
+        return Ok(result);
+    }
 
-        /// <summary>Update an announcement</summary>
-        [HttpPut("{id:guid}")]
+
+
+    /// <summary>Update an announcement</summary>
+    [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<SuccessResponse<string>>> Update(
             Guid id,

@@ -6,7 +6,9 @@ using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetImageCategories;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomImages;
+using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomWithServiceSelections;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
+using DHAFacilitationAPIs.Application.Feature.RoomServices.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -119,6 +121,18 @@ public class RoomController : ControllerBase
         return Ok(result);
     }
 
+
+    [HttpPost("AddRoom-Services"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> AddRoomServices(AssignServicesToRoomCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd, ct));
+
+
+    [HttpGet("rooms/{roomId:guid}/with-services"),AllowAnonymous]
+    public async Task<IActionResult> GetRoomWithServices(Guid roomId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetRoomWithServiceSelectionsQuery { RoomId = roomId }, ct);
+        return StatusCode(result.Status, result);
+    }
 
 
 
