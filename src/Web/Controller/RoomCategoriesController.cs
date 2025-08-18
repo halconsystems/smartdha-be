@@ -26,14 +26,14 @@ public class RoomCategoriesController : ControllerBase
         => Ok(await _mediator.Send(cmd with { Id = id }, ct));
 
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, bool hardDelete, CancellationToken ct)
-        => Ok(await _mediator.Send(new DeleteRoomCategoryCommand(id, hardDelete), ct));
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new DeleteRoomCategoryCommand(id), ct));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<RoomCategoryDto?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetRoomCategoryByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
-        => Ok(await _mediator.Send(new GetRoomCategoriesQuery(includeInactive, page, pageSize), ct));
+    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll()
+        => Ok(await _mediator.Send(new GetRoomCategoriesQuery()));
 }

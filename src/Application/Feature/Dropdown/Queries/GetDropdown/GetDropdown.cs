@@ -21,13 +21,16 @@ public sealed class GetDropdownQueryHandler<TEntity>
     public GetDropdownQueryHandler(IOLMRSApplicationDbContext context) => _context = context;
 
     public async Task<List<DropdownDto>> Handle(GetDropdownQuery<TEntity> request, CancellationToken ct)
-        => await _context.Set<TEntity>()
-            .AsNoTracking()
-            .Select(e => new DropdownDto
-            {
-                Id = EF.Property<Guid>(e, "Id"),
-                Name = EF.Property<string>(e, "Name")
-            })
-            .OrderBy(x => x.Name)
-            .ToListAsync(ct);
+     => await _context.Set<TEntity>()
+         .AsNoTracking()
+         .Where(e => EF.Property<bool?>(e, "IsActive") == true
+                  && (EF.Property<bool?>(e, "IsDeleted") == false || EF.Property<bool?>(e, "IsDeleted") == null))
+         .Select(e => new DropdownDto
+         {
+             Id = EF.Property<Guid>(e, "Id"),
+             Name = EF.Property<string>(e, "Name")
+         })
+         .OrderBy(x => x.Name)
+         .ToListAsync(ct);
+
 }

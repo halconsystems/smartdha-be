@@ -18,10 +18,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
-public class ClubServicesController : BaseApiController
+public class RoomServicesController : BaseApiController
 {
     private readonly IMediator _mediator;
-    public ClubServicesController(IMediator mediator) => _mediator = mediator;
+    public RoomServicesController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost("Create"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> Create(CreateServiceCommand cmd, CancellationToken ct)
@@ -32,14 +32,14 @@ public class ClubServicesController : BaseApiController
         => Ok(await _mediator.Send(cmd with { Id = id }, ct));
 
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, bool hardDelete, CancellationToken ct)
-        => Ok(await _mediator.Send(new DeleteServiceCommand(id, hardDelete), ct));
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new DeleteServiceCommand(id), ct));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ServiceDto?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetServiceByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ServiceDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
-        => Ok(await _mediator.Send(new GetServicesQuery(includeInactive, page, pageSize), ct));
+    public async Task<ActionResult<List<ServiceDto>>> GetAll()
+        => Ok(await _mediator.Send(new GetServicesQuery()));
 }

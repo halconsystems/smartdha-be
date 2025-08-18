@@ -23,7 +23,7 @@ public class UpdateServiceCommandHandler : IRequestHandler<UpdateServiceCommand,
         entity.Name = request.Name;
         entity.Description = request.Description;
         if (request.IsActive.HasValue) entity.IsActive = request.IsActive;
-        entity.LastModified = DateTime.UtcNow;
+        entity.LastModified = DateTime.Now;
 
         await _ctx.SaveChangesAsync(ct);
         return Success.Update(entity.Id.ToString());

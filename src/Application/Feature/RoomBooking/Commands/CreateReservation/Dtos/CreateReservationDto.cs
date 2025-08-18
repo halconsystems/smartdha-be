@@ -6,18 +6,22 @@ namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateRes
 
 public class CreateReservationDto
 {
-    public Guid UserId { get; set; }  // Now Guid instead of string
+    //public Guid UserId { get; set; }  // Now Guid instead of string
     public Guid ClubId { get; set; }
+    public string BookingType { get; set; } = "Self";
+    public int Adult { get; set; } = 0;
+    public int Child { get; set; } = 0;
     public List<CreateReservationRoomDto> Rooms { get; set; } = new();
     public CreateGuestDto? Guest { get; set; }  // Guest info if booking for a guest
 }
 
 public class CreateReservationRoomDto
 {
+
     public Guid RoomId { get; set; }
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
-    public decimal PricePerNight { get; set; }
+    //public decimal PricePerNight { get; set; }
 }
 
 public class CreateGuestDto

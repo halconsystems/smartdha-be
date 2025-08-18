@@ -8,11 +8,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries.GetRoomCategories;
-public record GetRoomCategoriesQuery(
-    bool IncludeInactive = false,
-    int Page = 1,
-    int PageSize = 50
-) : IRequest<SuccessResponse<List<RoomCategoryDto>>>;
+public record GetRoomCategoriesQuery() : IRequest<SuccessResponse<List<RoomCategoryDto>>>;
 
 public class GetRoomCategoriesQueryHandler
     : IRequestHandler<GetRoomCategoriesQuery, SuccessResponse<List<RoomCategoryDto>>>
@@ -29,16 +25,10 @@ public class GetRoomCategoriesQueryHandler
     public async Task<SuccessResponse<List<RoomCategoryDto>>> Handle(GetRoomCategoriesQuery request, CancellationToken ct)
     {
         var q = _ctx.RoomCategories
-            .AsNoTracking()
-            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
-
-        if (!request.IncludeInactive)
-            q = q.Where(x => x.IsActive == true || x.IsActive == null);
+            .AsNoTracking();
 
         var list = await q
             .OrderBy(x => x.Name)
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize)
             .ProjectTo<RoomCategoryDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);
 

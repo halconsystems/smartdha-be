@@ -7,7 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
-public record DeleteClubCommand(Guid Id, bool HardDelete = false) : IRequest<SuccessResponse<string>>;
+public record DeleteClubCommand(Guid Id) : IRequest<SuccessResponse<string>>;
 
 public class DeleteClubCommandHandler : IRequestHandler<DeleteClubCommand, SuccessResponse<string>>
 {
@@ -19,14 +19,11 @@ public class DeleteClubCommandHandler : IRequestHandler<DeleteClubCommand, Succe
         var entity = await _ctx.Clubs.FindAsync(new object?[] { request.Id }, ct);
         if (entity is null) throw new KeyNotFoundException("Club not found.");
 
-        if (request.HardDelete)
-            _ctx.Clubs.Remove(entity);
-        else
-        {
+        
             entity.IsDeleted = true;
             entity.IsActive = false;
             entity.LastModified = DateTime.Now;
-        }
+        
 
         await _ctx.SaveChangesAsync(ct);
         return Success.Delete(entity.Id.ToString());
