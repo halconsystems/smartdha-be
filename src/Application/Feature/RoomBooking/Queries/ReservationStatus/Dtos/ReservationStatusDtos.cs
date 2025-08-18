@@ -16,5 +16,10 @@ public class StageStatus
 {
     public string? Status { get; set; }
     public int? StatusCode { get; set; }
+
+    public static implicit operator StageStatus(Reservationstage v)
+    {
+        throw new NotImplementedException();
+    }
 }
 

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using System.Text.Json.Serialization;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -37,6 +38,13 @@ builder.Services.AddAuthorization(options =>
         policy.RequireClaim("purpose", "set_password");
     });
 });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 
 
 builder.Services.Configure<FileStorageOptions>(

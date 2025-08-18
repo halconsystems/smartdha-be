@@ -27,15 +27,15 @@ public class ClubsController : BaseApiController
         => Ok(await _mediator.Send(cmd with { Id = id }, ct));
 
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, bool hardDelete, CancellationToken ct)
-        => Ok(await _mediator.Send(new DeleteClubCommand(id, hardDelete), ct));
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new DeleteClubCommand(id), ct));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<Club?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetClubByIdQuery(id), ct));
 
     [HttpGet,AllowAnonymous]
-    public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
-        => Ok(await _mediator.Send(new GetClubsQuery(includeInactive, page, pageSize), ct));
+    public async Task<ActionResult<List<ClubDto>>> GetAll()
+        => Ok(await _mediator.Send(new GetClubsQuery()));
 }
 

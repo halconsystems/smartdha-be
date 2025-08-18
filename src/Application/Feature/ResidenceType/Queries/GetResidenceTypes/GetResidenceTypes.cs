@@ -9,11 +9,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.CreateResidenceType.Queries.GetResidenceTypes;
-public record GetResidenceTypesQuery(
-    bool IncludeInactive = false,
-    int Page = 1,
-    int PageSize = 50
-) : IRequest<SuccessResponse<List<ResidenceTypeDto>>>;
+public record GetResidenceTypesQuery() : IRequest<SuccessResponse<List<ResidenceTypeDto>>>;
 
 public class GetResidenceTypesQueryHandler
     : IRequestHandler<GetResidenceTypesQuery, SuccessResponse<List<ResidenceTypeDto>>>
@@ -30,16 +26,11 @@ public class GetResidenceTypesQueryHandler
     public async Task<SuccessResponse<List<ResidenceTypeDto>>> Handle(GetResidenceTypesQuery request, CancellationToken ct)
     {
         var q = _ctx.ResidenceTypes
-            .AsNoTracking()
-            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
+            .AsNoTracking();
 
-        if (!request.IncludeInactive)
-            q = q.Where(x => x.IsActive == true || x.IsActive == null);
 
         var list = await q
             .OrderBy(x => x.Name)
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize)
             .ProjectTo<ResidenceTypeDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);
 

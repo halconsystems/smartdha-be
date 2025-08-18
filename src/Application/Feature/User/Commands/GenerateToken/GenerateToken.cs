@@ -70,7 +70,7 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             .ToListAsync(cancellationToken);
 
         var modules = await _context.Modules
-            .Where(m => userModuleIds.Contains(m.Id))
+            .Where(m => userModuleIds.Contains(m.Id) && m.AppType==AppType.Web)
             .Include(m => m.SubModules)
             .ToListAsync(cancellationToken);
 
@@ -82,6 +82,7 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             {
                 ModuleId = module.Id,
                 ModuleName = module.Name,
+                ModuleURL = module.URL,
                 SubModules = new List<SubModuleDto>()
             };
 
@@ -108,6 +109,8 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             AccessToken = token,
             Role = userRole,
             Modules = moduleDtos,
+            Name=user.Name,
+            Email = user.Email?.ToString() ?? string.Empty,
             ResponseMessage = "Authenticated!"
         };
     }

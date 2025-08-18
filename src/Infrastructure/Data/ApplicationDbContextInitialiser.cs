@@ -67,6 +67,7 @@ public class ApplicationDbContextInitialiser
         }
     }
 
+
     public async Task TrySeedAsync()
     {
         // 1️⃣ Seed Roles
@@ -103,10 +104,10 @@ public class ApplicationDbContextInitialiser
             new() { ParentRole = "SuperAdministrator", ChildRole = "Administrator" },
             new() { ParentRole = "SuperAdministrator", ChildRole = "Admin" },
             new() { ParentRole = "SuperAdministrator", ChildRole = "User" },
-        
+
             new() { ParentRole = "Administrator", ChildRole = "Admin" },
             new() { ParentRole = "Administrator", ChildRole = "User" },
-        
+
             new() { ParentRole = "Admin", ChildRole = "User" }
         };
 
@@ -155,42 +156,39 @@ public class ApplicationDbContextInitialiser
         {
             var webModules = new List<Module>
         {
-            new() { Name = "HR", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Employee Management" }, new() { Name = "Leave Requests" }
+            new() { Name = "Non Member Approval", Title ="Non Member Approval", Description="Non Member Approval",Remarks="Non Member Approval", AppType = AppType.Web, SubModules = new List<SubModule> {
+                new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Finance", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Budget" }, new() { Name = "Invoices" }
+            new() { Name = "User Management", Title ="User Management", Description="User Management",Remarks="User Management", AppType = AppType.Web, SubModules = new List<SubModule> {
+                new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Members Approvel", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Pending Requests" }, new() { Name = "Approved Members" }
+            new() { Name = "Announcement", Title ="Announcement", Description="Announcement",Remarks="Announcement", AppType = AppType.Web, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard" }
             }},
-            new() { Name = "Club Management", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Events" }, new() { Name = "Staff Management" }
+            new() { Name = "Club Management", Title ="Club Management", Description="Club Management",Remarks="Club Management", AppType = AppType.Web, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
         };
 
             var mobileModules = new List<Module>
         {
-            new() { Name = "Club Management", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Club Events" }, new() { Name = "News" }
+            new() { Name = "Club Management", Title ="Club Management", Description="Club Management",Remarks="Club Management", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Bowser", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Track Bowser" }, new() { Name = "Request Bowser" }
+            new() { Name = "Bowser", Title = "Bowser", Description="Bowser",Remarks="Bowser", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Property", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "My Properties" }, new() { Name = "Listings" }
+            new() { Name = "Property", Title = "Property", Description="Property",Remarks="Property", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Panic Button", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Trigger Alert" }, new() { Name = "Alert History" }
+            new() { Name = "Panic Button", Title = "Panic Button", Description="Panic Button", Remarks="Panic Button", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "GIS", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Map View" }, new() { Name = "Nearby Locations" }
+            new() { Name = "GIS",Title = "GIS", Description="GIS", Remarks="GIS", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
-            new() { Name = "Worker", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Request Worker" }, new() { Name = "My Requests" }
-            }},
-            new() { Name = "QR Code", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-                new() { Name = "Scan" }, new() { Name = "History" }
+            new() { Name = "QR Code",Title = "QR Code", Description="QR Code", Remarks="QR Code", AppType = AppType.Mobile, SubModules = new List<SubModule> {
+               new() { Name = "Dashboard",Description="Dashboard"  }
             }},
         };
 

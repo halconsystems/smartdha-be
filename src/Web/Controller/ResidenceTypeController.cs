@@ -26,14 +26,14 @@ public class ResidenceTypeController : BaseApiController
         => Ok(await _mediator.Send(cmd with { Id = id }, ct));
 
     [HttpDelete("{id:guid}")]
-    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, bool hardDelete, CancellationToken ct)
-        => Ok(await _mediator.Send(new DeleteResidenceTypeCommand(id, hardDelete), ct));
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new DeleteResidenceTypeCommand(id), ct));
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ResidenceTypeDto?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetResidenceTypeByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll([FromQuery] bool includeInactive, [FromQuery] int page = 1, [FromQuery] int pageSize = 50, CancellationToken ct = default)
-        => Ok(await _mediator.Send(new GetResidenceTypesQuery(includeInactive, page, pageSize), ct));
+    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll()
+        => Ok(await _mediator.Send(new GetResidenceTypesQuery()));
 }

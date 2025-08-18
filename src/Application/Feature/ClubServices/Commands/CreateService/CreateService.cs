@@ -21,10 +21,7 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
         var entity = new Services
         {
             Name = request.Name,
-            Description = request.Description,
-            IsActive = true,
-            IsDeleted = false,
-            Created = DateTime.UtcNow
+            Description = request.Description
         };
         _ctx.Services.Add(entity);
         await _ctx.SaveChangesAsync(ct);

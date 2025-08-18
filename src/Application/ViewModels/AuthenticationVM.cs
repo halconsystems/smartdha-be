@@ -16,6 +16,8 @@ public class AuthenticationDto
     public string AccessToken { get; set; } = string.Empty;
     public string Role { get; set; } = string.Empty;
     public string ResponseMessage { get; set; } = string.Empty;
+    public string Name {  get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public List<ModuleDto> Modules { get; set; } = new(); // include module/submodule with permissions
 }
 
@@ -23,6 +25,7 @@ public class ModuleDto
 {
     public Guid ModuleId { get; set; }
     public string ModuleName { get; set; } = string.Empty;
+    public string? ModuleURL {  get; set; } = string.Empty;
     public List<SubModuleDto> SubModules { get; set; } = new();
 }
 

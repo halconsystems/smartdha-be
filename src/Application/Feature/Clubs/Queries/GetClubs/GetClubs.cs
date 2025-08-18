@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
-public record GetClubsQuery(bool IncludeInactive = false, int Page = 1, int PageSize = 50)
+public record GetClubsQuery()
     : IRequest<SuccessResponse<List<ClubDto>>>;
 
 public class GetClubsQueryHandler
@@ -25,16 +25,11 @@ public class GetClubsQueryHandler
 
     public async Task<SuccessResponse<List<ClubDto>>> Handle(GetClubsQuery request, CancellationToken ct)
     {
-        var q = _ctx.Clubs.AsNoTracking()
-            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
+        var q = _ctx.Clubs.AsNoTracking();
 
-        if (!request.IncludeInactive)
-            q = q.Where(x => x.IsActive == true || x.IsActive == null);
 
         var clubs = await q
             .OrderBy(x => x.Name)
-            .Skip((request.Page - 1) * request.PageSize)
-            .Take(request.PageSize)
             .ProjectTo<ClubDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);
 

@@ -86,16 +86,27 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpPost("create-reservation"), AllowAnonymous]
-    public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationDto dto)
+    public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand cmd, CancellationToken ct)
     {
-        var reservationId = await _mediator.Send(new CreateReservationCommand(dto));
+        var reservationId = await _mediator.Send(cmd);
         return Ok(reservationId);
     }
 
-    [HttpGet("get-all-reservations/{userId}"), AllowAnonymous]
-    public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations(Guid userId)
+
+
+    [HttpGet("get-all-reservations"), AllowAnonymous]
+    public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                       ?? User.FindFirst("sub")?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized("Invalid or missing user ID in token");
+        }
+
         var result = await _mediator.Send(new GetAllReservationsQuery(userId));
+
         return Ok(result);
     }
 

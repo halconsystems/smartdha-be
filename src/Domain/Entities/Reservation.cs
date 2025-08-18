@@ -22,6 +22,9 @@ public class Reservation : BaseAuditableEntity
     [Column(TypeName = "decimal(18,2)")] public decimal DepositAmountRequired { get; set; }
 
     [Column(TypeName = "decimal(18,2)")] public decimal AmountPaidSoFar { get; set; } = 0m;
+    public int Adult { get; set; } = 0;
+    public int Child { get; set; } = 0;
+    public string OneBillId { get; set; } = string.Empty;
 
     // Optional guest (if booking for a guest)
     public Guid? GuestId { get; set; }
