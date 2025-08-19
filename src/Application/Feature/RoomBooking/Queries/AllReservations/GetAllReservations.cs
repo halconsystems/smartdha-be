@@ -122,7 +122,11 @@ public class GetAllReservationsueryHandler : IRequestHandler<GetAllReservationsu
                     RoomName = rr.Room?.Name ?? string.Empty,
                     CategoryName = rr.Room?.RoomCategory?.Name ?? string.Empty,
                     ResidenceType = rr.Room?.ResidenceType?.Name ?? string.Empty,
-                    Services = rr.Room?.RoomServices?.Select(s => s.Name).ToList() ?? new List<string>(),
+                    //Services = rr.Room?.RoomServices?.Select(s => s.Name).ToList() ?? new List<string>(),
+                    Services = _context.ServiceMappings
+                 .Where(sm => sm.RoomId == rr.RoomId && (sm.IsDeleted == false || sm.IsDeleted == null))
+                 .Select(sm => sm.Services.Name)
+                  .ToList(),
 
                     FromDate = rr.FromDate,
                     ToDate = rr.ToDate,

@@ -15,7 +15,7 @@ public class UpdateNonMemberVerificationCommand : IRequest<bool>
     public Guid Id { get; set; }
     public VerificationStatus Status { get; set; }
     public bool IsActive { get; set; }
-
+    public bool IsOtpRequired { get; set; } = false;
     public string remarks { get; set; } = default!;
 
 }
@@ -37,25 +37,23 @@ public class UpdateNonMemberVerificationCommandHandler : IRequestHandler<UpdateN
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (entity == null)
-        {
-            // Handle not found case (you can throw custom NotFoundException if needed)
             return false;
-        }
-        var entity_User = await _userManager.Users
-     .FirstOrDefaultAsync(x => x.Id == entity.UserId.ToString(), cancellationToken);
+
+        var entity_User = await _userManager.FindByIdAsync(entity.UserId.ToString());
         if (entity_User == null)
-        {
             return false;
-        }
+
         entity.Status = request.Status;
         entity.Remarks = request.remarks;
         entity.IsActive = request.IsActive;
         await _context.SaveChangesAsync(cancellationToken);
 
         entity_User.IsVerified = request.IsActive;
-        await _userManager.UpdateAsync(entity_User);
+        entity_User.IsOtpRequired=request.IsOtpRequired;
+        var result = await _userManager.UpdateAsync(entity_User);
 
-        return true;
+        return result.Succeeded;
     }
+
 }
 

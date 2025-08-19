@@ -91,11 +91,13 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                         ResponseMessage = responseMessage
                     };
 
-                    return new SuccessResponse<MobileAuthenticationDto>(
-                        newdto,
-                     "Authentication step completed.",
-                     "OTP Verification Required"
-                    );
+                    throw new UnAuthorizedException(responseMessage);
+
+                    //return new SuccessResponse<MobileAuthenticationDto>(
+                    //    newdto,
+                    // "Authentication step completed.",
+                    // "OTP Verification Required"
+                    //);
 
                 }
             }

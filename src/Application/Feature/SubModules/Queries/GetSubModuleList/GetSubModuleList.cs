@@ -24,7 +24,7 @@ public class SubModuleListQueryHandler : IRequestHandler<SubModuleListQuery, Suc
 
     public async Task<SuccessResponse<List<SubModulesDto>>> Handle(SubModuleListQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.SubModules.AsQueryable();
+        var query = _context.SubModules.Where(x => x.IsDeleted == null || x.IsDeleted == false).AsQueryable();
 
         if (request.Id.HasValue)
         {

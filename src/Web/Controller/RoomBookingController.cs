@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DHAFacilitationAPIs.Application.Feature.ConfirmBooking.Commands;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.AllReservations;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationDashboard;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DHAFacilitationAPIs.Web.Controller;
+
 [Route("api/[controller]")]
 [ApiController]
 public class RoomBookingController : BaseApiController
@@ -31,6 +33,16 @@ public class RoomBookingController : BaseApiController
     {
         var result = await _mediator.Send(new GetAllReservationsuery());
 
+        return Ok(result);
+    }
+
+    [HttpPost("confirm-payment"),AllowAnonymous]
+    public async Task<IActionResult> ConfirmBooking([FromBody] ConfirmBookingCommand command, CancellationToken ct)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
 }
