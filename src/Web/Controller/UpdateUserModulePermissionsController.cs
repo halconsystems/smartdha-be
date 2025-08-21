@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.Modules.Commands.AddModule;
-using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.User.Commands;
 using DHAFacilitationAPIs.Application.Feature.User.Queries;
 using DHAFacilitationAPIs.Web.Controller;
@@ -24,10 +22,10 @@ public class UserManagementController : BaseApiController
         _loggedInUser = loggedInUser;
     }
 
-    [HttpPost("Update-User-Permissions"), AllowAnonymous]
-    public async Task<IActionResult> UpdateUserModulePermissions([FromBody] UpdateUserModulePermissionsCommand request)
-    {
-        var result = await Mediator.Send(request);
-        return Ok(new { message = result });
-    }
+    //[HttpPost("Update-User-Permissions"), AllowAnonymous]
+    //public async Task<IActionResult> UpdateUserModulePermissions([FromBody] UpdateUserModulePermissionsCommand request)
+    //{
+    //    var result = await Mediator.Send(request);
+    //    return Ok(new { message = result });
+    //}
 }

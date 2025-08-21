@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.ApprovalProcess.Queries.GetProcessStepsByProcessId;

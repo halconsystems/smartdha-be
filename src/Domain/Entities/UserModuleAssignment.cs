@@ -13,12 +13,11 @@ public class UserModuleAssignment : BaseAuditableEntity
     [Required]
     public string UserId { get; set; } = default!;
 
-
     [ForeignKey(nameof(UserId))]
     public ApplicationUser User { get; set; } = default!;
 
-    public Guid? ModuleId { get; set; }
-    public Module? Module { get; set; }
+    public Guid ModuleId { get; set; }
+    public Module Module { get; set; } = default!;
 }
 
 

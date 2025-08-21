@@ -9,20 +9,20 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModuleList;
-public record SubModuleListQuery : IRequest<SuccessResponse<List<SubModulesDto>>>
+public record GetSubModuleListQuery : IRequest<SuccessResponse<List<SubModulesDto>>>
 { public Guid? Id { get; set; } };
 
-public class SubModuleListQueryHandler : IRequestHandler<SubModuleListQuery, SuccessResponse<List<SubModulesDto>>>
+public class GetSubModuleListQueryHandler : IRequestHandler<GetSubModuleListQuery, SuccessResponse<List<SubModulesDto>>>
 {
     private readonly IApplicationDbContext _context;
 
-    public SubModuleListQueryHandler(IApplicationDbContext context)
+    public GetSubModuleListQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
 
-    public async Task<SuccessResponse<List<SubModulesDto>>> Handle(SubModuleListQuery request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<List<SubModulesDto>>> Handle(GetSubModuleListQuery request, CancellationToken cancellationToken)
     {
         var query = _context.SubModules.Where(x => x.IsDeleted == null || x.IsDeleted == false).AsQueryable();
 
@@ -35,9 +35,13 @@ public class SubModuleListQueryHandler : IRequestHandler<SubModuleListQuery, Suc
             .Select(s => new SubModulesDto
             {
                 Id = s.Id,
+                Value=s.Value,
+                DisplayName=s.DisplayName,
                 Name = s.Name,
                 Description = s.Description,
-                ModuleId = s.ModuleId
+                ModuleId = s.ModuleId,
+                RequiresPermission=s.RequiresPermission
+
             })
             .ToListAsync(cancellationToken);
 

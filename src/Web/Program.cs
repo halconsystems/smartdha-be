@@ -32,6 +32,10 @@ builder.Services.AddControllers();
 builder.Services.Configure<FileStorageOptions>(
     builder.Configuration.GetSection("FileStorage"));
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+
 
 
 var app = builder.Build();

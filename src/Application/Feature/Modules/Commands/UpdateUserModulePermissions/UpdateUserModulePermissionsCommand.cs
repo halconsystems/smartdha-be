@@ -62,7 +62,7 @@ public class UpdateUserModulePermissionsCommandHandler : IRequestHandler<UpdateU
 
                 if (existingPermission == null)
                 {
-                    var newPermission = _mapper.Map<RolePermission>(sub);
+                    var newPermission = _mapper.Map<AppRolePermission>(sub);
                     newPermission.Id = Guid.NewGuid();
                     newPermission.RoleName = primaryRole;
                     _context.RolePermissions.Add(newPermission);

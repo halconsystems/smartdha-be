@@ -70,172 +70,238 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-        // 1️⃣ Seed Roles
-        foreach (var role in AllRoles.GetAllRoles())
+        // 1️⃣ Super Admin User
+        var superAdminEmail = "superadministrator@dhakarachi.org";
+        var superAdminPassword = "SuperAdministrator1!";
+
+        var existingUser = await _userManager.FindByEmailAsync(superAdminEmail);
+        ApplicationUser superAdmin;
+
+        if (existingUser == null)
         {
-            if (!await _roleManager.RoleExistsAsync(role))
+            superAdmin = new ApplicationUser
             {
-                var result = await _roleManager.CreateAsync(new IdentityRole(role));
-                if (!result.Succeeded)
-                {
-                    _logger.LogError("Failed to create role {Role}: {Errors}",
-                        role,
-                        string.Join(", ", result.Errors.Select(e => e.Description)));
-                }
-            }
-        }
-
-        var purposes = new List<MembershipPurpose>
-        {
-            new() { Title = "Visiting Family" },
-            new() { Title = "Business" },
-            new() { Title = "Property Inquiry" },
-            new() { Title = "Events / Club Access" }
-        };
-
-        if (!_context.MembershipPurposes.Any())
-        {
-            _context.MembershipPurposes.AddRange(purposes);
-            await _context.SaveChangesAsync();
-        }
-
-        var assignments = new List<RoleAssignment>
-        {
-            new() { ParentRole = "SuperAdministrator", ChildRole = "Administrator" },
-            new() { ParentRole = "SuperAdministrator", ChildRole = "Admin" },
-            new() { ParentRole = "SuperAdministrator", ChildRole = "User" },
-
-            new() { ParentRole = "Administrator", ChildRole = "Admin" },
-            new() { ParentRole = "Administrator", ChildRole = "User" },
-
-            new() { ParentRole = "Admin", ChildRole = "User" }
-        };
-
-        if (!_context.RoleAssignments.Any())
-        {
-            _context.RoleAssignments.AddRange(assignments);
-            await _context.SaveChangesAsync();
-        }
-
-        // 2️⃣ Seed Users
-
-        async Task<ApplicationUser> SeedUser(string name, string email, string role, string cnic)
-        {
-            var existing = await _userManager.FindByEmailAsync(email);
-            if (existing != null) return existing;
-
-            var user = new ApplicationUser
-            {
-                Name = name,
-                Email = email,
-                UserName = email,
-                CNIC = cnic,
+                Name = "Super Administrator",
+                Email = superAdminEmail,
+                UserName = superAdminEmail,
+                CNIC = "1234567890123",
                 EmailConfirmed = true,
                 AppType = AppType.Web,
-                UserType = UserType.Employee
+                UserType = UserType.Employee,
+                MobileNo= "03000000000",
+                MEMPK="2025",
             };
 
-            var result = await _userManager.CreateAsync(user, $"{role}123!");
-            if (result.Succeeded)
+            var result = await _userManager.CreateAsync(superAdmin, superAdminPassword);
+            if (!result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, role);
-                return user;
+                throw new Exception("Failed to create SuperAdmin: " +
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
             }
-
-            _logger.LogError("Failed to create {Role} user: {Errors}", role, string.Join(", ", result.Errors.Select(e => e.Description)));
-            return null!;
+        }
+        else
+        {
+            superAdmin = existingUser;
         }
 
-        var superAdmin = await SeedUser("Super Admin", "superadministrator@dhakarachi.org", AllRoles.SuperAdministrator, "1234567890123");
-        var administrator = await SeedUser("Administrator", "administrator@dhakarachi.org", AllRoles.Administrator, "1234567890124");
-        var admin = await SeedUser("Admin", "admin@dhakarachi.org", AllRoles.Admin, "1234567890125");
-
-        // 3️⃣ Seed Modules + SubModules
-
+        // 2️⃣ Seed Modules
         if (!_context.Modules.Any())
         {
-            var webModules = new List<Module>
-        {
-            new() { Name = "Non Member Approval", Title ="Non Member Approval", Description="Non Member Approval",Remarks="Non Member Approval", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "User Management", Title ="User Management", Description="User Management",Remarks="User Management", AppType = AppType.Web, SubModules = new List<SubModule> {
-                new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "Announcement", Title ="Announcement", Description="Announcement",Remarks="Announcement", AppType = AppType.Web, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard" }
-            }},
-            new() { Name = "Club Management", Title ="Club Management", Description="Club Management",Remarks="Club Management", AppType = AppType.Web, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-        };
-
+            // 📱 Mobile Modules (no submodules)
             var mobileModules = new List<Module>
         {
-            new() { Name = "Club Management", Title ="Club Management", Description="Club Management",Remarks="Club Management", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "Bowser", Title = "Bowser", Description="Bowser",Remarks="Bowser", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "Property", Title = "Property", Description="Property",Remarks="Property", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "Panic Button", Title = "Panic Button", Description="Panic Button", Remarks="Panic Button", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "GIS",Title = "GIS", Description="GIS", Remarks="GIS", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-            new() { Name = "QR Code",Title = "QR Code", Description="QR Code", Remarks="QR Code", AppType = AppType.Mobile, SubModules = new List<SubModule> {
-               new() { Name = "Dashboard",Description="Dashboard"  }
-            }},
-        };
+          new() {
+        Value = "PanicButton",
+        DisplayName = "Panic Button",
+        Name = "PanicButton",
+        Description = "Mobile panic button alerts and quick actions",
+        Title = "Panic Button",
+        Remarks = "Critical safety feature",
+        AppType = AppType.Mobile,
+        URL = "app://panic-button"
+    },
+    new() {
+        Value = "PropertyManagement",
+        DisplayName = "Property Management",
+        Name = "PropertyManagement",
+        Description = "Manage property details from mobile",
+        Title = "Property Management",
+        Remarks = "Mobile access",
+        AppType = AppType.Mobile,
+        URL = "app://property-management"
+    },
+    new() {
+        Value = "ClubManagement",
+        DisplayName = "Club Management",
+        Name = "ClubManagement",
+        Description = "Mobile access to club reservations and payments",
+        Title = "Club Management",
+        Remarks = "For members",
+        AppType = AppType.Mobile,
+        URL = "app://club-management"
+    },
+    new() {
+        Value = "Bowzer",
+        DisplayName = "Bowzer",
+        Name = "Bowzer",
+        Description = "Mobile Bowzer services",
+        Title = "Bowzer",
+        Remarks = "Bowzer on mobile",
+        AppType = AppType.Mobile,
+        URL = "app://bowzer"
+    },
+    new() {
+        Value = "QRCode",
+        DisplayName = "QR Code",
+        Name = "QRCode",
+        Description = "Scan and generate QR Codes",
+        Title = "QR Code",
+        Remarks = "Mobile QR services",
+        AppType = AppType.Mobile,
+        URL = "app://qr-code"
+    }
+};
 
-            await _context.Modules.AddRangeAsync(webModules.Concat(mobileModules));
+
+            // 💻 Web Modules (with submodules)
+            var webModules = new List<Module>
+{
+    new() {
+        Value = "PanicButton",
+        DisplayName = "Panic Button",
+        Name = "PanicButton",
+        Description = "Manage panic button alerts and monitoring",
+        Title = "Panic Button Module",
+        Remarks = "Critical feature for emergency response",
+        AppType = AppType.Web,
+        URL = "/panic-button",
+        SubModules = new List<SubModule> {
+            new() {
+                Value = "WebPanic.Dashboard",
+                DisplayName = "Dashboard",
+                Name = "WebPanicDashboard",
+                Description = "Overview of panic button alerts",
+                RequiresPermission = false
+            }
+        }
+    },
+    new() {
+        Value = "ClubManagement",
+        DisplayName = "Club Management",
+        Name = "ClubManagement",
+        Description = "Manage club activities, reservations, and payments",
+        Title = "Club Management Module",
+        Remarks = "Important for member services",
+        AppType = AppType.Web,
+        URL = "/club-management",
+        SubModules = new List<SubModule> {
+            new() {
+                Value = "WebClub.Dashboard",
+                DisplayName = "Dashboard",
+                Name = "WebClubDashboard",
+                Description = "Overview of club activities",
+                RequiresPermission = false
+            },
+            new() {
+                Value = "WebClub.RoomReservation",
+                DisplayName = "Room Reservation",
+                Name = "WebClubRoomReservation",
+                Description = "Manage club room reservations",
+                RequiresPermission = true
+            },
+            new() {
+                Value = "WebClub.Payment",
+                DisplayName = "Payment Received",
+                Name = "WebClubPayment",
+                Description = "Track and approve club payments",
+                RequiresPermission = true
+            }
+        }
+    },
+    new() {
+        Value = "NonMemberApproval",
+        DisplayName = "Non Member Approval",
+        Name = "NonMemberApproval",
+        Description = "Handle non-member verification and approval requests",
+        Title = "Non Member Approval Module",
+        Remarks = "Workflow module",
+        AppType = AppType.Web,
+        URL = "/non-member-approval",
+        SubModules = new List<SubModule> {
+            new() {
+                Value = "NMA.Dashboard",
+                DisplayName = "Dashboard",
+                Name = "NMADashboard",
+                Description = "Overview of non-member approval status",
+                RequiresPermission = false
+            },
+            new() {
+                Value = "NMA.Request",
+                DisplayName = "Request",
+                Name = "NMARequest",
+                Description = "Approve or reject non-member requests",
+                RequiresPermission = true
+            }
+        }
+    }
+};
+
+
+            await _context.Modules.AddRangeAsync(mobileModules.Concat(webModules));
             await _context.SaveChangesAsync();
         }
 
-        // 4️⃣ Assign ALL modules to SuperAdmin
+        // 3️⃣ Seed SuperAdmin Role
+        var superAdminRole = await _context.AppRoles
+            .FirstOrDefaultAsync(r => r.Name == "SuperAdministrator");
 
-        var allModules = await _context.Modules.ToListAsync();
-        var superAdminAssignments = allModules.Select(m => new UserModuleAssignment
+        if (superAdminRole == null)
         {
-            UserId = superAdmin.Id,
-            ModuleId = m.Id,
-            Created = DateTime.UtcNow,
-            CreatedBy = superAdmin.Id
-        });
-
-        var assignedModuleIds = _context.UserModuleAssignments
-            .Where(x => x.UserId.ToString() == superAdmin.Id)
-            .Select(x => x.ModuleId)
-            .ToHashSet();
-
-        var newAssignments = superAdminAssignments
-            .Where(x => !assignedModuleIds.Contains(x.ModuleId));
-
-        _context.UserModuleAssignments.AddRange(newAssignments);
-
-        // 5️⃣ Assign FULL PERMISSIONS to SuperAdmin for all SubModules
-
-        if (!_context.RolePermissions.Any(x => x.RoleName == AllRoles.SuperAdministrator))
-        {
-            var allSubModules = await _context.SubModules.ToListAsync();
-
-            var permissions = allSubModules.Select(sm => new RolePermission
+            superAdminRole = new AppRole
             {
-                RoleName = AllRoles.SuperAdministrator,
-                SubModuleId = sm.Id,
-                CanRead = true,
-                CanWrite = true,
-                CanDelete = true
-            });
+                Name = "SuperAdministrator",
+                IsSystemRole = true
+            };
+            _context.AppRoles.Add(superAdminRole);
+            await _context.SaveChangesAsync();
+        }
 
-            await _context.RolePermissions.AddRangeAsync(permissions);
+        // 4️⃣ Assign Role to SuperAdmin User
+        var roleAssigned = await _context.AppUserRoles
+            .AnyAsync(ur => ur.UserId == superAdmin.Id && ur.RoleId == superAdminRole.Id);
+
+        if (!roleAssigned)
+        {
+            var userRole = new AppUserRole
+            {
+                UserId = superAdmin.Id,
+                RoleId = superAdminRole.Id
+            };
+            _context.AppUserRoles.Add(userRole);
+            await _context.SaveChangesAsync();
+        }
+
+        // 5️⃣ Assign Full Permissions on All SubModules
+        var allSubModules = await _context.SubModules.ToListAsync();
+
+        foreach (var sm in allSubModules)
+        {
+            bool exists = await _context.AppRolePermissions
+                .AnyAsync(rp => rp.RoleId == superAdminRole.Id && rp.SubModuleId == sm.Id);
+
+            if (!exists)
+            {
+                _context.AppRolePermissions.Add(new AppRolePermission
+                {
+                    RoleId = superAdminRole.Id,
+                    SubModuleId = sm.Id,
+                    AllowedActions = "Read,Write,Delete,Approve,Reject"
+                });
+            }
         }
 
         await _context.SaveChangesAsync();
     }
+
 
 }

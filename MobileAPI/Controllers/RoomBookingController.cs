@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using DHAFacilitationAPIs.Application.Feature.Modules.Commands.UpdateUserModulePermissions;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;

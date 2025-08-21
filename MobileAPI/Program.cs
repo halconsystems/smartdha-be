@@ -31,6 +31,10 @@ builder.Services.AddSingleton<DapperConnectionFactory>();
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -55,6 +59,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 
 

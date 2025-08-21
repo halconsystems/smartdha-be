@@ -127,8 +127,8 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             string returnmsg = $"An OTP has been sent to the mobile number registered with your membership {generateotp}";
             string sentmsg =  generateotp + " is your OTP to sign-in DHA Karachi mobile application.";
             string smsresult = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
-            if (smsresult == "SUCCESSFUL")
-            {
+            //if (smsresult == "SUCCESSFUL")
+            //{
                 var usernewOtp = new UserOtp
                 {
                     UserId = Guid.Parse(user.Id),
@@ -156,11 +156,11 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                      "Authentication step completed.",
                      "OTP Verification Required"
                     );
-            }
-            else
-            {
-                throw new UnAuthorizedException("Mobile Number not verified!");
-            }
+            //}
+            //else
+            //{
+            //    throw new UnAuthorizedException("Mobile Number not verified!");
+            //}
         }
 
         string token = await _authenticationService.GenerateToken(user);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.SubModuleList;
 using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -60,8 +61,17 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             throw new UnAuthorizedException("Invalid Password");
 
         string token = await _authenticationService.GenerateWebUserToken(user);
-        IList<string> roles = await _userManager.GetRolesAsync(user);
-        string userRole = roles.FirstOrDefault() ?? "User";
+
+        var userRoles = await _context.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == user.Id)
+            .Select(ur => ur.Role.Name)
+            .ToListAsync();
+
+
+
+        //IList<string> roles = await _userManager.GetRolesAsync(user);
+        string userRole = userRoles.FirstOrDefault() ?? "User";
 
         // -------- Fetch Modules Assigned to User --------
         var userModuleIds = await _context.UserModuleAssignments
@@ -69,40 +79,42 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             .Select(x => x.ModuleId)
             .ToListAsync(cancellationToken);
 
+        // ✅ Get assigned modules including submodules + permissions
         var modules = await _context.Modules
-            .Where(m => userModuleIds.Contains(m.Id) && m.AppType==AppType.Web)
+            .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
             .Include(m => m.SubModules)
+                .ThenInclude(sm => sm.Permissions)
             .ToListAsync(cancellationToken);
 
-        var moduleDtos = new List<ModuleDto>();
+        // ✅ Get user permissions (explicitly stored)
+        var userPermissions = await _context.UserPermissions
+            .Where(up => up.UserId == user.Id)
+            .ToListAsync(cancellationToken);
 
-        foreach (var module in modules)
+        var moduleDtos = modules.Select(module => new ModuleDto
         {
-            var moduleDto = new ModuleDto
-            {
-                ModuleId = module.Id,
-                ModuleName = module.Name,
-                ModuleURL = module.URL,
-                SubModules = new List<SubModuleDto>()
-            };
+            ModuleId = module.Id,
+            ModuleName = module.DisplayName,
+            ModuleURL = module.URL,
+            DisplayName= module.DisplayName,
+            Value= module.Value,
 
-            foreach (var sub in module.SubModules)
+            SubModules = module.SubModules.Select(sm => new SubModuleDto
             {
-                var permission = await _context.RolePermissions
-                    .FirstOrDefaultAsync(p => p.RoleName == userRole && p.SubModuleId == sub.Id, cancellationToken);
+                SubModuleId = sm.Id,
+                SubModuleName = sm.DisplayName,
+                DisplayName = sm.DisplayName,
+                Value = sm.Value,
 
-                moduleDto.SubModules.Add(new SubModuleDto
+                Permissions = sm.Permissions.Select(p => new AllPermissionDto
                 {
-                    SubModuleId = sub.Id,
-                    SubModuleName = sub.Name,
-                    CanRead = permission?.CanRead ?? false,
-                    CanWrite = permission?.CanWrite ?? false,
-                    CanDelete = permission?.CanDelete ?? false
-                });
-            }
+                    PermissionId = p.Id,
+                    Value = p.Value,
+                    DisplayName = p.DisplayName
+                }).ToList()
+            }).ToList()
+        }).ToList();
 
-            moduleDtos.Add(moduleDto);
-        }
 
         return new AuthenticationDto
         {

@@ -6,10 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Feature\Modules\Commands\UpdateUserModulePermissions\**" />
+    <Compile Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <Compile Remove="Feature\TodoItems\**" />
     <Compile Remove="Feature\TodoLists\**" />
+    <EmbeddedResource Remove="Feature\Modules\Commands\UpdateUserModulePermissions\**" />
+    <EmbeddedResource Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <EmbeddedResource Remove="Feature\TodoItems\**" />
     <EmbeddedResource Remove="Feature\TodoLists\**" />
+    <None Remove="Feature\Modules\Commands\UpdateUserModulePermissions\**" />
+    <None Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <None Remove="Feature\TodoItems\**" />
     <None Remove="Feature\TodoLists\**" />
   </ItemGroup>
@@ -31,6 +37,7 @@
   <ItemGroup>
     <Folder Include="Feature\ApprovalProcess\Commands\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
+    <Folder Include="Feature\Permissions\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\RoomServices\Queries\" />
     <Folder Include="Feature\User\Commands\ForgetPassword\" />

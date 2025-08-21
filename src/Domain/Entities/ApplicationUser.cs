@@ -36,4 +36,5 @@ public class ApplicationUser : IdentityUser
     public bool IsDeleted { get; set; } = false;
     public bool IsVerified { get; set; } = false;
     public bool IsOtpRequired { get; set; } = false;
+    public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();
 }

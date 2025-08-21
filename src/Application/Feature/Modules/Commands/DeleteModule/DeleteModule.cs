@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.Modules.Commands.DeleteModule;
-public record DeleteModuleCommand(string Id): IRequest<bool>;
+public record DeleteModuleCommand(string Id): IRequest<SuccessResponse<bool>>;
 
 
-public class DeleteModuleCommandHandler : IRequestHandler<DeleteModuleCommand, bool>
+public class DeleteModuleCommandHandler : IRequestHandler<DeleteModuleCommand, SuccessResponse<bool>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -19,7 +20,7 @@ public class DeleteModuleCommandHandler : IRequestHandler<DeleteModuleCommand, b
         _context = context;
     }
 
-    public async Task<bool> Handle(DeleteModuleCommand request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<bool>> Handle(DeleteModuleCommand request, CancellationToken cancellationToken)
     {
         if (!Guid.TryParse(request.Id, out var guid))
         {
@@ -37,7 +38,10 @@ public class DeleteModuleCommandHandler : IRequestHandler<DeleteModuleCommand, b
 
         var result = await _context.SaveChangesAsync(cancellationToken);
 
-        return result > 0;
+        return new SuccessResponse<bool>(
+         result > 0,
+         result > 0 ? "Module deleted successfully!" : "Failed to delete Module"
+     );
     }
 }
 

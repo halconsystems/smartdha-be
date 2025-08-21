@@ -151,7 +151,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 MobileNo = request.MobileNo,
                 CNIC = request.CNIC,
                 EmailConfirmed = true,
-                PhoneNumberConfirmed=false,
+                PhoneNumberConfirmed=true,
                 TwoFactorEnabled = false,
                 AppType = AppType.Mobile,
                 UserType = UserType.Member,
@@ -165,8 +165,8 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             string sentmsg = userOtp + " is your OTP to sign-up DHA Karachi mobile application.";
 
             var result =await _otpService.SendSmsAsync(outCellNo, sentmsg, cancellationToken);
-            if (result == "SUCCESSFUL")
-            {
+            //if (result == "SUCCESSFUL" )
+            //{
                 var usernewOtp = new UserOtp
                 {
                     UserId = Guid.Parse(newUser.Id),
@@ -181,11 +181,11 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return SuccessResponse<string>.FromMessage(message);
-            }
-            else
-            {
-                throw new BadRequestException(message);
-            }
+            //}
+            //else
+            //{
+            //    throw new BadRequestException(message);
+            //}
             
         }
         else
