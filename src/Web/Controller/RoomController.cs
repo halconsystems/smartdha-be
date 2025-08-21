@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.CreateRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoom;
@@ -8,6 +9,7 @@ using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetImageCategories;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomImages;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomWithServiceSelections;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
+using DHAFacilitationAPIs.Application.Feature.RoomCharges.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomServices.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +38,7 @@ public class RoomController : ControllerBase
          => Ok(await _mediator.Send(new GetImageCategoriesQuery(), ct));
 
 
-    [HttpPost("{roomId:guid}/images/add"),AllowAnonymous]
+    [HttpPost("{roomId:guid}/images/add"), AllowAnonymous]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
     public async Task<IActionResult> AddRoomImages(
@@ -100,7 +102,7 @@ public class RoomController : ControllerBase
     public async Task<ActionResult<SuccessResponse<Guid>>> GetRoom([FromQuery] GetRoomsQuery cmd, CancellationToken ct)
      => Ok(await _mediator.Send(cmd, ct));
 
-    [HttpPut("UpdateRoom"),AllowAnonymous]
+    [HttpPut("UpdateRoom"), AllowAnonymous]
     public async Task<IActionResult> UpdateRoom([FromBody] UpdateRoomCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
@@ -127,13 +129,17 @@ public class RoomController : ControllerBase
        => Ok(await _mediator.Send(cmd, ct));
 
 
-    [HttpGet("rooms/{roomId:guid}/with-services"),AllowAnonymous]
+    [HttpGet("rooms/{roomId:guid}/with-services"), AllowAnonymous]
     public async Task<IActionResult> GetRoomWithServices(Guid roomId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetRoomWithServiceSelectionsQuery { RoomId = roomId }, ct);
         return StatusCode(result.Status, result);
     }
 
-
-
+    [HttpPost("AddRoom-Charges"), AllowAnonymous]
+    public async Task<ActionResult<Guid>> AddRoomCharge(Guid roomId, [FromBody] RoomChargesDto dto)
+    {
+        var id = await _mediator.Send(new AddRoomCharges(roomId, dto));
+        return Ok(new { RoomChargeId = id });
+    }
 }
