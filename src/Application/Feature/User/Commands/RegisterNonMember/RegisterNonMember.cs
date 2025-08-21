@@ -56,110 +56,123 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
 
     public async Task<SuccessResponse<string>> Handle(RegisterNonMemberCommand request, CancellationToken cancellationToken)
     {
-        // 1. Check if user already exists by CNIC
-        var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
 
-        if (existingUser != null)
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+
+        try
         {
-            if(existingUser.PhoneNumberConfirmed==false)
-            {
-                throw new UnAuthorizedException("Mobile Number not verified!");
-            }
 
-            // 2. Check existing verification request
-            var existingRequest = await _context.NonMemberVerifications
-                .Where(x => x.UserId == existingUser.Id)
-                .OrderByDescending(x => x.Created)
-                .FirstOrDefaultAsync(cancellationToken);
 
-            if (existingRequest != null)
+            // 1. Check if user already exists by CNIC
+            var existingUser = await _userManager.Users
+             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
+
+            if (existingUser != null)
             {
-                var dto= existingRequest.Status switch
+                if (existingUser.PhoneNumberConfirmed == false)
                 {
-                    VerificationStatus.Pending => "Your request is pending approval.",
-                    VerificationStatus.Rejected => "Membership request was rejected. Please contact administrator.",
-                    VerificationStatus.Approved => "User already registered.",
-                    _ => "User already registered."
-                };
+                    throw new UnAuthorizedException("Mobile Number not verified!");
+                }
 
-                return SuccessResponse<string>.FromMessage(dto);
-                
+                // 2. Check existing verification request
+                var existingRequest = await _context.NonMemberVerifications
+                    .Where(x => x.UserId == existingUser.Id)
+                    .OrderByDescending(x => x.Created)
+                    .FirstOrDefaultAsync(cancellationToken);
 
+                if (existingRequest != null)
+                {
+                    var dto = existingRequest.Status switch
+                    {
+                        VerificationStatus.Pending => "Your request is pending approval.",
+                        VerificationStatus.Rejected => "Membership request was rejected. Please contact administrator.",
+                        VerificationStatus.Approved => "User already registered.",
+                        _ => "User already registered."
+                    };
+
+                    return SuccessResponse<string>.FromMessage(dto);
+
+
+                }
+
+                // No verification found but user exists — treat as registered
+                string msg = "User already registered.";
+                return SuccessResponse<string>.FromMessage(msg);
             }
 
-            // No verification found but user exists — treat as registered
-            string msg= "User already registered.";
-            return SuccessResponse<string>.FromMessage(msg);
-        }
+            var user = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = request.Name,
+                CNIC = request.CNIC,
+                MobileNo = request.MobileNo,
+                PhoneNumber = request.MobileNo,
+                RegisteredMobileNo = request.MobileNo,
+                PhoneNumberConfirmed = true,
+                AppType = AppType.Mobile,
+                UserType = UserType.NonMember,
+                IsVerified = false,
+                UserName = request.CNIC,
+                Email = request.Email,
+                IsOtpRequired = true,
+                MEMPK = "-"
+            };
 
-        var user = new ApplicationUser
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = request.Name,
-            CNIC = request.CNIC,
-            MobileNo = request.MobileNo,
-            PhoneNumber = request.MobileNo,
-            RegisteredMobileNo = request.MobileNo,
-            PhoneNumberConfirmed = true,
-            AppType = AppType.Mobile,
-            UserType = UserType.NonMember,
-            IsVerified = false,
-            UserName = request.CNIC,
-            Email = request.Email,
-            IsOtpRequired = true,
-            MEMPK = "-"
-        };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+                throw new DBOperationException("User creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
 
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-            throw new DBOperationException("User creation failed: " + string.Join(", ", result.Errors.Select(e => e.Description)));
-
-        // Save verification request
-        var verification = new NonMemberVerification
-        {
-            UserId = user.Id,
-            CNIC = request.CNIC,
-            Status = VerificationStatus.Pending,
-            Remarks = "Submitted with documents"
-        };
-        _context.NonMemberVerifications.Add(verification);
-
-        // Store purposes
-        if (request.PurposeIds != null && request.PurposeIds.Any())
-        {
-            var purposeLinks = request.PurposeIds.Select(pid => new UserMembershipPurpose
+            // Save verification request
+            var verification = new NonMemberVerification
             {
                 UserId = user.Id,
-                PurposeId = pid
-            }).ToList();
+                CNIC = request.CNIC,
+                Status = VerificationStatus.Pending,
+                Remarks = "Submitted with documents"
+            };
+            _context.NonMemberVerifications.Add(verification);
 
-            await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
+            // Store purposes
+            if (request.PurposeIds != null && request.PurposeIds.Any())
+            {
+                var purposeLinks = request.PurposeIds.Select(pid => new UserMembershipPurpose
+                {
+                    UserId = user.Id,
+                    PurposeId = pid
+                }).ToList();
+
+                await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
+            }
+
+            // Save documents
+            var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
+            var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
+            string? supportPath = null;
+            if (request.SupportingDocument != null)
+            {
+                supportPath = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
+            }
+
+            var document = new NonMemberVerificationDocument
+            {
+                VerificationId = verification.Id,
+                CNICFrontImagePath = frontPath,
+                CNICBackImagePath = backPath,
+                SupportingDocumentPath = supportPath
+            };
+
+            _context.NonMemberVerificationDocuments.Add(document);
+            //Final call
+            await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+
+            string finalmsg = "Registration submitted successfully. Your request is pending review.";
+            return SuccessResponse<string>.FromMessage(finalmsg);
         }
-       
-        // Save documents
-        var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
-        var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
-        string? supportPath = null;
-        if (request.SupportingDocument != null)
-        {
-            supportPath = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
+        catch (Exception ex) {
+            await transaction.RollbackAsync(cancellationToken);
+            throw new DBOperationException(ex.ToString());
         }
-
-        var document = new NonMemberVerificationDocument
-        {
-            VerificationId = verification.Id,
-            CNICFrontImagePath = frontPath,
-            CNICBackImagePath = backPath,
-            SupportingDocumentPath = supportPath
-        };
-
-        _context.NonMemberVerificationDocuments.Add(document);
-        //Final call
-        await _context.SaveChangesAsync(cancellationToken);
-
-        string finalmsg= "Registration submitted successfully. Your request is pending review.";
-        return SuccessResponse<string>.FromMessage(finalmsg);
-    }
+   }
 }
 

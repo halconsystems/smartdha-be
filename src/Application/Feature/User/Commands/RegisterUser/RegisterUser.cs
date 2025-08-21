@@ -119,17 +119,32 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                 {
                     foreach (var subSel in moduleSel.SubModules)
                     {
-                        if (subSel.PermissionIds == null || !subSel.PermissionIds.Any())
-                            continue;
-
-                        var userPermission = new UserPermission
+                        //if (subSel.PermissionIds == null || !subSel.PermissionIds.Any())
+                        //    continue;
+                        if (subSel.PermissionIds != null && subSel.PermissionIds.Any())
                         {
-                            UserId = newUser.Id,
-                            SubModuleId = subSel.SubModuleId,
-                            AllowedActions = string.Join(",", subSel.PermissionIds) // CSV
-                        };
+                            var userPermission = new UserPermission
+                            {
+                                UserId = newUser.Id,
+                                SubModuleId = subSel.SubModuleId,
+                                AllowedActions = string.Join(",", subSel.PermissionIds) // CSV
+                            };
 
-                        _context.UserPermissions.Add(userPermission);
+                            _context.UserPermissions.Add(userPermission);
+                        }
+                        else
+                        {
+                            // Case 2️⃣: SubModule has NO permissions (e.g. Dashboard)
+                            // Create an entry so we know the user has access to this submodule
+                            var userPermission = new UserPermission
+                            {
+                                UserId = newUser.Id,
+                                SubModuleId = subSel.SubModuleId,
+                                AllowedActions = string.Empty // means "has access, but no fine-grained actions"
+                            };
+
+                            _context.UserPermissions.Add(userPermission);
+                        }
                     }
                 }
             }

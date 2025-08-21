@@ -94,7 +94,7 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
         var moduleDtos = modules.Select(module => new ModuleDto
         {
             ModuleId = module.Id,
-            ModuleName = module.DisplayName,
+            ModuleName = module.Name,
             ModuleURL = module.URL,
             DisplayName= module.DisplayName,
             Value= module.Value,
@@ -102,7 +102,7 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             SubModules = module.SubModules.Select(sm => new SubModuleDto
             {
                 SubModuleId = sm.Id,
-                SubModuleName = sm.DisplayName,
+                SubModuleName = sm.Name,
                 DisplayName = sm.DisplayName,
                 Value = sm.Value,
 

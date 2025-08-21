@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.User.Commands.ActivateDeactivateUs
 using DHAFacilitationAPIs.Application.Feature.User.Commands.CreateRole;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterUser;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateUserAccess;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllUsers;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetRoles;
@@ -61,6 +62,14 @@ public class UsersController : BaseApiController
             ? Ok(new { message = "User deleted (soft delete) successfully." })
             : BadRequest(new { message = "Failed to delete user." });
     }
+
+    [HttpPut("UpdateUserAccess")]
+    public async Task<IActionResult> UpdateUserAccess([FromBody] UpdateUserAccessCommand command)
+    {
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
 
 
     [HttpGet("GetRoles")]
