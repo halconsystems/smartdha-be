@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250820074335_AddEnumBookingTypeAndOccupancyChargeTable")]
+    partial class AddEnumBookingTypeAndOccupancyChargeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,9 +262,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxExtraOccupancy")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -270,9 +270,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("NormalOccupancy")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("ResidenceTypeId")
                         .HasColumnType("uniqueidentifier");
@@ -523,9 +520,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ExtraOccupancy")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -553,6 +547,54 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("RoomCharges");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomExtraOccupancyCharge", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Charges")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxOccupancy")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RoomChargeID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomChargeID");
+
+                    b.ToTable("RoomExtraOccupancyCharges");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomImage", b =>
@@ -1153,6 +1195,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomExtraOccupancyCharge", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.RoomCharge", "RoomCharge")
+                        .WithMany()
+                        .HasForeignKey("RoomChargeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoomCharge");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ServiceMapping", b =>

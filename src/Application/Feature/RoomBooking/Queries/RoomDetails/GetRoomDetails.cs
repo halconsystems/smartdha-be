@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
 
-public record GetRoomDetailsQuery(Guid RoomId, string BookingType)
+public record GetRoomDetailsQuery(Guid RoomId, RoomBookingType BookingType)
     : IRequest<RoomDetailsDto>;
 
 public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, RoomDetailsDto>

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250821060823_OccupancyChargeTableRemoved")]
+    partial class OccupancyChargeTableRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +262,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MaxExtraOccupancy")
+                    b.Property<int>("MaxOccupancy")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -270,9 +273,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("NormalOccupancy")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("ResidenceTypeId")
                         .HasColumnType("uniqueidentifier");
@@ -523,9 +523,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ExtraOccupancy")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -537,6 +534,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NoOfOccupancy")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");

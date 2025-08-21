@@ -12,6 +12,8 @@ public record CreateRoomCommand(
     Guid RoomCategoryId,
     Guid ResidenceTypeId,
     string No,
+    int NormalOccupancy,
+    int MaxExtraOccupancy,
     string? Name,
     string? Description
 ) : IRequest<SuccessResponse<string>>;
@@ -41,6 +43,8 @@ public class CreateRoomCommandHandler : IRequestHandler<CreateRoomCommand, Succe
             RoomCategoryId = request.RoomCategoryId,
             ResidenceTypeId = request.ResidenceTypeId,
             No = no,
+            NormalOccupancy = request.NormalOccupancy,
+            MaxExtraOccupancy = request.MaxExtraOccupancy,
             Name = request.Name?.Trim(),
             Description = request.Description,
             IsGloballyAvailable = true,   // default as per your model

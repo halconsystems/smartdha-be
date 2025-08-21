@@ -19,7 +19,7 @@ namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateRes
 public record class CreateReservationCommand : IRequest<ReservationInfoDto>
 {
     public Guid ClubId { get; set; }
-    public string BookingType { get; set; } = "Self";
+    public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
     public int Adult { get; set; } = 0;
     public int Child { get; set; } = 0;
     public List<CreateReservationRoomDto> Rooms { get; set; } = new();
@@ -79,9 +79,6 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             return totalDays * roomCharge;
         });
 
-
-
-
         decimal taxes = 0m;
         decimal discounts = 0m;
         decimal totalAmount = roomsAmount + taxes - discounts;
@@ -110,7 +107,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         };
 
         // Check Guest CNIC if guest data provided
-        if (dto.Guest != null && !string.IsNullOrWhiteSpace(dto.Guest.CNICOrPassport) && dto.BookingType!="Self")
+        if (dto.Guest != null && !string.IsNullOrWhiteSpace(dto.Guest.CNICOrPassport) && dto.BookingType!=RoomBookingType.Self)
         {
             var existingGuest = await _context.BookingGuests
                 .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport, cancellationToken);

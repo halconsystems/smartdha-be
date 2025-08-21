@@ -12,4 +12,6 @@ public class Club : BaseAuditableEntity
     public string? Description { get; set; }
     public string? Location { get; set; }
     public string? ContactNumber { get; set; }
+    public string? AccountNo { get; set; }
+    [MaxLength(4)] public string? AccountNoAccronym { get; set; }
 }
