@@ -53,7 +53,6 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
             select new SearchRoomsDto
             {
-                // Navigations
                 ResidenceTypeName = r.ResidenceType != null ? r.ResidenceType.Name : string.Empty,
                 CategoryName = r.RoomCategory != null ? r.RoomCategory.Name : string.Empty,
 
@@ -61,23 +60,22 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 Name = r.Name ?? string.Empty,
                 RoomNo = r.No,
 
-                // Charges (requested according to BookingType & Extra Occupancy if any)
+                // Charges (requested according to BookingType & 1 Occupant)
                 Price = _context.RoomCharges
                             .AsNoTracking()
-                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType)
+                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType && c.ExtraOccupancy == 0)
                             .Select(c => (decimal?)c.Charges)
                             .FirstOrDefault(),
 
-                // ریٹنگ (اوسط یا تازہ ترین میں سے ایک چنیں)
-                // تازہ ترین:
+                
                 Ratings = (decimal?)_context.RoomRatings
                             .AsNoTracking()
                             .Where(rr => rr.RoomId == r.Id)
-                            .OrderByDescending(rr => rr.Created) // اگر Created نہیں تو ہٹا دیں/Id پر کریں
+                            .OrderByDescending(rr => rr.Created) // If not Created then remove/set Id
                             .Select(rr => (double?)rr.RoomRatings)
                             .FirstOrDefault(),
 
-                // مین امیج
+              // Main Image
                 DefaultImage = _context.RoomImages
                             .AsNoTracking()
                             .Where(img => img.RoomId == r.Id && img.Category == ImageCategory.Main)
@@ -85,13 +83,13 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                             .Select(img => img.ImageURL)
                             .FirstOrDefault() ?? string.Empty,
 
-                // صارف کی ریکوئسٹڈ تاریخیں
+                // User requested dates
                 CheckInDate = start,
                 CheckInTimeOnly=a.FromTimeOnly,
                 CheckOutDate = end,
                 CheckOutTimeOnly=a.ToTimeOnly,
 
-                // ✅ اس مخصوص available سلوٹ کی رینج
+                // Range of this specific available slot
 
                 AvailabilityFrom = a.FromDate,
 
@@ -100,7 +98,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
         var list = await query.ToListAsync(ct);
 
-        // امیج URL کو public بنا دیں
+        // Make the image URL public
         list.ForEach(x =>
         {
             x.DefaultImage = string.IsNullOrWhiteSpace(x.DefaultImage)

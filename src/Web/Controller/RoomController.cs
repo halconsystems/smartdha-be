@@ -136,6 +136,6 @@ public class RoomController : ControllerBase
     }
 
     [HttpPost("AddRoom-Charges"), AllowAnonymous]
-    public async Task<ActionResult<SuccessResponse<Guid>>> AddRoomCharge([FromBody] AddRoomCharges cmd, CancellationToken ct)
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> AddRoomCharge([FromBody] AddRoomCharges cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
 }

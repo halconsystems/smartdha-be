@@ -24,7 +24,10 @@ public class Room : BaseAuditableEntity
     public string No { get; set; } = default!;
 
     [Required]
-    public int MaxOccupancy { get; set; }
+    public int NormalOccupancy { get; set; }
+
+    [Required]
+    public int MaxExtraOccupancy { get; set; }
 
     [MaxLength(100)]
     public string? Name { get; set; }

@@ -92,8 +92,6 @@ public class RoomBookingController : ControllerBase
         return Ok(reservationId);
     }
 
-
-
     [HttpGet("get-all-reservations"), AllowAnonymous]
     public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
     {

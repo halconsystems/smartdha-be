@@ -11,6 +11,11 @@ public class RoomChargesDto
 {
     public Guid RoomId { get; set; }
     public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
-    public int NoOfOccupancy { get; set; }
+    public List<RoomChargeItemDto> Charges { get; set; } = new();
+}
+
+public class RoomChargeItemDto
+{
+    public int ExtraOccupancy { get; set; }
     public decimal Charges { get; set; }
 }

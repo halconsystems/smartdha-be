@@ -12,8 +12,7 @@ public class RoomCharge : BaseAuditableEntity
     [Required]
     public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
 
-    [Required]
-    public int NoOfOccupancy { get; set; }
+    public int ExtraOccupancy { get; set; } = 0;
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal Charges { get; set; }
