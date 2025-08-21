@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Rooms;
 
@@ -10,7 +11,7 @@ public record GetAvailableRoomsQuery(
     Guid ResidenceTypeId,
     DateTime CheckInDate,
     DateTime CheckOutDate,
-    string BookingType
+    RoomBookingType BookingType
 ) : IRequest<List<AvailableRoomDto>>;
 
 public class GetAvailableRoomsQueryHandler : IRequestHandler<GetAvailableRoomsQuery, List<AvailableRoomDto>>

@@ -9,7 +9,7 @@ public record SearchRoomsQuery(
     Guid ClubId,
     DateOnly CheckInDate,
     DateOnly CheckOutDate,
-    string BookingType // "self" or "guest"
+    RoomBookingType BookingType // "self" or "guest"
 ) : IRequest<List<SearchRoomsDto>>;
 
 public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<SearchRoomsDto>>

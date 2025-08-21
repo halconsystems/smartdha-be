@@ -29,9 +29,17 @@ public class RoomBooking : BaseAuditableEntity
 
     [Required]
     public DateTime? CheckInDate { get; set; }
+    [Required]
+    public DateOnly? CheckInDateOnly { get; set; }
+    [Required]
+    public TimeOnly? CheckInTimeOnly { get; set; }
 
     [Required]
     public DateTime? CheckOutDate { get; set; }
+    [Required]
+    public DateOnly? CheckOutDateOnly { get; set; }
+    [Required]
+    public TimeOnly? CheckOutTimeOnly { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal TotalAmount { get; set; }

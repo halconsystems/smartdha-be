@@ -9,6 +9,7 @@ using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomCategories
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Rooms;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("search-rooms"), AllowAnonymous]
-    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] string bookingType)
+    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
         return Ok(result);
@@ -78,7 +79,7 @@ public class RoomBookingController : ControllerBase
 //    }
 
     [HttpGet("get-room-details"), AllowAnonymous]
-    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] string bookingType)
+    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
         return Ok(result);

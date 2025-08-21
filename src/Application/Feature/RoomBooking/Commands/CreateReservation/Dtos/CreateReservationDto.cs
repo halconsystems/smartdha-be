@@ -1,6 +1,7 @@
 ﻿// Imports for DTO file
 using System;
 using System.Collections.Generic;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 
@@ -8,7 +9,7 @@ public class CreateReservationDto
 {
     //public Guid UserId { get; set; }  // Now Guid instead of string
     public Guid ClubId { get; set; }
-    public string BookingType { get; set; } = "Self";
+    public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
     public int Adult { get; set; } = 0;
     public int Child { get; set; } = 0;
     public List<CreateReservationRoomDto> Rooms { get; set; } = new();
