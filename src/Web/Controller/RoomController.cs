@@ -123,7 +123,6 @@ public class RoomController : ControllerBase
         return Ok(result);
     }
 
-
     [HttpPost("AddRoom-Services"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> AddRoomServices(AssignServicesToRoomCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd, ct));
@@ -137,9 +136,6 @@ public class RoomController : ControllerBase
     }
 
     [HttpPost("AddRoom-Charges"), AllowAnonymous]
-    public async Task<ActionResult<Guid>> AddRoomCharge(Guid roomId, [FromBody] RoomChargesDto dto)
-    {
-        var id = await _mediator.Send(new AddRoomCharges(roomId, dto));
-        return Ok(new { RoomChargeId = id });
-    }
+    public async Task<ActionResult<SuccessResponse<Guid>>> AddRoomCharge([FromBody] AddRoomCharges cmd, CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
 }

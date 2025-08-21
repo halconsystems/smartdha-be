@@ -79,9 +79,6 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             return totalDays * roomCharge;
         });
 
-
-
-
         decimal taxes = 0m;
         decimal discounts = 0m;
         decimal totalAmount = roomsAmount + taxes - discounts;

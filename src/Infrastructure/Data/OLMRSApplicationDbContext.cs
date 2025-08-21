@@ -23,7 +23,6 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<ResidenceType> ResidenceTypes => base.Set<ResidenceType>();
     public DbSet<Room> Rooms => Set<Room>();
     public DbSet<RoomCharge> RoomCharges => Set<RoomCharge>();
-    public DbSet<RoomExtraOccupancyCharge> RoomExtraOccupancyCharges => Set<RoomExtraOccupancyCharge>();
     public DbSet<RoomImage> RoomImages => Set<RoomImage>();
     public DbSet<RoomRating> RoomRatings => Set<RoomRating>();
     public DbSet<RoomAvailability> RoomAvailabilities => Set<RoomAvailability>();

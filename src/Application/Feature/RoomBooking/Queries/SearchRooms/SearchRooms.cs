@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Enums;
+using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
 
@@ -33,18 +34,26 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             where r.ClubId == request.ClubId
                && r.IsGloballyAvailable
 
-            // روم کی ہر وہ available ونڈو جو پورا رینج کور کرتی ہو (subset allowed)
+            // Check rooms according to their availibility (subset allowed)
             from a in r.Availabilities
                 .Where(a => a.Action == AvailabilityAction.Available
                      && a.FromDateOnly <= end   // starts before (or on) the search end
                      && a.ToDateOnly >= start) // ends after (or on) the search start
-
-
-
+            where !_context.ReservationRooms.Any(res =>     // Exclude rooms already reserved/booked in overlapping period
+                res.RoomId == r.Id &&
+                res.FromDateOnly <= end &&
+                res.ToDateOnly >= start &&
+                (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
+                 || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
+            && !_context.RoomBookings.Any(bk =>
+                bk.RoomId == r.Id &&
+                bk.Status == BookingStatus.Confirmed &&
+                bk.CheckInDateOnly <= end &&
+                bk.CheckOutDateOnly >= start)
 
             select new SearchRoomsDto
             {
-                // Navigations سے سیدھا
+                // Navigations
                 ResidenceTypeName = r.ResidenceType != null ? r.ResidenceType.Name : string.Empty,
                 CategoryName = r.RoomCategory != null ? r.RoomCategory.Name : string.Empty,
 
@@ -52,7 +61,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 Name = r.Name ?? string.Empty,
                 RoomNo = r.No,
 
-                // Charges (requested BookingType کے مطابق)
+                // Charges (requested according to BookingType & Extra Occupancy if any)
                 Price = _context.RoomCharges
                             .AsNoTracking()
                             .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType)

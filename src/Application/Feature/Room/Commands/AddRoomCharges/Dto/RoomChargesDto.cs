@@ -9,6 +9,8 @@ namespace DHAFacilitationAPIs.Application.Feature.RoomCharges.Dtos;
 
 public class RoomChargesDto
 {
+    public Guid RoomId { get; set; }
     public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
+    public int NoOfOccupancy { get; set; }
     public decimal Charges { get; set; }
 }
