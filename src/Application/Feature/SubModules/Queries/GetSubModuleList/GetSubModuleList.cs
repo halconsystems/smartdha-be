@@ -10,7 +10,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModuleList;
 public record GetSubModuleListQuery : IRequest<SuccessResponse<List<SubModulesDto>>>
-{ public Guid? Id { get; set; } };
+{ public string? Id { get; set; } };
 
 public class GetSubModuleListQueryHandler : IRequestHandler<GetSubModuleListQuery, SuccessResponse<List<SubModulesDto>>>
 {
@@ -26,9 +26,9 @@ public class GetSubModuleListQueryHandler : IRequestHandler<GetSubModuleListQuer
     {
         var query = _context.SubModules.Where(x => x.IsDeleted == null || x.IsDeleted == false).AsQueryable();
 
-        if (request.Id.HasValue)
+        if (Guid.TryParse(request.Id, out Guid parsedId) && parsedId != Guid.Empty)
         {
-            query = query.Where(s => s.Id == request.Id);
+            query = query.Where(s => s.Id == parsedId);
         }
 
         var subModules = await query

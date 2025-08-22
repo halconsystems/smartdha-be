@@ -5,6 +5,8 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
+using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
+using ValidationException = DHAFacilitationAPIs.Application.Common.Exceptions.ValidationException;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterUser;
 
@@ -54,111 +56,134 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
 
     public async Task<SuccessResponse<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var existingUser = await _userManager.Users
-            .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(u =>
-                u.Email == request.Email ||
-                u.UserName == request.UserName ||
-                u.CNIC == request.CNIC,
-                cancellationToken);
+        // Start transaction
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
 
-        if (existingUser != null)
+        try
         {
-            throw new RecordAlreadyExistException("User already exists.");
-        }
+            // 1️⃣ Check if user already exists
+            var existingUser = await _userManager.Users
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(u =>
+                    u.Email == request.Email ||
+                    u.UserName == request.UserName ||
+                    u.CNIC == request.CNIC,
+                    cancellationToken);
 
-        // Create new user
-        var newUser = new ApplicationUser
-        {
-            Id = Guid.NewGuid().ToString(), // Identity user uses string Id
-            Name = request.Name,
-            UserName = request.UserName,
-            NormalizedUserName = request.UserName.ToUpper(),
-            Email = request.Email,
-            NormalizedEmail = request.Email.ToUpper(),
-            MobileNo = request.MobileNo,
-            CNIC = request.CNIC,
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            RegisteredMobileNo = request.MobileNo,
-            AppType = AppType.Web,
-            UserType = UserType.Employee,
-            MEMPK = request.MEMPK
-        };
+            if (existingUser != null)
+                throw new RecordAlreadyExistException("A user with the same Email, Username, or CNIC already exists.");
 
-        var createResult = await _userManager.CreateAsync(newUser, request.Password);
-        if (!createResult.Succeeded)
-            throw new DBOperationException("User creation failed: " + string.Join(", ", createResult.Errors.Select(e => e.Description)));
-
-        // Assign Role
-        var role = await _context.AppRoles.FindAsync(new object[] { request.RoleId }, cancellationToken);
-        if (role == null) throw new Exception("Role not found.");
-
-        var userRole = new AppUserRole
-        {
-            UserId = newUser.Id,
-            RoleId = role.Id
-        };
-        _context.AppUserRoles.Add(userRole);
-
-        // Assign Modules + SubModules + Permissions
-        if (request.Modules != null)
-        {
-            foreach (var moduleSel in request.Modules)
+            // 2️⃣ Create new Identity User
+            var newUser = new ApplicationUser
             {
-                // User ↔ Module link
-                var assignment = new UserModuleAssignment
-                {
-                    UserId = newUser.Id,
-                    ModuleId = moduleSel.ModuleId
-                };
-                _context.UserModuleAssignments.Add(assignment);
+                Id = Guid.NewGuid().ToString(), // Identity expects string PK
+                Name = request.Name,
+                UserName = request.UserName,
+                NormalizedUserName = request.UserName.ToUpper(),
+                Email = request.Email,
+                NormalizedEmail = request.Email.ToUpper(),
+                MobileNo = request.MobileNo,
+                CNIC = request.CNIC,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                RegisteredMobileNo = request.MobileNo,
+                AppType = AppType.Web,
+                UserType = UserType.Employee,
+                MEMPK = request.MEMPK
+            };
 
-                // SubModules + Permissions
-                if (moduleSel.SubModules != null)
+            var createResult = await _userManager.CreateAsync(newUser, request.Password);
+            if (!createResult.Succeeded)
+            {
+                var errors = string.Join("; ", createResult.Errors.Select(e => e.Description));
+                throw new DBOperationException($"User creation failed: {errors}");
+            }
+
+            // 3️⃣ Validate and assign Role
+            if (!Guid.TryParse(request.RoleId, out var roleId))
+                throw new DBOperationException("RoleId is not a valid GUID.");
+
+            var role = await _context.AppRoles.FindAsync(new object[] { roleId }, cancellationToken);
+            if (role == null)
+                throw new NotFoundException($"Role with ID {roleId} was not found.");
+
+            var userRole = new AppUserRole
+            {
+                UserId = newUser.Id,
+                RoleId = role.Id
+            };
+            _context.AppUserRoles.Add(userRole);
+
+            // 4️⃣ Assign Modules + SubModules + Permissions
+            if (request.Modules != null)
+            {
+                foreach (var moduleSel in request.Modules)
                 {
-                    foreach (var subSel in moduleSel.SubModules)
+                    // ✅ Ensure module exists
+                    var moduleExists = await _context.Modules
+                        .AnyAsync(m => m.Id == moduleSel.ModuleId, cancellationToken);
+
+                    if (!moduleExists)
+                        throw new NotFoundException($"Module with Id {moduleSel.ModuleId} does not exist.");
+
+                    // User ↔ Module link
+                    _context.UserModuleAssignments.Add(new UserModuleAssignment
                     {
-                        //if (subSel.PermissionIds == null || !subSel.PermissionIds.Any())
-                        //    continue;
-                        if (subSel.PermissionIds != null && subSel.PermissionIds.Any())
+                        UserId = newUser.Id,
+                        ModuleId = moduleSel.ModuleId
+                    });
+
+                    // SubModules + Permissions
+                    if (moduleSel.SubModules != null)
+                    {
+                        foreach (var subSel in moduleSel.SubModules)
                         {
-                            var userPermission = new UserPermission
+                            var allowedActions = (subSel.PermissionIds != null && subSel.PermissionIds.Any())
+                                ? string.Join(",", subSel.PermissionIds)
+                                : string.Empty;
+
+                            // ✅ Ensure submodule exists
+                            var subModuleExists = await _context.SubModules
+                                .AnyAsync(s => s.Id == subSel.SubModuleId, cancellationToken);
+
+                            if (!subModuleExists)
+                                throw new NotFoundException($"SubModule with Id {subSel.SubModuleId} does not exist.");
+
+                            _context.UserPermissions.Add(new UserPermission
                             {
                                 UserId = newUser.Id,
                                 SubModuleId = subSel.SubModuleId,
-                                AllowedActions = string.Join(",", subSel.PermissionIds) // CSV
-                            };
-
-                            _context.UserPermissions.Add(userPermission);
-                        }
-                        else
-                        {
-                            // Case 2️⃣: SubModule has NO permissions (e.g. Dashboard)
-                            // Create an entry so we know the user has access to this submodule
-                            var userPermission = new UserPermission
-                            {
-                                UserId = newUser.Id,
-                                SubModuleId = subSel.SubModuleId,
-                                AllowedActions = string.Empty // means "has access, but no fine-grained actions"
-                            };
-
-                            _context.UserPermissions.Add(userPermission);
+                                AllowedActions = allowedActions
+                            });
                         }
                     }
                 }
+
             }
+
+            // 5️⃣ Save changes
+            await _context.SaveChangesAsync(cancellationToken);
+
+            // Commit the transaction
+            await transaction.CommitAsync(cancellationToken);
+
+            // Convert newUser.Id string → Guid safely
+            var userGuid = Guid.TryParse(newUser.Id, out var parsedGuid)
+                ? parsedGuid
+                : Guid.Empty;
+
+            return new SuccessResponse<Guid>(userGuid, "User created successfully.");
         }
+        catch (Exception ex)
+        {
+            // Rollback on error
+            await transaction.RollbackAsync(cancellationToken);
 
-        await _context.SaveChangesAsync(cancellationToken);
-
-        // Convert newUser.Id string → Guid safely
-        var userGuid = Guid.TryParse(newUser.Id, out var parsedGuid)
-            ? parsedGuid
-            : Guid.Empty;
-
-        return new SuccessResponse<Guid>(userGuid, "User created successfully.");
+            // Re-throw with proper context
+            throw new ApplicationException($"Failed to register user: {ex.Message}", ex);
+        }
     }
+
 
 }
 

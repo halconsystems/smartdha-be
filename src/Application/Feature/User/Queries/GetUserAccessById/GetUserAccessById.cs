@@ -74,6 +74,7 @@ public class GetUserAccessByIdHandler
                 {
                     SubModuleId = sm.Id,
                     SubModuleName = sm.DisplayName,
+                    RequiresPermission=sm.RequiresPermission,
                     IsAlreadyAssigned = assignedSubModuleIds.Contains(sm.Id),
                     Permissions = sm.Permissions.Select(p => new PermissionAccessDto
                     {

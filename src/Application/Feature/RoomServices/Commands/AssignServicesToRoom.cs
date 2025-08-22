@@ -19,39 +19,33 @@ public sealed class AssignServicesToRoomCommandHandler
 
     public async Task<SuccessResponse<string>> Handle(AssignServicesToRoomCommand c, CancellationToken ct)
     {
-        var r = c.Request;
-        if (r.ServiceIds == null) r.ServiceIds = new();
+        var r = c.Request ?? throw new ArgumentNullException(nameof(c.Request));
 
-        // room must exist
-        var roomExists = await _ctx.Rooms.AnyAsync(x => x.Id == r.RoomId && (x.IsDeleted == false || x.IsDeleted == null), ct);
-        if (!roomExists) throw new ArgumentException("Invalid RoomId.");
+        // 1️⃣ Room must exist
+        var roomExists = await _ctx.Rooms
+            .AnyAsync(x => x.Id == r.RoomId && (x.IsDeleted == false || x.IsDeleted == null), ct);
 
-        // validate all serviceIds exist
-        var validCount = await _ctx.Services.CountAsync(s => r.ServiceIds.Contains(s.Id) && (s.IsDeleted == false || s.IsDeleted == null), ct);
-        if (validCount != r.ServiceIds.Distinct().Count())
+        if (!roomExists)
+            throw new ArgumentException("Invalid RoomId.");
+
+        // 2️⃣ Validate all serviceIds exist
+        var distinctServiceIds = r.ServiceIds?.Distinct().ToList() ?? new List<Guid>();
+
+        var validCount = await _ctx.Services
+            .CountAsync(s => distinctServiceIds.Contains(s.Id) && (s.IsDeleted == false || s.IsDeleted == null), ct);
+
+        if (validCount != distinctServiceIds.Count)
             throw new ArgumentException("One or more ServiceIds are invalid.");
 
-        // current mappings
-        var current = await _ctx.ServiceMappings
-            .Where(m => m.RoomId == r.RoomId && (m.IsDeleted == false || m.IsDeleted == null))
+        // 3️⃣ Remove all previous mappings (hard delete)
+        var existingMappings = await _ctx.ServiceMappings
+            .Where(m => m.RoomId == r.RoomId)
             .ToListAsync(ct);
 
-        var newSet = r.ServiceIds.Distinct().ToHashSet();
+        _ctx.ServiceMappings.RemoveRange(existingMappings);
 
-        // soft-remove those not in new set
-        var toRemove = current.Where(m => !newSet.Contains(m.ServiceId)).ToList();
-        foreach (var m in toRemove)
-        {
-            m.IsDeleted = true;
-            m.IsActive = false;
-            m.LastModified = DateTime.Now;
-        }
-
-        // add new ones
-        var existingIds = current.Select(m => m.ServiceId).ToHashSet();
-        var toAdd = newSet.Except(existingIds).ToList();
-
-        foreach (var sid in toAdd)
+        // 4️⃣ Add new mappings
+        foreach (var sid in distinctServiceIds)
         {
             await _ctx.ServiceMappings.AddAsync(new ServiceMapping
             {
@@ -60,29 +54,11 @@ public sealed class AssignServicesToRoomCommandHandler
             }, ct);
         }
 
-        // revive previously soft-deleted same pairs (optional)
-        var previouslyDeleted = await _ctx.ServiceMappings
-            .Where(m => m.RoomId == r.RoomId && r.ServiceIds.Contains(m.ServiceId) && m.IsDeleted == true)
-            .ToListAsync(ct);
+        // 5️⃣ Save changes
+        await _ctx.SaveChangesAsync(ct);
 
-        foreach (var m in previouslyDeleted)
-        {
-            if (!current.Any(x => x.ServiceId == m.ServiceId)) // only if not already active
-            {
-                m.IsDeleted = false;
-                m.IsActive = true;
-                m.LastModified = DateTime.Now;
-            }
-        }
-        try
-        {
-            await _ctx.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
         return new SuccessResponse<string>("OK", "Room services updated.");
     }
+
 }
 

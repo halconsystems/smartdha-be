@@ -32,10 +32,8 @@ public class SubModuleController : BaseApiController
     [HttpGet("get-submodule"), AllowAnonymous]
     public async Task<IActionResult> GetModules([FromQuery] string? id)
     {
-        if (!Guid.TryParse(id, out var userGuid))
-            return BadRequest("Invalid user id format.");
-
-        var result = await Mediator.Send(new GetSubModuleListQuery { Id = userGuid });
+      
+        var result = await Mediator.Send(new GetSubModuleListQuery { Id = id });
         return Ok(result);
     }
 

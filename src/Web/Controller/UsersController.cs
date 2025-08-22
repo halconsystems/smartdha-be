@@ -8,7 +8,10 @@ using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateUserAccess;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllUsers;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetRoles;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserAccessById;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserById;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserDashboard;
+using DHAFacilitationAPIs.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +73,12 @@ public class UsersController : BaseApiController
         return Ok(result);
     }
 
-
+    [HttpGet("user-dashboard")]
+    public async Task<ActionResult<SuccessResponse<UserDashboardDto>>> GetUserDashboard()
+    {
+        var result = await _mediator.Send(new GetUserDashboardQuery());
+        return Ok(result);
+    }
 
     [HttpGet("GetRoles")]
     public async Task<IActionResult> GetRoles()
@@ -78,7 +86,6 @@ public class UsersController : BaseApiController
         var result = await Mediator.Send(new GetRolesQuery());
         return Ok(result);
     }
-
 
     [HttpGet("Get-All")]
     public async Task<IActionResult> GetAllUsers()
@@ -92,12 +99,21 @@ public class UsersController : BaseApiController
         return Ok(await Mediator.Send(new GetAccessTreeQuery()));
     }
 
-    [HttpGet("GetUserById"), AllowAnonymous]
-    public async Task<IActionResult> GetUserById([FromQuery]string id)
+    [HttpGet("GetUserAccessById")]
+    public async Task<IActionResult> GetUserAccessById([FromQuery] string userId)
     {
-        var result = await Mediator.Send(new GetUserByIdQuery { UserId = id });
-        return result is null ? NotFound() : Ok(result);
+        var result = await Mediator.Send(new GetUserAccessByIdQuery(userId));
+        return Ok(result);
     }
+
+    //[HttpGet("GetUserById"), AllowAnonymous]
+    //public async Task<IActionResult> GetUserById([FromQuery]string id)
+    //{
+    //    var result = await Mediator.Send(new GetUserByIdQuery { UserId = id });
+    //    return result is null ? NotFound() : Ok(result);
+    //}
+
+
 
 
 

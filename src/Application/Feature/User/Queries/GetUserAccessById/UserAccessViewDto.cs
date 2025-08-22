@@ -30,6 +30,7 @@ public class SubModuleAccessDto
     public Guid SubModuleId { get; set; }
     public string SubModuleName { get; set; } = default!;
     public bool IsAlreadyAssigned { get; set; }
+    public bool RequiresPermission { get; set; }
     public List<PermissionAccessDto> Permissions { get; set; } = new();
 }
 

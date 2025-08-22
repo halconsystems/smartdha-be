@@ -36,6 +36,14 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "RBAC_";
+});
+builder.Services.AddMemoryCache(); // backup fallback
+builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
+
 
 
 var app = builder.Build();

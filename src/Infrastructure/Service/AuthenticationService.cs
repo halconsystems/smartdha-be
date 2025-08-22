@@ -155,23 +155,7 @@ public class AuthenticationService : IAuthenticationService
                 claims.Add(new Claim("ModuleAccess", modId));
         }
 
-        // 🔹 Add submodule permissions by role
-        //string userRole = roles.FirstOrDefault() ?? "User";
-
-        //var subPermissions = await _context.RolePermissions
-        //    .Where(p => p.RoleName == userRole)
-        //    .ToListAsync();
-
-        //foreach (var perm in subPermissions)
-        //{
-        //    if (perm.CanRead)
-        //        claims.Add(new Claim("Permission", $"Read:{perm.SubModuleId}"));
-        //    if (perm.CanWrite)
-        //        claims.Add(new Claim("Permission", $"Write:{perm.SubModuleId}"));
-        //    if (perm.CanDelete)
-        //        claims.Add(new Claim("Permission", $"Delete:{perm.SubModuleId}"));
-        //}
-
+        
         return GenerateAccessToken(claims);
     }
 
