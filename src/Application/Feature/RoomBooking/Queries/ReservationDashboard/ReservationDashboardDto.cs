@@ -14,12 +14,12 @@ public class ReservationDashboardDto
 
     public decimal TotalRevenue { get; set; }
     public decimal TotalPaid { get; set; }
-    public decimal PendingAmount { get; set; }
 
-    public Dictionary<string, int> ReservationsByClub { get; set; } = new();
-    public Dictionary<string, int> ReservationsByStatus { get; set; } = new();
+    public int AwaitingPaymentReservations { get; set; } // instead of PendingAmount
 
-    // 👇 Stage-wise summary
+    public List<ClubDashboardDto> Clubs { get; set; } = new();
+
+    // Stage tracking
     public int ReservationStageApproved { get; set; }
     public int ReservationStagePending { get; set; }
     public int PaymentStageApproved { get; set; }
@@ -27,4 +27,16 @@ public class ReservationDashboardDto
     public int BookingStageApproved { get; set; }
     public int BookingStagePending { get; set; }
 }
+
+public class ClubDashboardDto
+{
+    public string ClubName { get; set; } = string.Empty;
+    public int TotalReservations { get; set; }
+    public int ConfirmedReservations { get; set; }
+    public int CancelledReservations { get; set; }
+    public int AwaitingPaymentReservations { get; set; }
+    public int TotalRoomsBooked { get; set; }
+    public decimal ConfirmationPercentage { get; set; }
+}
+
 

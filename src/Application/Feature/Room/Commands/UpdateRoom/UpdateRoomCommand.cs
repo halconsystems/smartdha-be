@@ -16,6 +16,8 @@ public class UpdateRoomCommand : IRequest<bool>
 
     [MaxLength(50)]
     public string No { get; set; } = default!;
+    public int NormalOccupancy { get; set; }
+    public int MaxExtraOccupancy { get; set; }
 
     [MaxLength(100)]
     public string? Name { get; set; }
@@ -43,6 +45,8 @@ public class UpdateRoomCommandHandler : IRequestHandler<UpdateRoomCommand, bool>
         room.RoomCategoryId = request.RoomCategoryId;
         room.ResidenceTypeId = request.ResidenceTypeId;
         room.No = request.No;
+        room.NormalOccupancy = request.NormalOccupancy;
+        room.MaxExtraOccupancy = request.MaxExtraOccupancy;
         room.Name = request.Name;
         room.Description = request.Description;
         room.IsGloballyAvailable = request.IsGloballyAvailable;

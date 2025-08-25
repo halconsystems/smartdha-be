@@ -9,8 +9,12 @@ namespace DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModul
 public class SubModulesDto
 {
     public Guid Id { get; set; }
+    public string Value { get; set; } = default!;
+    public string DisplayName { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
+    public bool RequiresPermission { get; set; }
     public Guid? ModuleId { get; set; }
+
 
 }

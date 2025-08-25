@@ -115,9 +115,23 @@ public class AuthenticationService : IAuthenticationService
     public async Task<string> GenerateWebUserToken(ApplicationUser user)
     {
         IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
-        IList<string> roles = await _userManager.GetRolesAsync(user);
+        //IList<string> roles = await _userManager.GetRolesAsync(user);
 
-        List<Claim> roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
+        //List<Claim> roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
+
+        // ✅ Fetch roles from your custom AppUserRole → AppRole
+        var userRoles = await _context.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == user.Id)
+            .Select(ur => ur.Role.Name)
+            .ToListAsync();
+
+        // ✅ Convert them to claims like before
+        List<Claim> roleClaims = userRoles
+            .Select(role => new Claim(ClaimTypes.Role, role))
+            .ToList();
+
+
 
         var claims = new List<Claim>()
     {
@@ -141,23 +155,7 @@ public class AuthenticationService : IAuthenticationService
                 claims.Add(new Claim("ModuleAccess", modId));
         }
 
-        // 🔹 Add submodule permissions by role
-        string userRole = roles.FirstOrDefault() ?? "User";
-
-        var subPermissions = await _context.RolePermissions
-            .Where(p => p.RoleName == userRole)
-            .ToListAsync();
-
-        foreach (var perm in subPermissions)
-        {
-            if (perm.CanRead)
-                claims.Add(new Claim("Permission", $"Read:{perm.SubModuleId}"));
-            if (perm.CanWrite)
-                claims.Add(new Claim("Permission", $"Write:{perm.SubModuleId}"));
-            if (perm.CanDelete)
-                claims.Add(new Claim("Permission", $"Delete:{perm.SubModuleId}"));
-        }
-
+        
         return GenerateAccessToken(claims);
     }
 

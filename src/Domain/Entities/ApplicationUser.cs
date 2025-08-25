@@ -31,9 +31,10 @@ public class ApplicationUser : IdentityUser
     public DateTime? RegistrationDate { get; set; } = default!;
 
     public ICollection<UserModuleAssignment> ModuleAssignments { get; set; } = default!;
-    public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedDateTime { get; set; } = DateTime.Now;
     public bool IsActive { get; set; } = true;
     public bool IsDeleted { get; set; } = false;
     public bool IsVerified { get; set; } = false;
     public bool IsOtpRequired { get; set; } = false;
+    public ICollection<AppUserRole> UserRoles { get; set; } = new List<AppUserRole>();
 }

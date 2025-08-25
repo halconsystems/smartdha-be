@@ -10,6 +10,11 @@ namespace DHAFacilitationAPIs.Domain.Entities;
 public class Module : BaseAuditableEntity
 {
 
+    [Required, MaxLength(100)]
+    public string Value { get; set; } = default!;         // e.g. "ClubManagement"
+    [Required, MaxLength(100)]
+    public string DisplayName { get; set; } = default!;   // e.g. "Club Management"
+
     [Required]
     [MaxLength(100)]
     public string Name { get; set; } = default!;

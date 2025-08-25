@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.SubModuleList;
 
 namespace DHAFacilitationAPIs.Application.ViewModels;
 public class AuthenticationVM
@@ -24,6 +25,8 @@ public class AuthenticationDto
 public class ModuleDto
 {
     public Guid ModuleId { get; set; }
+    public string Value { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
     public string ModuleName { get; set; } = string.Empty;
     public string? ModuleURL {  get; set; } = string.Empty;
     public List<SubModuleDto> SubModules { get; set; } = new();
@@ -32,10 +35,16 @@ public class ModuleDto
 public class SubModuleDto
 {
     public Guid SubModuleId { get; set; }
+    public string Value { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
     public string SubModuleName { get; set; } = string.Empty;
-    public bool CanRead { get; set; }
-    public bool CanWrite { get; set; }
-    public bool CanDelete { get; set; }
+    public List<AllPermissionDto> Permissions { get; set; } = new();
+}
+public class AllPermissionDto
+{
+    public Guid PermissionId { get; set; }
+    public string Value { get; set; } = string.Empty;       // e.g. "Approve"
+    public string DisplayName { get; set; } = string.Empty; // e.g. "Approve Request"
 }
 
 public class MobileAuthenticationDto

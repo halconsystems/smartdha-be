@@ -23,77 +23,79 @@ public class GetReservationDashboardHandler
     {
         var reservations = await _context.Reservations
             .Include(r => r.Club)
+            .Include(r => r.ReservationRooms)
             .Include(r => r.PaymentIntents)
                 .ThenInclude(pi => pi.Payments)
             .ToListAsync(ct);
 
-        int totalReservations = reservations.Count;
-        int activeReservations = reservations.Count(r =>
-            r.Status == DHAFacilitationAPIs.Domain.Enums.ReservationStatus.AwaitingPayment ||
-            r.Status == DHAFacilitationAPIs.Domain.Enums.ReservationStatus.Converted);
-
-        int cancelledReservations = reservations.Count(r =>
-            r.Status == DHAFacilitationAPIs.Domain.Enums.ReservationStatus.Cancelled ||
-            r.Status == DHAFacilitationAPIs.Domain.Enums.ReservationStatus.Expired);
-
-        int completedReservations = reservations.Count(r =>
-            r.Status == DHAFacilitationAPIs.Domain.Enums.ReservationStatus.Converted);
-
-        decimal totalRevenue = reservations.Sum(r => r.TotalAmount);
-        decimal totalPaid = reservations.Sum(r =>
-            r.PaymentIntents?.SelectMany(pi => pi.Payments)
-                .Where(p => p.Status == PaymentStatus.Paid)
-                .Sum(p => p.Amount) ?? 0);
-
-        decimal pendingAmount = totalRevenue - totalPaid;
-
-        // ✅ Grouping by Club safely
-        var byClub = reservations
-            .GroupBy(r => r.Club?.Name ?? "Unknown Club")
-            .ToDictionary(g => g.Key, g => g.Count());
-
-        var byStatus = reservations
-            .GroupBy(r => r.Status.ToString())
-            .ToDictionary(g => g.Key, g => g.Count());
-
-        // ✅ Stage-wise summary
-        int reservationStageApproved = 0;
-        int reservationStagePending = 0;
-        int paymentStageApproved = 0;
-        int paymentStagePending = 0;
-        int bookingStageApproved = 0;
-        int bookingStagePending = 0;
-
-        foreach (var r in reservations)
+        var reservationStatuses = reservations.Select(r =>
         {
-            decimal paid = r.PaymentIntents?.SelectMany(pi => pi.Payments)
+            decimal paid = r.PaymentIntents?
+                .SelectMany(pi => pi.Payments)
                 .Where(p => p.Status == PaymentStatus.Paid)
                 .Sum(p => p.Amount) ?? 0;
 
-            // Reservation Stage
-            if (r.ExpiresAt > DateTime.Now) reservationStageApproved++;
-            else reservationStagePending++;
+            return new
+            {
+                Reservation = r,
+                Paid = paid,
+                DisplayStatus = GetDisplayStatus(r, paid)
+            };
+        }).ToList();
 
-            // Payment Stage
-            if (paid >= r.TotalAmount) paymentStageApproved++;
-            else paymentStagePending++;
+        int totalReservations = reservationStatuses.Count;
+        int confirmedReservations = reservationStatuses.Count(x => x.DisplayStatus == "Booking Confirmed");
+        int cancelledReservations = reservationStatuses.Count(x => x.DisplayStatus == "Cancelled");
+        int awaitingPaymentReservations = reservationStatuses.Count(x => x.DisplayStatus == "Awaiting Payment");
 
-            // Booking Stage (only confirmed after payment)
-            if (paid >= r.TotalAmount) bookingStageApproved++;
-            else bookingStagePending++;
-        }
+        // Active = confirmed + awaiting payment
+        int activeReservations = confirmedReservations + awaitingPaymentReservations;
+
+        // ✅ Payments & Revenue
+        decimal totalPaid = reservationStatuses.Sum(x => x.Paid);
+        decimal totalRevenue = totalPaid;
+
+        // ✅ Club-wise stats
+        var clubStats = reservationStatuses
+            .GroupBy(x => x.Reservation.Club?.Name ?? "Unknown Club")
+            .Select(g => new ClubDashboardDto
+            {
+                ClubName = g.Key,
+                TotalReservations = g.Count(),
+                ConfirmedReservations = g.Count(r => r.DisplayStatus == "Booking Confirmed"),
+                CancelledReservations = g.Count(r => r.DisplayStatus == "Cancelled"),
+                AwaitingPaymentReservations = g.Count(r => r.DisplayStatus == "Awaiting Payment"),
+                TotalRoomsBooked = g.Where(r => r.DisplayStatus != "Cancelled")
+                                    .SelectMany(r => r.Reservation.ReservationRooms).Count(),
+                ConfirmationPercentage = g.Any()
+                    ? Math.Round((decimal)g.Count(r => r.DisplayStatus == "Booking Confirmed") / g.Count() * 100, 2)
+                    : 0
+            })
+            .ToList();
+
+        // ✅ Stage progress (Approved + Pending + Cancelled = TotalReservations)
+        int reservationStageApproved = confirmedReservations;
+        int reservationStagePending = awaitingPaymentReservations;
+
+        // Cancelled is tracked separately
+        int paymentStageApproved = confirmedReservations; // paid fully
+        int paymentStagePending = awaitingPaymentReservations; // awaiting only
+
+        int bookingStageApproved = confirmedReservations;
+        int bookingStagePending = awaitingPaymentReservations;
 
         return new ReservationDashboardDto
         {
             TotalReservations = totalReservations,
             ActiveReservations = activeReservations,
             CancelledReservations = cancelledReservations,
-            CompletedReservations = completedReservations,
+            CompletedReservations = confirmedReservations,
             TotalRevenue = totalRevenue,
             TotalPaid = totalPaid,
-            PendingAmount = pendingAmount,
-            ReservationsByClub = byClub,
-            ReservationsByStatus = byStatus,
+
+            AwaitingPaymentReservations = awaitingPaymentReservations,
+            Clubs = clubStats,
+
             ReservationStageApproved = reservationStageApproved,
             ReservationStagePending = reservationStagePending,
             PaymentStageApproved = paymentStageApproved,
@@ -102,6 +104,21 @@ public class GetReservationDashboardHandler
             BookingStagePending = bookingStagePending
         };
     }
+
+    private string GetDisplayStatus(Reservation r, decimal paid)
+    {
+        if (paid >= r.TotalAmount)
+            return "Booking Confirmed";
+
+        if (r.ExpiresAt <= DateTime.Now)
+            return "Cancelled";
+
+        return "Awaiting Payment";
+    }
+
+
+
+
 
 }
 

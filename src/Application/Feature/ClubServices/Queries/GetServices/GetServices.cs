@@ -27,6 +27,7 @@ public class GetServicesQueryHandler
 
 
         var items = await q
+            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
             .OrderBy(x => x.Name)
             .ProjectTo<ServiceDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

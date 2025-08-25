@@ -2,7 +2,6 @@
 using DHAFacilitationAPIs.Application.Feature.ApprovalRequest.Commands;
 using DHAFacilitationAPIs.Application.Feature.ApprovalRequest.Queries.GetRequestTrackings;
 using DHAFacilitationAPIs.Application.Feature.ApprovalRequest.Queries.GetTrackingStepsByTrackingId;
-using DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetUserModulePermissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

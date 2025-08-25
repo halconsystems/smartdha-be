@@ -86,6 +86,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
+                    b.Property<string>("AccountNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AccountNoAccronym")
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
+
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -252,6 +259,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MaxExtraOccupancy")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -260,6 +270,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("NormalOccupancy")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ResidenceTypeId")
                         .HasColumnType("uniqueidentifier");
@@ -375,9 +388,25 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<DateOnly?>("CheckInDateOnly")
+                        .IsRequired()
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly?>("CheckInTimeOnly")
+                        .IsRequired()
+                        .HasColumnType("time");
+
                     b.Property<DateTime?>("CheckOutDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<DateOnly?>("CheckOutDateOnly")
+                        .IsRequired()
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly?>("CheckOutTimeOnly")
+                        .IsRequired()
+                        .HasColumnType("time");
 
                     b.Property<Guid>("ClubId")
                         .HasColumnType("uniqueidentifier");
@@ -482,9 +511,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("BookingType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("BookingType")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Charges")
                         .HasColumnType("decimal(18,2)");
@@ -494,6 +522,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExtraOccupancy")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
@@ -518,6 +549,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("RoomCharges");
                 });
@@ -1018,6 +1051,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateOnly>("FromDateOnly")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("FromTimeOnly")
+                        .HasColumnType("time");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -1051,6 +1090,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateOnly>("ToDateOnly")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("ToTimeOnly")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
@@ -1092,6 +1137,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Room", "Room")
                         .WithMany("Availabilities")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCharge", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.Room", "Room")
+                        .WithMany()
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -31,6 +31,16 @@ builder.Services.AddSingleton<DapperConnectionFactory>();
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "RBAC_";
+});
+builder.Services.AddMemoryCache(); // backup fallback
+builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -55,6 +65,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 
 

@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controller\RolesController.cs" />
     <Compile Remove="Controller\TodoItemsController.cs" />
     <Compile Remove="Controller\TodoListsController.cs" />
   </ItemGroup>
@@ -26,12 +27,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CBMS\" />
+    <Folder Include="CBMS\" />
+    <Folder Include="CBMS\" />
     <Folder Include="CBMS\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

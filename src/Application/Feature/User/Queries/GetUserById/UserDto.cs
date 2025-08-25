@@ -26,6 +26,7 @@ public class UserDto
 
     public List<ModuleAssignmentDto> ModuleAssignments { get; set; } = new();
 }
+
 public class ModuleAssignmentDto
 {
     public Guid? ModuleId { get; set; }
@@ -33,5 +34,22 @@ public class ModuleAssignmentDto
     public string? Description { get; set; }
     public string? Title { get; set; }
     public string? Remarks { get; set; }
+
+    public List<SubModuleAssignmentDto> SubModules { get; set; } = new();
+}
+
+public class SubModuleAssignmentDto
+{
+    public Guid SubModuleId { get; set; }
+    public string SubModuleName { get; set; } = default!;
+    public bool RequiresPermission { get; set; }
+
+    public List<UserPermissionDto> Permissions { get; set; } = new();
+}
+
+public class UserPermissionDto
+{
+    public Guid Id { get; set; }
+    public string AllowedActions { get; set; } = string.Empty; // CSV/JSON
 }
 

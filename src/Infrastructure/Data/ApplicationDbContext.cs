@@ -25,7 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<SubModule> SubModules => Set<SubModule>();
     public DbSet<UserModuleAssignment> UserModuleAssignments => Set<UserModuleAssignment>();
     public DbSet<ApplicationLog> ApplicationLogs => Set<ApplicationLog>();
-    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<AppRolePermission> AppRolePermissions => Set<AppRolePermission>();
     public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
     public DbSet<Membershipdetail> Membershipdetails => Set<Membershipdetail>();
     public DbSet<SMSLog> SMSLogs => Set<SMSLog>();
@@ -38,6 +38,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<RequestTracking> RequestTrackings => Set<RequestTracking>();
     public DbSet<RequestProcessStep> RequestProcessSteps => Set<RequestProcessStep>();
     public DbSet<UserMembershipPurpose> UserMembershipPurposes => Set<UserMembershipPurpose>();
+    public DbSet<AppPermission> AppPermissions => Set<AppPermission>();
+    public DbSet<AppRole> AppRoles => Set<AppRole>();
+    public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
+    public DbSet<AppRoleModule> AppRoleModules => Set<AppRoleModule>();
+    public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
+
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)
@@ -49,7 +55,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
     private static void IdentityBuilder(ModelBuilder builder)
     {
-
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
             if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
@@ -65,26 +70,26 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             }
         }
 
-        builder.Entity<ApplicationUser>(
-            entity =>
-            {
-                entity.ToTable("Users");
-                entity.Property(e => e.Id).HasMaxLength(85);
-                entity.Property(e => e.Name).HasMaxLength(100);
-                entity.Property(e => e.NormalizedEmail).HasMaxLength(100);
-                entity.Property(e => e.Email).HasMaxLength(100);
-                entity.Property(e => e.NormalizedUserName).HasMaxLength(100);
-            });
+        // ---------------- Identity User ----------------
+        builder.Entity<ApplicationUser>(entity =>
+        {
+            entity.ToTable("Users");
+            entity.Property(e => e.Id).HasMaxLength(85);
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.NormalizedEmail).HasMaxLength(100);
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.NormalizedUserName).HasMaxLength(100);
+        });
 
-        builder.Entity<IdentityRole>(
-            entity =>
-            {
-                entity.ToTable("Role");
-                entity.Property(e => e.Id).HasMaxLength(85);
-                entity.Property(e => e.NormalizedName).HasMaxLength(100);
-                entity.Property(e => e.Name).HasMaxLength(100);
-                entity.Property(e => e.ConcurrencyStamp).HasMaxLength(85);
-            });
+        // ---------------- Identity Role ----------------
+        builder.Entity<IdentityRole>(entity =>
+        {
+            entity.ToTable("Role"); // keep default Identity roles separate
+            entity.Property(e => e.Id).HasMaxLength(85);
+            entity.Property(e => e.NormalizedName).HasMaxLength(100);
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.ConcurrencyStamp).HasMaxLength(85);
+        });
 
         builder.Entity<IdentityUserRole<string>>(entity =>
         {
@@ -121,20 +126,52 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             entity.Property(e => e.RoleId).HasMaxLength(85);
         });
 
+        // ---------------- App RBAC Tables ----------------
+        builder.Entity<AppRole>(entity =>
+        {
+            entity.ToTable("AppRoles"); // avoid conflict with IdentityRole
+            entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
+        builder.Entity<AppUserRole>(entity =>
+        {
+            entity.ToTable("AppUserRoles");
+            entity.HasOne(ur => ur.User)
+                  .WithMany(u => u.UserRoles)
+                  .HasForeignKey(ur => ur.UserId);
+
+            entity.HasOne(ur => ur.Role)
+                  .WithMany(r => r.UserRoles)
+                  .HasForeignKey(ur => ur.RoleId);
+        });
+
+        builder.Entity<AppRolePermission>(entity =>
+        {
+            entity.ToTable("AppRolePermissions");
+
+            entity.HasOne(rp => rp.Role)
+                  .WithMany(r => r.RolePermissions)
+                  .HasForeignKey(rp => rp.RoleId);
+
+            entity.HasOne(rp => rp.SubModule)
+                  .WithMany()
+                  .HasForeignKey(rp => rp.SubModuleId);
+        });
+
+        // ---------------- App Modules ----------------
         builder.Entity<SubModule>()
-        .HasOne(s => s.Module)
-        .WithMany(m => m.SubModules)
-        .HasForeignKey(s => s.ModuleId);
+            .HasOne(s => s.Module)
+            .WithMany(m => m.SubModules)
+            .HasForeignKey(s => s.ModuleId);
 
+        // Example other relation (yours)
         builder.Entity<RequestProcessStep>()
-     .HasOne(p => p.RequestTracking)
-     .WithMany(t => t.ProcessSteps)
-     .HasForeignKey(p => p.RequestTrackingId)
-     .OnDelete(DeleteBehavior.Cascade); // Optional
-
-
-
+            .HasOne(p => p.RequestTracking)
+            .WithMany(t => t.ProcessSteps)
+            .HasForeignKey(p => p.RequestTrackingId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
+
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         // Define the Pakistan Standard Time zone

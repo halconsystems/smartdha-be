@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 public record GetRoomsQuery(Guid Id) : IRequest<IEnumerable<RoomDto>>;
@@ -27,7 +28,7 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
         {
             roomsQuery = roomsQuery.Where(r => r.Id == request.Id);
         }
-
+        var today = DateOnly.FromDateTime(DateTime.Now);
         var roomDtos = await (
             from room in roomsQuery
             join club in _context.Clubs on room.ClubId equals club.Id
@@ -45,13 +46,33 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
                 No = room.No,
                 Name = room.Name,
                 Description = room.Description,
-                IsGloballyAvailable = room.IsGloballyAvailable
+                IsGloballyAvailable = room.IsGloballyAvailable,
+                NormalOccupancy = room.NormalOccupancy,
+                MaxExtraOccupancy = room.MaxExtraOccupancy,
+
+                // ✅ Load charges list
+                Charges = _context.RoomCharges
+                    .Where(rc => rc.RoomId == room.Id)
+                    .Select(rc => new RoomChargeDto
+                    {
+                        BookingType = rc.BookingType,
+                        ExtraOccupancy = rc.ExtraOccupancy,
+                        Charges = rc.Charges
+                    })
+                    .ToList(),
+                IsAvailableForApp = _context.RoomAvailabilities
+            .Any(a => a.RoomId == room.Id
+                   && a.Action == AvailabilityAction.Available
+                   && today < a.ToDateOnly),
+                MainImageUrl = _context.RoomImages
+            .Where(img => img.RoomId == room.Id && img.Category == ImageCategory.Main)
+            .Select(img => img.ImageURL)
+            .FirstOrDefault()
             }
         ).ToListAsync(cancellationToken);
 
         return roomDtos;
     }
-
 }
 
 

@@ -30,6 +30,7 @@ public class GetResidenceTypesQueryHandler
 
 
         var list = await q
+            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
             .OrderBy(x => x.Name)
             .ProjectTo<ResidenceTypeDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

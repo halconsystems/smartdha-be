@@ -9,6 +9,8 @@ namespace DHAFacilitationAPIs.Application.Feature.Modules.Queries.GetModule;
 public class ModuleDto
 {
     public Guid Id { get; set; }
+    public string Value { get; set; } = default!;
+    public string DisplayName { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public string Title { get; set; } = default!;

@@ -19,13 +19,10 @@ namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateRes
 public record class CreateReservationCommand : IRequest<ReservationInfoDto>
 {
     public Guid ClubId { get; set; }
-    public string BookingType { get; set; } = "Self";
-    public int Adult { get; set; } = 0;
-    public int Child { get; set; } = 0;
+    public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
     public List<CreateReservationRoomDto> Rooms { get; set; } = new();
     public CreateGuestDto? Guest { get; set; }
 }
-
 
 public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, ReservationInfoDto>
 {
@@ -38,50 +35,111 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<ReservationInfoDto> Handle(CreateReservationCommand dto, CancellationToken cancellationToken)
+    public async Task<ReservationInfoDto> Handle(CreateReservationCommand dto, CancellationToken ct)
     {
-        //var dto = request.Reservation;
-
-        var _currentUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrWhiteSpace(_currentUserId))
+        var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userIdStr))
             throw new UnauthorizedAccessException("Invalid or missing UserId in token.");
+        var userId = Guid.Parse(userIdStr);
 
         if (dto.Rooms == null || !dto.Rooms.Any())
             throw new InvalidOperationException("At least one room must be provided.");
 
-        // Calculate totals
-        //decimal roomsAmount = dto.Rooms.Sum(r =>
-        //{
-        //    var totalDays = (r.ToDate.Date - r.FromDate.Date).Days;
-        //    if (totalDays <= 0)
-        //        throw new Exception("ToDate must be after FromDate");
+        // Collect ids
+        var roomIds = dto.Rooms.Select(x => x.RoomId).Distinct().ToList();
 
-        //    return totalDays * r.PricePerNight;
-        //});
-        // Step 1: Load charges for all rooms in the DTO
-        var roomIds = dto.Rooms.Select(r => r.RoomId).ToList();
+        // Load rooms with occupancy limits
+        var roomsMap = await _context.Rooms
+            .AsNoTracking()
+            .Where(r => roomIds.Contains(r.Id))
+            .Select(r => new
+            {
+                r.Id,
+                r.ClubId,
+                r.NormalOccupancy,
+                r.MaxExtraOccupancy
+            })
+            .ToDictionaryAsync(r => r.Id, r => r, ct);
 
+        // Validate rooms belong to requested club
+        if (roomsMap.Values.Any(r => r.ClubId != dto.ClubId))
+            throw new InvalidOperationException("One or more rooms do not belong to the specified club.");
+
+        // Load charges keyed by (RoomId, BookingType, ExtraOccupancy)
         var chargesDict = await _context.RoomCharges
-            .Where(c => roomIds.Contains(c.RoomId))
-            .ToDictionaryAsync(c => (c.RoomId, c.BookingType), c => c.Charges, cancellationToken);
+            .Where(c => roomIds.Contains(c.RoomId) && c.BookingType == dto.BookingType)
+            .ToDictionaryAsync(c => (c.RoomId, c.BookingType, c.ExtraOccupancy), c => c.Charges, ct);
 
-        // Step 2: Calculate total amount
-        decimal roomsAmount = dto.Rooms.Sum(r =>
+        // Optional: quick overlap guard against existing reservations (DateOnly-based)
+        foreach (var rr in dto.Rooms)
         {
-            var totalDays = (r.ToDate.Date - r.FromDate.Date).Days;
-            if (totalDays <= 0)
-                throw new Exception("ToDate must be after FromDate");
+            var reqFromDO = DateOnly.FromDateTime(rr.FromDate);
+            var reqToDO = DateOnly.FromDateTime(rr.ToDate);
 
-            //// fallback: if no charge found, you can decide to throw or default
-            if (!chargesDict.TryGetValue((r.RoomId, dto.BookingType), out var roomCharge))
-                throw new Exception($"No charges configured for RoomId {r.RoomId} with BookingType {dto.BookingType}");
+            var conflict = await _context.ReservationRooms
+                .AsNoTracking()
+                .AnyAsync(x =>
+                    x.RoomId == rr.RoomId &&
+                    // overlap on DateOnly:
+                    x.FromDateOnly <= reqToDO &&
+                    x.ToDateOnly >= reqFromDO &&
+                    (x.Reservation.Status == ReservationStatus.AwaitingPayment ||
+                     x.Reservation.Status == ReservationStatus.Converted),
+                    ct);
 
-            return totalDays * roomCharge;
-        });
+            if (conflict)
+                throw new InvalidOperationException("Selected room is already reserved in the requested dates.");
+        }
 
+        // Price calculation
+        decimal roomsAmount = 0m;
+        int totalAdults = 0, totalChildren = 0;
 
+        // We'll also prepare ReservationRooms
+        var reservationRooms = new List<ReservationRoom>();
 
+        foreach (var r in dto.Rooms)
+        {
+            var nights = (r.ToDate.Date - r.FromDate.Date).Days;
+            if (nights <= 0)
+                throw new InvalidOperationException("ToDate must be after FromDate.");
 
+            if (!roomsMap.TryGetValue(r.RoomId, out var roomInfo))
+                throw new InvalidOperationException($"Room not found: {r.RoomId}");
+
+            // Compute extra occupancy
+            var occupants = r.Adults + r.Children;
+            var extra = Math.Max(0, occupants - roomInfo.NormalOccupancy);
+            if (extra > roomInfo.MaxExtraOccupancy)
+                throw new InvalidOperationException($"Extra occupancy {extra} exceeds allowed {roomInfo.MaxExtraOccupancy} for room {r.RoomId}.");
+
+            // Find exact RoomCharge row (total nightly price for base+extra)
+            if (!chargesDict.TryGetValue((r.RoomId, dto.BookingType, extra), out var nightlyTotal))
+                throw new InvalidOperationException(
+                    $"No RoomCharge configured for RoomId={r.RoomId}, BookingType={dto.BookingType}, ExtraOccupancy={extra}."
+                );
+
+            var subTotal = nightlyTotal * nights;
+
+            roomsAmount += subTotal;
+            totalAdults += r.Adults;
+            totalChildren += r.Children;
+
+            reservationRooms.Add(new ReservationRoom
+            {
+                RoomId = r.RoomId,
+                FromDate = r.FromDate,
+                ToDate = r.ToDate,
+                FromDateOnly = DateOnly.FromDateTime(r.FromDate),
+                ToDateOnly = DateOnly.FromDateTime(r.ToDate),
+                FromTimeOnly = TimeOnly.FromDateTime(r.FromDate),
+                ToTimeOnly = TimeOnly.FromDateTime(r.ToDate),
+                PricePerNight = nightlyTotal,
+                Subtotal = subTotal
+            });
+        }
+
+        // Taxes/discounts/policy (keep same for now)
         decimal taxes = 0m;
         decimal discounts = 0m;
         decimal totalAmount = roomsAmount + taxes - discounts;
@@ -89,31 +147,43 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         decimal depositPercent = 30m;
         decimal depositAmount = Math.Round(totalAmount * (depositPercent / 100m), 2);
 
+        var club = await _context.Clubs
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == dto.ClubId, ct)
+            ?? throw new InvalidOperationException($"Club with Id {dto.ClubId} not found.");
 
-        string onebillId = GenerateOneBillId();
+        if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
+            throw new Exception($"Club {club.Id} has no valid AccountNoAccronym configured.");
+
+        string onebillId = GenerateOneBillId(club.AccountNoAccronym);
 
         var reservation = new Reservation
         {
-            UserId = new Guid(_currentUserId),
+            UserId = userId,
             ClubId = dto.ClubId,
             Status = ReservationStatus.AwaitingPayment,
             ExpiresAt = DateTime.Now.AddMinutes(30),
+
             RoomsAmount = roomsAmount,
             Taxes = taxes,
             Discounts = discounts,
             TotalAmount = totalAmount,
+
             DepositPercentRequired = depositPercent,
             DepositAmountRequired = depositAmount,
-            Adult=dto.Adult,
-            Child=dto.Child,
+
+            Adult = totalAdults,
+            Child = totalChildren,
             OneBillId = onebillId
         };
 
-        // Check Guest CNIC if guest data provided
-        if (dto.Guest != null && !string.IsNullOrWhiteSpace(dto.Guest.CNICOrPassport) && dto.BookingType!="Self")
+        // Guest (for non-self bookings)
+        if (dto.Guest != null &&
+            !string.IsNullOrWhiteSpace(dto.Guest.CNICOrPassport) &&
+            dto.BookingType != RoomBookingType.Self)
         {
             var existingGuest = await _context.BookingGuests
-                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport, cancellationToken);
+                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport, ct);
 
             if (existingGuest != null)
             {
@@ -121,7 +191,6 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             }
             else
             {
-                // No match → create new guest
                 var newGuest = new BookingGuest
                 {
                     FullName = dto.Guest.FullName,
@@ -130,96 +199,53 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
                     Email = dto.Guest.Email,
                     Address = dto.Guest.Address
                 };
-
                 _context.BookingGuests.Add(newGuest);
-                await _context.SaveChangesAsync(cancellationToken); // Save immediately to get ID
-
+                await _context.SaveChangesAsync(ct);
                 reservation.GuestId = newGuest.Id;
             }
         }
 
-        // Add reservation rooms
-        foreach (var room in dto.Rooms)
-        {
-            var totalDays = (room.ToDate.Date - room.FromDate.Date).Days;
-            if (totalDays <= 0)
-                throw new Exception("ToDate must be after FromDate");
-
-            decimal PricePerNight=0;
-
-            var roomCharges = await _context.RoomCharges
-           .Where(c => c.RoomId == room.RoomId).FirstOrDefaultAsync();
-            if(roomCharges != null)
-            {
-                PricePerNight = roomCharges.Charges;
-            }
-
-            var subTotal = totalDays * PricePerNight;
-            reservation.ReservationRooms.Add(new ReservationRoom
-            {
-                RoomId = room.RoomId,
-                FromDate = room.FromDate,
-                ToDate = room.ToDate,
-                PricePerNight = PricePerNight,
-                Subtotal = subTotal
-            });
-        }
+        // Attach rooms to reservation
+        foreach (var rr in reservationRooms)
+            reservation.ReservationRooms.Add(rr);
 
         _context.Reservations.Add(reservation);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(ct);
 
-        var getClub = await _context.Clubs
-        .AsNoTracking()
-           .FirstOrDefaultAsync(x => x.Id == dto.ClubId, cancellationToken);
+        // Build response
+        var persisted = await _context.Reservations
+            .AsNoTracking()
+            .Include(r => r.ReservationRooms)
+                .ThenInclude(rr => rr.Room)
+                    .ThenInclude(room => room.RoomCategory)
+            .Include(r => r.ReservationRooms)
+                .ThenInclude(rr => rr.Room)
+                    .ThenInclude(room => room.ResidenceType)
+            .FirstOrDefaultAsync(r => r.Id == reservation.Id, ct)
+            ?? throw new InvalidOperationException($"Reservation {reservation.Id} not found after save.");
 
-        ClubInfoDto clubInfoDto = new ClubInfoDto();
-
-
-        if (getClub == null)
-            throw new Exception($"Club with Id {dto.ClubId} not found");
-        else
+        var result = new ReservationInfoDto
         {
-            clubInfoDto.Name = getClub.Name;
-            clubInfoDto.Location = getClub.Location;
-            clubInfoDto.ContactNumber = getClub.ContactNumber;
-        }
-
-        var roomreservation = await _context.Reservations
-     .AsNoTracking()
-     .Include(r => r.ReservationRooms)
-         .ThenInclude(rr => rr.Room)
-             .ThenInclude(r => r.RoomCategory)
-     .Include(r => r.ReservationRooms)
-         .ThenInclude(rr => rr.Room)
-             .ThenInclude(r => r.ResidenceType)
-     .Include(r => r.ReservationRooms)
-         .ThenInclude(rr => rr.Room)
-             .ThenInclude(r => r.RoomServices)
-     .FirstOrDefaultAsync(r => r.Id == reservation.Id, cancellationToken);
-
-        if (roomreservation == null)
-            throw new Exception($"Reservation {reservation.Id} not found");
-
-        // Build DTO to return
-        var reservationInfo = new ReservationInfoDto
-        {
-            OneBillId = roomreservation.OneBillId,
-            ExpiresAt = roomreservation.ExpiresAt,
-            Status = roomreservation.Status.ToString(),
-            Club = clubInfoDto,  // I assume you already built this separately
-            Rooms = roomreservation.ReservationRooms.Select(rr => new ReservationRoomInfoDto
+            OneBillId = persisted.OneBillId,
+            ExpiresAt = persisted.ExpiresAt,
+            Status = persisted.Status.ToString(),
+            Club = new ClubInfoDto
+            {
+                Name = club.Name,
+                Location = club.Location,
+                ContactNumber = club.ContactNumber
+            },
+            Rooms = persisted.ReservationRooms.Select(rr => new ReservationRoomInfoDto
             {
                 RoomNo = rr.Room?.No ?? string.Empty,
-                RoomName = rr.Room?.Name ?? string.Empty,
-                Description = rr.Room?.Description ?? string.Empty,
+                RoomName = rr.Room?.Name,
+                Description = rr.Room?.Description,
                 CategoryName = rr.Room?.RoomCategory?.Name ?? string.Empty,
                 ResidenceType = rr.Room?.ResidenceType?.Name ?? string.Empty,
-                //Services = rr.Room?.RoomServices?.Select(s => s.Name).ToList() ?? new List<string>(),
                 Services = _context.ServiceMappings
-                 .Where(sm => sm.RoomId == rr.RoomId && (sm.IsDeleted == false || sm.IsDeleted == null))
-                 .Select(sm => sm.Services.Name)
-                  .ToList(),
-
+                                .Where(sm => sm.RoomId == rr.RoomId && (sm.IsDeleted == false || sm.IsDeleted == null))
+                                .Select(sm => sm.Services.Name)
+                                .ToList(),
                 FromDate = rr.FromDate,
                 ToDate = rr.ToDate,
                 TotalNights = (rr.ToDate.Date - rr.FromDate.Date).Days,
@@ -228,27 +254,20 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             }).ToList()
         };
 
-        return reservationInfo;
-
+        return result;
     }
 
-    public static string GenerateOneBillId()
+    private static string GenerateOneBillId(string clubAccountNo)
     {
-        // Base = yyyyMMddHHmm (12 digits, up to minutes)
-        string baseId = DateTime.UtcNow.ToString("yyyyMMddHHmm");
+        string smartPayCode = "SMPY"; // Always 4 chars
+        string yymm = DateTime.UtcNow.ToString("yyMM"); // e.g., 2508
+        string invoiceNo = new Random().Next(1, 99).ToString("D2"); // 2-digit padded
 
-        // Add 3 random digits → total length = 15
-        string random = new Random().Next(100, 999).ToString();
+        string final = $"{smartPayCode}{clubAccountNo}{yymm}{invoiceNo}"; // 14 chars
 
-        string final = baseId + random; // 15 digits
-
-        // Ensure length is between 10 and 15
-        if (final.Length > 15)
-            final = final.Substring(0, 15);
-        else if (final.Length < 10)
-            final = final.PadRight(10, '0');
+        if (final.Length != 14)
+            throw new Exception($"Generated OneBillId must be 14 chars, got {final.Length}");
 
         return final;
     }
-
 }

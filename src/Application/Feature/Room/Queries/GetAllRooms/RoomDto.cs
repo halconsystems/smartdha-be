@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 
@@ -23,5 +24,17 @@ public class RoomDto
     public string? Name { get; set; }
     public string? Description { get; set; }
     public bool IsGloballyAvailable { get; set; }
+    public int NormalOccupancy { get; set; }
+    public int MaxExtraOccupancy { get; set; }
+    public List<RoomChargeDto> Charges { get; set; } = new();
+    public bool IsAvailableForApp { get; set; }
+    public string? MainImageUrl { get; set; }
+}
+
+public class RoomChargeDto
+{
+    public RoomBookingType BookingType { get; set; }
+    public int ExtraOccupancy { get; set; }
+    public decimal Charges { get; set; }
 }
 

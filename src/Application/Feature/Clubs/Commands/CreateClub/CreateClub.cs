@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
-public record CreateClubCommand(string Name, string? Description, string? Location, string? ContactNumber)
+public record CreateClubCommand(string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, SuccessResponse<string>>
@@ -23,7 +23,9 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
             Name = request.Name,
             Description = request.Description,
             Location = request.Location,
-            ContactNumber = request.ContactNumber
+            ContactNumber = request.ContactNumber,
+            AccountNo = request.AccountNo,
+            AccountNoAccronym = request.AccountNoAccronym
         };
         _ctx.Clubs.Add(entity);
         await _ctx.SaveChangesAsync(ct);

@@ -29,6 +29,7 @@ public class GetClubsQueryHandler
 
 
         var clubs = await q
+            .Where(x =>x.IsDeleted == null || x.IsDeleted == false)
             .OrderBy(x => x.Name)
             .ProjectTo<ClubDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

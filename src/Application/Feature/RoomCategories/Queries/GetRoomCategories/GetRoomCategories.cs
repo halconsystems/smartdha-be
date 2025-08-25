@@ -28,6 +28,7 @@ public class GetRoomCategoriesQueryHandler
             .AsNoTracking();
 
         var list = await q
+            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
             .OrderBy(x => x.Name)
             .ProjectTo<RoomCategoryDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

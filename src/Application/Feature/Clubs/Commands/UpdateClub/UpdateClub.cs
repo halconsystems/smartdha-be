@@ -7,7 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
-public record UpdateClubCommand(Guid Id, string Name, string? Description, string? Location, string? ContactNumber, bool? IsActive)
+public record UpdateClubCommand(Guid Id, string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, bool? IsActive)
     : IRequest<SuccessResponse<string>>;
 
 public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, SuccessResponse<string>>
@@ -24,6 +24,8 @@ public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, Succe
         entity.Description = request.Description;
         entity.Location = request.Location;
         entity.ContactNumber = request.ContactNumber;
+        entity.AccountNo = request.AccountNo;
+        entity.AccountNoAccronym = request.AccountNoAccronym;
         if (request.IsActive.HasValue) entity.IsActive = request.IsActive;
         entity.LastModified = DateTime.Now;
 
