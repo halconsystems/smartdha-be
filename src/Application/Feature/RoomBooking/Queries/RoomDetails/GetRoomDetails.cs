@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,10 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                 r.Name,
                 r.No,
                 r.Description,
+                r.NormalOccupancy,
+                r.MaxExtraOccupancy,
                 Price = _context.RoomCharges
-                    .Where(rc => rc.RoomId == r.Id && rc.BookingType == request.BookingType)
+                    .Where(rc => rc.RoomId == r.Id && rc.BookingType == request.BookingType && rc.ExtraOccupancy == 0)
                     .Select(rc => rc.Charges)
                     .FirstOrDefault(),
                 Ratings = _context.RoomRatings
@@ -42,18 +45,16 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                             where m.RoomId == r.Id
                             select s.Name).ToList(),
                 ResidenceTypeName = r.ResidenceType != null && r.ResidenceType.Name != null
-    ? r.ResidenceType.Name
-    : _context.ResidenceTypes
-        .Where(rt => rt.Id == r.ResidenceTypeId)
-        .Select(rt => rt.Name)
-        .FirstOrDefault() ?? string.Empty,
+                ? r.ResidenceType.Name : _context.ResidenceTypes
+                    .Where(rt => rt.Id == r.ResidenceTypeId)
+                    .Select(rt => rt.Name)
+                    .FirstOrDefault() ?? string.Empty,
 
                 CategoryName = r.RoomCategory != null && r.RoomCategory.Name != null
-    ? r.RoomCategory.Name
-    : _context.RoomCategories
-        .Where(rc => rc.Id == r.RoomCategoryId)
-        .Select(rc => rc.Name)
-        .FirstOrDefault() ?? string.Empty,
+                ? r.RoomCategory.Name : _context.RoomCategories
+                    .Where(rc => rc.Id == r.RoomCategoryId)
+                    .Select(rc => rc.Name)
+                    .FirstOrDefault() ?? string.Empty,
 
                 // Just pick the first matching availability range
                 FromDate = _context.RoomAvailabilities
@@ -92,6 +93,8 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
             Ratings = roomData.Ratings,
             Images = imageUrls,
             Services = roomData.Services,
+            NormalOccupancy = roomData.NormalOccupancy,
+            MaxExtraOccupancy = roomData.MaxExtraOccupancy,
             CheckInDate = roomData.FromDate,
             CheckOutDate = roomData.ToDate,
             ResidenceTypeName=roomData.ResidenceTypeName,

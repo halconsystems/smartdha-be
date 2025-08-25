@@ -30,10 +30,10 @@ public class AddRoomChargesHandler : IRequestHandler<AddRoomCharges, SuccessResp
 
         var addedIds = new List<Guid>();
 
-        // 3. Validate user’s input
+        // Validate user’s input
         foreach (var chargeItem in request.Charge.Charges)
         {
-            // ✅ Validation: ExtraOccupancy must not exceed allowed max
+            // Validation: ExtraOccupancy must not exceed allowed max
             if (chargeItem.ExtraOccupancy > room.MaxExtraOccupancy)
                 throw new Exception(
                     $"ExtraOccupancy {chargeItem.ExtraOccupancy} exceeds max allowed {room.MaxExtraOccupancy} for this room."
