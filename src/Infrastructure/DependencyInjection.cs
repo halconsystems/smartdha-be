@@ -58,6 +58,18 @@ public static class DependencyInjection
         services.AddScoped<IOLMRSApplicationDbContext>(provider =>
             provider.GetRequiredService<OLMRSApplicationDbContext>());
 
+        //OLH Database
+        var olhCon = configuration.GetConnectionString("OLHConnection");
+        Guard.Against.Null(olhCon, message: "Connection string 'OLHConnection' not found.");
+        services.AddDbContext<OLHApplicationDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(olhCon);
+
+        });
+        services.AddScoped<IOLHApplicationDbContext>(provider =>
+        provider.GetRequiredService<OLHApplicationDbContext>());
+
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 

@@ -3,7 +3,9 @@ using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.CreateRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoom;
+using DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoom;
+using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetImageCategories;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomImages;
@@ -138,4 +140,13 @@ public class RoomController : ControllerBase
     [HttpPost("AddRoom-Charges"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> AddRoomCharge([FromBody] AddRoomCharges cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPut("UpdateRoom-Charges"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> UpdateRoomCharge([FromBody] UpdateRoomCharges cmd, CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpDelete("DeleteRoom-Charges"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<string>>> DeleteRoomCharges([FromQuery] DeleteRoomCharges cmd, CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
+
 }
