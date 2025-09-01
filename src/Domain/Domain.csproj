@@ -9,6 +9,7 @@
     <Compile Remove="Entities\ApplicationRole.cs" />
     <Compile Remove="Entities\TodoItem.cs" />
     <Compile Remove="Entities\TodoList.cs" />
+    <Compile Remove="Entities\UserPermission.cs" />
   </ItemGroup>
 
   <ItemGroup>

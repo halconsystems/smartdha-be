@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 
@@ -18,16 +19,24 @@ public class RoleDto
 public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, SuccessResponse<List<RoleDto>>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUserService;
 
-    public GetRolesQueryHandler(IApplicationDbContext context)
+    public GetRolesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
     {
         _context = context;
+        _currentUserService = currentUserService;
     }
 
     public async Task<SuccessResponse<List<RoleDto>>> Handle(GetRolesQuery request, CancellationToken cancellationToken)
     {
+        var userId = _currentUserService.UserId;
+        if (userId == Guid.Empty)
+            throw new UnAuthorizedException("Invalid user context.");
+
         var roles = await _context.AppRoles
-            .Where(r => r.IsDeleted == null || r.IsDeleted == false) // ✅ Only active roles
+            .Where(r => (r.IsDeleted == null || r.IsDeleted == false)   // ✅ Only active roles
+                        && r.Name != "SuperAdministrator"               // ✅ Exclude SuperAdmin
+                        && r.CreatedBy == userId.ToString())               // ✅ Only current user created
             .Select(r => new RoleDto
             {
                 Id = r.Id,
@@ -38,4 +47,5 @@ public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, SuccessRespon
         return new SuccessResponse<List<RoleDto>>(roles, "Roles fetched successfully", "Roles");
     }
 }
+
 

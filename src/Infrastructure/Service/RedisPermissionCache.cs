@@ -3,19 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 
 namespace DHAFacilitationAPIs.Infrastructure.Service;
+
 public class RedisPermissionCache : IPermissionCache
 {
     private readonly IDistributedCache _redis;
-    private readonly IMemoryCache _memoryCache; // backup in-memory cache
+    private readonly IMemoryCache _memoryCache;
     private readonly ILogger<RedisPermissionCache> _logger;
-    private readonly TimeSpan _expiry = TimeSpan.FromHours(1);
+
+    private readonly TimeSpan _redisExpiry = TimeSpan.FromHours(1);
+    private readonly TimeSpan _memoryExpiry = TimeSpan.FromMinutes(5);
+
+    private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = false
+    };
 
     public RedisPermissionCache(
         IDistributedCache redis,
@@ -29,65 +40,88 @@ public class RedisPermissionCache : IPermissionCache
 
     public async Task<List<string>> GetPermissionsAsync(string userId, Func<Task<List<string>>> dbFallback)
     {
-        var redisKey = $"permissions:{userId}";
+        var redisKey = $"RBAC:permissions:{userId}";
 
+        // 1️⃣ Try Redis first
         try
         {
-            // 1. Try Redis
             var data = await _redis.GetStringAsync(redisKey);
             if (!string.IsNullOrEmpty(data))
             {
-                return JsonConvert.DeserializeObject<List<string>>(data)!;
+                var list = JsonSerializer.Deserialize<List<string>>(data, _jsonOptions);
+                if (list != null && list.Count > 0)
+                {
+                    return list;
+                }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis unavailable. Falling back.");
+            _logger.LogWarning(ex, $"Redis unavailable for key {redisKey}. Using fallback.");
         }
 
-        // 2. Try In-Memory cache
+        // 2️⃣ Try in-memory cache
         if (_memoryCache.TryGetValue(redisKey, out List<string>? cachedPerms) && cachedPerms != null)
         {
             return cachedPerms;
         }
 
-        // 3. Fallback → DB
-        var permissionsFromDb = await dbFallback();
+        // 3️⃣ Fallback → DB query
+        var permissionsFromDb = await dbFallback() ?? new List<string>();
 
-        // 4. Store in Redis (if available)
+        // 4️⃣ Save to Redis
         try
         {
             await SetPermissionsAsync(userId, permissionsFromDb);
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Redis unavailable during Set.");
+            _logger.LogWarning(ex, $"Redis unavailable when setting key {redisKey}.");
         }
 
-        // 5. Store in MemoryCache (short TTL)
-        _memoryCache.Set(redisKey, permissionsFromDb, TimeSpan.FromMinutes(5));
+        // 5️⃣ Save to MemoryCache (short TTL)
+        _memoryCache.Set(redisKey, permissionsFromDb, _memoryExpiry);
 
         return permissionsFromDb;
     }
 
     public async Task SetPermissionsAsync(string userId, List<string> permissions)
     {
-        var redisKey = $"permissions:{userId}";
-        var json = JsonConvert.SerializeObject(permissions);
+        var redisKey = $"RBAC:permissions:{userId}";
+        var json = JsonSerializer.Serialize(permissions, _jsonOptions);
 
-        await _redis.SetStringAsync(redisKey, json, new DistributedCacheEntryOptions
+        try
         {
-            AbsoluteExpirationRelativeToNow = _expiry
-        });
+            await _redis.SetStringAsync(redisKey, json, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = _redisExpiry
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, $"Failed to set Redis key {redisKey}. Falling back to in-memory only.");
+        }
 
-        _memoryCache.Set(redisKey, permissions, TimeSpan.FromMinutes(5));
+        // Always update memory cache too
+        _memoryCache.Set(redisKey, permissions ?? new List<string>(), _memoryExpiry);
     }
 
     public async Task InvalidateAsync(string userId)
     {
-        var redisKey = $"permissions:{userId}";
-        await _redis.RemoveAsync(redisKey);
+        var redisKey = $"RBAC:permissions:{userId}";
+        try
+        {
+            await _redis.RemoveAsync(redisKey);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, $"Failed to remove Redis key {redisKey}. Will clear in-memory anyway.");
+        }
+
         _memoryCache.Remove(redisKey);
     }
 }
+
+
+
 

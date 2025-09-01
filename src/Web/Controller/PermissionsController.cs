@@ -18,7 +18,7 @@ public class PermissionsController : BaseApiController
         return Ok(await Mediator.Send(cmd));
     }
 
-    [HttpGet("get-submodules-permissions"), AllowAnonymous]
+    [HttpGet("get-submodules-permissions")]
     public async Task<IActionResult> GetSubModulePermissionList([FromQuery] string? id)
     {
         Guid? submoduleId = null;

@@ -6,50 +6,59 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModuleList;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.SubModules.Queries.SubModuleList;
 
-public record SubModuleListQuery : IRequest<SuccessResponse<List<AllSubModulesDto>>>
+public record SubModuleListQuery : IRequest<SuccessResponse<List<AllModulesDto>>>
 { public Guid? Id { get; set; } };
 
-public class SubModuleListQueryHandler: IRequestHandler<SubModuleListQuery, SuccessResponse<List<AllSubModulesDto>>>
+public class SubModuleListQueryHandler: IRequestHandler<SubModuleListQuery, SuccessResponse<List<AllModulesDto>>>
 {
     private readonly IApplicationDbContext _context;
 
     public SubModuleListQueryHandler(IApplicationDbContext context) => _context = context;
 
-    public async Task<SuccessResponse<List<AllSubModulesDto>>> Handle(SubModuleListQuery request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<List<AllModulesDto>>> Handle(SubModuleListQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.SubModules
-            .Include(s => s.Permissions)   // ✅ include permissions
-            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
+        var query = _context.Modules
+            .Include(m => m.SubModules)
+                .ThenInclude(sm => sm.Permissions)
+            .Where(m => m.IsDeleted == null || m.IsDeleted == false && m.AppType==AppType.Web)
             .AsQueryable();
 
         if (request.Id.HasValue)
         {
-            query = query.Where(s => s.Id == request.Id);
+            query = query.Where(m => m.Id == request.Id);
         }
 
-        var subModules = await query
-            .Select(s => new AllSubModulesDto
+        var modules = await query
+            .Select(m => new AllModulesDto
             {
-                Id = s.Id,
-                Value = s.Value,
-                DisplayName = s.DisplayName,
-                Name = s.Name,
-                Description = s.Description,
-                ModuleId = s.ModuleId,
-                RequiresPermission = s.RequiresPermission,
-                Permissions = s.Permissions.Select(p => new PermissionDto
-                {
-                    Id = p.Id,
-                    Value = p.Value,
-                    DisplayName = p.DisplayName
-                }).ToList()
+                Id = m.Id,
+                Value = m.Value,
+                DisplayName = m.DisplayName,
+                AllSubModules = m.SubModules
+                    .Where(sm => sm.IsDeleted == null || sm.IsDeleted == false)
+                    .Select(sm => new AllSubModulesDto
+                    {
+                        Id = sm.Id,
+                        Value = sm.Value,
+                        DisplayName = sm.DisplayName,
+                        Permissions = sm.Permissions
+                            .Select(p => new PermissionDto
+                            {
+                                Id = p.Id,
+                                Value = p.Value,
+                                DisplayName = p.DisplayName
+                            })
+                            .ToList()
+                    })
+                    .ToList()
             })
             .ToListAsync(cancellationToken);
 
-        return new SuccessResponse<List<AllSubModulesDto>>(subModules, "Sub-modules fetched successfully.", "SubModules");
+        return new SuccessResponse<List<AllModulesDto>>(modules, "Modules with sub-modules and permissions fetched successfully.", "Modules");
     }
 }
 

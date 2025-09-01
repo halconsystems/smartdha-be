@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
@@ -31,63 +32,96 @@ public class GetAccessTreeQueryHandler : IRequestHandler<GetAccessTreeQuery, Suc
     public async Task<SuccessResponse<List<ModuleTreeDto>>> Handle(GetAccessTreeQuery request, CancellationToken ct)
     {
         var userId = _currentUser.UserId;
-
         if (userId == Guid.Empty)
             throw new UnAuthorizedException("Invalid user context.");
 
-        // Try to load user (optional if you only need roles)
+        // Try to load user
         var user = await _userManager.FindByIdAsync(userId.ToString());
         if (user == null)
             throw new UnAuthorizedException("User not found.");
 
-        // Now get roles safely
+        // Load user roles
         var roles = await _context.AppUserRoles
             .Include(ur => ur.Role)
-            .Where(ur => ur.UserId == userId.ToString()) // use userId directly instead of user.Id
+            .Where(ur => ur.UserId == userId.ToString())
             .Select(ur => ur.Role.Name)
             .ToListAsync(ct);
 
-
         bool isSuperAdmin = roles.Contains("SuperAdministrator");
 
-        // Step 1: Get all modules/submodules/permissions
-        var allModules = await _context.Modules
-            .Include(m => m.SubModules)
-                .ThenInclude(sm => sm.Permissions)
-            .ToListAsync(ct);
+        List<Module> modules;
 
-        // Step 2: Get current user assigned permissions (if not superadmin)
-        var userPermissions = new List<AppRolePermission>();
-
-        if (!isSuperAdmin)
+        if (isSuperAdmin)
         {
-            userPermissions = await _context.AppRolePermissions
-                .Where(rp => rp.Role.UserRoles.Any(ur => ur.UserId == userId.ToString()))
+            // ✅ SuperAdmin → load ALL modules with all submodules and permissions
+            modules = await _context.Modules
+                .Where(m => m.AppType == AppType.Web)
+                .Include(m => m.SubModules)
+                    .ThenInclude(sm => sm.Permissions)
                 .ToListAsync(ct);
         }
+        else
+        {
+            // ✅ Normal user → load only assigned modules
+            var userModuleIds = await _context.UserModuleAssignments
+                .Where(x => x.UserId == user.Id)
+                .Select(x => x.ModuleId)
+                .ToListAsync(ct);
 
-        // Step 3: Build tree
-        var result = allModules.Select(m => new ModuleTreeDto
+            // user assigned permission Ids
+            var userPermissionIds = await _context.UserPermissionAssignments
+                .Where(up => up.UserId == user.Id)
+                .Select(up => up.PermissionId)
+                .ToListAsync(ct);
+
+            modules = await _context.Modules
+                .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
+                .Include(m => m.SubModules)
+                    .ThenInclude(sm => sm.Permissions)
+                .ToListAsync(ct);
+
+            // Filter out unassigned permissions
+            foreach (var module in modules)
+            {
+                foreach (var sub in module.SubModules)
+                {
+                    sub.Permissions = sub.Permissions
+                        .Where(p => userPermissionIds.Contains(p.Id))
+                        .ToList();
+                }
+
+                // Optionally remove submodules that end up with no permissions
+                module.SubModules = module.SubModules
+                    .Where(sm => sm.Permissions.Any())
+                    .ToList();
+            }
+        }
+
+        // Build tree
+        var result = modules.Select(m => new ModuleTreeDto
         {
             Id = m.Id,
             Name = m.DisplayName,
-            Checked = isSuperAdmin || userPermissions.Any(p => p.SubModule.ModuleId == m.Id),
+            Value = m.Value,
+            DisplayName = m.DisplayName,
             SubModules = m.SubModules.Select(sm => new SubModuleTreeDto
             {
                 Id = sm.Id,
                 Name = sm.DisplayName,
-                Checked = isSuperAdmin || userPermissions.Any(p => p.SubModuleId == sm.Id),
+                Value = sm.Value,
+                DisplayName = sm.DisplayName,
                 Permissions = sm.Permissions.Select(p => new PermissionTreeDto
                 {
                     Id = p.Id,
                     Name = p.DisplayName,
-                    Checked = isSuperAdmin || userPermissions.Any(up => up.SubModuleId == sm.Id &&
-                        up.AllowedActions.Contains(p.Value)) // validate by CSV/JSON AllowedActions
+                    Value = p.Value,
+                    DisplayName = p.DisplayName
                 }).ToList()
             }).ToList()
         }).ToList();
 
         return new SuccessResponse<List<ModuleTreeDto>>(result);
     }
+
 }
 

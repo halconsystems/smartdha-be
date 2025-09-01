@@ -18,7 +18,7 @@ public class ClubsController : BaseApiController
     private readonly IMediator _mediator;
     public ClubsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost("Create"),AllowAnonymous]
+    [HttpPost("Create")]
     public async Task<ActionResult<SuccessResponse<Guid>>> Create(CreateClubCommand cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
 
@@ -34,7 +34,7 @@ public class ClubsController : BaseApiController
     public async Task<ActionResult<Club?>> GetById(Guid id, CancellationToken ct)
         => Ok(await _mediator.Send(new GetClubByIdQuery(id), ct));
 
-    [HttpGet,AllowAnonymous]
+    [HttpGet]
     public async Task<ActionResult<List<ClubDto>>> GetAll()
         => Ok(await _mediator.Send(new GetClubsQuery()));
 }
