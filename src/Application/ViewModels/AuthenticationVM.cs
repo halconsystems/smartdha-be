@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.SubModuleList;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 
 namespace DHAFacilitationAPIs.Application.ViewModels;
 public class AuthenticationVM
@@ -19,7 +20,7 @@ public class AuthenticationDto
     public string ResponseMessage { get; set; } = string.Empty;
     public string Name {  get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public List<ModuleDto> Modules { get; set; } = new(); // include module/submodule with permissions
+    public List<ModuleTreeDto> Modules { get; set; } = new(); // include module/submodule with permissions
 }
 
 public class ModuleDto

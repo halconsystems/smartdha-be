@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using DHAFacilitationAPIs.Application;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Infrastructure;
 using DHAFacilitationAPIs.Infrastructure.Data;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,14 +36,22 @@ builder.Services.Configure<FileStorageOptions>(
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.ConfigurationOptions = new ConfigurationOptions
+    {
+        EndPoints = { "172.16.10.123:6379" },
+        Password = "DFP@234&Done",
+        ConnectTimeout = 5000,  // optional: increase timeout
+        AbortOnConnectFail = false
+    };
     options.InstanceName = "RBAC_";
 });
 builder.Services.AddMemoryCache(); // backup fallback
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
 builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
 
 

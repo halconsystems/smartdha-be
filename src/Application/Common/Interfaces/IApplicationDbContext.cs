@@ -28,7 +28,11 @@ public interface IApplicationDbContext
     DbSet<AppUserRole> AppUserRoles { get; }
     DbSet<AppRole> AppRoles { get; }
     DbSet<AppRoleModule> AppRoleModules { get; }
-    DbSet<UserPermission> UserPermissions { get; }
+    DbSet<UserSubModuleAssignment> UserSubModuleAssignments { get; }
+    DbSet<UserPermissionAssignment> UserPermissionAssignments { get; }
+    DbSet<UserClubAssignment> UserClubAssignments { get; }
+    DbSet<AuditLog> AuditLogs { get; }
+    DbSet<UserActivityLog> UserActivityLogs { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

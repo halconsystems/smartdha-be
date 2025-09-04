@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.SubModuleList;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -29,6 +30,7 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
     private readonly IApplicationDbContext _context;
     private readonly IPermissionCache _permissionCache;   // 🔹 Injected Redis cache
     private readonly ILogger<GenerateTokenCommand> _logger;
+    private readonly IActivityLogger _activityLogger;
 
     public GenerateTokenHandler(
         UserManager<ApplicationUser> userManager,
@@ -36,83 +38,166 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
         IAuthenticationService authenticationService,
         IApplicationDbContext context,
         IPermissionCache permissionCache,
-        ILogger<GenerateTokenCommand> logger)
+        ILogger<GenerateTokenCommand> logger,
+        IActivityLogger activityLogger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _authenticationService = authenticationService;
         _context = context;
         _permissionCache = permissionCache;
-        _logger=logger;
+        _logger = logger;
+        _activityLogger = activityLogger;
     }
 
     public async Task<AuthenticationDto> Handle(GenerateTokenCommand request, CancellationToken cancellationToken)
     {
+        string username = "";
+        // 1️⃣ Validate user
         var user = await _userManager.FindByEmailAsync(request.Email);
-
         if (user == null)
+        {
+            await _activityLogger.LogAsync("LoginFailed", email: request.Email, description: "Invalid Email", appType: AppType.Web);
             throw new UnAuthorizedException("Invalid Email");
+        }
+        else
+        {
+            username = user.UserName ?? user.Email ?? "";
+        }
 
         if (user.AppType != AppType.Web)
+        {
+            await _activityLogger.LogAsync("InvalidApp", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User not authorized for this portal.", appType: AppType.Web);
             throw new UnAuthorizedException("User not authorized for this portal.");
+        }
 
         if (!user.IsActive)
+        {
+            await _activityLogger.LogAsync("InactiveUserLogin", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "Inactive user tried to login", appType: AppType.Web);
             throw new UnAuthorizedException("User is marked InActive. Contact administrator.");
+        }
 
         if (user.IsDeleted == true)
+        {
+            await _activityLogger.LogAsync("DeletedUserLogin", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User is deleted. Contact administrator.", appType: AppType.Web);
             throw new UnAuthorizedException("User is deleted. Contact administrator.");
+        }
 
-        var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, lockoutOnFailure: false);
-
+        // 2️⃣ Validate password
+        var result = await _signInManager.PasswordSignInAsync(username, request.Password, false, lockoutOnFailure: false);
         if (!result.Succeeded && !result.RequiresTwoFactor)
+        {
+            await _activityLogger.LogAsync("LoginFailed", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "Invalid Password", appType: AppType.Web);
             throw new UnAuthorizedException("Invalid Password");
+        }
 
+        // 3️⃣ Generate JWT
         string token = await _authenticationService.GenerateWebUserToken(user);
 
-        // -------- Fetch Modules Assigned to User --------
-        // ✅ Get assigned modules
-        var userModuleIds = await _context.UserModuleAssignments
-            .Where(x => x.UserId == user.Id)
-            .Select(x => x.ModuleId)
+        // 4️⃣ Check roles
+        var roles = await _context.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == user.Id)
+            .Select(ur => ur.Role.Name)
             .ToListAsync(cancellationToken);
 
-        var modules = await _context.Modules
-            .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
-            .Include(m => m.SubModules)
-                .ThenInclude(sm => sm.Permissions)
-            .ToListAsync(cancellationToken);
+        bool isSuperAdmin = roles.Contains("SuperAdministrator");
 
-        var userPermissions = await _context.UserPermissions
-            .Where(up => up.UserId == user.Id)
-            .ToListAsync(cancellationToken);
+        List<Guid> userPermissionIds = new();
+        List<Guid> userSubModuleIds = new(); // ✅ declare here so it’s available later
+        List<Module> modules;
 
-        // ✅ Flatten permissions into strings
+        if (isSuperAdmin)
+        {
+            // ✅ SuperAdmin → all modules + submodules + permissions
+            modules = await _context.Modules
+                .Where(m => m.AppType == AppType.Web)
+                .Include(m => m.SubModules)
+                    .ThenInclude(sm => sm.Permissions)
+                .ToListAsync(cancellationToken);
+
+            userPermissionIds = modules.SelectMany(m => m.SubModules)
+                                       .SelectMany(sm => sm.Permissions)
+                                       .Select(p => p.Id)
+                                       .ToList();
+
+            // for consistency, give superadmin all submodules
+            userSubModuleIds = modules.SelectMany(m => m.SubModules)
+                                      .Select(sm => sm.Id)
+                                      .ToList();
+        }
+        else
+        {
+            // ✅ Normal user → only assigned modules + submodules + permissions
+            var userModuleIds = await _context.UserModuleAssignments
+                .Where(x => x.UserId == user.Id)
+                .Select(x => x.ModuleId)
+                .ToListAsync(cancellationToken);
+
+            userSubModuleIds = await _context.UserSubModuleAssignments
+                .Where(x => x.UserId == user.Id)
+                .Select(x => x.SubModuleId)
+                .ToListAsync(cancellationToken);
+
+            userPermissionIds = await _context.UserPermissionAssignments
+                .Where(up => up.UserId == user.Id)
+                .Select(up => up.PermissionId)
+                .ToListAsync(cancellationToken);
+
+            modules = await _context.Modules
+                .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
+                .Include(m => m.SubModules)
+                    .ThenInclude(sm => sm.Permissions)
+                .ToListAsync(cancellationToken);
+        }
+
+        // 5️⃣ Build DTO tree
+        var moduleresult = modules.Select(m => new ModuleTreeDto
+        {
+            Id = m.Id,
+            Name = m.Name ?? m.DisplayName,
+            Value = m.Value,
+            DisplayName = m.DisplayName,
+
+            SubModules = m.SubModules
+                .Where(sm => isSuperAdmin || userSubModuleIds.Contains(sm.Id)) // ✅ only assigned submodules
+                .Select(sm => new SubModuleTreeDto
+                {
+                    Id = sm.Id,
+                    Name = sm.Name ?? sm.DisplayName,
+                    Value = sm.Value,
+                    DisplayName = sm.DisplayName,
+
+                    Permissions = sm.Permissions
+                        .Where(p => isSuperAdmin || userPermissionIds.Contains(p.Id)) // ✅ only assigned perms
+                        .Select(p => new PermissionTreeDto
+                        {
+                            Id = p.Id,
+                            Name = p.DisplayName,
+                            Value = p.Value,
+                            DisplayName = p.DisplayName
+                        }).ToList()
+                }).ToList()
+        }).ToList();
+
+
+        // 6️⃣ Flatten for Redis
         var flatPermissions = new List<string>();
         foreach (var module in modules)
         {
+            flatPermissions.Add(module.Value); // module-level
+
             foreach (var sm in module.SubModules)
             {
-                if (!sm.RequiresPermission)
+                flatPermissions.Add(sm.Value); // submodule-level
+
+                foreach (var perm in sm.Permissions)
                 {
-                    // SubModule-level access
-                    flatPermissions.Add(sm.Value);
-                }
-                else
-                {
-                    var userPerm = userPermissions.FirstOrDefault(up => up.SubModuleId == sm.Id);
-                    if (userPerm != null)
-                    {
-                        var actions = userPerm.AllowedActions.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var act in actions)
-                        {
-                            flatPermissions.Add($"{sm.Value}.{act.Trim()}");
-                        }
-                    }
+                    flatPermissions.Add($"{sm.Value}.{perm.Value}"); // permission-level
                 }
             }
         }
 
-        // ✅ Save to Redis (with graceful failure handling)
         try
         {
             await _permissionCache.SetPermissionsAsync(user.Id, flatPermissions);
@@ -122,36 +207,19 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             _logger.LogWarning(ex, $"Redis unavailable for user {user.Id}, skipping cache.");
         }
 
-        // ✅ Return DTO
+        await _activityLogger.LogAsync("LoginSuccess", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User logged in successfully", appType: AppType.Web);
+
+        // 7️⃣ Return DTO
         return new AuthenticationDto
         {
             AccessToken = token,
-            Role = (await _context.AppUserRoles
-                .Include(ur => ur.Role)
-                .Where(ur => ur.UserId == user.Id)
-                .Select(ur => ur.Role.Name)
-                .FirstOrDefaultAsync()) ?? "User",
-            Modules = modules.Select(m => new ModuleDto
-            {
-                ModuleId = m.Id,
-                DisplayName = m.DisplayName,
-                Value = m.Value,
-                SubModules = m.SubModules.Select(sm => new SubModuleDto
-                {
-                    SubModuleId = sm.Id,
-                    DisplayName = sm.DisplayName,
-                    Value = sm.Value,
-                    Permissions = sm.Permissions.Select(p => new AllPermissionDto
-                    {
-                        PermissionId = p.Id,
-                        Value = p.Value,
-                        DisplayName = p.DisplayName
-                    }).ToList()
-                }).ToList()
-            }).ToList(),
+            Role = roles.FirstOrDefault() ?? "User",
+            Modules = moduleresult,
             Name = user.Name,
             Email = user.Email ?? string.Empty,
             ResponseMessage = "Authenticated!"
         };
     }
+
+
 }

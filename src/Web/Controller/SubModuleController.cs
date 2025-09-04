@@ -6,7 +6,6 @@ using DHAFacilitationAPIs.Application.Feature.SubModules.Commands.DeleteSubModul
 using DHAFacilitationAPIs.Application.Feature.SubModules.Commands.UpdateSubModule;
 using DHAFacilitationAPIs.Application.Feature.SubModules.Queries.GetSubModuleList;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAssignableModules;
-using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

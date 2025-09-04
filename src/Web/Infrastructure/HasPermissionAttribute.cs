@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DHAFacilitationAPIs.Web.Infrastructure;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
+
 public class HasPermissionAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
 {
     private readonly string _permission;
@@ -15,6 +20,7 @@ public class HasPermissionAttribute : AuthorizeAttribute, IAsyncAuthorizationFil
 
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
+        // 1️⃣ Get current user id from claims
         var userId = context.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
         {
@@ -22,19 +28,20 @@ public class HasPermissionAttribute : AuthorizeAttribute, IAsyncAuthorizationFil
             return;
         }
 
+        // 2️⃣ Resolve services from DI
         var cache = context.HttpContext.RequestServices.GetRequiredService<IPermissionCache>();
         var mediator = context.HttpContext.RequestServices.GetRequiredService<IMediator>();
 
-        // Use Redis → fallback to DB
+        // 3️⃣ Fetch permissions → Redis first, fallback DB
         var permissions = await cache.GetPermissionsAsync(userId, async () =>
         {
             return await mediator.Send(new GetUserPermissionsQuery(userId));
         });
 
-        if (!permissions.Contains(_permission))
+        // 4️⃣ Check permission match
+        if (!permissions.Contains(_permission, StringComparer.OrdinalIgnoreCase))
         {
             context.Result = new ForbidResult();
         }
     }
 }
-

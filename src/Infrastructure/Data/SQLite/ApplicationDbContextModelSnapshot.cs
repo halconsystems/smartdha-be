@@ -69,7 +69,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Announcements");
+                    b.ToTable("Announcements", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppPermission", b =>
@@ -121,7 +121,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("SubModuleId");
 
-                    b.ToTable("AppPermissions");
+                    b.ToTable("AppPermissions", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppRole", b =>
@@ -216,7 +216,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AppRoleModules");
+                    b.ToTable("AppRoleModules", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppRolePermission", b =>
@@ -365,7 +365,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationLogs");
+                    b.ToTable("ApplicationLogs", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", b =>
@@ -484,6 +484,48 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs", (string)null);
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MemberTypeModuleAssignment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -526,7 +568,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("MemberTypeModuleAssignments");
+                    b.ToTable("MemberTypeModuleAssignments", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MembershipPurpose", b =>
@@ -570,7 +612,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembershipPurposes");
+                    b.ToTable("MembershipPurposes", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Membershipdetail", b =>
@@ -619,7 +661,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Membershipdetails");
+                    b.ToTable("Membershipdetails", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Module", b =>
@@ -690,7 +732,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.NonMemberVerification", b =>
@@ -748,7 +790,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("NonMemberVerifications");
+                    b.ToTable("NonMemberVerifications", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.NonMemberVerificationDocument", b =>
@@ -812,7 +854,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("VerificationId");
 
-                    b.ToTable("NonMemberVerificationDocuments");
+                    b.ToTable("NonMemberVerificationDocuments", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestProcessStep", b =>
@@ -870,7 +912,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("RequestTrackingId");
 
-                    b.ToTable("RequestProcessSteps");
+                    b.ToTable("RequestProcessSteps", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestTracking", b =>
@@ -937,7 +979,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("RequestTrackings");
+                    b.ToTable("RequestTrackings", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoleAssignment", b =>
@@ -982,7 +1024,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleAssignments");
+                    b.ToTable("RoleAssignments", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SMSLog", b =>
@@ -1062,7 +1104,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("SMSLogs");
+                    b.ToTable("SMSLogs", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SubModule", b =>
@@ -1127,7 +1169,95 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("SubModules");
+                    b.ToTable("SubModules", (string)null);
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserActivityLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AppType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Browser")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CNIC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Device")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserActivityLogs", (string)null);
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("ClubId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(85)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserClubAssignments", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMembershipPurpose", b =>
@@ -1175,7 +1305,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserMembershipPurposes");
+                    b.ToTable("UserMembershipPurposes", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserModuleAssignment", b =>
@@ -1223,7 +1353,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserModuleAssignments");
+                    b.ToTable("UserModuleAssignments", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserOtp", b =>
@@ -1285,19 +1415,63 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserOtps");
+                    b.ToTable("UserOtps", (string)null);
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserPermission", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserPermissionAssignment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("AllowedActions")
-                        .IsRequired()
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(85)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPermissionAssignments", (string)null);
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserSubModuleAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -1337,7 +1511,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPermissions");
+                    b.ToTable("UserSubModuleAssignments", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1595,6 +1769,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("Module");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubAssignment", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMembershipPurpose", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.MembershipPurpose", "Purpose")
@@ -1633,7 +1818,26 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserPermission", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserPermissionAssignment", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.AppPermission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserSubModuleAssignment", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SubModule", "SubModule")
                         .WithMany()
