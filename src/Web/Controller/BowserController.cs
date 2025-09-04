@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Commands;
+using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Queries;
 using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.Assignment;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -23,5 +24,31 @@ public class BowserController : BaseApiController
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
+
+    [HttpPut("UpdateBowserCapacity"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> UpdateBowserCapacity([FromBody] UpdateBowserCapacityCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(Guid id)
+    {
+        var result = await _mediator.Send(new DeleteBowserCapacityCommand { Id = id });
+        return Ok(result);
+    }
+
+    [HttpGet, AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<object>>> Get([FromQuery] Guid? id)
+    {
+        var result = await _mediator.Send(new GetBowserCapacityQuery { Id = id });
+        return Ok(result);
+    }
+
+
+
+
+
 
 }
