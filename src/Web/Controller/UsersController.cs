@@ -1,16 +1,18 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Roles.Queries.GetAllRoles;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.ActivateDeactivateUser;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.AdminResetPassword;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.CreateRole;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterUser;
-using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateUserAccess;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.ResetPassword;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdatePassword;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateUser;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllUsers;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetRoles;
-using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserAccessById;
-using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserById;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserDashboard;
+using DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserWithAccess;
 using DHAFacilitationAPIs.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -66,8 +68,8 @@ public class UsersController : BaseApiController
             : BadRequest(new { message = "Failed to delete user." });
     }
 
-    [HttpPut("UpdateUserAccess")]
-    public async Task<IActionResult> UpdateUserAccess([FromBody] UpdateUserAccessCommand command)
+    [HttpPut("Update-User")]
+    public async Task<IActionResult> UpdateUserAccess([FromBody] UpdateUserCommand command)
     {
         var result = await Mediator.Send(command);
         return Ok(result);
@@ -80,6 +82,7 @@ public class UsersController : BaseApiController
         return Ok(result);
     }
 
+    
     [HttpGet("GetRoles")]
     public async Task<IActionResult> GetRoles()
     {
@@ -102,9 +105,25 @@ public class UsersController : BaseApiController
     [HttpGet("GetUserAccessById")]
     public async Task<IActionResult> GetUserAccessById([FromQuery] string userId)
     {
-        var result = await Mediator.Send(new GetUserAccessByIdQuery(userId));
+        var result = await Mediator.Send(new GetUserWithAccessQuery(userId));
         return Ok(result);
     }
+
+
+    [HttpPost("update-password")]
+    public async Task<IActionResult> UpdatePassword(UpdatePasswordCommand command, CancellationToken ct)
+    => Ok(await _mediator.Send(command, ct));
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command, CancellationToken ct)
+        => Ok(await _mediator.Send(command, ct));
+
+    [HttpPost("admin-reset-password")]
+    [Authorize(Roles = "SuperAdministrator")]
+    public async Task<IActionResult> AdminResetPassword(AdminResetPasswordCommand command, CancellationToken ct)
+        => Ok(await _mediator.Send(command, ct));
+
+
 
     //[HttpGet("GetUserById"), AllowAnonymous]
     //public async Task<IActionResult> GetUserById([FromQuery]string id)

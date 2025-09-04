@@ -14,6 +14,7 @@ namespace DHAFacilitationAPIs.Web.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "SuperAdministrator")]
 public class ModulesController : BaseApiController
 {
     private readonly IUser _loggedInUser;

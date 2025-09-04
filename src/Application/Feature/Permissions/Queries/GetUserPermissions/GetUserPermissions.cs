@@ -13,24 +13,53 @@ public class GetUserPermissionsQueryHandler
 {
     private readonly IApplicationDbContext _ctx;
 
-    public GetUserPermissionsQueryHandler(IApplicationDbContext ctx)
-    {
-        _ctx = ctx;
-    }
+    public GetUserPermissionsQueryHandler(IApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<List<string>> Handle(GetUserPermissionsQuery request, CancellationToken ct)
     {
-        var permissions = await _ctx.UserPermissions
-            .Include(up => up.SubModule)
-            .ThenInclude(sm => sm.Permissions)
-            .Where(up => up.UserId == request.UserId)
+        var userModuleIds = await _ctx.UserModuleAssignments
+            .Where(x => x.UserId == request.UserId)
+            .Select(x => x.ModuleId)
             .ToListAsync(ct);
 
-        // flatten: SubModule.Action
-        return permissions.SelectMany(up =>
-            up.AllowedActions.Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(action => $"{up.SubModule.Value}.{action.Trim()}")
-        ).ToList();
+        var userSubModuleIds = await _ctx.UserSubModuleAssignments
+            .Where(x => x.UserId == request.UserId)
+            .Select(x => x.SubModuleId)
+            .ToListAsync(ct);
+
+        var userPermissionIds = await _ctx.UserPermissionAssignments
+            .Where(x => x.UserId == request.UserId)
+            .Select(x => x.PermissionId)
+            .ToListAsync(ct);
+
+        var modules = await _ctx.Modules
+            .Where(m => userModuleIds.Contains(m.Id))
+            .Include(m => m.SubModules)
+                .ThenInclude(sm => sm.Permissions)
+            .ToListAsync(ct);
+
+        var flat = new List<string>();
+        foreach (var module in modules)
+        {
+            flat.Add(module.Value); // module-level
+
+            foreach (var sm in module.SubModules)
+            {
+                if (userSubModuleIds.Contains(sm.Id))
+                {
+                    flat.Add(sm.Value); // submodule-level
+
+                    foreach (var perm in sm.Permissions)
+                    {
+                        if (userPermissionIds.Contains(perm.Id))
+                        {
+                            flat.Add($"{sm.Value}.{perm.Value}");
+                        }
+                    }
+                }
+            }
+        }
+        return flat;
     }
 }
 

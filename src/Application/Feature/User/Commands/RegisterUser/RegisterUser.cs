@@ -19,7 +19,6 @@ public record RegisterUserCommand : IRequest<SuccessResponse<Guid>>
     public string CNIC { get; set; } = default!;
     public string Password { get; set; } = default!;
     public string RoleId { get; set; } = default!;
-    public string MEMPK { get; set; } = default!;
     public List<ModuleSelectionDto> Modules { get; set; } = new();
 }
 
@@ -27,6 +26,7 @@ public class ModuleSelectionDto
 {
     public Guid ModuleId { get; set; }
     public List<SubModuleSelectionDto> SubModules { get; set; } = new();
+    public List<Guid>? AssignedClubIds { get; set; }
 }
 
 public class SubModuleSelectionDto
@@ -87,9 +87,11 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
                 RegisteredMobileNo = request.MobileNo,
+                IsOtpRequired=false,
+                IsVerified=true,
                 AppType = AppType.Web,
                 UserType = UserType.Employee,
-                MEMPK = request.MEMPK
+                MEMPK = "-",
             };
 
             var createResult = await _userManager.CreateAsync(newUser, request.Password);
@@ -120,10 +122,10 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                 foreach (var moduleSel in request.Modules)
                 {
                     // ✅ Ensure module exists
-                    var moduleExists = await _context.Modules
-                        .AnyAsync(m => m.Id == moduleSel.ModuleId, cancellationToken);
+                    var module = await _context.Modules
+                        .FirstOrDefaultAsync(m => m.Id == moduleSel.ModuleId, cancellationToken);
 
-                    if (!moduleExists)
+                    if (module == null)
                         throw new NotFoundException($"Module with Id {moduleSel.ModuleId} does not exist.");
 
                     // User ↔ Module link
@@ -133,33 +135,49 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                         ModuleId = moduleSel.ModuleId
                     });
 
+                    // ✅ Special Case: ClubManagement requires club assignment
+                    if (module.Value == "Club")
+                    {
+                        if (moduleSel.AssignedClubIds == null || !moduleSel.AssignedClubIds.Any())
+                            throw new DBOperationException("At least one Club must be assigned for ClubManagement module.");
+
+                        foreach (var clubId in moduleSel.AssignedClubIds)
+                        {
+                            _context.UserClubAssignments.Add(new UserClubAssignment
+                            {
+                                UserId = newUser.Id,
+                                ClubId = clubId
+                            });
+                        }
+                    }
+
                     // SubModules + Permissions
                     if (moduleSel.SubModules != null)
                     {
                         foreach (var subSel in moduleSel.SubModules)
                         {
-                            var allowedActions = (subSel.PermissionIds != null && subSel.PermissionIds.Any())
-                                ? string.Join(",", subSel.PermissionIds)
-                                : string.Empty;
-
-                            // ✅ Ensure submodule exists
-                            var subModuleExists = await _context.SubModules
-                                .AnyAsync(s => s.Id == subSel.SubModuleId, cancellationToken);
-
-                            if (!subModuleExists)
-                                throw new NotFoundException($"SubModule with Id {subSel.SubModuleId} does not exist.");
-
-                            _context.UserPermissions.Add(new UserPermission
+                            _context.UserSubModuleAssignments.Add(new UserSubModuleAssignment
                             {
                                 UserId = newUser.Id,
-                                SubModuleId = subSel.SubModuleId,
-                                AllowedActions = allowedActions
+                                SubModuleId = subSel.SubModuleId
                             });
+
+                            if (subSel.PermissionIds != null && subSel.PermissionIds.Any())
+                            {
+                                foreach (var permId in subSel.PermissionIds)
+                                {
+                                    _context.UserPermissionAssignments.Add(new UserPermissionAssignment
+                                    {
+                                        UserId = newUser.Id,
+                                        PermissionId = permId
+                                    });
+                                }
+                            }
                         }
                     }
                 }
-
             }
+
 
             // 5️⃣ Save changes
             await _context.SaveChangesAsync(cancellationToken);

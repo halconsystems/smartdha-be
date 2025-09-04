@@ -17,12 +17,16 @@ public class AllSubModulesDto
     public Guid Id { get; set; }
     public string Value { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string? Description { get; set; }
-    public Guid? ModuleId { get; set; }
-    public bool RequiresPermission { get; set; }
-
     public List<PermissionDto> Permissions { get; set; } = new();
+}
+
+public class AllModulesDto
+{
+    public Guid Id { get; set; }
+    public string Value { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty;
+    public List<AllSubModulesDto> AllSubModules { get; set; } = new();
+  
 }
 
 

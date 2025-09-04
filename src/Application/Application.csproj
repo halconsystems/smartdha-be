@@ -10,14 +10,23 @@
     <Compile Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <Compile Remove="Feature\TodoItems\**" />
     <Compile Remove="Feature\TodoLists\**" />
+    <Compile Remove="Feature\User\Commands\UpdateUserAccess\**" />
+    <Compile Remove="Feature\User\Queries\GetUserAccessById\**" />
+    <Compile Remove="Feature\User\Queries\GetUserById\**" />
     <EmbeddedResource Remove="Feature\Modules\Commands\UpdateUserModulePermissions\**" />
     <EmbeddedResource Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <EmbeddedResource Remove="Feature\TodoItems\**" />
     <EmbeddedResource Remove="Feature\TodoLists\**" />
+    <EmbeddedResource Remove="Feature\User\Commands\UpdateUserAccess\**" />
+    <EmbeddedResource Remove="Feature\User\Queries\GetUserAccessById\**" />
+    <EmbeddedResource Remove="Feature\User\Queries\GetUserById\**" />
     <None Remove="Feature\Modules\Commands\UpdateUserModulePermissions\**" />
     <None Remove="Feature\Modules\Queries\GetUserModulePermissions\**" />
     <None Remove="Feature\TodoItems\**" />
     <None Remove="Feature\TodoLists\**" />
+    <None Remove="Feature\User\Commands\UpdateUserAccess\**" />
+    <None Remove="Feature\User\Queries\GetUserAccessById\**" />
+    <None Remove="Feature\User\Queries\GetUserById\**" />
   </ItemGroup>
 
   <ItemGroup>

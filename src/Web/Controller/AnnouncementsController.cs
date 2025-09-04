@@ -19,7 +19,9 @@ public class AnnouncementsController : BaseApiController
     private readonly IMediator _mediator;
     public AnnouncementsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost("Create"), AllowAnonymous]
+
+
+    [HttpPost("Create")]
     public async Task<IActionResult> CreateAnnouncements(AddAnnouncementCommand addAnnouncementCommand)
     {
         var result = await Mediator.Send(addAnnouncementCommand);
@@ -27,13 +29,13 @@ public class AnnouncementsController : BaseApiController
 
     }
 
-    [HttpGet("GetAll-Annoucements"),AllowAnonymous]
+    [HttpGet("GetAll-Annoucements")]
     public async Task<IActionResult> GetAllAnnoucements()
     {
         return Ok(await Mediator.Send(new GetAllAnnouncementsQuery()));
     }
 
-    [HttpGet("GetAnnouncementById/{id:guid}"), AllowAnonymous]
+    [HttpGet("GetAnnouncementById/{id:guid}")]
     public async Task<IActionResult> GetAnnouncementById(Guid id, CancellationToken ct)
     {
         var query = new GetAnnouncementByIdQuery { Id = id };
@@ -45,11 +47,11 @@ public class AnnouncementsController : BaseApiController
 
     /// <summary>Update an announcement</summary>
     [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<SuccessResponse<string>>> Update(
-            Guid id,
-            [FromBody] UpdateAnnouncementCommand command,
-            CancellationToken ct)
+    //[ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SuccessResponse<string>>> Update(
+    Guid id,
+    [FromBody] UpdateAnnouncementCommand command,
+    CancellationToken ct)
         {
             // trust route id; overwrite command.Id if needed
             command.Id = id;
@@ -57,13 +59,13 @@ public class AnnouncementsController : BaseApiController
             return Ok(result);
         }
 
-        /// <summary>Delete an announcement (soft by default; hard via query)</summary>
-        [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<SuccessResponse<string>>> Delete(
-            Guid id,
-            [FromQuery] bool hardDelete = false,
-            CancellationToken ct = default)
+    /// <summary>Delete an announcement (soft by default; hard via query)</summary>
+    [HttpDelete("{id:guid}")]
+    //[ProducesResponseType(typeof(SuccessResponse<string>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<SuccessResponse<string>>> Delete(
+    Guid id,
+    [FromQuery] bool hardDelete = false,
+    CancellationToken ct = default)
         {
             var result = await _mediator.Send(new DeleteAnnouncementCommand
             {

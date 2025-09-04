@@ -28,12 +28,11 @@ public class NonMemberController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpGet("Dashboard"), AllowAnonymous]
-    //[AuthorizeModuleAccess("16969A58-982D-45D6-81D8-FBD48627D2CB")]
+    [HttpGet("Dashboard")]
     public Task<SuccessResponse<NonMemberVerificationDashboardDto>> Get(CancellationToken ct)
         => _mediator.Send(new GetNonMemberVerificationDashboardQuery(), ct);
 
-    [HttpPost("get-nonmember-requests"), AllowAnonymous]
+    [HttpPost("get-nonmember-requests")]
     public async Task<IActionResult> GetNonMemberRequests(NonMemberRequestsQuery nonMemberRequestsQuery)
     {
         var result = await Mediator.Send(nonMemberRequestsQuery);
@@ -41,42 +40,42 @@ public class NonMemberController : BaseApiController
     }
 
 
-    [HttpPost("Update-nonmember-requests"), AllowAnonymous]
+    [HttpPost("Update-nonmember-requests")]
     public async Task<IActionResult> UpdateNonMemberRequests(UpdateNonMemberVerificationCommand updateNonMemberVerificationCommand)
     {
         var result = await Mediator.Send(updateNonMemberVerificationCommand);
         return Ok(result);
 
     }
-    [HttpPost("AssignModule"), AllowAnonymous]
+    [HttpPost("AssignModule")]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> AssignModule([FromBody] CreateUserModuleAssignmentCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
 
-    [HttpPut("Inactivate"), AllowAnonymous]
+    [HttpPut("Inactivate")]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> Inactivate([FromBody] InactivateUserModuleAssignmentCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
 
-    [HttpDelete("Delete"), AllowAnonymous]
+    [HttpDelete("Delete")]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> Delete([FromQuery] DeleteUserModuleAssignmentCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
 
-    [HttpGet("GetAssignedModules/{userId}"),AllowAnonymous]
+    [HttpGet("GetAssignedModules/{userId}")]
     public async Task<ActionResult<SuccessResponse<List<AssignedModuleDto>>>> GetAssignedModules(string userId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAssignedModulesQuery { UserId = userId }, ct);
         return Ok(result);
     }
 
-    [HttpGet("GetMobileModule"), AllowAnonymous]
+    [HttpGet("GetMobileModule")]
     public async Task<IActionResult> GetMobileModules()
     {
         var result = await _mediator.Send(new GetMobileModulesQuery());

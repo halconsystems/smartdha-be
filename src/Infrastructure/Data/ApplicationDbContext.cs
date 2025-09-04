@@ -42,9 +42,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<AppRole> AppRoles => Set<AppRole>();
     public DbSet<AppUserRole> AppUserRoles => Set<AppUserRole>();
     public DbSet<AppRoleModule> AppRoleModules => Set<AppRoleModule>();
-    public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
-
-
+    public DbSet<UserSubModuleAssignment> UserSubModuleAssignments => Set<UserSubModuleAssignment>();
+    public DbSet<UserPermissionAssignment> UserPermissionAssignments => Set<UserPermissionAssignment>();
+    public DbSet<UserClubAssignment> UserClubAssignments => Set<UserClubAssignment>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -52,7 +54,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         IdentityBuilder(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
-
     private static void IdentityBuilder(ModelBuilder builder)
     {
         foreach (var entityType in builder.Model.GetEntityTypes())
@@ -170,8 +171,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .WithMany(t => t.ProcessSteps)
             .HasForeignKey(p => p.RequestTrackingId)
             .OnDelete(DeleteBehavior.Cascade);
-    }
 
+        builder.Entity<UserModuleAssignment>()
+       .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+
+        builder.Entity<UserSubModuleAssignment>()
+            .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+
+        builder.Entity<UserClubAssignment>()
+            .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+
+        builder.Entity<UserPermissionAssignment>()
+            .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+
+
+    }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         // Define the Pakistan Standard Time zone
@@ -221,6 +235,75 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                 transactionEntry.Entity.CreatedDateTime = pakistanTime;
             }
         }
-        return base.SaveChangesAsync(cancellationToken);
+        var auditEntries = OnBeforeSaveChanges();
+        var result =  base.SaveChangesAsync(cancellationToken);
+        if (auditEntries.Any())
+        {
+             OnAfterSaveChangesAsync(auditEntries);
+        }
+
+        return result;
+        //return base.SaveChangesAsync(cancellationToken);
     }
+    private List<AuditEntry> OnBeforeSaveChanges()
+    {
+        ChangeTracker.DetectChanges();
+        var auditEntries = new List<AuditEntry>();
+
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.Entity is AuditLog || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                continue;
+
+            var auditEntry = new AuditEntry(entry)
+            {
+                TableName = entry.Metadata.GetTableName() ?? entry.Entity.GetType().Name,
+                UserId = "SYSTEM" // 👈 inject _currentUser.UserId here
+            };
+            auditEntries.Add(auditEntry);
+
+            foreach (var property in entry.Properties)
+            {
+                string propertyName = property.Metadata.Name;
+                if (property.Metadata.IsPrimaryKey())
+                {
+                    auditEntry.KeyValues[propertyName] = property.CurrentValue;
+                    continue;
+                }
+
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        break;
+
+                    case EntityState.Deleted:
+                        auditEntry.OldValues[propertyName] = property.OriginalValue;
+                        break;
+
+                    case EntityState.Modified:
+                        if (property.IsModified)
+                        {
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                        }
+                        break;
+                }
+            }
+        }
+
+        // Save audit entries temporarily
+        foreach (var auditEntry in auditEntries)
+        {
+            AuditLogs.Add(auditEntry.ToAuditLog());
+        }
+
+        return auditEntries;
+    }
+    private Task OnAfterSaveChangesAsync(List<AuditEntry> auditEntries)
+    {
+        // Here you could push to ELK, Serilog, Kafka, etc.
+        return Task.CompletedTask;
+    }
+
 }

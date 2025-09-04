@@ -30,7 +30,7 @@ public class RoomBookingController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpGet("get-dashboard"), AllowAnonymous]
+    [HttpGet("get-dashboard")]
     public async Task<ActionResult<ReservationDashboardDto>> GetDashboard()
     {
         var result = await _mediator.Send(new GetReservationDashboardQuery());
@@ -38,7 +38,7 @@ public class RoomBookingController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("get-all-reservations"), AllowAnonymous]
+    [HttpGet("get-all-reservations")]
     public async Task<ActionResult<List<ReservationWebDto>>> GetAllReservations()
     {
         var result = await _mediator.Send(new GetAllReservationsuery());
@@ -46,7 +46,7 @@ public class RoomBookingController : BaseApiController
         return Ok(result);
     }
 
-    [HttpPost("confirm-payment"),AllowAnonymous]
+    [HttpPost("confirm-payment")]
     public async Task<IActionResult> ConfirmBooking([FromBody] ConfirmBookingCommand command, CancellationToken ct)
     {
         if (!ModelState.IsValid)

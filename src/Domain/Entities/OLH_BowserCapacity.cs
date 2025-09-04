@@ -9,7 +9,7 @@ public class OLH_BowserCapacity:BaseAuditableEntity
 {
    // public Guid BowserCapacityID { get; set; }
 
-    public string Capacity { get; set; } = default!;
+    public decimal Capacity { get; set; } = default!;
 
     public string Unit { get; set; } = default!;
 

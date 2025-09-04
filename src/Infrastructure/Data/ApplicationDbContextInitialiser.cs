@@ -104,201 +104,201 @@ public class ApplicationDbContextInitialiser
             superAdmin = existingUser;
         }
 
-        // 2️⃣ Seed Modules
-        if (!_context.Modules.Any())
-        {
-            // 📱 Mobile Modules (no submodules)
-            var mobileModules = new List<Module>
-        {
-          new() {
-        Value = "PanicButton",
-        DisplayName = "Panic Button",
-        Name = "PanicButton",
-        Description = "Mobile panic button alerts and quick actions",
-        Title = "Panic Button",
-        Remarks = "Critical safety feature",
-        AppType = AppType.Mobile,
-        URL = "app://panic-button"
-    },
-    new() {
-        Value = "PropertyManagement",
-        DisplayName = "Property Management",
-        Name = "PropertyManagement",
-        Description = "Manage property details from mobile",
-        Title = "Property Management",
-        Remarks = "Mobile access",
-        AppType = AppType.Mobile,
-        URL = "app://property-management"
-    },
-    new() {
-        Value = "ClubManagement",
-        DisplayName = "Club Management",
-        Name = "ClubManagement",
-        Description = "Mobile access to club reservations and payments",
-        Title = "Club Management",
-        Remarks = "For members",
-        AppType = AppType.Mobile,
-        URL = "app://club-management"
-    },
-    new() {
-        Value = "Bowzer",
-        DisplayName = "Bowzer",
-        Name = "Bowzer",
-        Description = "Mobile Bowzer services",
-        Title = "Bowzer",
-        Remarks = "Bowzer on mobile",
-        AppType = AppType.Mobile,
-        URL = "app://bowzer"
-    },
-    new() {
-        Value = "QRCode",
-        DisplayName = "QR Code",
-        Name = "QRCode",
-        Description = "Scan and generate QR Codes",
-        Title = "QR Code",
-        Remarks = "Mobile QR services",
-        AppType = AppType.Mobile,
-        URL = "app://qr-code"
-    }
-};
+//        // 2️⃣ Seed Modules
+//        if (!_context.Modules.Any())
+//        {
+//            // 📱 Mobile Modules (no submodules)
+//            var mobileModules = new List<Module>
+//        {
+//          new() {
+//        Value = "PanicButton",
+//        DisplayName = "Panic Button",
+//        Name = "PanicButton",
+//        Description = "Mobile panic button alerts and quick actions",
+//        Title = "Panic Button",
+//        Remarks = "Critical safety feature",
+//        AppType = AppType.Mobile,
+//        URL = "app://panic-button"
+//    },
+//    new() {
+//        Value = "PropertyManagement",
+//        DisplayName = "Property Management",
+//        Name = "PropertyManagement",
+//        Description = "Manage property details from mobile",
+//        Title = "Property Management",
+//        Remarks = "Mobile access",
+//        AppType = AppType.Mobile,
+//        URL = "app://property-management"
+//    },
+//    new() {
+//        Value = "ClubManagement",
+//        DisplayName = "Club Management",
+//        Name = "ClubManagement",
+//        Description = "Mobile access to club reservations and payments",
+//        Title = "Club Management",
+//        Remarks = "For members",
+//        AppType = AppType.Mobile,
+//        URL = "app://club-management"
+//    },
+//    new() {
+//        Value = "Bowzer",
+//        DisplayName = "Bowzer",
+//        Name = "Bowzer",
+//        Description = "Mobile Bowzer services",
+//        Title = "Bowzer",
+//        Remarks = "Bowzer on mobile",
+//        AppType = AppType.Mobile,
+//        URL = "app://bowzer"
+//    },
+//    new() {
+//        Value = "QRCode",
+//        DisplayName = "QR Code",
+//        Name = "QRCode",
+//        Description = "Scan and generate QR Codes",
+//        Title = "QR Code",
+//        Remarks = "Mobile QR services",
+//        AppType = AppType.Mobile,
+//        URL = "app://qr-code"
+//    }
+//};
 
 
-            // 💻 Web Modules (with submodules)
-            var webModules = new List<Module>
-{
-    new() {
-        Value = "PanicButton",
-        DisplayName = "Panic Button",
-        Name = "PanicButton",
-        Description = "Manage panic button alerts and monitoring",
-        Title = "Panic Button Module",
-        Remarks = "Critical feature for emergency response",
-        AppType = AppType.Web,
-        URL = "/panic-button",
-        SubModules = new List<SubModule> {
-            new() {
-                Value = "WebPanic.Dashboard",
-                DisplayName = "Dashboard",
-                Name = "WebPanicDashboard",
-                Description = "Overview of panic button alerts",
-                RequiresPermission = false
-            }
-        }
-    },
-    new() {
-        Value = "ClubManagement",
-        DisplayName = "Club Management",
-        Name = "ClubManagement",
-        Description = "Manage club activities, reservations, and payments",
-        Title = "Club Management Module",
-        Remarks = "Important for member services",
-        AppType = AppType.Web,
-        URL = "/club-management",
-        SubModules = new List<SubModule> {
-            new() {
-                Value = "WebClub.Dashboard",
-                DisplayName = "Dashboard",
-                Name = "WebClubDashboard",
-                Description = "Overview of club activities",
-                RequiresPermission = false
-            },
-            new() {
-                Value = "WebClub.RoomReservation",
-                DisplayName = "Room Reservation",
-                Name = "WebClubRoomReservation",
-                Description = "Manage club room reservations",
-                RequiresPermission = true
-            },
-            new() {
-                Value = "WebClub.Payment",
-                DisplayName = "Payment Received",
-                Name = "WebClubPayment",
-                Description = "Track and approve club payments",
-                RequiresPermission = true
-            }
-        }
-    },
-    new() {
-        Value = "NonMemberApproval",
-        DisplayName = "Non Member Approval",
-        Name = "NonMemberApproval",
-        Description = "Handle non-member verification and approval requests",
-        Title = "Non Member Approval Module",
-        Remarks = "Workflow module",
-        AppType = AppType.Web,
-        URL = "/non-member-approval",
-        SubModules = new List<SubModule> {
-            new() {
-                Value = "NMA.Dashboard",
-                DisplayName = "Dashboard",
-                Name = "NMADashboard",
-                Description = "Overview of non-member approval status",
-                RequiresPermission = false
-            },
-            new() {
-                Value = "NMA.Request",
-                DisplayName = "Request",
-                Name = "NMARequest",
-                Description = "Approve or reject non-member requests",
-                RequiresPermission = true
-            }
-        }
-    }
-};
+//            // 💻 Web Modules (with submodules)
+//            var webModules = new List<Module>
+//{
+//    new() {
+//        Value = "PanicButton",
+//        DisplayName = "Panic Button",
+//        Name = "PanicButton",
+//        Description = "Manage panic button alerts and monitoring",
+//        Title = "Panic Button Module",
+//        Remarks = "Critical feature for emergency response",
+//        AppType = AppType.Web,
+//        URL = "/panic-button",
+//        SubModules = new List<SubModule> {
+//            new() {
+//                Value = "WebPanic.Dashboard",
+//                DisplayName = "Dashboard",
+//                Name = "WebPanicDashboard",
+//                Description = "Overview of panic button alerts",
+//                RequiresPermission = false
+//            }
+//        }
+//    },
+//    new() {
+//        Value = "ClubManagement",
+//        DisplayName = "Club Management",
+//        Name = "ClubManagement",
+//        Description = "Manage club activities, reservations, and payments",
+//        Title = "Club Management Module",
+//        Remarks = "Important for member services",
+//        AppType = AppType.Web,
+//        URL = "/club-management",
+//        SubModules = new List<SubModule> {
+//            new() {
+//                Value = "WebClub.Dashboard",
+//                DisplayName = "Dashboard",
+//                Name = "WebClubDashboard",
+//                Description = "Overview of club activities",
+//                RequiresPermission = false
+//            },
+//            new() {
+//                Value = "WebClub.RoomReservation",
+//                DisplayName = "Room Reservation",
+//                Name = "WebClubRoomReservation",
+//                Description = "Manage club room reservations",
+//                RequiresPermission = true
+//            },
+//            new() {
+//                Value = "WebClub.Payment",
+//                DisplayName = "Payment Received",
+//                Name = "WebClubPayment",
+//                Description = "Track and approve club payments",
+//                RequiresPermission = true
+//            }
+//        }
+//    },
+//    new() {
+//        Value = "NonMemberApproval",
+//        DisplayName = "Non Member Approval",
+//        Name = "NonMemberApproval",
+//        Description = "Handle non-member verification and approval requests",
+//        Title = "Non Member Approval Module",
+//        Remarks = "Workflow module",
+//        AppType = AppType.Web,
+//        URL = "/non-member-approval",
+//        SubModules = new List<SubModule> {
+//            new() {
+//                Value = "NMA.Dashboard",
+//                DisplayName = "Dashboard",
+//                Name = "NMADashboard",
+//                Description = "Overview of non-member approval status",
+//                RequiresPermission = false
+//            },
+//            new() {
+//                Value = "NMA.Request",
+//                DisplayName = "Request",
+//                Name = "NMARequest",
+//                Description = "Approve or reject non-member requests",
+//                RequiresPermission = true
+//            }
+//        }
+//    }
+//};
 
 
-            await _context.Modules.AddRangeAsync(mobileModules.Concat(webModules));
-            await _context.SaveChangesAsync();
-        }
+//            await _context.Modules.AddRangeAsync(mobileModules.Concat(webModules));
+//            await _context.SaveChangesAsync();
+//        }
 
         // 3️⃣ Seed SuperAdmin Role
-        var superAdminRole = await _context.AppRoles
-            .FirstOrDefaultAsync(r => r.Name == "SuperAdministrator");
+        //var superAdminRole = await _context.AppRoles
+        //    .FirstOrDefaultAsync(r => r.Name == "SuperAdministrator");
 
-        if (superAdminRole == null)
-        {
-            superAdminRole = new AppRole
-            {
-                Name = "SuperAdministrator",
-                IsSystemRole = true
-            };
-            _context.AppRoles.Add(superAdminRole);
-            await _context.SaveChangesAsync();
-        }
+        //if (superAdminRole == null)
+        //{
+        //    superAdminRole = new AppRole
+        //    {
+        //        Name = "SuperAdministrator",
+        //        IsSystemRole = true
+        //    };
+        //    _context.AppRoles.Add(superAdminRole);
+        //    await _context.SaveChangesAsync();
+        //}
 
         // 4️⃣ Assign Role to SuperAdmin User
-        var roleAssigned = await _context.AppUserRoles
-            .AnyAsync(ur => ur.UserId == superAdmin.Id && ur.RoleId == superAdminRole.Id);
+        //var roleAssigned = await _context.AppUserRoles
+        //    .AnyAsync(ur => ur.UserId == superAdmin.Id && ur.RoleId == superAdminRole.Id);
 
-        if (!roleAssigned)
-        {
-            var userRole = new AppUserRole
-            {
-                UserId = superAdmin.Id,
-                RoleId = superAdminRole.Id
-            };
-            _context.AppUserRoles.Add(userRole);
-            await _context.SaveChangesAsync();
-        }
+        //if (!roleAssigned)
+        //{
+        //    var userRole = new AppUserRole
+        //    {
+        //        UserId = superAdmin.Id,
+        //        RoleId = superAdminRole.Id
+        //    };
+        //    _context.AppUserRoles.Add(userRole);
+        //    await _context.SaveChangesAsync();
+        //}
 
         // 5️⃣ Assign Full Permissions on All SubModules
-        var allSubModules = await _context.SubModules.ToListAsync();
+        //var allSubModules = await _context.SubModules.ToListAsync();
 
-        foreach (var sm in allSubModules)
-        {
-            bool exists = await _context.AppRolePermissions
-                .AnyAsync(rp => rp.RoleId == superAdminRole.Id && rp.SubModuleId == sm.Id);
+        //foreach (var sm in allSubModules)
+        //{
+        //    bool exists = await _context.AppRolePermissions
+        //        .AnyAsync(rp => rp.RoleId == superAdminRole.Id && rp.SubModuleId == sm.Id);
 
-            if (!exists)
-            {
-                _context.AppRolePermissions.Add(new AppRolePermission
-                {
-                    RoleId = superAdminRole.Id,
-                    SubModuleId = sm.Id,
-                    AllowedActions = "Read,Write,Delete,Approve,Reject"
-                });
-            }
-        }
+        //    if (!exists)
+        //    {
+        //        _context.AppRolePermissions.Add(new AppRolePermission
+        //        {
+        //            RoleId = superAdminRole.Id,
+        //            SubModuleId = sm.Id,
+        //            AllowedActions = "Read,Write,Delete,Approve,Reject"
+        //        });
+        //    }
+        //}
 
         await _context.SaveChangesAsync();
     }
