@@ -36,6 +36,9 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<ReservationRoom> ReservationRooms => Set<ReservationRoom>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<PaymentIntent> PaymentIntents => Set<PaymentIntent>();
+    public DbSet<RefundPolicy> RefundPolicies => Set<RefundPolicy>();
+    public DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
+    public DbSet<Configuration> Configurations => Set<Configuration>();
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class
         => base.Set<TEntity>();

@@ -28,6 +28,10 @@ public interface IOLMRSApplicationDbContext
     DbSet<ReservationRoom> ReservationRooms { get; }
     DbSet<Payment> Payments { get; }
     DbSet<PaymentIntent> PaymentIntents { get; }
+    DbSet<RefundRequest> RefundRequests { get; }
+    DbSet<RefundPolicy> RefundPolicies { get; }
+    DbSet<Configuration> Configurations { get; }
+
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

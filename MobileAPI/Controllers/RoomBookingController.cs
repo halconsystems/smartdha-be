@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DHAFacilitationAPIs.Application.Feature.Refund.Command.CreateRefundRequest;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;
@@ -114,4 +115,12 @@ public class RoomBookingController : ControllerBase
         var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
         return Ok(result);
     }
+
+    [HttpPost("create-RefundRequest"), AllowAnonymous]
+    public async Task<ActionResult<Guid>> CreateRefundRequest([FromBody] CreateRefundRequestCommand cmd, CancellationToken ct)
+    {
+        var id = await _mediator.Send(cmd, ct);
+        return Ok(id);
+    }
+
 }
