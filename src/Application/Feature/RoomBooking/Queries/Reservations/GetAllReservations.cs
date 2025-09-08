@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations.Dtos;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +29,7 @@ public class GetAllReservationsQueryHandler : IRequestHandler<GetAllReservations
             .Include(r => r.ReservationRooms)
             .Include(r => r.PaymentIntents)
                 .ThenInclude(pi => pi.Payments)
-            .Where(r => r.UserId == request.UserId)
+            .Where(r => r.UserId == request.UserId && r.Club.ClubType == ClubType.GuestRoom)
             .ToListAsync(ct);
 
         var result = reservations.Select(r =>

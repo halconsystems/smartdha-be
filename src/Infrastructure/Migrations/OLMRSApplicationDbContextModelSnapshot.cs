@@ -93,6 +93,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("nvarchar(4)");
 
+                    b.Property<int>("ClubType")
+                        .HasColumnType("int");
+
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 

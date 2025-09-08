@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using DHAFacilitationAPIs.Application.Common.Contracts;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation.Dtos;
@@ -155,7 +156,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
             throw new Exception($"Club {club.Id} has no valid AccountNoAccronym configured.");
 
-        string onebillId = GenerateOneBillId(club.AccountNoAccronym);
+        string onebillId = SmartPayBillId.GenerateOneBillId(club.AccountNoAccronym);
 
         var reservation = new Reservation
         {
@@ -257,17 +258,5 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         return result;
     }
 
-    private static string GenerateOneBillId(string clubAccountNo)
-    {
-        string smartPayCode = "SMPY"; // Always 4 chars
-        string yymm = DateTime.UtcNow.ToString("yyMM"); // e.g., 2508
-        string invoiceNo = new Random().Next(1, 99).ToString("D2"); // 2-digit padded
-
-        string final = $"{smartPayCode}{clubAccountNo}{yymm}{invoiceNo}"; // 14 chars
-
-        if (final.Length != 14)
-            throw new Exception($"Generated OneBillId must be 14 chars, got {final.Length}");
-
-        return final;
-    }
+    
 }

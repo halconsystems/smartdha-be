@@ -8,10 +8,15 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Infrastructure;
+using MobileAPI.RealTime;
+using MobileAPI.Services;
+using StackExchange.Redis;
+
 
 var options = new WebApplicationOptions
 {
@@ -30,6 +35,7 @@ builder.Services.AddMobileAPIServices(builder.Configuration);
 builder.Services.AddSingleton<DapperConnectionFactory>();
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -66,7 +72,45 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// (D) SignalR + Redis backplane (read from appsettings)
+var redisConn = builder.Configuration.GetConnectionString("Redis");
+builder.Services
+    .AddSignalR()
+    .AddStackExchangeRedis(redisConn!, opts =>
+    {
+        // Explicit channel prefix to avoid obsolete API and to keep both hosts on same bus
+        opts.Configuration.ChannelPrefix = RedisChannel.Literal("panic");
+    });
 
+// (E) JWT auth (also enable token from query string for WebSockets on the hub path)
+//builder.Services
+//    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        // TODO: set your token validation parameters here if not already set in Infrastructure:
+//        // options.TokenValidationParameters = ...
+
+//        options.Events = new JwtBearerEvents
+//        {
+//            OnMessageReceived = context =>
+//            {
+//                // This enables SignalR WebSocket auth: ?access_token=...
+//                var token = context.Request.Query["access_token"];
+//                var path = context.HttpContext.Request.Path;
+//                if (!string.IsNullOrEmpty(token) && path.StartsWithSegments("/hubs/panic"))
+//                {
+//                    context.Token = token;
+//                }
+//                return Task.CompletedTask;
+//            }
+//        };
+//    });
+
+//builder.Services.AddAuthorization();
+
+// (F) Host-specific realtime adapter (Mobile)
+builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
+builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
 
 
@@ -106,5 +150,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
+
+app.MapHub<PanicHub>("/hubs/panic").RequireAuthorization();
+
 app.UseMiddleware<CustomExceptionMiddleware>();
 app.Run();

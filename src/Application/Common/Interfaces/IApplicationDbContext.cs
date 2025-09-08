@@ -33,6 +33,11 @@ public interface IApplicationDbContext
     DbSet<UserClubAssignment> UserClubAssignments { get; }
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<UserActivityLog> UserActivityLogs { get; }
+    //Panic Button Module
+    DbSet<EmergencyType> EmergencyTypes { get; }
+    DbSet<PanicRequest> PanicRequests { get; }
+    DbSet<PanicActionLog> PanicActionLogs { get; }
+    DbSet<PanicLocationUpdate> PanicLocationUpdates { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

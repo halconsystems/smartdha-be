@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Configurations\EmergencyTypeConfiguration.cs" />
+    <Compile Remove="Data\Configurations\PanicRequestConfiguration.cs" />
     <Compile Remove="Data\Configurations\TodoItemConfiguration.cs" />
     <Compile Remove="Data\Configurations\TodoListConfiguration.cs" />
     <Compile Remove="Repository\TodoListRepository.cs" />

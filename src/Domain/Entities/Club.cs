@@ -14,4 +14,5 @@ public class Club : BaseAuditableEntity
     public string? ContactNumber { get; set; }
     public string? AccountNo { get; set; }
     [MaxLength(4)] public string? AccountNoAccronym { get; set; }
+    public ClubType ClubType { get; set; } = ClubType.GuestRoom;
 }

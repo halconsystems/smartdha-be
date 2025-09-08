@@ -9,12 +9,17 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using DHAFacilitationAPIs.Web;
 using DHAFacilitationAPIs.Web.Infrastructure;
+using DHAFacilitationAPIs.Web.RealTime;
+using DHAFacilitationAPIs.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+// *** ADD: SignalR and your host adapter
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +44,8 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 
+
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.ConfigurationOptions = new ConfigurationOptions
@@ -53,6 +60,45 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddMemoryCache(); // backup fallback
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
 builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
+
+
+// *** ADD: SignalR + Redis backplane
+var redisConn = builder.Configuration.GetConnectionString("Redis");
+
+builder.Services
+    .AddSignalR()
+    .AddStackExchangeRedis(redisConn!, opts =>
+    {
+        // avoid obsolete warning by using RedisChannel.Literal
+        opts.Configuration.ChannelPrefix = RedisChannel.Literal("panic");
+    });
+
+// *** ADD: Ensure JWT also works for SignalR WebSockets (token via ?access_token=)
+builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
+{
+    var original = o.Events;
+    o.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // Preserve existing handler if any
+            if (original?.OnMessageReceived != null)
+                return original.OnMessageReceived(context);
+
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/panic"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// *** ADD: Host-specific realtime adapter (overrides any previous IPanicRealtime registration)
+builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
+builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
 
 
@@ -104,6 +150,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
+
+// *** ADD: Map the hub (path must match MobileApi)
+app.MapHub<PanicHub>("/hubs/panic").RequireAuthorization();
+
 app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.Run();

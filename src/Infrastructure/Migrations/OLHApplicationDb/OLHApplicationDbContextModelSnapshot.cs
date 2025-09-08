@@ -22,6 +22,76 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserAssignmentHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ArrivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AssignedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DriverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("RequestId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("BowserAssignmentHistorys");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -29,9 +99,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("Capacity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("Capacity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -164,7 +233,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("OLH_BowserDriverShifts");
+                    b.ToTable("BowserDriverShifts");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", b =>
@@ -181,10 +250,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("BowserCapacityId")
+                    b.Property<Guid?>("AssignedDriverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CapacityID")
+                    b.Property<Guid?>("AssignedVehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BowserCapacityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
@@ -193,17 +265,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DeliveryDate")
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("DriverId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DriverInfoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Ext")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActive")
@@ -218,17 +290,22 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("PaymentID")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PaymentStatusID")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Phase")
-                        .IsRequired()
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PlannedDeliveryDate")
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PhaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("PlannedDeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("RequestDate")
@@ -236,10 +313,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     b.Property<string>("RequestNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("RequestStatusId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("RequestedDeliveryDate")
                         .HasColumnType("datetime2");
@@ -251,28 +325,176 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
+                    b.Property<short>("Status")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VehicleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("latitude")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("longitude")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedDriverId");
+
+                    b.HasIndex("AssignedVehicleId");
 
                     b.HasIndex("BowserCapacityId");
 
-                    b.HasIndex("DriverInfoId");
+                    b.HasIndex("PhaseId");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("RequestNo")
+                        .IsUnique();
 
-                    b.ToTable("OLH_BowserRequests");
+                    b.ToTable("BowserRequests");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestNextStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("NextStatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("StatusId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NextStatusId");
+
+                    b.HasIndex("StatusId", "NextStatusId")
+                        .IsUnique();
+
+                    b.ToTable("BowserRequestsNextStatus");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OLH_BowserRequestStatus");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestStatusHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("ChangedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ChangedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short>("FromStatus")
+                        .HasColumnType("smallint");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<short>("ToStatus")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("BowserRequestStatusHistorys");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", b =>
@@ -300,7 +522,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
@@ -344,6 +565,68 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.ToTable("DriverInfos");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_DriverShift", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DriverInfoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("DutyDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ShiftId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DriverInfoId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("DriverId", "DutyDate")
+                        .IsUnique();
+
+                    b.HasIndex("VehicleId", "DutyDate")
+                        .IsUnique();
+
+                    b.ToTable("DriverShifts");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_DriverStatus", b =>
                 {
                     b.Property<Guid>("Id")
@@ -376,13 +659,250 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<string>("status")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("DriverStatuses");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("AuthorizationCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("AuthorizedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CapturedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MetaJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderIntentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProviderPaymentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefundedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("VoidedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Phases");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_PhaseCapacity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal?>("BaseRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("BowserCapacityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PhaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BowserCapacityId");
+
+                    b.HasIndex("PhaseId", "BowserCapacityId", "EffectiveFrom", "EffectiveTo");
+
+                    b.ToTable("PhaseCapacities");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Refund", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProviderRefundId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefundedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Refunds");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Shift", b =>
@@ -398,7 +918,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("EndTime")
+                    b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
                     b.Property<bool?>("IsActive")
@@ -420,19 +940,16 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<string>("Shift")
+                    b.Property<string>("ShiftName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ShiftId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeOnly>("StartTime")
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OLH_Shifts");
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", b =>
@@ -442,7 +959,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<Guid>("BowserCapacityID")
+                    b.Property<Guid>("BowserCapacityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ChassisNumber")
@@ -475,14 +992,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("MakeID")
+                    b.Property<Guid?>("MakeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ModelID")
+                    b.Property<Guid?>("ModelId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Ser")
@@ -492,25 +1008,30 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<Guid>("VehicleID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("VehicleOwnerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VehicleStatusID")
+                    b.Property<Guid>("VehicleStatusId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("VehicleTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("YearofManufacture")
+                    b.Property<string>("YearOfManufacture")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OLH_Vehicles");
+                    b.HasIndex("BowserCapacityId");
+
+                    b.HasIndex("VehicleOwnerId");
+
+                    b.HasIndex("VehicleStatusId");
+
+                    b.HasIndex("VehicleTypeId");
+
+                    b.ToTable("Vehicles");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleOwner", b =>
@@ -538,6 +1059,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -545,16 +1070,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<string>("VehicleOwner")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("VehicleOwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.ToTable("OLH_VehicleOwners");
+                    b.ToTable("VehicleOwners");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleStatus", b =>
@@ -583,7 +1101,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Ser")
@@ -593,16 +1110,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<string>("VehicleStatus")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("VehicleStatusID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.ToTable("OLH_VehicleStatuses");
+                    b.ToTable("VehicleStatuses");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleType", b =>
@@ -637,16 +1151,36 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
-                    b.Property<Guid>("VehicleTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("VehilceType")
+                    b.Property<string>("TypeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OLH_VehicleTypes");
+                    b.ToTable("VehicleTypes");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserAssignmentHistory", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Request");
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacityRate", b =>
@@ -689,29 +1223,65 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", b =>
                 {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "AssignedDriver")
+                        .WithMany()
+                        .HasForeignKey("AssignedDriverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "AssignedVehicle")
+                        .WithMany()
+                        .HasForeignKey("AssignedVehicleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
                         .WithMany()
                         .HasForeignKey("BowserCapacityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "DriverInfo")
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", "Phase")
                         .WithMany()
-                        .HasForeignKey("DriverInfoId")
+                        .HasForeignKey("PhaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
-                        .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("AssignedDriver");
+
+                    b.Navigation("AssignedVehicle");
 
                     b.Navigation("BowserCapacity");
 
-                    b.Navigation("DriverInfo");
+                    b.Navigation("Phase");
+                });
 
-                    b.Navigation("Vehicle");
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestNextStatus", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestStatus", "NextStatus")
+                        .WithMany()
+                        .HasForeignKey("NextStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("NextStatus");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequestStatusHistory", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", b =>
@@ -723,6 +1293,119 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                         .IsRequired();
 
                     b.Navigation("DriverStatus");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_DriverShift", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "DriverInfo")
+                        .WithMany()
+                        .HasForeignKey("DriverInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Shift", "Shift")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DriverInfo");
+
+                    b.Navigation("Shift");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Payment", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_PhaseCapacity", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
+                        .WithMany("Phases")
+                        .HasForeignKey("BowserCapacityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", "Phase")
+                        .WithMany("AllowedCapacities")
+                        .HasForeignKey("PhaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BowserCapacity");
+
+                    b.Navigation("Phase");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Refund", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
+                        .WithMany()
+                        .HasForeignKey("BowserCapacityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleOwner", "VehicleOwner")
+                        .WithMany()
+                        .HasForeignKey("VehicleOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleStatus", "VehicleStatus")
+                        .WithMany()
+                        .HasForeignKey("VehicleStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleType", "VehicleType")
+                        .WithMany()
+                        .HasForeignKey("VehicleTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BowserCapacity");
+
+                    b.Navigation("VehicleOwner");
+
+                    b.Navigation("VehicleStatus");
+
+                    b.Navigation("VehicleType");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", b =>
+                {
+                    b.Navigation("Phases");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", b =>
+                {
+                    b.Navigation("AllowedCapacities");
                 });
 #pragma warning restore 612, 618
         }
