@@ -32,4 +32,6 @@ public class Reservation : BaseAuditableEntity
 
     public ICollection<ReservationRoom> ReservationRooms { get; set; } = new List<ReservationRoom>();
     public ICollection<PaymentIntent> PaymentIntents { get; set; } = new List<PaymentIntent>();
+    public ICollection<RoomBooking> RoomBookings { get; set; } = new List<RoomBooking>();
+
 }

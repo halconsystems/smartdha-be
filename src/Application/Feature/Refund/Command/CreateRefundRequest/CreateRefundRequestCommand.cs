@@ -80,7 +80,7 @@ public class CreateRefundRequestCommandHandler : IRequestHandler<CreateRefundReq
             RequestedAtDateOnly = DateOnly.FromDateTime(now),
             RequestedAtTimeOnly = TimeOnly.FromDateTime(now),
             AmountPaid = amountPaid,
-            AmountRefunded = refundableAmount,
+            RefundableAmount = refundableAmount,
             Status = RefundStatus.Pending,
             Notes = request.Notes
         };

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908051128_RoomBookingTableUpdate")]
+    partial class RoomBookingTableUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -298,6 +301,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<decimal>("AmountPaid")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("AmountRefunded")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -318,9 +324,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("RefundableAmount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("RequestedAt")
                         .HasColumnType("datetime2");
@@ -1349,7 +1352,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Reservation", "Reservation")
-                        .WithMany("RoomBookings")
+                        .WithMany()
                         .HasForeignKey("ReservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1496,8 +1499,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Navigation("PaymentIntents");
 
                     b.Navigation("ReservationRooms");
-
-                    b.Navigation("RoomBookings");
                 });
 #pragma warning restore 612, 618
         }

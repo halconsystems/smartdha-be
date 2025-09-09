@@ -21,7 +21,7 @@ public class RefundRequest : BaseAuditableEntity
     public decimal AmountPaid { get; set; }  // Amount initially paid against the reservation
 
     [Column(TypeName = "decimal(18,2)")]
-    public decimal AmountRefunded { get; set; } // Amount refunded as per club policy
+    public decimal RefundableAmount { get; set; } // Amount refunded as per club policy
 
     public RefundStatus Status { get; set; } = RefundStatus.Pending;
 

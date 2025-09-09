@@ -7,6 +7,8 @@ using DHAFacilitationAPIs.Application.Feature.Refund.Command.CreateRefundRequest
 using DHAFacilitationAPIs.Application.Feature.Refund.Command.UpdateRefundPolicy;
 using DHAFacilitationAPIs.Application.Feature.Refund.Command.UpdateRefundRequest;
 using DHAFacilitationAPIs.Application.Feature.Refund.Queries.GetRefundPolicy;
+using DHAFacilitationAPIs.Application.Feature.Refund.Queries.GetRefundRequest_web_;
+using DHAFacilitationAPIs.Application.Feature.Refunds.Queries;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.AllReservations;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationDashboard;
@@ -85,6 +87,13 @@ public class RoomBookingController : BaseApiController
     public async Task<IActionResult> UpdateRefundRequest([FromBody] UpdateRefundRequestCommand cmd, CancellationToken ct)
     {
         var result = await _mediator.Send(cmd, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("get-RefundRequest/{clubId:guid}")]
+    public async Task<ActionResult<List<RefundRequestWebDto>>> GetRefundRequestsByClub(Guid clubId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetRefundRequestsWebQuery(clubId), ct);
         return Ok(result);
     }
 

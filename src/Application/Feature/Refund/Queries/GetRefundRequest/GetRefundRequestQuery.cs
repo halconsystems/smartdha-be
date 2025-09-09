@@ -46,7 +46,7 @@ public class GetRefundRequestsQueryHandler
                 ReservationId = r.ReservationId,
                 RequestedAt = r.RequestedAt,
                 AmountPaid = r.AmountPaid,
-                AmountRefunded = r.AmountRefunded,
+                RefundableAmount = r.RefundableAmount,
                 Status = r.Status,
                 Notes = r.Notes
             })
