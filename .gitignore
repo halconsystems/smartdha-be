@@ -4,3 +4,4 @@
 
 /.vs
 /artifacts
+/src/Application/Application.csproj
