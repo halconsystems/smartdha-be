@@ -47,9 +47,51 @@ public class UpdateRefundRequestCommandHandler
         refundRequest.Notes = request.Notes ?? refundRequest.Notes;
 
         _context.RefundRequests.Update(refundRequest);
+
+        string msg1 = string.Empty;
+        string msg2 = string.Empty;
+        string msg3 = "Refund request updated successfully.";
+
+        // If refund approved, cascade cancellation
+        if (request.Status == RefundStatus.Approved)
+        {
+            // Find reservation
+            var reservation = await _context.Reservations
+                .FirstOrDefaultAsync(r => r.Id == refundRequest.ReservationId, cancellationToken);
+
+            if (reservation == null)
+                throw new NotFoundException(nameof(Reservation), refundRequest.ReservationId.ToString());
+
+            if (reservation.Status == ReservationStatus.Cancelled || reservation.Status == ReservationStatus.Expired)
+                throw new InvalidOperationException("Refund cannot cancel an already cancelled or expired reservation.");
+
+            reservation.Status = ReservationStatus.Cancelled;
+            _context.Reservations.Update(reservation);
+
+            msg1 = "Reservation status updated to cancelled.";
+
+            // Cancel all linked room bookings
+            var roomBookings = await _context.RoomBookings
+                .Where(rb => rb.ReservationId == reservation.Id)
+                .ToListAsync(cancellationToken);
+
+            if (!roomBookings.Any())
+                throw new InvalidOperationException($"No room bookings found for reservation {reservation.Id}.");
+
+            foreach (var booking in roomBookings)
+            {
+                booking.Status = BookingStatus.Cancelled;
+            }
+
+            _context.RoomBookings.UpdateRange(roomBookings);
+
+            msg2 = "RoomBooking statuses updated to cancelled.";
+
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
-        var message = "Refund request updated successfully.";
-        return message; 
+        var responseMessage = string.Join(" | ", new[] { msg1, msg2, msg3 }.Where(m => !string.IsNullOrEmpty(m)));
+        return responseMessage; 
     }
 }
