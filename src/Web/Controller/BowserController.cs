@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
-public class BowserController : ControllerBase
+public class BowserController : BaseApiController
 {
     private readonly IMediator _mediator;
 

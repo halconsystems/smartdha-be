@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
-public class BowserCapacityRateController : ControllerBase
+public class BowserCapacityRateController : BaseApiController
 {
     private readonly IMediator _mediator;
     public BowserCapacityRateController(IMediator mediator)
