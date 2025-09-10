@@ -27,6 +27,10 @@ public interface IOLHApplicationDbContext
 
     DbSet<OLH_Vehicle> Vehicles { get; }
 
+    public DbSet<OLH_VehicleMake> VehicleMakes { get; set; }   
+    public DbSet<OLH_VehicleModel> VehicleModels { get; set; } 
+
+
     DbSet<OLH_VehicleOwner> VehicleOwners { get; }
 
     DbSet<OLH_VehicleStatus> VehicleStatuses { get; }

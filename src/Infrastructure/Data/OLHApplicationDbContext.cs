@@ -17,7 +17,7 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
     {
         _loggedInUser = loggedInUser;
     }
-    public DbSet<OLH_BowserCapacity> BowserCapacitys =>Set<OLH_BowserCapacity>();
+    public DbSet<OLH_BowserCapacity> BowserCapacitys => Set<OLH_BowserCapacity>();
     public DbSet<OLH_BowserCapacityRate> BowserCapacityRates => Set<OLH_BowserCapacityRate>();
     public DbSet<OLH_BowserDriverShift> BowserDriverShifts => Set<OLH_BowserDriverShift>();
     public DbSet<OLH_BowserRequest> BowserRequests => Set<OLH_BowserRequest>();
@@ -25,6 +25,8 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
     public DbSet<OLH_DriverStatus> DriverStatuses => Set<OLH_DriverStatus>();
     public DbSet<OLH_Shift> Shifts => Set<OLH_Shift>();
     public DbSet<OLH_Vehicle> Vehicles => Set<OLH_Vehicle>();
+    public DbSet<OLH_VehicleMake> VehicleMakes { get; set; }
+    public DbSet<OLH_VehicleModel> VehicleModels { get; set; }
     public DbSet<OLH_VehicleOwner> VehicleOwners => Set<OLH_VehicleOwner>();
     public DbSet<OLH_VehicleStatus> VehicleStatuses => Set<OLH_VehicleStatus>();
     public DbSet<OLH_VehicleType> VehicleTypes => Set<OLH_VehicleType>();

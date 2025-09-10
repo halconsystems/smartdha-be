@@ -46,8 +46,6 @@
   <ItemGroup>
     <Folder Include="Feature\ApprovalProcess\Commands\" />
     <Folder Include="Feature\BowserCapacityRates\Queries\" />
-    <Folder Include="Feature\BowserModel\Commands\" />
-    <Folder Include="Feature\BowserModel\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\RoomServices\Queries\" />
