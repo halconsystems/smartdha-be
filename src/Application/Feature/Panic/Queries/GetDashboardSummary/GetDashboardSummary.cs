@@ -39,15 +39,19 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
                             .CountAsync(x => x.Created >= todayStart && x.Created < todayStart.AddDays(1), ct);
 
         // SLA metrics
-        var ackMins = await baseQ
-    .Where(x => x.AcknowledgedAt != null)
-    .Select(x => (x.AcknowledgedAt!.Value - x.Created).TotalMinutes)
-    .AverageAsync(ct);
+        var ackMins = baseQ
+     .Where(x => x.AcknowledgedAt != null)
+     .AsEnumerable() // forces client-side after filtering
+     .Select(x => (x.AcknowledgedAt!.Value - x.Created).TotalMinutes)
+     .DefaultIfEmpty(0)
+     .Average();
 
-        var resMins = await baseQ
+        var resMins = baseQ
             .Where(x => x.ResolvedAt != null)
+            .AsEnumerable()
             .Select(x => (x.ResolvedAt!.Value - x.Created).TotalMinutes)
-            .AverageAsync(ct);
+            .DefaultIfEmpty(0)
+            .Average();
 
         return new DashboardSummaryDto(total, open, resolved, cancelled, last24h, today, ackMins, resMins);
     }

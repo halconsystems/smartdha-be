@@ -68,7 +68,7 @@ public sealed class CreateRequestHandler(
 
         // Unique IDs
         var requestNo = NextRequestNo();
-        var paymentId = SmartPayBillId.GenerateOneBillId(requestNo); // ensure uniqueness against existing payments
+        var paymentId = SmartPayBillId.GenerateOneBillId("Bowz"); // ensure uniqueness against existing payments
 
         var entity = new OLH_BowserRequest
         {

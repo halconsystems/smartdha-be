@@ -13,7 +13,6 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Infrastructure;
-using MobileAPI.RealTime;
 using MobileAPI.Services;
 using StackExchange.Redis;
 
@@ -56,6 +55,8 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
     {
@@ -82,37 +83,33 @@ builder.Services
         opts.Configuration.ChannelPrefix = RedisChannel.Literal("panic");
     });
 
-// (E) JWT auth (also enable token from query string for WebSockets on the hub path)
-//builder.Services
-//    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddJwtBearer(options =>
-//    {
-//        // TODO: set your token validation parameters here if not already set in Infrastructure:
-//        // options.TokenValidationParameters = ...
+builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
-//        options.Events = new JwtBearerEvents
-//        {
-//            OnMessageReceived = context =>
-//            {
-//                // This enables SignalR WebSocket auth: ?access_token=...
-//                var token = context.Request.Query["access_token"];
-//                var path = context.HttpContext.Request.Path;
-//                if (!string.IsNullOrEmpty(token) && path.StartsWithSegments("/hubs/panic"))
-//                {
-//                    context.Token = token;
-//                }
-//                return Task.CompletedTask;
-//            }
-//        };
-//    });
 
-//builder.Services.AddAuthorization();
 
 // (F) Host-specific realtime adapter (Mobile)
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", b => b
+        .SetIsOriginAllowed(_ => true) // TEMP: accept all origins
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+});
+
+builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, client) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Realtime:BaseUrl"]
+        ?? throw new InvalidOperationException("Realtime:BaseUrl missing");
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
 
 var app = builder.Build();
 
@@ -146,12 +143,13 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseCors("CorsPolicy");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 
-app.MapHub<PanicHub>("/hubs/panic").RequireAuthorization();
+//app.MapHub<PanicHub>("/hubs/panic");
 
 app.UseMiddleware<CustomExceptionMiddleware>();
 app.Run();

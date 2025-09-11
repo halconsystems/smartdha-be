@@ -65,13 +65,7 @@ builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
 // *** ADD: SignalR + Redis backplane
 var redisConn = builder.Configuration.GetConnectionString("Redis");
 
-builder.Services
-    .AddSignalR()
-    .AddStackExchangeRedis(redisConn!, opts =>
-    {
-        // avoid obsolete warning by using RedisChannel.Literal
-        opts.Configuration.ChannelPrefix = RedisChannel.Literal("panic");
-    });
+builder.Services.AddSignalR();
 
 // *** ADD: Ensure JWT also works for SignalR WebSockets (token via ?access_token=)
 builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, o =>
@@ -100,7 +94,19 @@ builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.Authenticatio
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", b => b
+        .WithOrigins(
+            "http://localhost:3000",
+            "https://dfpwebapi.dhakarachi.org",
+            "https://gw.dhakarachi.org"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+    );
+});
 
 var app = builder.Build();
 

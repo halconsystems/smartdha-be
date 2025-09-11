@@ -22,7 +22,7 @@ public class PanicController : BaseApiController
 
     public record CreateBody(Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl);
 
-    [HttpPost]
+    [HttpPost,AllowAnonymous]
     public Task<PanicRequestDto> Create([FromBody] CreateBody b)
         => _med.Send(new CreatePanicRequestCommand(b.EmergencyTypeId, b.Latitude, b.Longitude, b.Notes, b.MediaUrl));
 

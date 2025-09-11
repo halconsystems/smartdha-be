@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace MobileAPI.RealTime;
 
-[Authorize]
+[AllowAnonymous] // keep anon while you debug; switch to [Authorize] later if needed
 public class PanicHub : Hub<IPanicHubClient>
 {
     public static class PanicGroups
@@ -16,19 +16,25 @@ public class PanicHub : Hub<IPanicHubClient>
 
     public override async Task OnConnectedAsync()
     {
-        var userId = Context.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        var logger = Context.GetHttpContext()?.RequestServices.GetRequiredService<ILogger<PanicHub>>();
+        logger?.LogInformation("Hub connected: {ConnId}", Context.ConnectionId);
 
-        if (!string.IsNullOrWhiteSpace(userId))
-            await this.Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.User(userId));
-
-       await this.Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.Dispatchers);
+        // Optional: auto-subscribe everyone as dispatcher while testing
+        // await Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.Dispatchers);
 
         await base.OnConnectedAsync();
     }
 
+    // Call this from client right after connection.start()
+    public Task JoinDispatchers() =>
+        Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.Dispatchers);
+
+    public Task LeaveDispatchers() =>
+        Groups.RemoveFromGroupAsync(Context.ConnectionId, PanicGroups.Dispatchers);
+
     public Task JoinPanic(Guid panicId) =>
-        this.Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.Panic(panicId));
+        Groups.AddToGroupAsync(Context.ConnectionId, PanicGroups.Panic(panicId));
 
     public Task LeavePanic(Guid panicId) =>
-        this.Groups.RemoveFromGroupAsync(Context.ConnectionId, PanicGroups.Panic(panicId));
+        Groups.RemoveFromGroupAsync(Context.ConnectionId, PanicGroups.Panic(panicId));
 }

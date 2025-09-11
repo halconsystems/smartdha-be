@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreatePanicRequest;
@@ -30,15 +31,24 @@ public class CreatePanicRequestHandler : IRequestHandler<CreatePanicRequestComma
     private readonly ICurrentUserService _current;
     private readonly IPanicRealtime _realtime;
     private readonly ICaseNoGenerator _caseNo;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public CreatePanicRequestHandler(IApplicationDbContext ctx, ICurrentUserService current, IPanicRealtime realtime, ICaseNoGenerator caseNo)
-        => (_ctx, _current, _realtime, _caseNo) = (ctx, current, realtime, caseNo);
+
+    public CreatePanicRequestHandler(IApplicationDbContext ctx, ICurrentUserService current, IPanicRealtime realtime, ICaseNoGenerator caseNo,UserManager<ApplicationUser> userManager)
+        => (_ctx, _current, _realtime, _caseNo, _userManager) = (ctx, current, realtime, caseNo,userManager);
 
     public async Task<PanicRequestDto> Handle(CreatePanicRequestCommand r, CancellationToken ct)
     {
         var et = await _ctx.EmergencyTypes
             .FirstOrDefaultAsync(x => x.Id == r.EmergencyTypeId, ct)
             ?? throw new NotFoundException("Emergency type not found.");
+
+        var userId = _current.UserId.ToString()
+        ?? throw new UnAuthorizedException("Not signed in.");
+
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, ct)
+            ?? throw new NotFoundException("User not found.");
 
         var entity = new PanicRequest
         {
@@ -55,8 +65,46 @@ public class CreatePanicRequestHandler : IRequestHandler<CreatePanicRequestComma
         _ctx.PanicRequests.Add(entity);
         await _ctx.SaveChangesAsync(ct);
 
-        await _realtime.PanicCreatedAsync(entity.Id);
+        var apiDto = new PanicRequestDto(
+         entity.Id,
+         entity.CaseNo,
+         et.Code,
+         et.Name,
+         entity.Latitude,
+         entity.Longitude,
+         entity.Status,
+         entity.Created
+     );
 
-        return new PanicRequestDto(entity.Id, entity.CaseNo, et.Code, et.Name, entity.Latitude, entity.Longitude, entity.Status, entity.Created);
+        // Realtime DTO (with user info)
+        var rtDto = new PanicCreatedRealtimeDto(
+            Id: entity.Id,
+            CaseNo: entity.CaseNo,
+            EmergencyCode: et.Code,
+            EmergencyName: et.Name,
+            Latitude: entity.Latitude,
+            Longitude: entity.Longitude,
+            Status: entity.Status,
+            CreatedUtc: entity.Created,
+
+            RequestedByName: user.Name,
+            RequestedByEmail: user.Email ?? user.RegisteredEmail ?? string.Empty,
+            RequestedByPhone: user.MobileNo ?? user.RegisteredMobileNo ?? string.Empty,
+            RequestedByUserType: user.UserType
+        );
+
+        //await _realtime.PanicCreatedAsync(rtDto);
+        try
+        {
+            await _realtime.PanicCreatedAsync(rtDto);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            //_logger.LogWarning(ex, "PanicCreated realtime broadcast failed for {CaseNo}", entity.CaseNo);
+            // don't rethrow; creation succeeded already
+        }
+
+        return apiDto;
     }
 }

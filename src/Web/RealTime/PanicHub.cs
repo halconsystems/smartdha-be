@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace DHAFacilitationAPIs.Web.RealTime;
 
-[Authorize] // keep if your hub requires JWT
+[AllowAnonymous] // keep if your hub requires JWT
 public class PanicHub : Hub<IPanicHubClient>
 {
     public static class PanicGroups

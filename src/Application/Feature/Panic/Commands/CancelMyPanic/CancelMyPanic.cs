@@ -51,7 +51,7 @@ public class CancelMyPanicCommandHandler
         });
 
         await _ctx.SaveChangesAsync(ct);
-        await _realtime.PanicUpdatedAsync(e.Id);
+       // await _realtime.PanicUpdatedAsync(e.Id);
 
         return Unit.Value;
     }

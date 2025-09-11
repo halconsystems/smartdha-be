@@ -52,7 +52,7 @@ public class CreatePanicLocationUpdateHandler : IRequestHandler<CreatePanicLocat
         _ctx.PanicLocationUpdates.Add(loc);
         await _ctx.SaveChangesAsync(ct);
 
-        await _realtime.LocationUpdatedAsync(request.Id, loc.Id);
+        //await _realtime.LocationUpdatedAsync(request.Id, loc.Id);
         return loc.Id;
     }
 }

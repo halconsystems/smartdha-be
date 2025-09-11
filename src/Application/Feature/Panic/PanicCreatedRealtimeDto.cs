@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DHAFacilitationAPIs.Domain.Enums;
+
+namespace DHAFacilitationAPIs.Application.Feature.Panic;
+public sealed record PanicCreatedRealtimeDto(
+    Guid Id,
+    string CaseNo,
+    int EmergencyCode,
+    string EmergencyName,
+    decimal Latitude,
+    decimal Longitude,
+    PanicStatus Status,
+    DateTime CreatedUtc,
+
+    // 👇 User details
+    string RequestedByName,
+    string RequestedByEmail,
+    string RequestedByPhone,
+    UserType RequestedByUserType
+);

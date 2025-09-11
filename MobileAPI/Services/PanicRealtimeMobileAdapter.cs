@@ -1,29 +1,58 @@
-﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+﻿using System.Text;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.Panic;
 using Microsoft.AspNetCore.SignalR;
-using MobileAPI.RealTime;
 
 namespace MobileAPI.Services;
 
 public class PanicRealtimeMobileAdapter : IPanicRealtime
 {
-    private readonly IHubContext<PanicHub, IPanicHubClient> _hub;
-    public PanicRealtimeMobileAdapter(IHubContext<PanicHub, IPanicHubClient> hub) => _hub = hub;
+    private readonly HttpClient _http;
+    private readonly string _secret;
 
-    public async Task PanicCreatedAsync(Guid panicId)
+    public PanicRealtimeMobileAdapter(HttpClient http, IConfiguration cfg)
     {
-        await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).PanicCreated(panicId);
-        await _hub.Clients.All.SummaryChanged();
+        _http = http; // BaseAddress is set via DI above
+        _secret = cfg["Realtime:SharedSecret"]
+            ?? throw new InvalidOperationException("Missing Realtime:SharedSecret");
     }
 
-    public async Task PanicUpdatedAsync(Guid panicId)
+    //public async Task PanicCreatedAsync(PanicCreatedRealtimeDto dto)
+    //{
+    //    using var req = new HttpRequestMessage(HttpMethod.Post, "/internal/realtime/panic-created")
+    //    {
+    //        Content = JsonContent.Create(dto) // System.Text.Json, camelCase by default
+    //    };
+    //    req.Headers.Add("X-RT-Secret", _secret);
+
+    //    var res = await _http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+    //    if (!res.IsSuccessStatusCode)
+    //    {
+    //        var body = await res.Content.ReadAsStringAsync();
+    //        throw new InvalidOperationException(
+    //            $"Realtime forward failed: {(int)res.StatusCode} {res.ReasonPhrase}. Body: {body}");
+    //    }
+    //}
+
+    public async Task PanicCreatedAsync(PanicCreatedRealtimeDto dto)
     {
-        await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).PanicUpdated(panicId);
-        await _hub.Clients.All.SummaryChanged();
+        const string path = "/internal/realtime/panic-created";
+
+        using var req = new HttpRequestMessage(HttpMethod.Post, path)
+        { Content = JsonContent.Create(dto) };
+        req.Headers.Add("X-RT-Secret", _secret);
+
+        using var res = await _http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+        var responseText = await res.Content.ReadAsStringAsync();
+
+        // write current response to wwwroot/realtime-response.txt
+        var root = Path.Combine(AppContext.BaseDirectory, "wwwroot");
+        //Directory.CreateDirectory(root);
+        await File.WriteAllTextAsync(Path.Combine(root, "realtime-response.txt"), responseText ?? "");
+
+        if (!res.IsSuccessStatusCode)
+            throw new InvalidOperationException($"Realtime forward failed: {(int)res.StatusCode} {res.ReasonPhrase}.");
     }
 
-    public Task LocationUpdatedAsync(Guid panicId, Guid locationUpdateId)
-        => _hub.Clients.Group(PanicHub.PanicGroups.Panic(panicId)).LocationUpdated(panicId, locationUpdateId);
 
-    public Task SummaryChangedAsync()
-        => _hub.Clients.All.SummaryChanged();
 }
