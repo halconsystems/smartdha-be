@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -14,6 +15,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -31,6 +33,8 @@ public class AuthenticationService : IAuthenticationService
         _jwtSettings = jwtSettings.Value;
         _context = context;
     }
+
+  
 
     public async Task<string> GenerateTemporaryToken(ApplicationUser user, string purpose, TimeSpan expiresIn)
     {
@@ -157,6 +161,34 @@ public class AuthenticationService : IAuthenticationService
 
         
         return GenerateAccessToken(claims);
+    }
+
+    public Task<ClaimsPrincipal?> GetPrincipalFromExpiredToken(string token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
+            ValidateLifetime = false // 👈 ignore expiration
+        };
+
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        try
+        {
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
+            if (securityToken is not JwtSecurityToken jwt ||
+                !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return Task.FromResult<ClaimsPrincipal?>(principal);// 👈 compiler warning
+        }
+        catch
+        {
+            return Task.FromResult<ClaimsPrincipal?>(null); // 👈 null
+        }
     }
 
     #region Private Method
