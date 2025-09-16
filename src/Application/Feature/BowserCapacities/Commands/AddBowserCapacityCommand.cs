@@ -13,7 +13,7 @@ public class AddBowserCapacityCommand : IRequest<SuccessResponse<string>>
 {
     public decimal Capacity { get; set; }
     public string Unit { get; set; } = default!;
-    public Guid UserID { get; set; }
+
 }
 
 public class AddBowserCapacityCommandHandler : IRequestHandler<AddBowserCapacityCommand, SuccessResponse<string>>
