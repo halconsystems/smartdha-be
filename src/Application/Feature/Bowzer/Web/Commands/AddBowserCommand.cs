@@ -19,9 +19,8 @@ public record AddBowserCommand(
     Guid VehicleTypeId,
     Guid VehicleStatusId,
     Guid BowserCapacityId,
-    string? Remarks
-) : IRequest<SuccessResponse<string>>;
-public class AddBowserCommandHandler : IRequestHandler<AddBowserCommand, SuccessResponse<string>>
+    string? Remarks) : IRequest<Guid>;
+public class AddBowserCommandHandler : IRequestHandler<AddBowserCommand, Guid>
 {
     private readonly IOLHApplicationDbContext _context;
 
@@ -30,7 +29,7 @@ public class AddBowserCommandHandler : IRequestHandler<AddBowserCommand, Success
         _context = context;
     }
 
-    public async Task<SuccessResponse<string>> Handle(AddBowserCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddBowserCommand request, CancellationToken cancellationToken)
     {
         var entity = new OLH_Vehicle
         {
@@ -50,7 +49,7 @@ public class AddBowserCommandHandler : IRequestHandler<AddBowserCommand, Success
         _context.Vehicles.Add(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new SuccessResponse<string>($"Vehicle '{request.LicensePlateNumber}' successfully added.");
+        return entity.Id;
     }
 }
 
