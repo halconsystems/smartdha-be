@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
@@ -47,9 +48,30 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<UserClubAssignment> UserClubAssignments => Set<UserClubAssignment>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
+    //Panic Button
+   public DbSet<EmergencyType> EmergencyTypes => Set<EmergencyType>();
+   public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
+   public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
+   public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
+
+
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        //builder.ApplyConfiguration(new EmergencyTypeConfig());
+        //builder.ApplyConfiguration(new PanicRequestConfig());
+        //builder.ApplyConfiguration(new PanicRequestActionLogConfig());
+        //builder.ApplyConfiguration(new PanicLocationUpdateConfig());
+
+        // Seed lookup (DON'T set Ser in seeds)
+        //builder.Entity<EmergencyType>().HasData(
+        //    new EmergencyType { Id = Guid.NewGuid(), Code = 1, Name = "Rescue", Description = "General rescue", HelplineNumber = "1122", IsActive = true, IsDeleted = false, Created = DateTime.UtcNow },
+        //    new EmergencyType { Id = Guid.NewGuid(), Code = 2, Name = "Fire Brigade", Description = "Fire emergency", HelplineNumber = "16", IsActive = true, IsDeleted = false, Created = DateTime.UtcNow },
+        //    new EmergencyType { Id = Guid.NewGuid(), Code = 3, Name = "Health Emergency", Description = "Ambulance/medical", HelplineNumber = "115", IsActive = true, IsDeleted = false, Created = DateTime.UtcNow },
+        //    new EmergencyType { Id = Guid.NewGuid(), Code = 4, Name = "Police", Description = "Police helpline", HelplineNumber = "15", IsActive = true, IsDeleted = false, Created = DateTime.UtcNow },
+        //    new EmergencyType { Id = Guid.NewGuid(), Code = 99, Name = "Other", Description = "Other emergency", HelplineNumber = null, IsActive = true, IsDeleted = false, Created = DateTime.UtcNow }
+        //);
+
         base.OnModelCreating(builder);
         IdentityBuilder(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -183,6 +205,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         builder.Entity<UserPermissionAssignment>()
             .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+
+        //Panic Button Module
+        builder.Entity<EmergencyType>()
+    .HasQueryFilter(e => e.IsDeleted != true);
+
+
 
 
     }

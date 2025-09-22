@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class OLH_PaymentStatus
 {
-    public string PaymentStatus { get; set; } = default!;
+    public string Status { get; set; } = default!; // Pending, Authorized, Captured, Refunded, Failed, Cancelled
 }

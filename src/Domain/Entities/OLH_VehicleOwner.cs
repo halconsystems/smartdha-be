@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class OLH_VehicleOwner :BaseAuditableEntity
 {
-    [Required]
-    public Guid VehicleOwnerId { get; set; }
-
-    [Required]
-    public string VehicleOwner { get; set; } = default!;
-
+    [Required] public string OwnerName { get; set; } = default!;
 
 }

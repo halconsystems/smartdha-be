@@ -18,7 +18,7 @@ public class ClubsController : BaseApiController
     private readonly IMediator _mediator;
     public ClubsController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost("Create")]
+    [HttpPost("Create"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> Create(CreateClubCommand cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
 

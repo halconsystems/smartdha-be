@@ -8,10 +8,14 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Infrastructure;
+using MobileAPI.Services;
+using StackExchange.Redis;
+
 
 var options = new WebApplicationOptions
 {
@@ -30,6 +34,7 @@ builder.Services.AddMobileAPIServices(builder.Configuration);
 builder.Services.AddSingleton<DapperConnectionFactory>();
 builder.Services.AddHttpClient<ISmsService, SmsService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -52,6 +57,8 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
     {
@@ -68,9 +75,43 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// (D) SignalR + Redis backplane (read from appsettings)
+var redisConn = builder.Configuration.GetConnectionString("Redis");
+builder.Services
+    .AddSignalR()
+    .AddStackExchangeRedis(redisConn!, opts =>
+    {
+        // Explicit channel prefix to avoid obsolete API and to keep both hosts on same bus
+        opts.Configuration.ChannelPrefix = RedisChannel.Literal("panic");
+    });
+
+builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
 
 
+// (F) Host-specific realtime adapter (Mobile)
+builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
+builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", b => b
+        .SetIsOriginAllowed(_ => true) // TEMP: accept all origins
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
+});
+
+builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, client) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Realtime:BaseUrl"]
+        ?? throw new InvalidOperationException("Realtime:BaseUrl missing");
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
 
 var app = builder.Build();
 
@@ -104,9 +145,13 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseCors("CorsPolicy");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
+
+//app.MapHub<PanicHub>("/hubs/panic");
+
 app.UseMiddleware<CustomExceptionMiddleware>();
 app.Run();

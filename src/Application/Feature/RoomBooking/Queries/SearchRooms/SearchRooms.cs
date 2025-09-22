@@ -63,7 +63,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 // Charges (requested according to BookingType & 1 Occupant)
                 Price = _context.RoomCharges
                             .AsNoTracking()
-                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType && c.ExtraOccupancy == 0)
+                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType)
                             .Select(c => (decimal?)c.Charges)
                             .FirstOrDefault(),
 
@@ -112,61 +112,5 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
 
 
-    //public async Task<List<SearchRoomsDto>> Handle(SearchRoomsQuery request, CancellationToken cancellationToken)
-    //{
-    //    var availableRooms = await (
-    //        from r in _context.Rooms
-    //        join ra in _context.RoomAvailabilities
-    //            on r.Id equals ra.RoomId
-    //        where r.ClubId == request.ClubId
-    //            && r.IsGloballyAvailable
-    //            && ra.FromDate <= request.CheckInDate
-    //            && ra.ToDate >= request.CheckOutDate
-    //            && ra.Action == AvailabilityAction.Available
-    //        select new SearchRoomsDto
-    //        {
-    //            ResidenceTypeName = _context.ResidenceTypes
-    //                .Where(rt => rt.Id == r.ResidenceTypeId)
-    //                .Select(rt => rt.Name)
-    //                .FirstOrDefault() ?? string.Empty,
-
-    //            CategoryName = _context.RoomCategories
-    //                .Where(rc => rc.Id == r.RoomCategoryId)
-    //                .Select(rc => rc.Name)
-    //                .FirstOrDefault() ?? string.Empty,
-
-    //            RoomId = r.Id,
-    //            Name = r.Name ?? string.Empty,
-    //            RoomNo = r.No,
-
-    //            Price = _context.RoomCharges
-    //                .Where(rc => rc.RoomId == r.Id && rc.BookingType == request.BookingType)
-    //                .Select(rc => rc.Charges)
-    //                .FirstOrDefault(),
-
-    //            Ratings = _context.RoomRatings
-    //                .Where(rr => rr.RoomId == r.Id)
-    //                .Select(rr => rr.RoomRatings)
-    //                .FirstOrDefault(),
-
-    //            DefaultImage = _context.RoomImages
-    //                .Where(img => img.RoomId == r.Id && img.Category == ImageCategory.Main)
-    //                .Select(img => img.ImageURL)
-    //                .FirstOrDefault() ?? string.Empty,
-
-    //            CheckInDate = ra.FromDate,
-    //            CheckOutDate = ra.ToDate
-    //        })
-    //        .ToListAsync(cancellationToken); // async version
-
-    //    // Now safely modify in memory
-    //    availableRooms.ForEach(r =>
-    //    {
-    //        r.DefaultImage = string.IsNullOrEmpty(r.DefaultImage)
-    //            ? string.Empty
-    //            : _fileStorageService.GetPublicUrl(r.DefaultImage);
-    //    });
-
-    //    return availableRooms;
-    //}
+   
 }

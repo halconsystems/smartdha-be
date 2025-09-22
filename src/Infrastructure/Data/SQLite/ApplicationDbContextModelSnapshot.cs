@@ -69,7 +69,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Announcements", (string)null);
+                    b.ToTable("Announcements");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppPermission", b =>
@@ -121,7 +121,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("SubModuleId");
 
-                    b.ToTable("AppPermissions", (string)null);
+                    b.ToTable("AppPermissions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppRole", b =>
@@ -216,7 +216,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AppRoleModules", (string)null);
+                    b.ToTable("AppRoleModules");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.AppRolePermission", b =>
@@ -365,7 +365,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationLogs", (string)null);
+                    b.ToTable("ApplicationLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", b =>
@@ -523,7 +523,60 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("AuditLogs", (string)null);
+                    b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.EmergencyType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("HelplineNumber")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmergencyTypes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MemberTypeModuleAssignment", b =>
@@ -568,7 +621,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("MemberTypeModuleAssignments", (string)null);
+                    b.ToTable("MemberTypeModuleAssignments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MembershipPurpose", b =>
@@ -612,7 +665,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembershipPurposes", (string)null);
+                    b.ToTable("MembershipPurposes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Membershipdetail", b =>
@@ -661,7 +714,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Membershipdetails", (string)null);
+                    b.ToTable("Membershipdetails");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Module", b =>
@@ -732,7 +785,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("Modules", (string)null);
+                    b.ToTable("Modules");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.NonMemberVerification", b =>
@@ -790,7 +843,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("NonMemberVerifications", (string)null);
+                    b.ToTable("NonMemberVerifications");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.NonMemberVerificationDocument", b =>
@@ -854,7 +907,213 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("VerificationId");
 
-                    b.ToTable("NonMemberVerificationDocuments", (string)null);
+                    b.ToTable("NonMemberVerificationDocuments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicActionLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ActionByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FromStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PanicRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("ToStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanicRequestId");
+
+                    b.ToTable("PanicActionLogs");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<float?>("AccuracyMeters")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<Guid>("PanicRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanicRequestId");
+
+                    b.ToTable("PanicLocationUpdates");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("AcknowledgedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("AssignedToUserId")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmergencyTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<string>("MediaUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("RequestedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmergencyTypeId");
+
+                    b.ToTable("PanicRequests");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestProcessStep", b =>
@@ -912,7 +1171,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("RequestTrackingId");
 
-                    b.ToTable("RequestProcessSteps", (string)null);
+                    b.ToTable("RequestProcessSteps");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestTracking", b =>
@@ -979,7 +1238,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("RequestTrackings", (string)null);
+                    b.ToTable("RequestTrackings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoleAssignment", b =>
@@ -1024,7 +1283,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleAssignments", (string)null);
+                    b.ToTable("RoleAssignments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SMSLog", b =>
@@ -1104,7 +1363,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("SMSLogs", (string)null);
+                    b.ToTable("SMSLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SubModule", b =>
@@ -1169,7 +1428,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("SubModules", (string)null);
+                    b.ToTable("SubModules");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserActivityLog", b =>
@@ -1211,7 +1470,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserActivityLogs", (string)null);
+                    b.ToTable("UserActivityLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubAssignment", b =>
@@ -1257,7 +1516,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClubAssignments", (string)null);
+                    b.ToTable("UserClubAssignments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMembershipPurpose", b =>
@@ -1305,7 +1564,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserMembershipPurposes", (string)null);
+                    b.ToTable("UserMembershipPurposes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserModuleAssignment", b =>
@@ -1353,7 +1612,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserModuleAssignments", (string)null);
+                    b.ToTable("UserModuleAssignments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserOtp", b =>
@@ -1415,7 +1674,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserOtps", (string)null);
+                    b.ToTable("UserOtps");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserPermissionAssignment", b =>
@@ -1463,7 +1722,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPermissionAssignments", (string)null);
+                    b.ToTable("UserPermissionAssignments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserSubModuleAssignment", b =>
@@ -1511,7 +1770,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSubModuleAssignments", (string)null);
+                    b.ToTable("UserSubModuleAssignments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1747,6 +2006,39 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .IsRequired();
 
                     b.Navigation("Verification");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicActionLog", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
+                        .WithMany()
+                        .HasForeignKey("PanicRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanicRequest");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
+                        .WithMany()
+                        .HasForeignKey("PanicRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanicRequest");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicRequest", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.EmergencyType", "EmergencyType")
+                        .WithMany()
+                        .HasForeignKey("EmergencyTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmergencyType");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestProcessStep", b =>
