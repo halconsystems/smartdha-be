@@ -76,7 +76,7 @@ public class RoomBookingController : BaseApiController
     public async Task<ActionResult<SuccessResponse<string>>> DeleteRefundPolicyCommand([FromQuery] DeleteRefundPolicyCommand cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
 
-    [HttpGet("get-RefundPolicy/{clubId}")]
+    [HttpGet("get-RefundPolicy/{clubId}"), AllowAnonymous]
     public async Task<IActionResult> GetRefundPoliciesByClub(Guid clubId, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetRefundPolicyQuery(clubId), cancellationToken);
@@ -90,7 +90,7 @@ public class RoomBookingController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("get-RefundRequest/{clubId:guid}")]
+    [HttpGet("get-RefundRequest/{clubId:guid}"), AllowAnonymous]
     public async Task<ActionResult<List<RefundRequestWebDto>>> GetRefundRequestsByClub(Guid clubId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetRefundRequestsWebQuery(clubId), ct);
