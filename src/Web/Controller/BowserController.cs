@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Queries;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Commands;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,13 @@ public class BowserController : BaseApiController
     public async Task<ActionResult<SuccessResponse<List<BowserDto>>>> Get([FromQuery] Guid? id)
     {
         var result = await _mediator.Send(new GetBowsersQuery ( id ));
+        return Ok(result);
+    }
+
+    [HttpGet("GetBowserRequests"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<BowserRequestDto>>>> GetBowserRequests([FromQuery] BowserStatus? status)
+    {
+        var result = await _mediator.Send(new GetBowserRequestByStatusQuery(status));
         return Ok(result);
     }
 }
