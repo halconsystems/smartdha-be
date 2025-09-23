@@ -55,7 +55,7 @@ public class MobileAuthenticationDto
     public string AccessToken { get; set; } = default!;
     public string ResponseMessage { get; set; } = default!;
     public string MobileNumber { get; set; } = default!;
-    
+
 }
 
 public class OtpAuthenticationDto

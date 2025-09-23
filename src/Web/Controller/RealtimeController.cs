@@ -25,7 +25,7 @@ public class RealtimeController : ControllerBase
 
         // Broadcast
         await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).PanicCreated(dto);
-        await _hub.Clients.All.SummaryChanged();
+        //await _hub.Clients.All.SummaryChanged();
         return Ok();
     }
 }

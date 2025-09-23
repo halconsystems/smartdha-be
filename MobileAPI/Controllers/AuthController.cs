@@ -1,6 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.RefreshToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterNonMember;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.ResendOtp;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.SetPassword;
@@ -38,6 +39,14 @@ public class AuthController : BaseApiController
     {
         return Ok(await Mediator.Send(request));
     }
+
+    [HttpPost("refresh-token"), AllowAnonymous]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+    {
+        var result = await Mediator.Send(command);
+        return Ok(result);
+    }
+
 
     [Authorize(Policy = "SetPasswordPolicy")]
     [HttpPost("Set-Password")]

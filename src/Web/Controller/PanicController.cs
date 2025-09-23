@@ -2,6 +2,7 @@
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicNote;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AssignPanic;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDashboardSummary;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicLogs;
@@ -9,6 +10,7 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicPaged;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicSummary;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicTrail;
 using DHAFacilitationAPIs.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static DHAFacilitationAPIs.Application.Feature.Panic.PanicDto;
@@ -28,6 +30,13 @@ public class PanicController : BaseApiController
          => _med.Send(new GetDashboardSummaryQuery(from, to));
 
 
+    [HttpGet("GetAllPanic"),AllowAnonymous]
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+    {
+        var result = await _med.Send(new GetAllPanicRequestsQuery(), ct);
+        return Ok(result);
+    }
+
     [HttpGet]
     public Task<List<PanicRequestListDto>> List(
         [FromQuery] int page = 1, [FromQuery] int size = 20,
@@ -35,6 +44,8 @@ public class PanicController : BaseApiController
         [FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null,
         [FromQuery] string? sort = null)
         => _med.Send(new GetPanicPagedQuery(page, size, code, status, from, to, sort));
+
+
 
     [HttpGet("{id:guid}")]
     public Task<PanicDetailDto> Get(Guid id) => _med.Send(new GetPanicByIdQuery(id));

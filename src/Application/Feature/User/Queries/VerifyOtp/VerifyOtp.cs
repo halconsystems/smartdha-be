@@ -89,7 +89,8 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
         IList<string> roles = await _userManager.GetRolesAsync(user);
         string roleName = roles.FirstOrDefault() ?? "NoRoleAssigned";
 
-        var finaldto= new OtpAuthenticationDto
+
+        var finaldto = new OtpAuthenticationDto
         {
             MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
             Name = user.Name,
@@ -97,7 +98,7 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
             isOtpVerified = true,
             Type = "Login",
             ResponseMessage = "Login successfull",
-            UserType = user.UserType.ToString(),
+            UserType = user.UserType.ToString()
         };
 
         return new SuccessResponse<OtpAuthenticationDto>(

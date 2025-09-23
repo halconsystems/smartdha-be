@@ -38,6 +38,7 @@ public interface IApplicationDbContext
     DbSet<PanicRequest> PanicRequests { get; }
     DbSet<PanicActionLog> PanicActionLogs { get; }
     DbSet<PanicLocationUpdate> PanicLocationUpdates { get; }
+    DbSet<RefreshToken> RefreshTokens { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

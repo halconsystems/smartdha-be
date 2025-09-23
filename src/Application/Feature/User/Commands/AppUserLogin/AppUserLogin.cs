@@ -163,22 +163,37 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             //}
         }
 
-        string token = await _authenticationService.GenerateToken(user);
+        string accessToken = await _authenticationService.GenerateToken(user);
         IList<string> roles = await _userManager.GetRolesAsync(user);
 
         var dto = new MobileAuthenticationDto
         {
-            MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
+            MobileNumber = user.RegisteredMobileNo ?? string.Empty,
             Name = user.Name,
-            AccessToken = token,
+            AccessToken = accessToken,
             isOtpRequired = false,
             ResponseMessage = "Login successful! You are now authenticated without OTP."
         };
 
         return new SuccessResponse<MobileAuthenticationDto>(
-                        dto,
-                     "Authentication step completed.",
-                     "Login successful! You are now authenticated without OTP."
-                    );
+            dto,
+            "Authentication step completed.",
+            "Login successful!"
+        );
+
+        //var dto = new MobileAuthenticationDto
+        //{
+        //    MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
+        //    Name = user.Name,
+        //    AccessToken = token,
+        //    isOtpRequired = false,
+        //    ResponseMessage = "Login successful! You are now authenticated without OTP."
+        //};
+
+        //return new SuccessResponse<MobileAuthenticationDto>(
+        //                dto,
+        //             "Authentication step completed.",
+        //             "Login successful! You are now authenticated without OTP."
+        //            );
     }
 }

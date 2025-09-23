@@ -53,6 +53,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
    public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
    public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
    public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
+   public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
