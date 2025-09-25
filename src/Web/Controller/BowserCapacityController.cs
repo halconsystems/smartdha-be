@@ -1,6 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Commands;
 using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Queries;
 using DHAFacilitationAPIs.Application.Feature.BowserCapacityRates.Commands;
+using DHAFacilitationAPIs.Application.Feature.BowserPhaseCapacities.Commands;
 using DHAFacilitationAPIs.Application.Feature.UserModuleAssignments.Commands.Assignment;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -48,7 +49,34 @@ public class BowserCapacityController : BaseApiController
         return Ok(result);
     }
 
-    
+    //Bowser Phase Capacity
+    [HttpPost("Add-Phase Capacity"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> AddBowserPhaseCapacity([FromBody] AddBowserPhaseCapacityCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpPut("Update-Phase Capacity"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<List<Guid>>>> UpdateBowserPhaseCapacity([FromBody] UpdateBowserPhaseCapacityCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpDelete("Delete-Phase Capacity/{id}"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<string>>> DeleteBowserPhaseCapacity(Guid id)
+    {
+        var result = await _mediator.Send(new DeleteBowserPhaseCapacityCommand { Id = id });
+        return Ok(result);
+    }
+
+    [HttpGet("Get-Phase Capacity"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<object>>> GetBowserPhaseCapacity([FromQuery] Guid? id)
+    {
+        var result = await _mediator.Send(new GetBowserPhaseCapacityQuery { Id = id });
+        return Ok(result);
+    }
 
 
 }
