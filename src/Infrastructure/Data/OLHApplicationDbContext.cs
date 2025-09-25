@@ -103,6 +103,11 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
         modelBuilder.Entity<OLH_Shift>().Property(x => x.EndTime)
             .HasConversion(v => v.ToTimeSpan(), v => TimeOnly.FromTimeSpan(v));
 
+        modelBuilder.Entity<OLH_DriverShift>()
+    .HasOne(ds => ds.DriverInfo)
+    .WithMany() // or .WithMany(d => d.DriverShifts) if collection exists
+    .HasForeignKey(ds => ds.DriverId);
+
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

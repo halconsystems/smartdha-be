@@ -1,6 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.DriverShift.Commands;
 using DHAFacilitationAPIs.Application.Feature.DriverShift.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

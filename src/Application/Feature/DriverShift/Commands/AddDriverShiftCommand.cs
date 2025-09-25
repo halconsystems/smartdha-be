@@ -18,19 +18,27 @@ public class AddDriverShiftHandler : IRequestHandler<AddDriverShiftCommand, Succ
 
     public async Task<SuccessResponse<string>> Handle(AddDriverShiftCommand request, CancellationToken cancellationToken)
     {
-        var entity = new OLH_DriverShift
+        try
         {
-            VehicleId = request.VehicleId,
-            DriverId = request.DriverId,
-            ShiftId = request.ShiftId,
-            DutyDate = request.DutyDate,
-            IsActive = true,
-            IsDeleted = false
-        };
+            var entity = new OLH_DriverShift
+            {
+                VehicleId = request.VehicleId,
+                DriverId = request.DriverId,
+                ShiftId = request.ShiftId,
+                DutyDate = request.DutyDate,
+                IsActive = true,
+                IsDeleted = false
+            };
 
-        _context.DriverShifts.Add(entity);
-        await _context.SaveChangesAsync(cancellationToken);
+            _context.DriverShifts.Add(entity);
+            await _context.SaveChangesAsync(cancellationToken);
 
-        return new SuccessResponse<string>($"Driver shift for duty date {request.DutyDate} added successfully.");
+            return new SuccessResponse<string>($"Driver shift for duty date {request.DutyDate} added successfully.");
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (you can use a logging framework here)
+            return new SuccessResponse<string>($"Error adding driver shift: {ex.Message}");
+        }
     }
 }
