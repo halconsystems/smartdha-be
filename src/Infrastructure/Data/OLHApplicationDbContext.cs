@@ -63,6 +63,8 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
             }
         }
 
+        modelBuilder.Entity<OLH_BowserRequest>().ToTable("BowserRequests", "dbo");
+
         // Unique + operational indexes
         modelBuilder.Entity<OLH_BowserRequest>().HasIndex(x => x.RequestNo).IsUnique();
         modelBuilder.Entity<OLH_DriverShift>().HasIndex(x => new { x.DriverId, x.DutyDate }).IsUnique();

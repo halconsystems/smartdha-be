@@ -11,6 +11,8 @@ public class OLH_DriverShift : BaseAuditableEntity
 {
     public Guid VehicleId { get; set; }
     public OLH_Vehicle Vehicle { get; set; } = default!;
+
+    [ForeignKey(nameof(DriverInfo))]
     public Guid DriverId { get; set; }
     public OLH_DriverInfo DriverInfo { get; set; } = default!;
     public Guid ShiftId { get; set; }

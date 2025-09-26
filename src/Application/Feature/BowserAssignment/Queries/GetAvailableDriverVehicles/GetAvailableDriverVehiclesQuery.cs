@@ -38,7 +38,7 @@ public class GetAvailableDriverVehiclesHandler : IRequestHandler<GetAvailableDri
             .Where(ds =>
                 ds.DutyDate == requestDate &&
                 ds.DriverInfo.DriverStatus.Status == "Available" &&
-                ds.Vehicle.VehicleStatus.Status == "Active" &&
+                ds.Vehicle.VehicleStatus.Status == "Not Busy" &&
                 ds.Vehicle.BowserCapacityId == request.BowserCapacityId &&
                 requestTime >= ds.Shift.StartTime &&   // requested delivery time must lie b/w driver's shift timings
                 requestTime <= ds.Shift.EndTime

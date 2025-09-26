@@ -42,6 +42,7 @@
     <Folder Include="CBMS\" />
     <Folder Include="CBMS\" />
     <Folder Include="CBMS\" />
+    <Folder Include="CBMS\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -63,6 +63,25 @@ public class CreateRoomAvailabilityCommandHandler
         // var fromUtc = TimeZoneInfo.ConvertTimeToUtc(fromLocal, pktTz);
         // var toUtc   = TimeZoneInfo.ConvertTimeToUtc(toLocal, pktTz);
 
+        // Check if overlaps with existing availabilities for the same room
+        var hasOverlap = await _ctx.RoomAvailabilities
+            .Where(a =>
+                a.RoomId == request.RoomId &&
+                a.IsDeleted != true &&
+                a.FromDate <= toLocal &&
+                fromLocal <= a.ToDate)
+            .FirstOrDefaultAsync(ct);
+
+        if (hasOverlap != null)
+        {
+            throw new InvalidOperationException(
+                $"This room already has an overlapping availability from " +
+                $"{hasOverlap.FromDate:dd-MM-yyyy HH:mm} to {hasOverlap.ToDate:dd-MM-yyyy HH:mm}."
+            );
+        }
+
+       
+
         // 3) Create entity (store both combined and split fields)
         var entity = new RoomAvailability
         {

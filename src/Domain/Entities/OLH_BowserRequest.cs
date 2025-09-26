@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
+
+[Table("BowserRequests", Schema = "dbo")]
 public class OLH_BowserRequest : BaseAuditableEntity
 {
     public string RequestNo { get; set; } = default!; // e.g., BZR-20250907-0001

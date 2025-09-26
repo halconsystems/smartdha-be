@@ -10,4 +10,5 @@ public class AssignDriverToBowserDto
     public Guid BowserRequestId { get; set; }
     public Guid DriverId { get; set; }
     public Guid VehicleId { get; set; }
+    public DateTime PlannedDeliveryDate { get; set; }
 }

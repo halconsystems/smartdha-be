@@ -1,4 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Commands.AssignDriverToBowser;
+using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Commands.UpdateDriverAssignment;
+using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Queries.GetAssignedDrivers;
 using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Queries.GetAvailableDriverVehicles;
 using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -27,10 +29,26 @@ public class BowserAssignmentController : BaseApiController
         return Ok(result);
     }
 
-    [HttpPost("assign-driver"), AllowAnonymous]
-    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriver([FromBody] AssignDriverToBowserDto dto)
+    [HttpPut("assign-driver"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriver([FromBody] AssignDriverToBowserDto dto, CancellationToken ct)
     {
-        var response = await _mediator.Send(new AssignDriverToBowserCommand(dto));
+        if (dto == null)
+            return BadRequest("Request body is missing or invalid");
+        var response = await _mediator.Send(new AssignDriverToBowserCommand(dto), ct);
         return Ok(response);
+    }
+
+    [HttpPut("update-driver-assignment"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateDriverAssignment([FromBody] UpdateDriverAssignmentDto dto, CancellationToken ct)
+    {
+        var response = await _mediator.Send(new UpdateDriverAssignmentCommand(dto), ct);
+        return Ok(response);
+    }
+
+    [HttpGet("get-assigned-drivers"), AllowAnonymous]
+    public async Task<ActionResult<List<AssignedDriverDto>>> GetAssignedDrivers(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAssignedDriversQuery(), ct);
+        return Ok(new SuccessResponse<List<AssignedDriverDto>>(result, "Assigned drivers fetched successfully."));
     }
 }

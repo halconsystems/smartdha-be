@@ -38,18 +38,19 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             from a in r.Availabilities
                 .Where(a => a.Action == AvailabilityAction.Available
                      && a.FromDateOnly <= start   // starts before (or on) the search end
-                     && a.ToDateOnly >= end) // ends after (or on) the search start
+                     && a.ToDateOnly >= end
+                     && a.IsDeleted == false) // ends after (or on) the search start
             where !_context.ReservationRooms.Any(res =>     // Exclude rooms already reserved/booked in overlapping period
                 res.RoomId == r.Id &&
-                res.FromDateOnly <= start &&
-                res.ToDateOnly >= end &&
+                res.FromDateOnly <= end &&
+                start <= res.ToDateOnly &&
                 (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
                  || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
             && !_context.RoomBookings.Any(bk =>
                 bk.RoomId == r.Id &&
                 bk.Status == BookingStatus.Confirmed &&
-                bk.CheckInDateOnly <= start &&
-                bk.CheckOutDateOnly >= end)
+                bk.CheckInDateOnly <= end &&
+                start <= bk.CheckOutDateOnly)
 
             select new SearchRoomsDto
             {
@@ -112,5 +113,5 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
 
 
-   
+  
 }
