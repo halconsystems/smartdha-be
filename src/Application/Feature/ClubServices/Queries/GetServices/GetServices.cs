@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.ClubServices.Queries.GetServices;
-public record GetServicesQuery()
+public record GetServicesQuery(ServiceType ServiceType)
     : IRequest<SuccessResponse<List<ServiceDto>>>;
 
 public class GetServicesQueryHandler
@@ -27,7 +28,7 @@ public class GetServicesQueryHandler
 
 
         var items = await q
-            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
+            .Where(x => x.IsDeleted == null || x.IsDeleted == false && x.ServiceType == request.ServiceType)
             .OrderBy(x => x.Name)
             .ProjectTo<ServiceDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

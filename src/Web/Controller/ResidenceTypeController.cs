@@ -5,6 +5,7 @@ using DHAFacilitationAPIs.Application.Feature.ResidenceType.Commands.UpdateResid
 using DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries;
 using DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries.GetResidenceTypeById;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,6 @@ public class ResidenceTypeController : BaseApiController
         => Ok(await _mediator.Send(new GetResidenceTypeByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll()
-        => Ok(await _mediator.Send(new GetResidenceTypesQuery()));
+    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll([FromQuery] ClubType clubType)
+        => Ok(await _mediator.Send(new GetResidenceTypesQuery(clubType)));
 }

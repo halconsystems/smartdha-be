@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationDashboard;
-public record GetReservationDashboardQuery : IRequest<ReservationDashboardDto>;
+public record GetReservationDashboardQuery(ClubType ClubType) : IRequest<ReservationDashboardDto>;
 
 public class GetReservationDashboardHandler
     : IRequestHandler<GetReservationDashboardQuery, ReservationDashboardDto>
@@ -49,6 +49,7 @@ public class GetReservationDashboardHandler
             .Include(r => r.ReservationRooms)
             .Include(r => r.PaymentIntents)
                 .ThenInclude(pi => pi.Payments)
+                .Where(r => r.Club.ClubType == request.ClubType)
             .AsQueryable();
 
         // 3️⃣ Restrict to assigned clubs if not SuperAdmin

@@ -11,10 +11,14 @@ using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationStatus.Dtos;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.AllReservations;
-public class GetAllReservationsuery() : IRequest<List<ReservationWebDto>>;
+public class GetAllReservationsuery() : IRequest<List<ReservationWebDto>>
+{
+    public ClubType ClubType { get; set; }
+}
 public class GetAllReservationsueryHandler : IRequestHandler<GetAllReservationsuery, List<ReservationWebDto>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -64,6 +68,7 @@ public class GetAllReservationsueryHandler : IRequestHandler<GetAllReservationsu
                     .ThenInclude(r => r.RoomServices)
             .Include(r => r.PaymentIntents)
                 .ThenInclude(pi => pi.Payments)
+                .Where(r => r.Club.ClubType == request.ClubType)
             .AsQueryable();
 
         // 3️⃣ Restrict to assigned clubs if not SuperAdmin

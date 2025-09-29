@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ public class ClubsController : BaseApiController
         => Ok(await _mediator.Send(new GetClubByIdQuery(id), ct));
 
     [HttpGet]
-    public async Task<ActionResult<List<ClubDto>>> GetAll()
-        => Ok(await _mediator.Send(new GetClubsQuery()));
+    public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] ClubType clubType)
+        => Ok(await _mediator.Send(new GetClubsQuery(clubType)));
 }
 

@@ -5,6 +5,7 @@ using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries.GetRoomCategories;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Queries.GetRoomCategoryById;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,6 @@ public class RoomCategoriesController : ControllerBase
         => Ok(await _mediator.Send(new GetRoomCategoryByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll()
-        => Ok(await _mediator.Send(new GetRoomCategoriesQuery()));
+    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll([FromQuery] ClubType clubType)
+        => Ok(await _mediator.Send(new GetRoomCategoriesQuery { ClubType = clubType }));
 }

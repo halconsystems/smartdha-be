@@ -7,9 +7,10 @@ using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
-public record GetClubsQuery()
+public record GetClubsQuery(ClubType ClubType)
     : IRequest<SuccessResponse<List<ClubDto>>>;
 
 public class GetClubsQueryHandler
@@ -50,7 +51,8 @@ public class GetClubsQueryHandler
         // 2️⃣ Base query
         IQueryable<Club> query = _ctx.Clubs
             .AsNoTracking()
-            .Where(c => c.IsDeleted == null || c.IsDeleted == false)
+            .Where(c => (c.IsDeleted == null || c.IsDeleted == false)
+                && c.ClubType == request.ClubType)
             .OrderBy(c => c.Name);
 
         // 3️⃣ Restrict to assigned clubs if not superadmin

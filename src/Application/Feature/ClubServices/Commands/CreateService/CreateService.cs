@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.ClubServices.Commands.CreateService;
-public record CreateServiceCommand(string Name, string? Description)
+public record CreateServiceCommand(string Name, string? Description, ServiceType ServiceType)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand, SuccessResponse<string>>
@@ -21,7 +22,8 @@ public class CreateServiceCommandHandler : IRequestHandler<CreateServiceCommand,
         var entity = new Services
         {
             Name = request.Name,
-            Description = request.Description
+            Description = request.Description,
+            ServiceType = request.ServiceType
         };
         _ctx.Services.Add(entity);
         await _ctx.SaveChangesAsync(ct);

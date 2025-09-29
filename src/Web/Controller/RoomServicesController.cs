@@ -11,6 +11,7 @@ using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries.GetServiceByI
 using DHAFacilitationAPIs.Application.Feature.ClubServices.Queries.GetServices;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,6 @@ public class RoomServicesController : BaseApiController
         => Ok(await _mediator.Send(new GetServiceByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ServiceDto>>> GetAll()
-        => Ok(await _mediator.Send(new GetServicesQuery()));
+    public async Task<ActionResult<List<ServiceDto>>> GetAll([FromQuery] ServiceType serviceType)
+        => Ok(await _mediator.Send(new GetServicesQuery(serviceType)));
 }

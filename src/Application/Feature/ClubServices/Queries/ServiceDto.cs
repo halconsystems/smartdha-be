@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.ClubServices.Queries;
 public record ServiceDto(
@@ -10,6 +11,7 @@ public record ServiceDto(
     string Name,
     string? Description,
     bool? IsActive,
-    bool? IsDeleted
+    bool? IsDeleted,
+    ServiceType ServiceType
 );
 

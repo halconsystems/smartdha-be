@@ -7,9 +7,10 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.ResidenceType.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CreateResidenceType.Queries.GetResidenceTypes;
-public record GetResidenceTypesQuery() : IRequest<SuccessResponse<List<ResidenceTypeDto>>>;
+public record GetResidenceTypesQuery(ClubType ClubType) : IRequest<SuccessResponse<List<ResidenceTypeDto>>>;
 
 public class GetResidenceTypesQueryHandler
     : IRequestHandler<GetResidenceTypesQuery, SuccessResponse<List<ResidenceTypeDto>>>
@@ -30,7 +31,8 @@ public class GetResidenceTypesQueryHandler
 
 
         var list = await q
-            .Where(x => x.IsDeleted == null || x.IsDeleted == false)
+            .Where(x => (x.IsDeleted == null || x.IsDeleted == false) &&
+                x.Rooms.Any(r => r.Club.ClubType == request.ClubType))
             .OrderBy(x => x.Name)
             .ProjectTo<ResidenceTypeDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

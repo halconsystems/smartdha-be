@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250929065315_RoomCategoryUpdated")]
+    partial class RoomCategoryUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,6 +457,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<Guid>("RoomCategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("RoomCategoryId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -466,6 +472,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasIndex("ResidenceTypeId");
 
                     b.HasIndex("RoomCategoryId");
+
+                    b.HasIndex("RoomCategoryId1");
 
                     b.HasIndex("ClubId", "No")
                         .IsUnique();
@@ -1317,16 +1325,20 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ResidenceType", "ResidenceType")
-                        .WithMany("Rooms")
+                        .WithMany()
                         .HasForeignKey("ResidenceTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.RoomCategory", "RoomCategory")
-                        .WithMany("Rooms")
+                        .WithMany()
                         .HasForeignKey("RoomCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.RoomCategory", null)
+                        .WithMany("Rooms")
+                        .HasForeignKey("RoomCategoryId1");
 
                     b.Navigation("Club");
 
@@ -1483,11 +1495,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
             modelBuilder.Entity("BookingGuest", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ResidenceType", b =>
-                {
-                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Room", b =>

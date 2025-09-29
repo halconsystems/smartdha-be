@@ -77,13 +77,13 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
 
         modelBuilder.Entity<Room>()
             .HasOne(r => r.RoomCategory)
-            .WithMany()
+            .WithMany(rc => rc.Rooms)
             .HasForeignKey(r => r.RoomCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Room>()
             .HasOne(r => r.ResidenceType)
-            .WithMany()
+            .WithMany(rc => rc.Rooms)
             .HasForeignKey(r => r.ResidenceTypeId)
             .OnDelete(DeleteBehavior.Restrict);
 
