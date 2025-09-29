@@ -19,7 +19,16 @@ public class DeleteRoomCategoryCommandHandler : IRequestHandler<DeleteRoomCatego
     {
         var entity = await _ctx.RoomCategories.FindAsync(new object?[] { request.Id }, ct);
         if (entity is null) throw new KeyNotFoundException("RoomCategory not found.");
-        
+
+        // Check dependencies: rooms that reference this category
+        var hasRooms = await _ctx.Rooms
+            .AnyAsync(r => r.RoomCategoryId == request.Id && r.IsDeleted == false, ct);
+
+        if (hasRooms)
+            throw new InvalidOperationException(
+                "Cannot delete this room category because it is attached to one or more rooms."
+            );
+
         entity.IsDeleted = true;
         entity.IsActive = false; 
         entity.LastModified = DateTime.Now;
