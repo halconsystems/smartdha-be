@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
-public record GetRoomsQuery(Guid Id) : IRequest<IEnumerable<RoomDto>>;
+public record GetRoomsQuery(Guid Id, ClubType ClubType) : IRequest<IEnumerable<RoomDto>>;
 
 public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<RoomDto>>
 {
@@ -42,7 +42,9 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
         bool isSuperAdmin = roles.Contains("SuperAdministrator");
 
         // 2️⃣ Base query
-        var roomsQuery = _context.Rooms.AsQueryable();
+        var roomsQuery = _context.Rooms
+            .Where(r => r.Club.ClubType == request.ClubType)
+            .AsQueryable();
 
         if (request.Id != Guid.Empty)
         {

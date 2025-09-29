@@ -10,6 +10,8 @@ public class RoomCategory : BaseAuditableEntity
     [MaxLength(100)]
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
+    public ClubType ClubType { get; set; } = ClubType.GuestRoom;
+
 
     public ICollection<Room> Rooms { get; set; } = new List<Room>();
 }

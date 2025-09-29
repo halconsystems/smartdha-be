@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Room_Availability.Queries.GetRoomAvailabilities;
 public record GetRoomAvailabilitiesQuery(
+    ClubType ClubType,
     Guid? RoomId = null,
     Guid? ClubId = null,
     DateTime? From = null,
@@ -28,7 +30,8 @@ public class GetRoomAvailabilitiesQueryHandler
     {
         var raQ = _ctx.RoomAvailabilities
             .AsNoTracking()
-            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
+            .Where(x => x.IsDeleted == false || x.IsDeleted == null)
+            .Where(x => x.Room.Club.ClubType == request.ClubType);
 
         if (request.RoomId is Guid rid)
             raQ = raQ.Where(x => x.RoomId == rid);

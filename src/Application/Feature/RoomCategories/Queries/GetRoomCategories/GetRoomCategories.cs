@@ -33,7 +33,7 @@ public class GetRoomCategoriesQueryHandler
 
         var list = await q
             .Where(x => x.IsDeleted == null || x.IsDeleted == false
-                && x.Rooms.Any(r => r.Club.ClubType == request.ClubType))
+                && x.ClubType == request.ClubType)
             .OrderBy(x => x.Name)
             .ProjectTo<RoomCategoryDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.ResidenceType.Commands.CreateResidenceType;
-public record CreateResidenceTypeCommand(string Name, string? Description)
+public record CreateResidenceTypeCommand(string Name, string? Description, ClubType ClubType)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateResidenceTypeCommandHandler : IRequestHandler<CreateResidenceTypeCommand, SuccessResponse<string>>
@@ -22,6 +23,7 @@ public class CreateResidenceTypeCommandHandler : IRequestHandler<CreateResidence
         {
             Name = request.Name,
             Description = request.Description,
+            ClubType = request.ClubType,
             IsActive = true,
             IsDeleted = false,
             Created = DateTime.Now

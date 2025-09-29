@@ -31,8 +31,8 @@ public class GetResidenceTypesQueryHandler
 
 
         var list = await q
-            .Where(x => (x.IsDeleted == null || x.IsDeleted == false) &&
-                x.Rooms.Any(r => r.Club.ClubType == request.ClubType))
+            .Where(x => (x.IsDeleted == null || x.IsDeleted == false)
+                && x.ClubType == request.ClubType)
             .OrderBy(x => x.Name)
             .ProjectTo<ResidenceTypeDto>(_mapper.ConfigurationProvider)
             .ToListAsync(ct);

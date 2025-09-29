@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
-public record CreateRoomCategoryCommand(string Name, string? Description)
+public record CreateRoomCategoryCommand(string Name, string? Description, ClubType ClubType)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateRoomCategoryCommandHandler : IRequestHandler<CreateRoomCategoryCommand, SuccessResponse<string>>
@@ -21,6 +22,7 @@ public class CreateRoomCategoryCommandHandler : IRequestHandler<CreateRoomCatego
         {
             Name = request.Name,
             Description = request.Description,
+            ClubType = request.ClubType,
             IsActive = true,
             IsDeleted = false,
             Created = DateTime.UtcNow
