@@ -26,7 +26,7 @@ public class DeleteRoomCategoryCommandHandler : IRequestHandler<DeleteRoomCatego
 
         if (hasRooms)
             throw new InvalidOperationException(
-                "Cannot delete this room category because it is attached to one or more rooms."
+                "Cannot delete this room category because it is attached to one or more rooms"
             );
 
         entity.IsDeleted = true;

@@ -26,7 +26,7 @@ public class DeleteResidenceTypeCommandHandler : IRequestHandler<DeleteResidence
 
         if (hasRooms)
             throw new InvalidOperationException(
-                "Cannot delete this residence type because it is attached to one or more rooms."
+                "Cannot delete this residence type because it is attached to one or more rooms"
             );
 
 
