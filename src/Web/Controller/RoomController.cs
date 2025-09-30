@@ -14,6 +14,7 @@ using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoom
 using DHAFacilitationAPIs.Application.Feature.RoomCharges.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomServices.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -131,9 +132,9 @@ public class RoomController : ControllerBase
 
 
     [HttpGet("rooms/{roomId:guid}/with-services"), AllowAnonymous]
-    public async Task<IActionResult> GetRoomWithServices(Guid roomId, CancellationToken ct)
+    public async Task<IActionResult> GetRoomWithServices(Guid roomId, [FromQuery] ServiceType serviceType, CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetRoomWithServiceSelectionsQuery { RoomId = roomId }, ct);
+        var result = await _mediator.Send(new GetRoomWithServiceSelectionsQuery { RoomId = roomId, ServiceType = serviceType }, ct);
         return StatusCode(result.Status, result);
     }
 

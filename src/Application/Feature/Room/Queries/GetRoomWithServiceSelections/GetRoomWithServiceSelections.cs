@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Announcements.Commands.AddAnnouncement;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomWithServiceSelections;
 public class GetRoomWithServiceSelectionsQuery : IRequest<SuccessResponse<RoomWithServicesDto>>
 {
     public Guid RoomId { get; set; }
+    public ServiceType ServiceType { get; set; }
 }
 
 public class GetRoomWithServiceSelectionsQueryHandler
@@ -64,6 +66,7 @@ public class GetRoomWithServiceSelectionsQueryHandler
         // Get full service list with Selected flag
         var services = await _ctx.Services
             .AsNoTracking()
+            .Where(s => s.ServiceType == request.ServiceType)
             .OrderBy(s => s.Name)
             .Select(s => new ServiceSelectionDto
             {
