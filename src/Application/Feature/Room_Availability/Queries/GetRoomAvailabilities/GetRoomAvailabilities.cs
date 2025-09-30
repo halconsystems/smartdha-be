@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
@@ -22,16 +23,47 @@ public class GetRoomAvailabilitiesQueryHandler
     : IRequestHandler<GetRoomAvailabilitiesQuery, SuccessResponse<List<RoomAvailabilityDto>>>
 {
     private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly IApplicationDbContext _appCtx;         // Auth/Assignments DbContext
+    private readonly ICurrentUserService _currentUser;
 
-    public GetRoomAvailabilitiesQueryHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    public GetRoomAvailabilitiesQueryHandler(IOLMRSApplicationDbContext ctx, IApplicationDbContext appCtx, ICurrentUserService currentUser)
+    {
+        _ctx = ctx;
+        _appCtx = appCtx;
+        _currentUser = currentUser;
+    }
 
     public async Task<SuccessResponse<List<RoomAvailabilityDto>>> Handle(
      GetRoomAvailabilitiesQuery request, CancellationToken ct)
     {
+        var userId = _currentUser.UserId.ToString();
+        if (string.IsNullOrEmpty(userId))
+            throw new UnAuthorizedException("Invalid user context.");
+
+        // get user roles
+        var roles = await _appCtx.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == userId)
+            .Select(ur => ur.Role.Name)
+            .ToListAsync(ct);
+
+        bool isSuperAdmin = roles.Contains("SuperAdministrator");
+
         var raQ = _ctx.RoomAvailabilities
             .AsNoTracking()
             .Where(x => x.IsDeleted == false || x.IsDeleted == null)
             .Where(x => x.Room.Club.ClubType == request.ClubType);
+
+        // 3Restrict to assigned clubs if not superadmin
+        if (!isSuperAdmin)
+        {
+            var assignedClubIds = await _appCtx.UserClubAssignments
+                .Where(uca => uca.UserId == userId)
+                .Select(uca => uca.ClubId)
+                .ToListAsync(ct);
+
+            raQ = raQ.Where(x => assignedClubIds.Contains(x.Room.ClubId));
+        }
 
         if (request.RoomId is Guid rid)
             raQ = raQ.Where(x => x.RoomId == rid);
@@ -44,17 +76,17 @@ public class GetRoomAvailabilitiesQueryHandler
         {
             var from = request.From.Value;
             var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDate < to && x.ToDate > from);
+            raQ = raQ.Where(x => x.FromDate <= from && x.ToDate >= to);
         }
         else if (request.From.HasValue)
         {
             var from = request.From.Value;
-            raQ = raQ.Where(x => x.ToDate > from);
+            raQ = raQ.Where(x => x.ToDate >= from);
         }
         else if (request.To.HasValue)
         {
             var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDate < to);
+            raQ = raQ.Where(x => x.FromDate <= to);
         }
 
         // ⚠️ Projection سے پہلے OrderBy کریں (raw scalar fields پر)
