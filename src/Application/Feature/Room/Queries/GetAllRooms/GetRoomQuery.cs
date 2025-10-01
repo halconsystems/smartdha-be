@@ -35,7 +35,7 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
         // 1️⃣ Check if user is SuperAdmin
         var roles = await _appCtx.AppUserRoles
             .Include(ur => ur.Role)
-            .Where(ur => ur.UserId == userId)
+            .Where(ur => ur.UserId == userId && ur.IsActive == true && ur.IsDeleted == false)
             .Select(ur => ur.Role.Name)
             .ToListAsync(cancellationToken);
 
@@ -43,19 +43,19 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
 
         // 2️⃣ Base query
         var roomsQuery = _context.Rooms
-            .Where(r => r.Club.ClubType == request.ClubType)
+            .Where(r => r.Club.ClubType == request.ClubType && r.IsActive==true && r.IsDeleted==false)
             .AsQueryable();
 
         if (request.Id != Guid.Empty)
         {
-            roomsQuery = roomsQuery.Where(r => r.Id == request.Id);
+            roomsQuery = roomsQuery.Where(r => r.Id == request.Id && r.IsActive == true && r.IsDeleted == false);
         }
 
         // 3️⃣ Restrict to assigned clubs if not SuperAdmin
         if (!isSuperAdmin)
         {
             var assignedClubIds = await _appCtx.UserClubAssignments
-                .Where(uca => uca.UserId == userId)
+                .Where(uca => uca.UserId == userId && uca.IsActive == true && uca.IsDeleted == false)
                 .Select(uca => uca.ClubId)
                 .ToListAsync(cancellationToken);
 
@@ -87,7 +87,7 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
                 MaxExtraOccupancy = room.MaxExtraOccupancy,
 
                 Charges = _context.RoomCharges
-                    .Where(rc => rc.RoomId == room.Id)
+                    .Where(rc => rc.RoomId == room.Id && rc.IsActive == true && rc.IsDeleted == false)
                     .Select(rc => new RoomChargeDto
                     {
                         BookingType = rc.BookingType,
@@ -99,10 +99,12 @@ public class GetRoomsQueryHandler : IRequestHandler<GetRoomsQuery, IEnumerable<R
                 IsAvailableForApp = _context.RoomAvailabilities
                     .Any(a => a.RoomId == room.Id
                            && a.Action == AvailabilityAction.Available
-                           && today < a.ToDateOnly),
+                           && today < a.ToDateOnly
+                           && a.IsActive == true && a.IsDeleted == false),
 
                 MainImageUrl = _context.RoomImages
-                    .Where(img => img.RoomId == room.Id && img.Category == ImageCategory.Main)
+                    .Where(img => img.RoomId == room.Id && img.Category == ImageCategory.Main 
+                        && img.IsActive == true && img.IsDeleted == false)
                     .Select(img => img.ImageURL)
                     .FirstOrDefault()
             }
