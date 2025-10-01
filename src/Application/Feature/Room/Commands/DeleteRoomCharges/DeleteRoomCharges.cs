@@ -1,5 +1,7 @@
-﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+﻿using System.Threading;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +9,9 @@ namespace DHAFacilitationAPIs.Application.Feature.Room.Commands.DeleteRoomCharge
 
 public class DeleteRoomCharges : IRequest<SuccessResponse<string>>
 {
-    public Guid Id { get; set; }            // RoomCharge Id
+    public Guid RoomId { get; set; }
+    public RoomBookingType BookingType { get; set; } = RoomBookingType.Self;
+    public int ExtraOccupancy { get; set; }
     public bool HardDelete { get; set; } = false;
 }
 
@@ -22,8 +26,13 @@ public class DeleteRoomChargesHandler : IRequestHandler<DeleteRoomCharges, Succe
 
     public async Task<SuccessResponse<string>> Handle(DeleteRoomCharges request, CancellationToken ct)
     {
-        var entity = await _ctx.RoomCharges
-            .FirstOrDefaultAsync(rc => rc.Id == request.Id, ct);
+        // Find existing RoomCharge
+        var entity = await _ctx.RoomCharges.FirstOrDefaultAsync(rc =>
+            rc.RoomId == request.RoomId &&
+            rc.BookingType == request.BookingType &&
+            rc.ExtraOccupancy == request.ExtraOccupancy &&
+            rc.IsDeleted == false && rc.IsActive == true,
+            ct);
 
         if (entity is null)
             throw new KeyNotFoundException("RoomCharge not found.");
