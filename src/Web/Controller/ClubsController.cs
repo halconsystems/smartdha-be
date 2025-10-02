@@ -1,7 +1,11 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
+using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
+using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClubBookingStandardTimeCommand;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
+using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClubBookingStandardTimeCommand;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
+using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubBookingStandardTimes;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -38,5 +42,32 @@ public class ClubsController : BaseApiController
     [HttpGet]
     public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] ClubType clubType)
         => Ok(await _mediator.Send(new GetClubsQuery(clubType)));
-}
 
+    [HttpPost("Create-Club Booking Standard Time"), AllowAnonymous]
+    public async Task<IActionResult> CreateClubBookingStandardTime([FromBody] ClubBookingStandardTimeDto dto, CancellationToken ct)
+    {
+        var id = await _mediator.Send(new CreateClubBookingStandardTimeCommand { Dto = dto }, ct);
+        return CreatedAtAction(nameof(Create), new { id }, id);
+    }
+
+    [HttpPut("Update-Club Booking Standard Time"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateClubBookingStandardTime(Guid id, [FromBody] ClubBookingStandardTimeDto dto, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new UpdateClubBookingStandardTimeCommand { Id = id, Dto = dto }, ct);
+        return StatusCode(result.Status, result);
+    }
+
+    [HttpDelete("Delete-Club Booking Standard Time"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> DeleteClubBookingStandardTime(Guid id, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new DeleteClubBookingStandardTimeCommand { Id = id }, ct);
+        return StatusCode(result.Status, result);
+    }
+
+    [HttpGet("GetAll-Club Booking Standard Time"), AllowAnonymous]
+    public async Task<IActionResult> GetClubBookingStandardTimes(CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetClubBookingStandardTimesQuery(), cancellationToken);
+        return Ok(result);
+    }
+}

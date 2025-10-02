@@ -17,10 +17,8 @@ public class CreateRoomAvailabilityCommand : IRequest<SuccessResponse<Guid>>
 
     // Separate inputs
     [Required] public DateOnly FromDate { get; set; }
-    [Required] public TimeOnly FromTime { get; set; }
 
     [Required] public DateOnly ToDate { get; set; }
-    [Required] public TimeOnly ToTime { get; set; }
 
     [Required] public AvailabilityAction Action { get; set; }
     public string? Reason { get; set; }
@@ -39,11 +37,18 @@ public class CreateRoomAvailabilityCommandHandler
 
     public async Task<SuccessResponse<Guid>> Handle(CreateRoomAvailabilityCommand request, CancellationToken ct)
     {
-        // 1) Validate room
-        var roomExists = await _ctx.Rooms.AnyAsync(r => r.Id == request.RoomId, ct);
-        if (!roomExists) throw new KeyNotFoundException("Room not found.");
+        // Validate room
+        var room = await _ctx.Rooms.Include(r => r.Club)
+            .FirstOrDefaultAsync(r => r.Id == request.RoomId && r.IsGloballyAvailable 
+            && r.IsDeleted == true && r.IsActive == false, ct);
+        if (room == null) throw new KeyNotFoundException("Room not found.");
 
-        // 2) Combine DateOnly + TimeOnly -> DateTime in PKT (Asia/Karachi)
+        // Get standard times for the club
+        var standardTimes = await _ctx.ClubBookingStandardTimes
+            .FirstOrDefaultAsync(s => s.ClubId == room.ClubId && s.IsDeleted == true && s.IsActive == false, ct);
+        if (standardTimes == null) throw new InvalidOperationException("Standard booking times not configured for this club.");
+
+        // Combine DateOnly + TimeOnly -> DateTime in PKT (Asia/Karachi)
         var pktTz = TimeZoneInfo.FindSystemTimeZoneById(
 #if WINDOWS
             "Pakistan Standard Time"   // Windows ID
@@ -52,10 +57,11 @@ public class CreateRoomAvailabilityCommandHandler
 #endif
         );
 
-        DateTime fromLocal = request.FromDate.ToDateTime(request.FromTime, DateTimeKind.Unspecified);
-        DateTime toLocal = request.ToDate.ToDateTime(request.ToTime, DateTimeKind.Unspecified);
+        // Use DateOnly from request + TimeOnly from standard times
+        var fromLocal = request.FromDate.ToDateTime(standardTimes.CheckInTime, DateTimeKind.Unspecified);
+        var toLocal = request.ToDate.ToDateTime(standardTimes.CheckOutTime, DateTimeKind.Unspecified);
 
-        // Optional: enforce that To >= From
+        // enforce that To >= From
         if (toLocal < fromLocal)
             throw new ArgumentException("To date/time must be greater than or equal to From date/time.");
 
@@ -68,21 +74,19 @@ public class CreateRoomAvailabilityCommandHandler
             .Where(a =>
                 a.RoomId == request.RoomId &&
                 a.IsDeleted != true &&
-                a.FromDate <= toLocal &&
-                fromLocal <= a.ToDate)
+                a.FromDateOnly <= request.ToDate &&
+                request.FromDate <= a.ToDateOnly)
             .FirstOrDefaultAsync(ct);
 
         if (hasOverlap != null)
         {
             throw new InvalidOperationException(
                 $"This room already has an overlapping availability from " +
-                $"{hasOverlap.FromDate:dd-MM-yyyy HH:mm} to {hasOverlap.ToDate:dd-MM-yyyy HH:mm}."
+                $"{hasOverlap.FromDate:dd-MM-yyyy} to {hasOverlap.ToDateOnly:dd-MM-yyyy}."
             );
         }
 
-       
-
-        // 3) Create entity (store both combined and split fields)
+        // Create entity (store both combined and split fields)
         var entity = new RoomAvailability
         {
             RoomId = request.RoomId,
@@ -93,9 +97,9 @@ public class CreateRoomAvailabilityCommandHandler
 
             // Split fields for exact matching
             FromDateOnly = request.FromDate,
-            FromTimeOnly = request.FromTime,
+            FromTimeOnly = standardTimes.CheckInTime,
             ToDateOnly = request.ToDate,
-            ToTimeOnly = request.ToTime,
+            ToTimeOnly = standardTimes.CheckOutTime,
 
             Action = request.Action,
             Reason = request.Reason
