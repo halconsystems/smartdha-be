@@ -22,7 +22,7 @@ public class AddRoomChargesHandler : IRequestHandler<AddRoomCharges, SuccessResp
     public async Task<SuccessResponse<List<Guid>>> Handle(AddRoomCharges request, CancellationToken cancellationToken)
     {
         var room = await _context.Rooms
-        .Where(r => r.Id == request.Charge.RoomId)
+        .Where(r => r.Id == request.Charge.RoomId && r.IsDeleted == false && r.IsActive == true)
         .FirstOrDefaultAsync(cancellationToken);
 
         if (room == null)
@@ -44,7 +44,8 @@ public class AddRoomChargesHandler : IRequestHandler<AddRoomCharges, SuccessResp
             bool exists = await _context.RoomCharges.AnyAsync(rc =>
             rc.RoomId == request.Charge.RoomId &&
             rc.BookingType == request.Charge.BookingType &&
-            rc.ExtraOccupancy == chargeItem.ExtraOccupancy,
+            rc.ExtraOccupancy == chargeItem.ExtraOccupancy &&
+            rc.IsDeleted == false && rc.IsActive == true,
             cancellationToken);
 
             if (exists)

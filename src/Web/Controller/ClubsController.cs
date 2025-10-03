@@ -64,10 +64,10 @@ public class ClubsController : BaseApiController
         return StatusCode(result.Status, result);
     }
 
-    [HttpGet("GetAll-Club Booking Standard Time"), AllowAnonymous]
-    public async Task<IActionResult> GetClubBookingStandardTimes(CancellationToken cancellationToken)
+    [HttpGet("Get-Club Booking Standard Time"), AllowAnonymous]
+    public async Task<IActionResult> GetClubBookingStandardTimes([FromQuery] Guid? clubId, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new GetClubBookingStandardTimesQuery(), cancellationToken);
+        var result = await _mediator.Send(new GetClubBookingStandardTimesQuery { ClubId = clubId }, cancellationToken);
         return Ok(result);
     }
 }

@@ -40,12 +40,12 @@ public class CreateRoomAvailabilityCommandHandler
         // Validate room
         var room = await _ctx.Rooms.Include(r => r.Club)
             .FirstOrDefaultAsync(r => r.Id == request.RoomId && r.IsGloballyAvailable 
-            && r.IsDeleted == true && r.IsActive == false, ct);
+            && r.IsDeleted == false && r.IsActive == true, ct);
         if (room == null) throw new KeyNotFoundException("Room not found.");
 
         // Get standard times for the club
         var standardTimes = await _ctx.ClubBookingStandardTimes
-            .FirstOrDefaultAsync(s => s.ClubId == room.ClubId && s.IsDeleted == true && s.IsActive == false, ct);
+            .FirstOrDefaultAsync(s => s.ClubId == room.ClubId && s.IsDeleted == false && s.IsActive == true, ct);
         if (standardTimes == null) throw new InvalidOperationException("Standard booking times not configured for this club.");
 
         // Combine DateOnly + TimeOnly -> DateTime in PKT (Asia/Karachi)

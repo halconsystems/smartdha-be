@@ -8,7 +8,10 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingSt
 using DHAFacilitationAPIs.Domain.Entities;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubBookingStandardTimes;
-public class GetClubBookingStandardTimesQuery : IRequest<List<object>>;
+public class GetClubBookingStandardTimesQuery : IRequest<List<object>>
+{
+    public Guid? ClubId { get; set; }
+}
 
 public class GetClubBookingStandardTimesQueryHandler : IRequestHandler<GetClubBookingStandardTimesQuery, List<object>>
 {
@@ -21,8 +24,15 @@ public class GetClubBookingStandardTimesQueryHandler : IRequestHandler<GetClubBo
 
     public async Task<List<object>> Handle(GetClubBookingStandardTimesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _context.ClubBookingStandardTimes
-            .Where(x => x.IsActive == true && x.IsDeleted == false)
+        var query = _context.ClubBookingStandardTimes
+            .Where(x => x.IsActive == true && x.IsDeleted == false);
+
+        if (request.ClubId.HasValue)
+        {
+            query = query.Where(x => x.ClubId == request.ClubId.Value);
+        }
+
+        var result = await query
             .Select(x => new
             {
                 x.Id,
