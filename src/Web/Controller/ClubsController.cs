@@ -51,9 +51,9 @@ public class ClubsController : BaseApiController
     }
 
     [HttpPut("Update-Club Booking Standard Time"), AllowAnonymous]
-    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateClubBookingStandardTime(Guid id, [FromBody] ClubBookingStandardTimeDto dto, CancellationToken ct)
+    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateClubBookingStandardTime([FromBody] UpdateClubBookingStandardTimeCommand cmd, CancellationToken ct)
     {
-        var result = await _mediator.Send(new UpdateClubBookingStandardTimeCommand { Id = id, Dto = dto }, ct);
+        var result = await _mediator.Send(cmd, ct);
         return StatusCode(result.Status, result);
     }
 

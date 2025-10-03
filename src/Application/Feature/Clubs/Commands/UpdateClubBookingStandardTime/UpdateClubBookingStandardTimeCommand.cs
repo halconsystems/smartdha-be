@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,11 @@ using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClubBookingStandardTimeCommand;
 
-public class UpdateClubBookingStandardTimeCommand : IRequest<SuccessResponse<Guid>>
+public class UpdateClubBookingStandardTimeCommand() : IRequest<SuccessResponse<Guid>>
 {
-    public Guid Id { get; set; }
-    public ClubBookingStandardTimeDto Dto { get; set; } = default!;
+    [Required] public Guid Id { get; set; }
+    public TimeOnly? CheckInTime { get; set; }
+    public TimeOnly? CheckOutTime { get; set; }
 }
 
 public class UpdateClubBookingStandardTimeCommandHandler : IRequestHandler<UpdateClubBookingStandardTimeCommand, SuccessResponse<Guid>>
@@ -33,8 +35,11 @@ public class UpdateClubBookingStandardTimeCommandHandler : IRequestHandler<Updat
             throw new KeyNotFoundException($"Standard time with Id {request.Id} not found.");
 
         // Do NOT allow ClubId change
-        entity.CheckInTime = request.Dto.CheckInTime;
-        entity.CheckOutTime = request.Dto.CheckOutTime;
+        if (request.CheckInTime.HasValue)
+            entity.CheckInTime = request.CheckInTime.Value;
+
+        if (request.CheckOutTime.HasValue)
+            entity.CheckOutTime = request.CheckOutTime.Value;
 
         await _ctx.SaveChangesAsync(ct);
 

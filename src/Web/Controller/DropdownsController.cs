@@ -2,6 +2,7 @@
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,10 @@ public class DropdownsController : BaseApiController
     }
 
     [HttpGet("clubs")]
-    public async Task<ActionResult<List<DropdownDto>>> Clubs(CancellationToken ct)
+    public async Task<ActionResult<List<DropdownDto>>> Clubs([FromQuery] ClubType? clubType, CancellationToken ct)
     {
         // 1️⃣ Get all clubs (generic handler)
-        var allClubs = await _mediator.Send(new GetDropdownQuery<Club>(), ct);
+        var allClubs = await _mediator.Send(new GetDropdownQuery<Club>(ClubType: clubType), ct);
 
         // 2️⃣ Get current user
         var userId = _currentUser.UserId.ToString();
@@ -62,23 +63,23 @@ public class DropdownsController : BaseApiController
     }
 
     [HttpGet("residence-types")]
-    public async Task<ActionResult<List<DropdownDto>>> GetResidenceTypes(CancellationToken ct)
+    public async Task<ActionResult<List<DropdownDto>>> GetResidenceTypes([FromQuery] ClubType? clubType, CancellationToken ct)
     {
-        var data = await _mediator.Send(new GetDropdownQuery<ResidenceType>(), ct);
+        var data = await _mediator.Send(new GetDropdownQuery<ResidenceType>(ClubType: clubType), ct);
         return Ok(data);
     }
 
     [HttpGet("room-categories")]
-    public async Task<ActionResult<List<DropdownDto>>> GetRoomCategories(CancellationToken ct)
+    public async Task<ActionResult<List<DropdownDto>>> GetRoomCategories([FromQuery] ClubType? clubType, CancellationToken ct)
     {
-        var data = await _mediator.Send(new GetDropdownQuery<RoomCategory>(), ct);
+        var data = await _mediator.Send(new GetDropdownQuery<RoomCategory>(ClubType: clubType), ct);
         return Ok(data);
     }
 
     [HttpGet("services")]
-    public async Task<ActionResult<List<DropdownDto>>> GetServices(CancellationToken ct)
+    public async Task<ActionResult<List<DropdownDto>>> GetServices([FromQuery] ServiceType? serviceType, CancellationToken ct)
     {
-        var data = await _mediator.Send(new GetDropdownQuery<DHAFacilitationAPIs.Domain.Entities.Services>(), ct);
+        var data = await _mediator.Send(new GetDropdownQuery<DHAFacilitationAPIs.Domain.Entities.Services>(ServiceType: serviceType), ct);
         return Ok(data);
     }
 }
