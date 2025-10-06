@@ -74,15 +74,15 @@ public class CreateRoomAvailabilityCommandHandler
             .Where(a =>
                 a.RoomId == request.RoomId &&
                 a.IsDeleted != true &&
-                a.FromDateOnly <= request.ToDate &&
-                request.FromDate <= a.ToDateOnly)
+                a.FromDate < toLocal &&
+                fromLocal < a.ToDate)
             .FirstOrDefaultAsync(ct);
 
         if (hasOverlap != null)
         {
             throw new InvalidOperationException(
                 $"This room already has an overlapping availability from " +
-                $"{hasOverlap.FromDate:dd-MM-yyyy} to {hasOverlap.ToDateOnly:dd-MM-yyyy}."
+                $"{hasOverlap.FromDate:dd-MM-yyyy HH:mm:ss} to {hasOverlap.ToDate:dd-MM-yyyy HH:mm:ss}."
             );
         }
 

@@ -13,8 +13,8 @@ public record GetRoomAvailabilitiesQuery(
     ClubType ClubType,
     Guid? RoomId = null,
     Guid? ClubId = null,
-    DateTime? From = null,
-    DateTime? To = null,
+    DateOnly? From = null,
+    DateOnly? To = null,
     AvailabilityAction? Action = null,
     int Page = 1,
     int PageSize = 50
@@ -76,17 +76,17 @@ public class GetRoomAvailabilitiesQueryHandler
         {
             var from = request.From.Value;
             var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDate <= from && x.ToDate >= to);
+            raQ = raQ.Where(x => x.FromDateOnly <= from && x.ToDateOnly >= to);
         }
         else if (request.From.HasValue)
         {
             var from = request.From.Value;
-            raQ = raQ.Where(x => x.ToDate >= from);
+            raQ = raQ.Where(x => x.ToDateOnly >= from);
         }
         else if (request.To.HasValue)
         {
             var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDate <= to);
+            raQ = raQ.Where(x => x.FromDateOnly <= to);
         }
 
         // ⚠️ Projection سے پہلے OrderBy کریں (raw scalar fields پر)

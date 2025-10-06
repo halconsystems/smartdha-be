@@ -2,6 +2,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,7 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
             where m.UserId == request.UserId
                   && m.IsActive == true
                   && m.IsDeleted != true
+                  && c.ClubType == ClubType.GuestRoom
             select new UserClubDto
             {
                 ClubId = c.Id.ToString(), // Assuming ClubId is Guid in DB
@@ -43,5 +45,4 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
 
         return clubs;
     }
-
 }
