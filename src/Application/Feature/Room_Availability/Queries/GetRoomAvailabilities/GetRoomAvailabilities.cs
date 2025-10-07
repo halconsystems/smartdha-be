@@ -74,19 +74,15 @@ public class GetRoomAvailabilitiesQueryHandler
         // Date overlap
         if (request.From.HasValue && request.To.HasValue)
         {
-            var from = request.From.Value;
-            var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDateOnly <= from && x.ToDateOnly >= to);
+            raQ = raQ.Where(x => x.FromDateOnly <= request.From && x.ToDateOnly >= request.To);
         }
         else if (request.From.HasValue)
         {
-            var from = request.From.Value;
-            raQ = raQ.Where(x => x.ToDateOnly >= from);
+            raQ = raQ.Where(x => x.ToDateOnly >= request.From);
         }
         else if (request.To.HasValue)
         {
-            var to = request.To.Value;
-            raQ = raQ.Where(x => x.FromDateOnly <= to);
+            raQ = raQ.Where(x => x.FromDateOnly <= request.To);
         }
 
         // ⚠️ Projection سے پہلے OrderBy کریں (raw scalar fields پر)

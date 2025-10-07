@@ -66,6 +66,7 @@ public class UpdateRoomAvailabilityCommandHandler : IRequestHandler<UpdateRoomAv
         var hasOverlap = await _ctx.RoomAvailabilities
             .Where(a =>
                 a.RoomId == request.RoomId &&
+                a.Id != request.Id &&
                 a.IsDeleted != true &&
                 a.FromDate < toLocal &&
                 fromLocal < a.ToDate)
