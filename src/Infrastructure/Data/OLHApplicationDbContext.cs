@@ -110,6 +110,16 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
     .WithMany() // or .WithMany(d => d.DriverShifts) if collection exists
     .HasForeignKey(ds => ds.DriverId);
 
+        // ✅ GLOBAL FIX: Restrict all cascading relationships
+        foreach (var relationship in modelBuilder.Model
+            .GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys()))
+        {
+            // Only override if not explicitly configured above
+            if (relationship.DeleteBehavior == DeleteBehavior.Cascade)
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

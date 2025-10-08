@@ -76,6 +76,22 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         base.OnModelCreating(builder);
         IdentityBuilder(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder.Entity<UserClubAssignment>()
+            .HasOne(u => u.User)
+            .WithMany()
+            .HasForeignKey(u => u.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // ✅ GLOBAL FIX: Restrict all cascading relationships
+        foreach (var relationship in builder.Model
+            .GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys()))
+        {
+            // Only override if not explicitly configured above
+            if (relationship.DeleteBehavior == DeleteBehavior.Cascade)
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
     }
     private static void IdentityBuilder(ModelBuilder builder)
     {

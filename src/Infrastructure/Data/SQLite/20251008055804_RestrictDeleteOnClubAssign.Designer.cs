@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251008055804_RestrictDeleteOnClubAssign")]
+    partial class RestrictDeleteOnClubAssign
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1977,7 +1980,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SubModule", "SubModule")
                         .WithMany("Permissions")
                         .HasForeignKey("SubModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("SubModule");
@@ -1988,13 +1991,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Module", "Module")
                         .WithMany()
                         .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.AppRole", "Role")
                         .WithMany("RoleModules")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Module");
@@ -2007,13 +2010,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.AppRole", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SubModule", "SubModule")
                         .WithMany()
                         .HasForeignKey("SubModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -2026,13 +2029,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.AppRole", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -2045,7 +2048,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Module", "Module")
                         .WithMany()
                         .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Module");
@@ -2056,7 +2059,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.NonMemberVerification", "Verification")
                         .WithMany()
                         .HasForeignKey("VerificationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Verification");
@@ -2067,7 +2070,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
                         .WithMany()
                         .HasForeignKey("PanicRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("PanicRequest");
@@ -2078,7 +2081,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
                         .WithMany()
                         .HasForeignKey("PanicRequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("PanicRequest");
@@ -2089,7 +2092,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.EmergencyType", "EmergencyType")
                         .WithMany()
                         .HasForeignKey("EmergencyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EmergencyType");
@@ -2100,7 +2103,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.RequestTracking", "RequestTracking")
                         .WithMany("ProcessSteps")
                         .HasForeignKey("RequestTrackingId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("RequestTracking");
@@ -2131,13 +2134,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.MembershipPurpose", "Purpose")
                         .WithMany()
                         .HasForeignKey("PurposeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Purpose");
@@ -2150,13 +2153,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Module", "Module")
                         .WithMany("UserAssignments")
                         .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany("ModuleAssignments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Module");
@@ -2169,13 +2172,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.AppPermission", "Permission")
                         .WithMany()
                         .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Permission");
@@ -2188,13 +2191,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SubModule", "SubModule")
                         .WithMany()
                         .HasForeignKey("SubModuleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("SubModule");
@@ -2207,7 +2210,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2216,7 +2219,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2225,7 +2228,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2234,13 +2237,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -2249,7 +2252,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

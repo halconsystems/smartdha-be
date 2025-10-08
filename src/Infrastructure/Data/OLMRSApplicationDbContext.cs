@@ -123,6 +123,16 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
         // (optional) helpful index for range queries
         modelBuilder.Entity<RoomAvailability>()
             .HasIndex(x => new { x.RoomId, x.FromDate, x.ToDate });
+
+        // ✅ GLOBAL FIX: Restrict all cascading relationships
+        foreach (var relationship in modelBuilder.Model
+            .GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys()))
+        {
+            // Only override if not explicitly configured above
+            if (relationship.DeleteBehavior == DeleteBehavior.Cascade)
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

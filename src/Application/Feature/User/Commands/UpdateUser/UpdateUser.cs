@@ -135,7 +135,7 @@ public class UpdateUserCommandHandler
                     });
 
                     // ✅ Special Case: Club module
-                    if (module.Value == "Club")
+                    if (module.Value == "Club" || module.Value == "Ground.Club")
                     {
                         if (moduleSel.AssignedClubIds == null || !moduleSel.AssignedClubIds.Any())
                             throw new DBOperationException("At least one Club must be assigned for Club module.");

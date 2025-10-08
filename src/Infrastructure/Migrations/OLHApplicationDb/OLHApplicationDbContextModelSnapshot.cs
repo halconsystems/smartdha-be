@@ -1255,7 +1255,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
                         .WithMany()
                         .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
@@ -1274,7 +1274,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
                         .WithMany()
                         .HasForeignKey("BowserCapacityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BowserCapacity");
@@ -1285,19 +1285,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "DriverInfo")
                         .WithMany()
                         .HasForeignKey("DriverInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DriverInfo");
@@ -1322,13 +1322,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
                         .WithMany()
                         .HasForeignKey("BowserCapacityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", "Phase")
                         .WithMany()
                         .HasForeignKey("PhaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AssignedDriver");
@@ -1364,7 +1364,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
                         .WithMany()
                         .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Request");
@@ -1375,7 +1375,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverStatus", "DriverStatus")
                         .WithMany()
                         .HasForeignKey("DriverStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DriverStatus");
@@ -1386,19 +1386,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_DriverInfo", "DriverInfo")
                         .WithMany()
                         .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("DriverInfo");
@@ -1413,7 +1413,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserRequest", "Request")
                         .WithMany()
                         .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Request");
@@ -1424,13 +1424,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
                         .WithMany("Phases")
                         .HasForeignKey("BowserCapacityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Phase", "Phase")
                         .WithMany("AllowedCapacities")
                         .HasForeignKey("PhaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BowserCapacity");
@@ -1443,7 +1443,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Payment");
@@ -1454,7 +1454,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_BowserCapacity", "BowserCapacity")
                         .WithMany()
                         .HasForeignKey("BowserCapacityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleMake", "Make")
@@ -1468,19 +1468,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleOwner", "VehicleOwner")
                         .WithMany()
                         .HasForeignKey("VehicleOwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleStatus", "VehicleStatus")
                         .WithMany()
                         .HasForeignKey("VehicleStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleType", "VehicleType")
                         .WithMany()
                         .HasForeignKey("VehicleTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("BowserCapacity");
@@ -1501,7 +1501,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.OLH_VehicleMake", "Make")
                         .WithMany("Models")
                         .HasForeignKey("MakeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Make");
