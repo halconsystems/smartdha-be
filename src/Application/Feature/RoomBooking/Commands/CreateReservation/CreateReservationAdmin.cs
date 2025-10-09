@@ -34,10 +34,10 @@ public class CreateReservationAdminCommandHandler
 
     public async Task<ReservationInfoDto> Handle(CreateReservationAdminCommand dto, CancellationToken ct)
     {
-        // ✅ ensure only admins can access
-        var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") ?? false;
-        if (!isAdmin)
-            throw new UnauthorizedAccessException("Only admins can create bookings for other users.");
+        //// ✅ ensure only admins can access
+        //var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") ?? false;
+        //if (!isAdmin)
+        //    throw new UnauthorizedAccessException("Only admins can create bookings for other users.");
 
         if (dto.Rooms == null || !dto.Rooms.Any())
             throw new InvalidOperationException("At least one room must be provided.");
@@ -134,7 +134,10 @@ public class CreateReservationAdminCommandHandler
             .FirstOrDefaultAsync(x => x.Id == dto.ClubId, ct)
             ?? throw new InvalidOperationException($"Club with Id {dto.ClubId} not found.");
 
-        string onebillId = SmartPayBillId.GenerateOneBillId("Moin");
+        if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
+            throw new Exception($"Club {club.Id} has no valid AccountNoAccronym configured.");
+
+        string onebillId = SmartPayBillId.GenerateOneBillId(club.AccountNoAccronym);
 
         var reservation = new Reservation
         {

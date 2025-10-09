@@ -56,17 +56,17 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                     .Select(rc => rc.Name)
                     .FirstOrDefault() ?? string.Empty,
 
-                // Just pick the first matching availability range
-                FromDate = _context.RoomAvailabilities
-                    .Where(a => a.RoomId == r.Id)
-                    .OrderBy(a => a.FromDate)
-                    .Select(a => a.FromDate)
-                    .FirstOrDefault(),
-                ToDate = _context.RoomAvailabilities
-                    .Where(a => a.RoomId == r.Id)
-                    .OrderBy(a => a.FromDate)
-                    .Select(a => a.ToDate)
-                    .FirstOrDefault()
+                //// Just pick the first matching availability range
+                //FromDate = _context.RoomAvailabilities
+                //    .Where(a => a.RoomId == r.Id)
+                //    .OrderBy(a => a.FromDate)
+                //    .Select(a => a.FromDate)
+                //    .FirstOrDefault(),
+                //ToDate = _context.RoomAvailabilities
+                //    .Where(a => a.RoomId == r.Id)
+                //    .OrderBy(a => a.FromDate)
+                //    .Select(a => a.ToDate)
+                //    .FirstOrDefault()
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -95,8 +95,8 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
             Services = roomData.Services,
             NormalOccupancy = roomData.NormalOccupancy,
             MaxExtraOccupancy = roomData.MaxExtraOccupancy,
-            CheckInDate = roomData.FromDate,
-            CheckOutDate = roomData.ToDate,
+            //CheckInDate = roomData.FromDate,
+            //CheckOutDate = roomData.ToDate,
             ResidenceTypeName=roomData.ResidenceTypeName,
             CategoryName=roomData.CategoryName,
             Description=roomData.Description
