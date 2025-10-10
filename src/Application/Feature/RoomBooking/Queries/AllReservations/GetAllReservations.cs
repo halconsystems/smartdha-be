@@ -339,7 +339,7 @@ public class GetAllReservationsueryHandler : IRequestHandler<GetAllReservationsu
             return "Booking Confirmed";
 
         if (r.ExpiresAt <= DateTime.Now)
-            return "Cancelled"; // or "Expired"
+            return "Expired"; // or "Cancelled"
 
         return "Awaiting Payment";
     }

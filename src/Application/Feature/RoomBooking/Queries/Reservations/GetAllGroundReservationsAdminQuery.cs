@@ -75,7 +75,7 @@ public class GetAllGroundReservationsAdminQueryHandler
             return "Booking Confirmed";
 
         if (r.ExpiresAt <= DateTime.Now)
-            return "Cancelled"; // or "Expired"
+            return "Expired"; // or "Cancelled"
 
         return "Awaiting Payment";
     }

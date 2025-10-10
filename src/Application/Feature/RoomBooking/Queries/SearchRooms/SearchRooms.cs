@@ -44,8 +44,9 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 res.RoomId == r.Id &&
                 res.FromDateOnly <= end &&
                 start <= res.ToDateOnly &&
-                (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
-                 || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
+             //   (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
+             //    || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
+                (res.Reservation.ExpiresAt > DateTime.Now))
             && !_context.RoomBookings.Any(bk =>
                 bk.RoomId == r.Id &&
                 bk.Status == BookingStatus.Confirmed &&
