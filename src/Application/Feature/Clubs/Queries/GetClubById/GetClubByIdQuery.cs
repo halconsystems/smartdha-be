@@ -12,9 +12,9 @@ using static System.Reflection.Metadata.BlobBuilder;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
-public record GetClubByIdQuery(Guid Id) : IRequest<SuccessResponse<ClubDto>>;
+public record GetClubByIdQuery(Guid Id) : IRequest<SuccessResponse<IdClubDto>>;
 
-public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessResponse<ClubDto>>
+public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessResponse<IdClubDto>>
 {
     private readonly IOLMRSApplicationDbContext _ctx;       // Clubs DbContext
     private readonly IApplicationDbContext _appCtx;         // Auth/Assignments DbContext
@@ -30,7 +30,7 @@ public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessR
         _currentUser = currentUser;
     }
 
-    public async Task<SuccessResponse<ClubDto>> Handle(GetClubByIdQuery request, CancellationToken ct)
+    public async Task<SuccessResponse<IdClubDto>> Handle(GetClubByIdQuery request, CancellationToken ct)
     {
         var userId = _currentUser.UserId.ToString();
         if (string.IsNullOrEmpty(userId))
@@ -63,7 +63,7 @@ public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessR
         // 3️⃣ Apply ID filter
         var dto = await query
             .Where(c => c.Id == request.Id)
-            .Select(c => new ClubDto(
+            .Select(c => new IdClubDto(
                 c.Id,
                 c.Name,
                 c.Description,
