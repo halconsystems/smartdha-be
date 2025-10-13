@@ -69,6 +69,8 @@ public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessR
                 c.Description,
                 c.Location,
                 c.ContactNumber,
+                c.AccountNo,
+                c.AccountNoAccronym,
                 c.IsActive,
                 c.IsDeleted
             ))

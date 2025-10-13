@@ -11,6 +11,8 @@ public record ClubDto(
     string? Description,
     string? Location,
     string? ContactNumber,
+    string? AccountNo,
+    string? AccountNoAccronym,
     bool? IsActive,
     bool? IsDeleted
 );
