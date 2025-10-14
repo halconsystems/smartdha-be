@@ -1,8 +1,9 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Threading;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Domain.Enums;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
 
@@ -10,6 +11,8 @@ public record SearchRoomsQuery(
     Guid ClubId,
     DateOnly CheckInDate,
     DateOnly CheckOutDate,
+    TimeOnly? CheckInTime,
+    TimeOnly? CheckOutTime,
     RoomBookingType BookingType // "self" or "guest"
 ) : IRequest<List<SearchRoomsDto>>;
 
@@ -26,8 +29,30 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
 
     public async Task<List<SearchRoomsDto>> Handle(SearchRoomsQuery request, CancellationToken ct)
     {
-        var start = request.CheckInDate;   // DateOnly
-        var end = request.CheckOutDate;  // DateOnly
+        var startDate = request.CheckInDate;   // DateOnly
+        var endDate = request.CheckOutDate;  // DateOnly
+        TimeOnly checkIn;
+        TimeOnly checkOut;
+
+        if (request.CheckInTime.HasValue && request.CheckOutTime.HasValue)
+        {
+            checkIn = request.CheckInTime.Value;
+            checkOut = request.CheckOutTime.Value;
+        }
+        else
+        {
+            var stdTimes = await _context.ClubBookingStandardTimes.AsNoTracking()
+                            .Where(std => std.ClubId == request.ClubId && std.IsDeleted == false && std.IsActive == true)
+                            .Select(std => new { std.CheckInTime, std.CheckOutTime }).FirstOrDefaultAsync(ct);
+            if (stdTimes == null)
+                throw new Exception($"Standard booking times not set for Club ID: {request.ClubId}");
+
+            checkIn = stdTimes.CheckInTime;
+            checkOut = stdTimes.CheckOutTime;
+        }
+            
+        var start = startDate.ToDateTime(checkIn);
+        var end = endDate.ToDateTime(checkOut);
 
         var query =
             from r in _context.Rooms.AsNoTracking()
@@ -37,21 +62,21 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             // Check rooms according to their availibility (subset allowed)
             from a in r.Availabilities
                 .Where(a => a.Action == AvailabilityAction.Available
-                     && a.FromDateOnly <= start   // starts before (or on) the search end
-                     && a.ToDateOnly >= end
+                     && a.FromDate <= start   // starts before (or on) the search end
+                     && a.ToDate >= end
                      && a.IsDeleted == false) // ends after (or on) the search start
             where !_context.ReservationRooms.Any(res =>     // Exclude rooms already reserved/booked in overlapping period
                 res.RoomId == r.Id &&
-                res.FromDateOnly <= end &&
-                start <= res.ToDateOnly &&
+                res.FromDate <= end &&
+                start <= res.ToDate &&
              //   (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
              //    || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
                 (res.Reservation.ExpiresAt > DateTime.Now))
             && !_context.RoomBookings.Any(bk =>
                 bk.RoomId == r.Id &&
                 bk.Status == BookingStatus.Confirmed &&
-                bk.CheckInDateOnly <= end &&
-                start <= bk.CheckOutDateOnly)
+                bk.CheckInDate <= end &&
+                start <= bk.CheckOutDate)
 
             select new SearchRoomsDto
             {
@@ -86,10 +111,10 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                             .FirstOrDefault() ?? string.Empty,
 
                 // User requested dates
-                CheckInDate = start,
-                CheckInTimeOnly=a.FromTimeOnly,
-                CheckOutDate = end,
-                CheckOutTimeOnly=a.ToTimeOnly,
+                CheckInDate = startDate,
+                CheckInTimeOnly=checkIn,
+                CheckOutDate = endDate,
+                CheckOutTimeOnly=checkOut,
 
                 // Range of this specific available slot
 
