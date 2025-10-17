@@ -39,6 +39,13 @@ public class CreateReservationAdminCommandHandler
         //if (!isAdmin)
         //    throw new UnauthorizedAccessException("Only admins can create bookings for other users.");
 
+        var clubType = await _context.Clubs
+                .Where(c => c.Id == dto.ClubId && c.IsDeleted == false && c.IsActive == true)
+                .Select(c => (ClubType ?)c.ClubType).FirstOrDefaultAsync();
+
+        if (clubType == null)
+            throw new Exception("Club not found");
+
         if (dto.Rooms == null || !dto.Rooms.Any())
             throw new InvalidOperationException("At least one room must be provided.");
 
@@ -64,15 +71,15 @@ public class CreateReservationAdminCommandHandler
         // 🔽 overlap guard
         foreach (var rr in dto.Rooms)
         {
-            var reqFromDO = DateOnly.FromDateTime(rr.FromDate);
-            var reqToDO = DateOnly.FromDateTime(rr.ToDate);
+            //var reqFromDO = DateOnly.FromDateTime(rr.FromDate);
+            //var reqToDO = DateOnly.FromDateTime(rr.ToDate);
 
             var conflict = await _context.ReservationRooms
                 .AsNoTracking()
                 .AnyAsync(x =>
                     x.RoomId == rr.RoomId &&
-                    x.FromDateOnly <= reqToDO &&
-                    x.ToDateOnly >= reqFromDO &&
+                    x.FromDate <= rr.ToDate &&
+                    x.ToDate >= rr.FromDate &&
                     (x.Reservation.Status == ReservationStatus.AwaitingPayment ||
                      x.Reservation.Status == ReservationStatus.Converted),
                     ct);
@@ -88,7 +95,17 @@ public class CreateReservationAdminCommandHandler
 
         foreach (var r in dto.Rooms)
         {
-            var nights = (r.ToDate.Date - r.FromDate.Date).Days;
+            decimal nights = 0;
+
+            if (clubType == ClubType.GuestRoom)
+            {
+                nights = (r.ToDate.Date - r.FromDate.Date).Days;
+            }
+            else if (clubType == ClubType.Ground)
+            {
+                nights = (decimal)(r.ToDate - r.FromDate).TotalHours;
+            }
+
             if (nights <= 0)
                 throw new InvalidOperationException("ToDate must be after FromDate.");
 
@@ -226,7 +243,10 @@ public class CreateReservationAdminCommandHandler
                     .ToList(),
                 FromDate = rr.FromDate,
                 ToDate = rr.ToDate,
-                TotalNights = (rr.ToDate.Date - rr.FromDate.Date).Days,
+                TotalNights = clubType == ClubType.GuestRoom
+                    ? (decimal)(rr.ToDate.Date - rr.FromDate.Date).Days        // Whole days
+                    : (decimal)(rr.ToDate - rr.FromDate).TotalHours,           // Fractional hours
+                //TotalNights = (rr.ToDate.Date - rr.FromDate.Date).Days,
                 PricePerNight = rr.PricePerNight,
                 Subtotal = rr.Subtotal
             }).ToList()
