@@ -80,8 +80,9 @@ public class CreateReservationAdminCommandHandler
                     x.RoomId == rr.RoomId &&
                     x.FromDate <= rr.ToDate &&
                     x.ToDate >= rr.FromDate &&
-                    (x.Reservation.Status == ReservationStatus.AwaitingPayment ||
-                     x.Reservation.Status == ReservationStatus.Converted),
+                    //(x.Reservation.Status == ReservationStatus.AwaitingPayment ||
+                    // x.Reservation.Status == ReservationStatus.Converted),
+                    x.Reservation.ExpiresAt > DateTime.Now,
                     ct);
 
             if (conflict)
