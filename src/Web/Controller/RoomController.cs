@@ -8,12 +8,14 @@ using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoom;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.UpdateRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetImageCategories;
+using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomCharges;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomImages;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetRoomWithServiceSelections;
 using DHAFacilitationAPIs.Application.Feature.RoomCategories.Commands.CreateRoomCategory;
 using DHAFacilitationAPIs.Application.Feature.RoomCharges.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomServices.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -149,5 +151,12 @@ public class RoomController : ControllerBase
     [HttpDelete("DeleteRoom-Charges"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<string>>> DeleteRoomCharges([FromQuery] DeleteRoomCharges cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpGet("GetRoom-Charges"), AllowAnonymous]
+    public async Task<IActionResult> GetRoomCharges([FromQuery] Guid roomId, [FromQuery] RoomBookingType? bookingType, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetRoomChargesQuery { RoomId = roomId, BookingType = bookingType }, ct);
+        return Ok(new { charges = result });
+    }
 
 }
