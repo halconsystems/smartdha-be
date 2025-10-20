@@ -55,7 +55,7 @@ public class CreateReservationAdminCommandHandler
         // 🔽 load rooms with occupancy
         var roomsMap = await _context.Rooms
             .AsNoTracking()
-            .Where(r => roomIds.Contains(r.Id))
+            .Where(r => roomIds.Contains(r.Id) && r.IsDeleted == false && r.IsActive == true)
             .Select(r => new { r.Id, r.ClubId, r.NormalOccupancy, r.MaxExtraOccupancy })
             .ToDictionaryAsync(r => r.Id, r => r, ct);
 
@@ -65,7 +65,7 @@ public class CreateReservationAdminCommandHandler
 
         // 🔽 load charges
         var chargesDict = await _context.RoomCharges
-            .Where(c => roomIds.Contains(c.RoomId) && c.BookingType == dto.BookingType)
+            .Where(c => roomIds.Contains(c.RoomId) && c.BookingType == dto.BookingType && c.IsDeleted == false && c.IsActive == true)
             .ToDictionaryAsync(c => (c.RoomId, c.BookingType, c.ExtraOccupancy), c => c.Charges, ct);
 
         // 🔽 overlap guard
@@ -82,7 +82,8 @@ public class CreateReservationAdminCommandHandler
                     x.ToDate >= rr.FromDate &&
                     //(x.Reservation.Status == ReservationStatus.AwaitingPayment ||
                     // x.Reservation.Status == ReservationStatus.Converted),
-                    x.Reservation.ExpiresAt > DateTime.Now,
+                    x.Reservation.ExpiresAt > DateTime.Now &&
+                    x.IsDeleted == false && x.IsActive == true,
                     ct);
 
             if (conflict)
@@ -149,7 +150,7 @@ public class CreateReservationAdminCommandHandler
 
         var club = await _context.Clubs
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == dto.ClubId, ct)
+            .FirstOrDefaultAsync(x => x.Id == dto.ClubId && x.IsDeleted == false && x.IsActive == true, ct)
             ?? throw new InvalidOperationException($"Club with Id {dto.ClubId} not found.");
 
         if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
@@ -180,7 +181,7 @@ public class CreateReservationAdminCommandHandler
             dto.BookingType != RoomBookingType.Self)
         {
             var existingGuest = await _context.BookingGuests
-                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport, ct);
+                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport && g.IsDeleted == false && g.IsActive == true, ct);
 
             if (existingGuest != null)
             {
