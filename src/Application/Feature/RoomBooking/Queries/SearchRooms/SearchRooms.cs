@@ -90,7 +90,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 // Charges (requested according to BookingType & 1 Occupant)
                 Price = _context.RoomCharges
                             .AsNoTracking()
-                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType)
+                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType && c.ExtraOccupancy == 0)
                             .Select(c => (decimal?)c.Charges)
                             .FirstOrDefault(),
 
