@@ -2,6 +2,8 @@
 using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Queries;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Commands;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Queries;
+using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Queries.BowserDashboard;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationDashboard;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -21,6 +23,13 @@ public class BowserController : BaseApiController
     }
 
     //Bowser 
+    [HttpGet("get-dashboard"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<BowserDashboardDto>>> GetBowserDashboard()
+    {
+        var result = await _mediator.Send(new GetBowserDashboardQuery());
+        return Ok(result);
+    }
+
     [HttpPost("Add"), AllowAnonymous]
     public async Task<IActionResult> AddBowser([FromBody] AddBowserCommand command, CancellationToken ct)
     {
