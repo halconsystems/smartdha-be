@@ -72,7 +72,7 @@ public class RegisterGroundNonMemberCommandHandler : IRequestHandler<RegisterGro
                 RegisteredMobileNo = request.MobileNo,
                 IsOtpRequired = false,
                 IsVerified = true,
-                AppType = AppType.Web,
+                AppType = AppType.Mobile,
                 UserType = UserType.NonMember,
                 MEMPK = "-",
             };
