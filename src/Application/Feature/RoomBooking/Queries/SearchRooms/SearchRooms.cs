@@ -62,21 +62,21 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             // Check rooms according to their availibility (subset allowed)
             from a in r.Availabilities
                 .Where(a => a.Action == AvailabilityAction.Available
-                     && a.FromDate <= start   // starts before (or on) the search end
-                     && a.ToDate >= end
+                     && a.FromDate < start   // starts before (or on) the search end
+                     && a.ToDate > end
                      && a.IsDeleted == false) // ends after (or on) the search start
             where !_context.ReservationRooms.Any(res =>     // Exclude rooms already reserved/booked in overlapping period
                 res.RoomId == r.Id &&
-                res.FromDate <= end &&
-                start <= res.ToDate &&
+                res.FromDate < end &&
+                start < res.ToDate &&
              //   (res.Reservation.Status == Domain.Enums.ReservationStatus.AwaitingPayment
              //    || res.Reservation.Status == Domain.Enums.ReservationStatus.Converted))
                 (res.Reservation.ExpiresAt > DateTime.Now))
             && !_context.RoomBookings.Any(bk =>
                 bk.RoomId == r.Id &&
                 bk.Status == BookingStatus.Confirmed &&
-                bk.CheckInDate <= end &&
-                start <= bk.CheckOutDate)
+                bk.CheckInDate < end &&
+                start < bk.CheckOutDate)
 
             select new SearchRoomsDto
             {
