@@ -33,9 +33,9 @@ public class NonMemberController : BaseApiController
         => _mediator.Send(new GetNonMemberVerificationDashboardQuery(), ct);
 
     [HttpGet("get-nonmember-requests")]
-    public async Task<IActionResult> GetNonMemberRequests(NonMemberRequestsQuery nonMemberRequestsQuery)
+    public async Task<IActionResult> GetNonMemberRequests([FromQuery] Domain.Enums.VerificationStatus status)
     {
-        var result = await Mediator.Send(nonMemberRequestsQuery);
+        var result = await Mediator.Send(new NonMemberRequestsQuery { status = status });
         return Ok(result);
     }
 
