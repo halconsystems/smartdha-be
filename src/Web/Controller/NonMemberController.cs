@@ -32,7 +32,7 @@ public class NonMemberController : BaseApiController
     public Task<SuccessResponse<NonMemberVerificationDashboardDto>> Get(CancellationToken ct)
         => _mediator.Send(new GetNonMemberVerificationDashboardQuery(), ct);
 
-    [HttpPost("get-nonmember-requests")]
+    [HttpGet("get-nonmember-requests")]
     public async Task<IActionResult> GetNonMemberRequests(NonMemberRequestsQuery nonMemberRequestsQuery)
     {
         var result = await Mediator.Send(nonMemberRequestsQuery);
@@ -47,7 +47,7 @@ public class NonMemberController : BaseApiController
         return Ok(result);
 
     }
-    [HttpPost("AssignModule")]
+    [HttpPut("AssignModule")]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> AssignModule([FromBody] CreateUserModuleAssignmentCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);

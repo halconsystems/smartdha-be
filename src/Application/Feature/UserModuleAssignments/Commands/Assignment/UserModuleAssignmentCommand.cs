@@ -14,7 +14,6 @@ public class CreateUserModuleAssignmentCommand : IRequest<SuccessResponse<List<G
 {
     [Required]
     public string UserId { get; set; } = default!;
-
     public List<Guid> ModuleIds { get; set; }= new();
 }
 public class CreateUserModuleAssignmentCommandHandler : IRequestHandler<CreateUserModuleAssignmentCommand, SuccessResponse<List<Guid>>>
@@ -35,26 +34,46 @@ public class CreateUserModuleAssignmentCommandHandler : IRequestHandler<CreateUs
         if (!userExists)
             throw new KeyNotFoundException("User not found.");
 
+        // Ensure distinct module IDs
+        var distinctModuleIds = request.ModuleIds.Distinct().ToList() ?? new List<Guid>();
+
         // Validate module IDs
-        var existingModuleIds = await _ctx.Modules
-            .Where(m => request.ModuleIds.Contains(m.Id))
+        var validModuleIds = await _ctx.Modules
+            .Where(m => distinctModuleIds.Contains(m.Id) && (m.IsDeleted == false || m.IsDeleted == null))
             .Select(m => m.Id)
             .ToListAsync(ct);
 
-        var invalidModuleIds = request.ModuleIds.Except(existingModuleIds).ToList();
-        if (invalidModuleIds.Any())
-            throw new KeyNotFoundException($"The following module IDs are invalid: {string.Join(", ", invalidModuleIds)}");
+        if (validModuleIds.Count != distinctModuleIds.Count)
+            throw new ArgumentException("One or more provided ModuleIds are invalid.");
 
+        // Fetch existing user-module assignments
+        var existingAssignments = await _ctx.UserModuleAssignments
+            .Where(x => x.UserId == request.UserId)
+            .ToListAsync(ct);
+
+        var existingModuleIds = existingAssignments.Select(x => x.ModuleId).ToList();
+
+        // Determine which to add and which to remove
+        var toAdd = distinctModuleIds.Except(existingModuleIds).ToList();
+        var toRemove = existingModuleIds.Except(distinctModuleIds).ToList();
+
+        var hasChanges = false;
         var createdIds = new List<Guid>();
 
-        foreach (var moduleId in request.ModuleIds)
+        // Remove unselected assignments
+        if (toRemove.Any())
         {
-            // Skip duplicates
-            var alreadyExists = await _ctx.UserModuleAssignments
-                .AnyAsync(x => x.UserId == request.UserId && x.ModuleId == moduleId, ct);
+            var assignmentsToRemove = existingAssignments
+                .Where(x => toRemove.Contains(x.ModuleId))
+                .ToList();
 
-            if (alreadyExists) continue;
+            _ctx.UserModuleAssignments.RemoveRange(assignmentsToRemove);
+            hasChanges = true;
+        }
 
+        // Add new assignments
+        foreach (var moduleId in toAdd)
+        {
             var assignment = new UserModuleAssignment
             {
                 Id = Guid.NewGuid(),
@@ -67,12 +86,14 @@ public class CreateUserModuleAssignmentCommandHandler : IRequestHandler<CreateUs
 
             await _ctx.UserModuleAssignments.AddAsync(assignment, ct);
             createdIds.Add(assignment.Id);
+            hasChanges = true;
         }
 
-        if (createdIds.Count > 0)
+        if (hasChanges)
             await _ctx.SaveChangesAsync(ct);
 
-        return Success.Created(createdIds, "Modules assigned successfully.");
+        return Success.Created(createdIds, hasChanges 
+            ? "User module assignments updated successfully."  : "No changes were made to user module assignments.");
     }
 }
 
