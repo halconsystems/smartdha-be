@@ -47,7 +47,7 @@ public class NonMemberController : BaseApiController
         return Ok(result);
 
     }
-    [HttpPut("AssignModule")]
+    [HttpPost("AssignModule")]
     public async Task<ActionResult<SuccessResponse<List<Guid>>>> AssignModule([FromBody] CreateUserModuleAssignmentCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
