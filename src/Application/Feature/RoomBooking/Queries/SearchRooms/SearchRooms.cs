@@ -62,8 +62,8 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
             // Check rooms according to their availibility (subset allowed)
             from a in r.Availabilities
                 .Where(a => a.Action == AvailabilityAction.Available
-                     && a.FromDate < start   // starts before (or on) the search end
-                     && a.ToDate > end
+                     && a.FromDate <= start   // starts before (or on) the search end
+                     && a.ToDate >= end
                      && a.IsDeleted == false) // ends after (or on) the search start
             where !_context.ReservationRooms.Any(res =>     // Exclude rooms already reserved/booked in overlapping period
                 res.RoomId == r.Id &&
