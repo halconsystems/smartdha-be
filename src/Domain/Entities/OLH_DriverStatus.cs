@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class OLH_DriverStatus : BaseAuditableEntity
 {
-    public string Status { get; set; } = "Available"; // Available/OnDuty/OffDuty/Suspended
+    public DriverStatus Status { get; set; } = DriverStatus.Available; // Available/NotAvailable/OnDuty/OffDuty/Suspended
 }

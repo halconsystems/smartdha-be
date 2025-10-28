@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Commands;
 using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Queries;
+using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetPhases;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Commands;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Queries;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Web.Queries.BowserDashboard;
@@ -65,4 +66,8 @@ public class BowserController : BaseApiController
         var result = await _mediator.Send(new GetBowserRequestByStatusQuery(status));
         return Ok(result);
     }
+
+    [HttpGet("GetPhases"), AllowAnonymous]
+    public async Task<IActionResult> GetPhases(CancellationToken ct)
+       => Ok(await _mediator.Send(new GetPhasesQuery(), ct));
 }

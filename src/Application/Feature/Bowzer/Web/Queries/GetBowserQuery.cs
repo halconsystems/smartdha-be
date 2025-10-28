@@ -48,7 +48,7 @@ public class GetBowserQueryHandler : IRequestHandler<GetBowsersQuery, SuccessRes
                     YearOfManufacture = vehicle.YearOfManufacture,
                     VehicleOwnerName = vehicle.VehicleOwner?.OwnerName ?? string.Empty,
                     VehicleTypeName = vehicle.VehicleType?.TypeName ?? string.Empty,
-                    VehicleStatusName = vehicle.VehicleStatus?.Status ?? string.Empty,
+                    VehicleStatusName = vehicle.VehicleStatus?.Status.ToString() ?? string.Empty,
                     BowserCapacityName = vehicle.BowserCapacity?.Capacity.ToString() ?? string.Empty,
                     Remarks = vehicle.Remarks
                 } });
@@ -66,7 +66,7 @@ public class GetBowserQueryHandler : IRequestHandler<GetBowsersQuery, SuccessRes
             YearOfManufacture = v.YearOfManufacture,
             VehicleOwnerName = v.VehicleOwner?.OwnerName ?? string.Empty,
             VehicleTypeName = v.VehicleType?.TypeName ?? string.Empty,
-            VehicleStatusName = v.VehicleStatus?.Status ?? string.Empty,
+            VehicleStatusName = v.VehicleStatus?.Status.ToString() ?? string.Empty,
             BowserCapacityName = v.BowserCapacity?.Capacity.ToString() ?? string.Empty,
             Remarks = v.Remarks
         }).ToList());

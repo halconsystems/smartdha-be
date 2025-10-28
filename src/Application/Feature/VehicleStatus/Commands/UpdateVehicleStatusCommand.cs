@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.BowserMake.Commands;
 
-public record UpdateVehicleStatusCommand(Guid Id, string Status) : IRequest<SuccessResponse<string>>;
+public record UpdateVehicleStatusCommand(Guid Id, VehicleStatus Status) : IRequest<SuccessResponse<string>>;
 
 public class UpdateVehicleStatusHandler : IRequestHandler<UpdateVehicleStatusCommand, SuccessResponse<string>>
 {

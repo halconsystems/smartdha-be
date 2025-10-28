@@ -43,15 +43,15 @@ public class GetBowserDashboardHandler : IRequestHandler<GetBowserDashboardQuery
         // --- 2️⃣ Operational Stats ---
         dto.TotalDrivers = await _context.DriverInfos.CountAsync(ct);
         dto.AvailableDrivers = await _context.DriverInfos
-            .CountAsync(d => d.DriverStatus.Status == "Available", ct);
+            .CountAsync(d => d.DriverStatus.Status == Domain.Enums.DriverStatus.Available, ct);
         dto.OnDutyDrivers = await _context.DriverInfos
-            .CountAsync(d => d.DriverStatus.Status == "OnDuty", ct);
+            .CountAsync(d => d.DriverStatus.Status == Domain.Enums.DriverStatus.OnDuty, ct);
 
         dto.TotalVehicles = await _context.Vehicles.CountAsync(ct);
         dto.ActiveVehicles = await _context.Vehicles
-            .CountAsync(v => v.VehicleStatus.Status == "Active", ct);
+            .CountAsync(v => v.VehicleStatus.Status == VehicleStatus.Active, ct);
         dto.InMaintenanceVehicles = await _context.Vehicles
-            .CountAsync(v => v.VehicleStatus.Status == "Maintenance", ct);
+            .CountAsync(v => v.VehicleStatus.Status == VehicleStatus.Maintenance, ct);
 
         dto.TotalPhases = await _context.Phases.CountAsync(ct);
         dto.TotalCapacities = await _context.BowserCapacitys.CountAsync(ct);

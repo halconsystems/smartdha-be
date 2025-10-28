@@ -59,7 +59,7 @@ public class AssignDriverToBowserCommandHandler : IRequestHandler<AssignDriverTo
 
             // Get the "OnDuty" status from DriverStatuses table
             var onDutyStatus = await _context.DriverStatuses
-                .FirstOrDefaultAsync(vs => vs.Status == "Not Available", cancellationToken);
+                .FirstOrDefaultAsync(vs => vs.Status == Domain.Enums.DriverStatus.NotAvailable, cancellationToken);
 
             if (onDutyStatus == null)
                 throw new Exception("Not Available status not found in VehicleStatuses");

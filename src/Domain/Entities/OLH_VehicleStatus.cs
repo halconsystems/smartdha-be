@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class OLH_VehicleStatus : BaseAuditableEntity
 {
-    [Required] public string Status { get; set; } = "Active"; // Active/Maintenance/Inactive
+    [Required] public VehicleStatus Status { get; set; } = VehicleStatus.Active; // Active/Maintenance/Inactive
     public string? Remarks { get; set; }
 }
