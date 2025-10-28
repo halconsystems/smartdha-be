@@ -51,7 +51,7 @@ public class AdminBookingsController : BaseApiController
     public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate,
         [FromQuery] RoomBookingType bookingType, [FromQuery] TimeOnly? checkInTime = null, [FromQuery] TimeOnly? checkOutTime = null, CancellationToken ct = default)
     {
-        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, checkInTime, checkOutTime, bookingType), ct);
+        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType, checkInTime, checkOutTime), ct);
         return Ok(result);
     }
 

@@ -11,9 +11,9 @@ public record SearchRoomsQuery(
     Guid ClubId,
     DateOnly CheckInDate,
     DateOnly CheckOutDate,
-    TimeOnly? CheckInTime,
-    TimeOnly? CheckOutTime,
-    RoomBookingType BookingType // "self" or "guest"
+    RoomBookingType BookingType, // "self" or "guest"
+    TimeOnly? CheckInTime = null,
+    TimeOnly? CheckOutTime = null
 ) : IRequest<List<SearchRoomsDto>>;
 
 public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<SearchRoomsDto>>
