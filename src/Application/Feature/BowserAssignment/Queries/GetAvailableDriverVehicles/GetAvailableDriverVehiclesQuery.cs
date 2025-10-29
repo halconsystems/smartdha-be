@@ -24,6 +24,15 @@ public class GetAvailableDriverVehiclesHandler : IRequestHandler<GetAvailableDri
         var requestDate = DateOnly.FromDateTime(request.RequestedDeliveryDate);
         var requestTime = TimeOnly.FromDateTime(request.RequestedDeliveryDate);
 
+        // Check if the phase supports this bowser capacity
+        bool isCapacityAllowed = await _context.PhaseCapacities
+            .AnyAsync(pc => pc.PhaseId == request.PhaseId && pc.BowserCapacityId == request.BowserCapacityId, cancellationToken);
+
+        if (!isCapacityAllowed)
+        {
+            throw new ArgumentException($"The selected phase does not allow bowser capacity '{request.BowserCapacityId}'.");
+        }
+
         var query = await _context.DriverShifts
             .Include(ds => ds.DriverInfo)
                 .ThenInclude(d => d.DriverStatus)
