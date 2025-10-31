@@ -35,27 +35,26 @@ public class AssignDriverToBowserCommandHandler : IRequestHandler<AssignDriverTo
             // Verify Bowser Request exists
             var bowserRequest = await _context.BowserRequests
             .FirstOrDefaultAsync(br => br.Id == dto.BowserRequestId, cancellationToken);
-        if (bowserRequest == null)
-            throw new NotFoundException(nameof(OLH_BowserRequest), dto.BowserRequestId.ToString());
+            if (bowserRequest == null)
+                throw new NotFoundException(nameof(OLH_BowserRequest), dto.BowserRequestId.ToString());
 
-        // Verify Driver exists
-        var driver = await _context.DriverInfos
-            .FirstOrDefaultAsync(d => d.Id == dto.DriverId, cancellationToken);
-        if (driver == null)
-            throw new NotFoundException(nameof(OLH_DriverInfo), dto.DriverId.ToString());
+            // Verify Driver exists
+            var driver = await _context.DriverInfos
+                .FirstOrDefaultAsync(d => d.Id == dto.DriverId, cancellationToken);
+            if (driver == null)
+                throw new NotFoundException(nameof(OLH_DriverInfo), dto.DriverId.ToString());
 
-        // Verify Vehicle exists
-        var vehicle = await _context.Vehicles
-            .FirstOrDefaultAsync(v => v.Id == dto.VehicleId, cancellationToken);
-        if (vehicle == null)
-            throw new NotFoundException(nameof(OLH_Vehicle), dto.VehicleId.ToString());
-
-            
+            // Verify Vehicle exists
+            var vehicle = await _context.Vehicles
+                .FirstOrDefaultAsync(v => v.Id == dto.VehicleId, cancellationToken);
+            if (vehicle == null)
+                throw new NotFoundException(nameof(OLH_Vehicle), dto.VehicleId.ToString());
 
             // Assign Driver & Vehicle & PlannedDeliveryDate
-        bowserRequest.AssignedDriverId = dto.DriverId;
-        bowserRequest.AssignedVehicleId = dto.VehicleId;
-        bowserRequest.PlannedDeliveryDate = dto.PlannedDeliveryDate;
+            bowserRequest.AssignedDriverId = dto.DriverId;
+            bowserRequest.AssignedVehicleId = dto.VehicleId;
+            bowserRequest.PlannedDeliveryDate = dto.PlannedDeliveryDate;
+            bowserRequest.Status = Domain.Enums.BowserStatus.Accepted;
 
             // Get the "OnDuty" status from DriverStatuses table
             var onDutyStatus = await _context.DriverStatuses
@@ -70,10 +69,10 @@ public class AssignDriverToBowserCommandHandler : IRequestHandler<AssignDriverTo
            // _context.DriverInfos.Attach(driver);
             await _context.SaveChangesAsync(cancellationToken);
 
-        return new SuccessResponse<Guid>(
-            bowserRequest.Id,
-            "Driver assigned to bowser request successfully."
-        );
+            return new SuccessResponse<Guid>(
+                bowserRequest.Id,
+                "Driver assigned to bowser request successfully."
+            );
         }
         catch (Exception ex)
         {

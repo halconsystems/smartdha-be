@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Contracts.Mobile;
+using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CancelBowserRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CreateRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.SubmitRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetMyRequests;
@@ -42,6 +43,13 @@ public class BowzerController : BaseApiController
     [HttpPost("{id:guid}/submit"), AllowAnonymous]
     public async Task<IActionResult> Submit(Guid id, CancellationToken ct)
         => Ok(new { status = await _mediator.Send(new SubmitRequestCommand(id), ct) });
+
+    [HttpPost("cancel-request"), AllowAnonymous]
+    public async Task<IActionResult> CancelBowserRequest([FromBody] CancelBowserRequestCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(new { message = result });
+    }
 
     [HttpGet("history"), AllowAnonymous]
     public async Task<IActionResult> GetMyHistory(CancellationToken ct)

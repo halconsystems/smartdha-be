@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Commands.UpdateDr
 using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Queries.GetAssignedDrivers;
 using DHAFacilitationAPIs.Application.Feature.BowserAssignment.Queries.GetAvailableDriverVehicles;
 using DHAFacilitationAPIs.Application.Feature.BowserCapacities.Commands;
+using DHAFacilitationAPIs.Application.Feature.BowserStatuses.Commands;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,5 +51,12 @@ public class BowserAssignmentController : BaseApiController
     {
         var result = await _mediator.Send(new GetAssignedDriversQuery(), ct);
         return Ok(new SuccessResponse<List<AssignedDriverDto>>(result, "Assigned drivers fetched successfully."));
+    }
+
+    [HttpPut("update-bowser-status"), AllowAnonymous]
+    public async Task<IActionResult> UpdateBowserStatus([FromBody] UpdateBowserStatusCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(new { message = result });
     }
 }
