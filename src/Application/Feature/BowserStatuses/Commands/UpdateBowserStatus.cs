@@ -32,9 +32,9 @@ public sealed class UpdateBowserStatusHandler : IRequestHandler<UpdateBowserStat
         {
             BowserStatus.Accepted,
             BowserStatus.Dispatched,
-            BowserStatus.OnRoute,
-            BowserStatus.Arrived,
-            BowserStatus.Delivering,
+            //BowserStatus.OnRoute,
+            //BowserStatus.Arrived,
+            //BowserStatus.Delivering,
             BowserStatus.Completed
         };
 
