@@ -100,7 +100,8 @@ builder.Services.AddCors(options =>
         .WithOrigins(
             "http://localhost:3000",
             "https://dfpwebapi.dhakarachi.org",
-            "https://gw.dhakarachi.org"
+            "https://gw.dhakarachi.org",
+            "http://172.16.10.123:3000"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
