@@ -14,9 +14,13 @@ public class BowserDto
     public Guid? MakeId { get; set; }
     public Guid? ModelId { get; set; }
     public string YearOfManufacture { get; set; } = default!;
+    public Guid VehicleOwnerId { get; set; } = default!;
     public string VehicleOwnerName { get; set; } = default!;
+    public Guid VehicleTypeId { get; set; } = default!;
     public string VehicleTypeName { get; set; } = default!;
+    public Guid VehicleStatusId { get; set; } = default!;
     public string VehicleStatusName { get; set; } = default!;
+    public Guid BowserCapacityId { get; set; } = default!;
     public string BowserCapacityName { get; set; } = default!;
     public string BowserCapacityUnit { get; set; } = default!;
     public string? Remarks { get; set; }
