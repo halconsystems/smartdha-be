@@ -8,6 +8,7 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicResponders;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDashboardSummary;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicLogs;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicPaged;
@@ -115,4 +116,7 @@ public class PanicController : BaseApiController
         var result = await _med.Send(new GetAllPanicRespondersQuery(emergencyTypeId));
         return Ok(result);
     }
+
+    [HttpGet("emergency-types")]
+    public Task<List<EmergencyTypeDto>> Types() => _med.Send(new GetEmergencyTypesQuery());
 }
