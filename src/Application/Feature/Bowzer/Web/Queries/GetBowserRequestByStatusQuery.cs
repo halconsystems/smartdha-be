@@ -51,6 +51,7 @@ public class GetBowserRequestByStatusHandler : IRequestHandler<GetBowserRequestB
             PhaseName = b.Phase?.Name, // adjust if property differs
             BowserCapacityId = b.BowserCapacityId,
             BowserCapacityName = b.BowserCapacity?.Capacity.ToString(),
+            BowserCapacityUnit = b.BowserCapacity?.Unit,
             RequestedDeliveryDate = b.RequestedDeliveryDate,
             PlannedDeliveryDate = b.PlannedDeliveryDate,
             DeliveryDate = b.DeliveryDate,

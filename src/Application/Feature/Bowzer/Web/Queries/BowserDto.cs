@@ -18,5 +18,6 @@ public class BowserDto
     public string VehicleTypeName { get; set; } = default!;
     public string VehicleStatusName { get; set; } = default!;
     public string BowserCapacityName { get; set; } = default!;
+    public string BowserCapacityUnit { get; set; } = default!;
     public string? Remarks { get; set; }
 }

@@ -49,11 +49,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
     //Panic Button
-   public DbSet<EmergencyType> EmergencyTypes => Set<EmergencyType>();
-   public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
-   public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
-   public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
-   public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<EmergencyType> EmergencyTypes => Set<EmergencyType>();
+    public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
+    public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
+    public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
+    public DbSet<PanicResponder> PanicResponders => Set<PanicResponder>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();

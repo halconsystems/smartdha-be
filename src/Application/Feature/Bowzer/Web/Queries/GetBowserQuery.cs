@@ -68,6 +68,7 @@ public class GetBowserQueryHandler : IRequestHandler<GetBowsersQuery, SuccessRes
             VehicleTypeName = v.VehicleType?.TypeName ?? string.Empty,
             VehicleStatusName = v.VehicleStatus?.Status.ToString() ?? string.Empty,
             BowserCapacityName = v.BowserCapacity?.Capacity.ToString() ?? string.Empty,
+            BowserCapacityUnit = v.BowserCapacity?.Unit ?? string.Empty,
             Remarks = v.Remarks
         }).ToList());
 
