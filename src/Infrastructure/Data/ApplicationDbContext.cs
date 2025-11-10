@@ -55,11 +55,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
     public DbSet<PanicResponder> PanicResponders => Set<PanicResponder>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-   public DbSet<EmergencyType> EmergencyTypes => Set<EmergencyType>();
-   public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
-   public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
-   public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
-   public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+  
    public DbSet<Complaint> Complaints => Set<Complaint>();
     public DbSet<ComplaintAttachment> ComplaintAttachments => Set<ComplaintAttachment>();
     public DbSet<ComplaintCategory> ComplaintCategories => Set<ComplaintCategory>();
