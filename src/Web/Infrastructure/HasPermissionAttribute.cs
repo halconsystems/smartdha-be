@@ -7,11 +7,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DHAFacilitationAPIs.Web.Infrastructure;
 
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Security.Claims;
-
 public class HasPermissionAttribute : AuthorizeAttribute, IAsyncAuthorizationFilter
 {
     private readonly string _permission;

@@ -79,3 +79,11 @@ public class SecretKeyDto
 {
     public string SecretKey { get; set; } = default!;
 }
+
+public class RegisterationDto
+{
+    public Boolean isOtpRequired { get; set; } = default!;
+    public string AccessToken { get; set; } = default!;
+    public string ResponseMessage { get; set; } = default!;
+    public string MobileNumber { get; set; } = default!;
+}

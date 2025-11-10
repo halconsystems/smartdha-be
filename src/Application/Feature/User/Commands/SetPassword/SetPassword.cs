@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Exceptions;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -7,23 +8,26 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.SetPassword;
 public record SetPasswordCommand : IRequest<SuccessResponse<string>>
 {
-    public string CNIC { get; init; } = default!;
     public string Password { get; init; } = default!;
 }
 
 public class SetPasswordCommandHandler : IRequestHandler<SetPasswordCommand, SuccessResponse<string>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ICurrentUserService _currentUserService;
 
-    public SetPasswordCommandHandler(UserManager<ApplicationUser> userManager)
+    public SetPasswordCommandHandler(UserManager<ApplicationUser> userManager,ICurrentUserService currentUserService)
     {
         _userManager = userManager;
+        _currentUserService = currentUserService;
     }
 
     public async Task<SuccessResponse<string>> Handle(SetPasswordCommand request, CancellationToken cancellationToken)
     {
+        var UserId = _currentUserService.UserId;
+
         var user = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == UserId.ToString(), cancellationToken);
 
         if (user == null)
             throw new NotFoundException("User not found with the provided CNIC.");

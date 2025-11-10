@@ -8,6 +8,7 @@ using Dapper;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Interface.Repository;
+using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -18,28 +19,29 @@ using Microsoft.EntityFrameworkCore;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
-public record MemberRegisterationCommand : IRequest<SuccessResponse<string>>
+public record MemberRegisterationCommand : IRequest<SuccessResponse<RegisterationDto>>
 {
     public string CNIC { get; set; } = default!;
-    public string MobileNo { get; set; } = default!;
 }
 
-public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegisterationCommand, SuccessResponse<string>>
+public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegisterationCommand, SuccessResponse<RegisterationDto>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISmsService _otpService;
     private readonly IProcedureService _sp;
     private readonly IApplicationDbContext _context;
+    private readonly IAuthenticationService _authenticationService;
 
-    public MemberRegisterationCommandHandler(UserManager<ApplicationUser> userManager, ISmsService otpService, IProcedureService sp, IApplicationDbContext context)
+    public MemberRegisterationCommandHandler(UserManager<ApplicationUser> userManager, ISmsService otpService, IProcedureService sp, IApplicationDbContext context, IAuthenticationService authenticationService)
     {
         _userManager = userManager;
         _otpService = otpService;
         _sp = sp;
         _context = context;
+        _authenticationService = authenticationService;
     }
 
-    public async Task<SuccessResponse<string>> Handle(MemberRegisterationCommand request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<RegisterationDto>> Handle(MemberRegisterationCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _userManager.Users
             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
@@ -60,9 +62,10 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 var random = new Random();
                 var generateotp = random.Next(100000, 999999); // generates a 6-digit number
 
-                string returnmsg = $"An OTP has been sent to the mobile number registered with your membership {generateotp}";
-                string sentmsg = generateotp + " is your OTP to sign-up DHA Karachi mobile application.";
-                string result=await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
+                string returnmsg = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.{generateotp}";
+                string sentmsg = $"{generateotp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.";
+
+                string result =await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
                 if(result == "SUCCESSFUL")
                 {
                     var usernewOtp = new UserOtp
@@ -78,28 +81,43 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                     _context.UserOtps.Add(usernewOtp);
                     await _context.SaveChangesAsync(cancellationToken);
 
+                    TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
+                    string verifyToken = await _authenticationService.GenerateTemporaryToken(existingUser, "verify_otp", expiresIn);
+
                     //return returnmsg;
-                    return SuccessResponse<string>.FromMessage(returnmsg);
+                    RegisterationDto _registerationdto = new RegisterationDto
+                    {
+                        isOtpRequired = true,
+                        AccessToken = verifyToken,
+                        MobileNumber = MaskMobile(normalizedMobile),
+                        ResponseMessage = returnmsg
+
+                    };
+
+                    return new SuccessResponse<RegisterationDto>(
+                    _registerationdto,
+                    returnmsg
+                    );
                 }
             }
             if (existingUser.IsActive == false)
             {
-                throw new ConflictException("User already exists but InActive contact with administrator!");
+                throw new ConflictException("Account already exists but is inactive. Please contact the administrator for assistance.");
             }
             if (existingUser.IsDeleted == true)
             {
-                throw new ConflictException("User already exists but deleted contact with administrator!");
+                throw new ConflictException("Account already exists but has been deleted. Please contact the administrator for assistance.");
             }
             if (existingUser.IsVerified == false)
             {
-                throw new ConflictException("User already exists but not verified contact with administrator!");
+                throw new ConflictException("Account already exists but is not verified. Please contact the administrator for assistance.");
             }
-            throw new ConflictException("User already exists");
+            throw new ConflictException("An account with this information already exists.");
+
         }
-       
+
         var p = new DynamicParameters();
         p.Add("@CNICNO", request.CNIC, DbType.String, size: 150);
-        p.Add("@CellNo", request.MobileNo, DbType.String, size: 15);
 
         // Output parameters
         //p.Add("@MEMPK", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
@@ -112,7 +130,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
 
         // Execute stored procedure
         await _sp.ExecuteAsync(
-            "USP_ApplyForRegistration_Temp",
+            "USP_ApplyForRegistration_CNIC",
             p,
             cancellationToken: cancellationToken,
             "DefaultConnection"
@@ -122,7 +140,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         //string memPk = p.Get<string>("@MEMPK") ?? "0";
         //string name = p.Get<string>("@Name") ?? "";
         string userOtp = p.Get<int>("@OTP").ToString();
-        string outCellNo = p.Get<string>("@OutCellNo") ?? request.MobileNo;
+        string outCellNo = p.Get<string>("@OutCellNo") ?? "No Number Found";
         string message = p.Get<string>("@msg") ?? "No message";
         string FullName = p.Get<string>("@Name") ?? "No message";
         string requestEmail = p.Get<string>("@Email") ?? "No message";
@@ -136,8 +154,6 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         {
             outCellNo = "92" + outCellNo.Substring(1);
         }
-
-
         if (int.TryParse(userOtp, out var otp) && otp > 0)
         {
             var newUser = new ApplicationUser
@@ -148,7 +164,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 NormalizedUserName = requestEmail.ToUpper(),
                 Email = requestEmail,
                 NormalizedEmail = requestEmail.ToUpper(),
-                MobileNo = request.MobileNo,
+                MobileNo = outCellNo,
                 CNIC = request.CNIC,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed=true,
@@ -162,11 +178,11 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             };
             await _userManager.CreateAsync(newUser);
             // Send OTP to MobileNo
-            string sentmsg = userOtp + " is your OTP to sign-up DHA Karachi mobile application.";
+            string sentmsg = $"{userOtp} is your OTP for DHA Karachi Mobile App. Do not share it.";
 
             var result =await _otpService.SendSmsAsync(outCellNo, sentmsg, cancellationToken);
-            //if (result == "SUCCESSFUL" )
-            //{
+            if (result == "SUCCESSFUL")
+            {
                 var usernewOtp = new UserOtp
                 {
                     UserId = Guid.Parse(newUser.Id),
@@ -180,18 +196,52 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
                 _context.UserOtps.Add(usernewOtp);
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return SuccessResponse<string>.FromMessage(message);
-            //}
-            //else
-            //{
-            //    throw new BadRequestException(message);
-            //}
-            
+                TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
+                string verifyToken = await _authenticationService.GenerateTemporaryToken(newUser, "verify_otp", expiresIn);
+
+                //return returnmsg;
+                RegisterationDto _registerationdto = new RegisterationDto
+                {
+                    isOtpRequired = true,
+                    AccessToken = verifyToken,
+                    MobileNumber = MaskMobile(outCellNo),
+                    ResponseMessage = message
+
+                };
+
+                return new SuccessResponse<RegisterationDto>(
+                _registerationdto,
+                message
+                );
+
+                //return SuccessResponse<string>.FromMessage(message);
+            }
+            else
+            {
+                throw new BadRequestException(message);
+            }
+
         }
         else
         {
             throw new NotFoundException(message);
         }
+    }
+
+    public static string MaskMobile(string normalizedMobile)
+    {
+        if (string.IsNullOrEmpty(normalizedMobile))
+            return string.Empty;
+
+        // Keep only last 4 digits
+        string lastFour = normalizedMobile.Length > 4
+            ? normalizedMobile[^4..]
+            : normalizedMobile;
+
+        // Replace the rest with asterisks
+        string masked = new string('*', normalizedMobile.Length - lastFour.Length) + lastFour;
+
+        return masked;
     }
 }
 

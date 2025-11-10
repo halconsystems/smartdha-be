@@ -1,7 +1,9 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MobileAPI.Controllers;
+[Authorize]
 [ApiController]
 public class BaseApiController : ControllerBase
 {

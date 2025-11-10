@@ -46,12 +46,14 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationDbContext _context;
     private readonly IFileStorageService _fileStorage;
+    private readonly ISmsService _otpService;
 
-    public RegisterNonMemberCommandHandler(UserManager<ApplicationUser> userManager, IApplicationDbContext context, IFileStorageService fileStorageService)
+    public RegisterNonMemberCommandHandler(UserManager<ApplicationUser> userManager, IApplicationDbContext context, IFileStorageService fileStorageService,ISmsService otpService)
     {
         _userManager = userManager;
         _context = context;
         _fileStorage = fileStorageService;
+        _otpService = otpService;
     }
 
     public async Task<SuccessResponse<string>> Handle(RegisterNonMemberCommand request, CancellationToken cancellationToken)
@@ -61,11 +63,14 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
 
         try
         {
-
+            if (request.MobileNo.StartsWith("0"))
+            {
+                request.MobileNo = "92" + request.MobileNo.Substring(1);
+            }
 
             // 1. Check if user already exists by CNIC
             var existingUser = await _userManager.Users
-             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
+             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC || u.RegisteredMobileNo==request.MobileNo, cancellationToken);
 
             if (existingUser != null)
             {
@@ -91,14 +96,14 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                     };
 
                     return SuccessResponse<string>.FromMessage(dto);
-
-
                 }
 
                 // No verification found but user exists — treat as registered
                 string msg = "User already registered.";
                 return SuccessResponse<string>.FromMessage(msg);
             }
+
+            
 
             var user = new ApplicationUser
             {
@@ -166,8 +171,11 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             await _context.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
 
-            string finalmsg = "Registration submitted successfully. Your request is pending review.";
-            return SuccessResponse<string>.FromMessage(finalmsg);
+            string finalmsg = "Welcome to DHA Karachi Mobile App. Your registration request has been submitted successfully and will be updated shortly.";
+            var sentresult = await _otpService.SendSmsAsync(request.MobileNo, finalmsg, cancellationToken);
+
+            string appmsg = "Registration submitted successfully. Your request is pending review.";
+            return SuccessResponse<string>.FromMessage(appmsg);
         }
         catch (Exception ex) {
             await transaction.RollbackAsync(cancellationToken);

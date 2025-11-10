@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
@@ -14,7 +15,7 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 namespace DHAFacilitationAPIs.Application.Feature.User.Queries.VerifyOtp;
 public record VerifyOtpCommand : IRequest<SuccessResponse<OtpAuthenticationDto>>
 {
-    public string CNIC { get; init; } = default!;
+   // public string CNIC { get; init; } = default!;
     public string OtpCode { get; init; } = default!;
 }
 public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, SuccessResponse<OtpAuthenticationDto>>
@@ -22,20 +23,27 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAuthenticationService _authenticationService;
     private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUserService;
     public VerifyOtpCommandHandler(IApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
-        IAuthenticationService authenticationService)
+        IAuthenticationService authenticationService,ICurrentUserService currentUserService)
     {
         _context = context;
         _userManager = userManager;
         _authenticationService = authenticationService;
+        _currentUserService = currentUserService;
     }
     public async Task<SuccessResponse<OtpAuthenticationDto>> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
     {
-       
+        string UsedId = _currentUserService.UserId.ToString();
+
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == UsedId, cancellationToken);
+        if (user == null)
+            throw new NotFoundException("User not found.");
+
         // Get latest unverified OTP
         var otp = await _context.UserOtps
-            .Where(x => x.CNIC == request.CNIC &&
+            .Where(x => x.CNIC == user.CNIC &&
                         !x.IsVerified)
             .OrderByDescending(x => x.Created)
             .FirstOrDefaultAsync(cancellationToken);
@@ -49,13 +57,16 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
         if (otp.OtpCode != request.OtpCode)
             throw new ConflictException("Invalid OTP.");
 
+        if (!CryptographicOperations.FixedTimeEquals(
+        Encoding.UTF8.GetBytes(otp.OtpCode),
+        Encoding.UTF8.GetBytes(request.OtpCode)))
+            throw new ConflictException("Invalid OTP.");
+
+
         // Mark OTP as verified
         otp.IsVerified = true;
         await _context.SaveChangesAsync(cancellationToken);
 
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == otp.UserId.ToString(), cancellationToken);
-        if (user == null)
-            throw new NotFoundException("User not found.");
 
         if (user.PhoneNumberConfirmed == false)
         {
@@ -64,12 +75,12 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
         }
         if (user.PasswordHash==null || String.IsNullOrEmpty(user.PasswordHash))
         {
-            TimeSpan expiresIn = TimeSpan.FromMinutes(5); // temporary token valid for 5 mins
+            TimeSpan expiresIn = TimeSpan.FromMinutes(2); // temporary token valid for 5 mins
             string temptoken = await _authenticationService.GenerateTemporaryToken(user, "set_password", expiresIn);
 
             var dto = new OtpAuthenticationDto
             {
-                MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
+                MobileNumber = MaskMobile(user.RegisteredMobileNo?.ToString()) ?? string.Empty,
                 Name = user.Name,
                 AccessToken = temptoken,
                 isOtpVerified = true,
@@ -92,7 +103,7 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
 
         var finaldto = new OtpAuthenticationDto
         {
-            MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
+            MobileNumber = MaskMobile(user.RegisteredMobileNo?.ToString()) ?? string.Empty,
             Name = user.Name,
             AccessToken = token,
             isOtpVerified = true,
@@ -106,6 +117,22 @@ public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, Success
                     "Authentication step completed.",
                     "Mobile Number Verified"
                    );
+    }
+
+    public static string MaskMobile(string? normalizedMobile)
+    {
+        if (string.IsNullOrEmpty(normalizedMobile))
+            return string.Empty;
+
+        // Keep only last 4 digits
+        string lastFour = normalizedMobile.Length > 4
+            ? normalizedMobile[^4..]
+            : normalizedMobile;
+
+        // Replace the rest with asterisks
+        string masked = new string('*', normalizedMobile.Length - lastFour.Length) + lastFour;
+
+        return masked;
     }
 }
 

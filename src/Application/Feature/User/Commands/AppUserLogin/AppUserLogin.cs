@@ -45,23 +45,24 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
 
         if (user == null)
         {
-            throw new UnAuthorizedException("Invalid CNIC");
+            throw new UnAuthorizedException("Invalid CNIC. Please verify and try again.");
+
         }
         else if (user.AppType != AppType.Mobile)
         {
-            throw new UnAuthorizedException("User not authorized for this application.");
+            throw new UnAuthorizedException("You are not authorized to access this application.");
         }
         else if (user.IsActive == false)
         {
-            throw new UnAuthorizedException("User marked InActive contact with administrator");
+            throw new UnAuthorizedException("Your account is inactive. Please contact the administrator for assistance.");
         }
         else if (user.IsDeleted == true)
         {
-            throw new UnAuthorizedException("User is deleted contact with administrator");
+            throw new UnAuthorizedException("Your account has been deleted. Please contact the administrator for assistance.");
         }
         else if (user.PhoneNumberConfirmed == false)
         {
-            throw new UnAuthorizedException("Mobile Number not verified!");
+            throw new UnAuthorizedException("Your mobile number is not verified. Please verify to continue.");
         }
         else if(user.UserType==UserType.NonMember)
         {
@@ -76,13 +77,14 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                 {
                     string responseMessage = existingRequest?.Status switch
                     {
-                        VerificationStatus.Pending => "Your request is pending approval.",
-                        VerificationStatus.Rejected => "Membership request was rejected. Please contact administrator.",
-                        VerificationStatus.Approved => "User already registered.",
-                        _ => "User already registered."
+                        VerificationStatus.Pending => "Your registration request is under review.",
+                        VerificationStatus.Rejected => "Your registration request was rejected. Please contact the administrator.",
+                        VerificationStatus.Approved => "Your account is already registered.",
+                        _ => "Your account is already registered."
                     };
 
-                    var newdto= new MobileAuthenticationDto
+
+                    var newdto = new MobileAuthenticationDto
                     {
                         MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
                         Name = user.Name,
@@ -107,7 +109,8 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
 
         if (!result.Succeeded)
         {
-            throw new UnAuthorizedException("Invalid Password");
+            throw new UnAuthorizedException("Invalid password. Please try again.");
+
         }
         else if (user.IsOtpRequired)
         {
@@ -124,11 +127,12 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             var random = new Random();
             var generateotp = random.Next(100000, 999999); // generates a 6-digit number
 
-            string returnmsg = $"An OTP has been sent to the mobile number registered with your membership {generateotp}";
-            string sentmsg =  generateotp + " is your OTP to sign-in DHA Karachi mobile application.";
+            string returnmsg = $"An OTP has been sent to your registered mobile number.{generateotp}";
+            string sentmsg = $"{generateotp} is your OTP to sign in to the DHA Karachi Mobile App. Do not share it with anyone.";
+
             string smsresult = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
-            //if (smsresult == "SUCCESSFUL")
-            //{
+            if (smsresult == "SUCCESSFUL")
+            {
                 var usernewOtp = new UserOtp
                 {
                     UserId = Guid.Parse(user.Id),
@@ -142,11 +146,14 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                 _context.UserOtps.Add(usernewOtp);
                 await _context.SaveChangesAsync(cancellationToken);
 
+                TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
+                string verifyToken = await _authenticationService.GenerateTemporaryToken(user, "verify_otp", expiresIn);
+
                 var finaldto= new MobileAuthenticationDto
                 {
-                    MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
+                    MobileNumber = MaskMobile(user.RegisteredMobileNo?.ToString()) ?? string.Empty,
                     Name = user.Name,
-                    AccessToken = "",
+                    AccessToken = verifyToken,
                     isOtpRequired = true,
                     ResponseMessage = returnmsg
                 };
@@ -156,11 +163,11 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                      "Authentication step completed.",
                      "OTP Verification Required"
                     );
-            //}
-            //else
-            //{
-            //    throw new UnAuthorizedException("Mobile Number not verified!");
-            //}
+            }
+            else
+            {
+                throw new UnAuthorizedException("Mobile Number not verified!");
+            }
         }
 
         string accessToken = await _authenticationService.GenerateToken(user);
@@ -168,11 +175,11 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
 
         var dto = new MobileAuthenticationDto
         {
-            MobileNumber = user.RegisteredMobileNo ?? string.Empty,
+            MobileNumber = MaskMobile(user.RegisteredMobileNo) ?? string.Empty,
             Name = user.Name,
             AccessToken = accessToken,
             isOtpRequired = false,
-            ResponseMessage = "Login successful! You are now authenticated without OTP."
+            ResponseMessage = "Login successful. You are now signed in without OTP verification.",
         };
 
         return new SuccessResponse<MobileAuthenticationDto>(
@@ -181,19 +188,21 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             "Login successful!"
         );
 
-        //var dto = new MobileAuthenticationDto
-        //{
-        //    MobileNumber = user.RegisteredMobileNo?.ToString() ?? string.Empty,
-        //    Name = user.Name,
-        //    AccessToken = token,
-        //    isOtpRequired = false,
-        //    ResponseMessage = "Login successful! You are now authenticated without OTP."
-        //};
+    }
 
-        //return new SuccessResponse<MobileAuthenticationDto>(
-        //                dto,
-        //             "Authentication step completed.",
-        //             "Login successful! You are now authenticated without OTP."
-        //            );
+    public static string MaskMobile(string? normalizedMobile)
+    {
+        if (string.IsNullOrEmpty(normalizedMobile))
+            return string.Empty;
+
+        // Keep only last 4 digits
+        string lastFour = normalizedMobile.Length > 4
+            ? normalizedMobile[^4..]
+            : normalizedMobile;
+
+        // Replace the rest with asterisks
+        string masked = new string('*', normalizedMobile.Length - lastFour.Length) + lastFour;
+
+        return masked;
     }
 }

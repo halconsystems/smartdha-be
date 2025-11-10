@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -8,6 +9,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -55,17 +57,17 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireClaim("purpose", "set_password");
     });
+    options.AddPolicy("SetOTPPolicy", policy =>
+    {
+        policy.RequireClaim("purpose", "verify_otp");
+    });
 });
-
-
 
 builder.Services.AddControllers()
     .AddJsonOptions(opt =>
     {
         opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
-
 
 builder.Services.Configure<FileStorageOptions>(
     builder.Configuration.GetSection("FileStorage"));
@@ -86,8 +88,6 @@ builder.Services
     });
 
 builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
-
-
 
 // (F) Host-specific realtime adapter (Mobile)
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
@@ -112,6 +112,70 @@ builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, 
     client.Timeout = TimeSpan.FromSeconds(10);
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 });
+
+//Rate Limiting
+builder.Services.AddRateLimiter(options =>
+{
+    // Return 429 instead of default 503
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Optional: unified JSON for rejected requests + Retry-After seconds (if available)
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.ContentType = "application/json";
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+
+        var retryAfter = context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var ra)
+            ? ra.TotalSeconds.ToString("0")
+            : null;
+
+        var payload = new
+        {
+            error = "Too many requests",
+            detail = "Rate limit exceeded. Please try again later.",
+            retryAfterSeconds = retryAfter
+        };
+
+        await context.HttpContext.Response.WriteAsJsonAsync(payload, cancellationToken: token);
+    };
+
+    //  Anonymous limiter (10 req/min per client IP)
+    options.AddPolicy("AnonymousLimiter", httpContext =>
+    {
+        // Identify client by IP
+        var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+        // You can also add route info to partition key for fairness
+        var path = httpContext.Request.Path.Value?.ToLowerInvariant() ?? "unknown";
+        var partitionKey = $"anon:{path}:{clientIp}";
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey,
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,                   // 10 requests
+                Window = TimeSpan.FromMinutes(1),   // per minute
+                QueueLimit = 1,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+            });
+    });
+
+
+    // (Optional) A global “background” policy you can use elsewhere if needed
+    options.AddFixedWindowLimiter("GlobalFixed", cfg =>
+    {
+        cfg.PermitLimit = 100;                // e.g., 100 requests per minute
+        cfg.Window = TimeSpan.FromMinutes(1);
+        cfg.QueueLimit = 10;
+        cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
+
+
+
+
+
 
 var app = builder.Build();
 
@@ -154,4 +218,5 @@ app.MapControllers().RequireAuthorization();
 //app.MapHub<PanicHub>("/hubs/panic");
 
 app.UseMiddleware<CustomExceptionMiddleware>();
+app.UseRateLimiter();
 app.Run();

@@ -53,7 +53,6 @@ public class AuthenticationService : IAuthenticationService
     {
         IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
         IList<string> roles = await _userManager.GetRolesAsync(user);
-
         List<Claim> roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
 
         var claims = new List<Claim>()
@@ -193,11 +192,15 @@ public class AuthenticationService : IAuthenticationService
 
     #region Private Method
 
+
+
     private string GenerateAccessToken(IEnumerable<Claim> claims)
     {
         //expires: DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes),
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+
         var tokeOptions = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
@@ -210,21 +213,26 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
-    private string GenerateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiryOverride = null)
+    private string GenerateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiresIn = null)
     {
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var tokenOptions = new JwtSecurityToken(
+        var now = DateTime.Now;
+        var expiry = now.Add(expiresIn ?? TimeSpan.FromMinutes(_jwtSettings.DurationInMinutes));
+
+        var token = new JwtSecurityToken(
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.Now.Add(expiryOverride ?? TimeSpan.FromMinutes(_jwtSettings.DurationInMinutes)),
-            signingCredentials: signinCredentials
+            notBefore: now,
+            expires: expiry,
+            signingCredentials: creds
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
 
     #endregion
 }

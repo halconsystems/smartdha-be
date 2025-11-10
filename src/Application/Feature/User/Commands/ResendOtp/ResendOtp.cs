@@ -11,34 +11,36 @@ using Microsoft.AspNetCore.Identity;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.ResendOtp;
-public record ResendOtpCommand(string CNIC) : IRequest<SuccessResponse<string>>;
+public record ResendOtpCommand() : IRequest<SuccessResponse<string>>;
 
 public class ResendOtpCommandHandler : IRequestHandler<ResendOtpCommand, SuccessResponse<string>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationDbContext _context;
     private readonly ISmsService _otpService;
+    private readonly ICurrentUserService _currentUserService;
 
     public ResendOtpCommandHandler(
         UserManager<ApplicationUser> userManager,
         IApplicationDbContext context,
-        ISmsService otpService)
+        ISmsService otpService,
+        ICurrentUserService currentUserService)
     {
         _userManager = userManager;
         _context = context;
         _otpService = otpService;
+        _currentUserService = currentUserService;
     }
 
     public async Task<SuccessResponse<string>> Handle(ResendOtpCommand request, CancellationToken cancellationToken)
     {
+        string UsedId = _currentUserService.UserId.ToString();
+
         var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == UsedId, cancellationToken);
 
         if (existingUser == null)
             throw new NotFoundException("User with the provided CNIC does not exist.");
-
-        //if (existingUser.PhoneNumberConfirmed)
-        //    throw new ConflictException("User already verified.");
 
         // Normalize mobile number
         string normalizedMobile = existingUser.MobileNo
@@ -68,7 +70,7 @@ public class ResendOtpCommandHandler : IRequestHandler<ResendOtpCommand, Success
             OtpCode = otp.ToString(),
             SentMessage = sentMessage,
             IsVerified = false,
-            ExpiresAt = DateTime.Now.AddMinutes(5)
+            ExpiresAt = DateTime.Now.AddMinutes(2)
         };
 
         _context.UserOtps.Add(userOtp);

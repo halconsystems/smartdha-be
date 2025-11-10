@@ -39,6 +39,14 @@ public interface IApplicationDbContext
     DbSet<PanicActionLog> PanicActionLogs { get; }
     DbSet<PanicLocationUpdate> PanicLocationUpdates { get; }
     DbSet<RefreshToken> RefreshTokens { get; }
+    DbSet<Complaint> Complaints { get; }
+    DbSet<ComplaintAttachment> ComplaintAttachments { get; }
+    DbSet<ComplaintCategory> ComplaintCategories { get; }
+    DbSet<ComplaintHistory> ComplaintHistories { get; }
+    DbSet<ComplaintPriority> ComplaintPriorities { get; }
+
+
+
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
