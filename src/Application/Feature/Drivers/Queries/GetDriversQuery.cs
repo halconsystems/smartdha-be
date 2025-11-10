@@ -40,7 +40,7 @@ public class GetDriversHandler : IRequestHandler<GetDriversQuery, SuccessRespons
                     Gender = driver.Gender,
                     LicenceNo = driver.LicenceNo,
                     DriverStatusId = driver.DriverStatusId,
-                    DriverStatusName = driver.DriverStatus?.Status ?? string.Empty,
+                    DriverStatusName = driver.DriverStatus?.Status.ToString() ?? string.Empty,
                     StatusDate = driver.StatusDate
                 }
             });
@@ -57,7 +57,7 @@ public class GetDriversHandler : IRequestHandler<GetDriversQuery, SuccessRespons
             Gender = driver.Gender,
             LicenceNo = driver.LicenceNo,
             DriverStatusId = driver.DriverStatusId,
-            DriverStatusName = driver.DriverStatus?.Status ?? string.Empty,
+            DriverStatusName = driver.DriverStatus?.Status.ToString() ?? string.Empty,
             StatusDate = driver.StatusDate
         }).ToList();
 

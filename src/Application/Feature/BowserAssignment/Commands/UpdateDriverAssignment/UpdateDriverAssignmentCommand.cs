@@ -55,7 +55,7 @@ public class UpdateDriverAssignmentCommandHandler : IRequestHandler<UpdateDriver
 
             // Find the "OnDuty" status id from DriverStatus table
             var onDutyStatusId = await _context.DriverStatuses
-                .Where(s => s.Status == "OnDuty")
+                .Where(s => s.Status == Domain.Enums.DriverStatus.OnDuty)
                 .Select(s => s.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -91,7 +91,7 @@ public class UpdateDriverAssignmentCommandHandler : IRequestHandler<UpdateDriver
 
                 // Find the "Available" status id from DriverStatus table
                 var availableStatusId = await _context.DriverStatuses
-                    .Where(s => s.Status == "Available")
+                    .Where(s => s.Status == Domain.Enums.DriverStatus.Available)
                     .Select(s => s.Id)
                     .FirstOrDefaultAsync(cancellationToken);
 

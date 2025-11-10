@@ -8,7 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.DriverStatus.Queries;
 public class DriverStatusDto
 {
     public Guid Id { get; set; }
-    public string Status { get; set; } = default!;
+    public Domain.Enums.DriverStatus Status { get; set; } = default!;
     public bool? IsActive { get; set; }
 }
 

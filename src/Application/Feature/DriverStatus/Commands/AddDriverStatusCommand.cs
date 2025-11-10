@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.DriverStatus.Commands;
 // Add
-public record AddDriverStatusCommand(string Status) : IRequest<SuccessResponse<string>>;
+public record AddDriverStatusCommand(Domain.Enums.DriverStatus Status) : IRequest<SuccessResponse<string>>;
 
 // ADD
 public class AddDriverStatusHandler : IRequestHandler<AddDriverStatusCommand, SuccessResponse<string>>

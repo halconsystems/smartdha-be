@@ -35,7 +35,7 @@ public class ReservationRoomInfoDto
     // Booking info
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
-    public int TotalNights { get; set; }
+    public decimal TotalNights { get; set; }
     public decimal PricePerNight { get; set; }
     public decimal Subtotal { get; set; }
 }

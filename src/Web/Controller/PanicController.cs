@@ -1,9 +1,14 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.Panic;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicNote;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AssignPanic;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeletePanicResponder;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicResponders;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDashboardSummary;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicLogs;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicPaged;
@@ -83,4 +88,35 @@ public class PanicController : BaseApiController
         await _med.Send(new AddPanicNoteCommand(id, b.Note));
         return NoContent();
     }
+
+    [HttpPost("add-panic-responder"), AllowAnonymous]
+    public async Task<IActionResult> AddPanicUser([FromBody] AddPanicResponderCommand command)
+    {
+        var result = await _med.Send(command);
+        return Ok(new { PanicUserId = result });
+    }
+
+    [HttpPut("update-panic-responder"), AllowAnonymous]
+    public async Task<IActionResult> UpdatePanicResponder([FromBody] UpdatePanicResponderCommand command)
+    {
+        await _med.Send(command);
+        return Ok("Panic responder updated successfully.");
+    }
+
+    [HttpDelete("delete-panic-responder/{id:guid}"), AllowAnonymous]
+    public async Task<IActionResult> DeletePanicResponder(Guid id)
+    {
+        var result = await _med.Send(new DeletePanicResponderCommand(id));
+        return Ok(result);
+    }
+
+    [HttpGet("get-all-panic-responders"), AllowAnonymous]
+    public async Task<IActionResult> GetAllPanicResponders([FromQuery] Guid? emergencyTypeId)
+    {
+        var result = await _med.Send(new GetAllPanicRespondersQuery(emergencyTypeId));
+        return Ok(result);
+    }
+
+    [HttpGet("emergency-types")]
+    public Task<List<EmergencyTypeDto>> Types() => _med.Send(new GetEmergencyTypesQuery());
 }

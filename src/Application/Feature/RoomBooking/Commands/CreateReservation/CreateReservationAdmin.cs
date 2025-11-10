@@ -39,6 +39,13 @@ public class CreateReservationAdminCommandHandler
         //if (!isAdmin)
         //    throw new UnauthorizedAccessException("Only admins can create bookings for other users.");
 
+        var clubType = await _context.Clubs
+                .Where(c => c.Id == dto.ClubId && c.IsDeleted == false && c.IsActive == true)
+                .Select(c => (ClubType ?)c.ClubType).FirstOrDefaultAsync();
+
+        if (clubType == null)
+            throw new Exception("Club not found");
+
         if (dto.Rooms == null || !dto.Rooms.Any())
             throw new InvalidOperationException("At least one room must be provided.");
 
@@ -48,7 +55,7 @@ public class CreateReservationAdminCommandHandler
         // 🔽 load rooms with occupancy
         var roomsMap = await _context.Rooms
             .AsNoTracking()
-            .Where(r => roomIds.Contains(r.Id))
+            .Where(r => roomIds.Contains(r.Id) && r.IsDeleted == false && r.IsActive == true)
             .Select(r => new { r.Id, r.ClubId, r.NormalOccupancy, r.MaxExtraOccupancy })
             .ToDictionaryAsync(r => r.Id, r => r, ct);
 
@@ -58,23 +65,25 @@ public class CreateReservationAdminCommandHandler
 
         // 🔽 load charges
         var chargesDict = await _context.RoomCharges
-            .Where(c => roomIds.Contains(c.RoomId) && c.BookingType == dto.BookingType)
+            .Where(c => roomIds.Contains(c.RoomId) && c.BookingType == dto.BookingType && c.IsDeleted == false && c.IsActive == true)
             .ToDictionaryAsync(c => (c.RoomId, c.BookingType, c.ExtraOccupancy), c => c.Charges, ct);
 
         // 🔽 overlap guard
         foreach (var rr in dto.Rooms)
         {
-            var reqFromDO = DateOnly.FromDateTime(rr.FromDate);
-            var reqToDO = DateOnly.FromDateTime(rr.ToDate);
+            //var reqFromDO = DateOnly.FromDateTime(rr.FromDate);
+            //var reqToDO = DateOnly.FromDateTime(rr.ToDate);
 
             var conflict = await _context.ReservationRooms
                 .AsNoTracking()
                 .AnyAsync(x =>
                     x.RoomId == rr.RoomId &&
-                    x.FromDateOnly <= reqToDO &&
-                    x.ToDateOnly >= reqFromDO &&
-                    (x.Reservation.Status == ReservationStatus.AwaitingPayment ||
-                     x.Reservation.Status == ReservationStatus.Converted),
+                    x.FromDate <= rr.ToDate &&
+                    x.ToDate >= rr.FromDate &&
+                    //(x.Reservation.Status == ReservationStatus.AwaitingPayment ||
+                    // x.Reservation.Status == ReservationStatus.Converted),
+                    x.Reservation.ExpiresAt > DateTime.Now &&
+                    x.IsDeleted == false && x.IsActive == true,
                     ct);
 
             if (conflict)
@@ -88,7 +97,17 @@ public class CreateReservationAdminCommandHandler
 
         foreach (var r in dto.Rooms)
         {
-            var nights = (r.ToDate.Date - r.FromDate.Date).Days;
+            decimal nights = 0;
+
+            if (clubType == ClubType.GuestRoom)
+            {
+                nights = (r.ToDate.Date - r.FromDate.Date).Days;
+            }
+            else if (clubType == ClubType.Ground)
+            {
+                nights = (decimal)(r.ToDate - r.FromDate).TotalHours;
+            }
+
             if (nights <= 0)
                 throw new InvalidOperationException("ToDate must be after FromDate.");
 
@@ -131,7 +150,7 @@ public class CreateReservationAdminCommandHandler
 
         var club = await _context.Clubs
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == dto.ClubId, ct)
+            .FirstOrDefaultAsync(x => x.Id == dto.ClubId && x.IsDeleted == false && x.IsActive == true, ct)
             ?? throw new InvalidOperationException($"Club with Id {dto.ClubId} not found.");
 
         if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
@@ -162,7 +181,7 @@ public class CreateReservationAdminCommandHandler
             dto.BookingType != RoomBookingType.Self)
         {
             var existingGuest = await _context.BookingGuests
-                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport, ct);
+                .FirstOrDefaultAsync(g => g.CNICOrPassport == dto.Guest.CNICOrPassport && g.IsDeleted == false && g.IsActive == true, ct);
 
             if (existingGuest != null)
             {
@@ -226,7 +245,10 @@ public class CreateReservationAdminCommandHandler
                     .ToList(),
                 FromDate = rr.FromDate,
                 ToDate = rr.ToDate,
-                TotalNights = (rr.ToDate.Date - rr.FromDate.Date).Days,
+                TotalNights = clubType == ClubType.GuestRoom
+                    ? (decimal)(rr.ToDate.Date - rr.FromDate.Date).Days        // Whole days
+                    : (decimal)(rr.ToDate - rr.FromDate).TotalHours,           // Fractional hours
+                //TotalNights = (rr.ToDate.Date - rr.FromDate.Date).Days,
                 PricePerNight = rr.PricePerNight,
                 Subtotal = rr.Subtotal
             }).ToList()

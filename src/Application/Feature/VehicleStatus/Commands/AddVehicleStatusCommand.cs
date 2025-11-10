@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.BowserMake.Commands;
-public record AddVehicleStatusCommand(string Status, string Remarks) : IRequest<SuccessResponse<string>>;
+public record AddVehicleStatusCommand(VehicleStatus Status, string Remarks) : IRequest<SuccessResponse<string>>;
 
 public class AddVehicleStatusHandler : IRequestHandler<AddVehicleStatusCommand, SuccessResponse<string>>
 {

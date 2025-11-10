@@ -46,10 +46,15 @@ public class GetBowserQueryHandler : IRequestHandler<GetBowsersQuery, SuccessRes
                     MakeId = vehicle.MakeId,
                     ModelId = vehicle.ModelId,
                     YearOfManufacture = vehicle.YearOfManufacture,
+                    VehicleOwnerId = vehicle.VehicleOwnerId,
                     VehicleOwnerName = vehicle.VehicleOwner?.OwnerName ?? string.Empty,
+                    VehicleTypeId = vehicle.VehicleTypeId,
                     VehicleTypeName = vehicle.VehicleType?.TypeName ?? string.Empty,
-                    VehicleStatusName = vehicle.VehicleStatus?.Status ?? string.Empty,
+                    VehicleStatusId = vehicle.VehicleStatusId,
+                    VehicleStatusName = vehicle.VehicleStatus?.Status.ToString() ?? string.Empty,
+                    BowserCapacityId = vehicle.BowserCapacityId,
                     BowserCapacityName = vehicle.BowserCapacity?.Capacity.ToString() ?? string.Empty,
+                    BowserCapacityUnit = vehicle.BowserCapacity?.Unit ?? string.Empty,
                     Remarks = vehicle.Remarks
                 } });
         }
@@ -64,10 +69,15 @@ public class GetBowserQueryHandler : IRequestHandler<GetBowsersQuery, SuccessRes
             MakeId = v.MakeId,
             ModelId = v.ModelId,
             YearOfManufacture = v.YearOfManufacture,
+            VehicleOwnerId = v.VehicleOwnerId,
             VehicleOwnerName = v.VehicleOwner?.OwnerName ?? string.Empty,
+            VehicleTypeId = v.VehicleTypeId,
             VehicleTypeName = v.VehicleType?.TypeName ?? string.Empty,
-            VehicleStatusName = v.VehicleStatus?.Status ?? string.Empty,
+            VehicleStatusId = v.VehicleStatusId,
+            VehicleStatusName = v.VehicleStatus?.Status.ToString() ?? string.Empty,
+            BowserCapacityId = v.BowserCapacityId,
             BowserCapacityName = v.BowserCapacity?.Capacity.ToString() ?? string.Empty,
+            BowserCapacityUnit = v.BowserCapacity?.Unit ?? string.Empty,
             Remarks = v.Remarks
         }).ToList());
 

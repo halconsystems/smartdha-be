@@ -17,6 +17,7 @@ public class BowserRequestDto
 
     public Guid BowserCapacityId { get; set; }
     public string? BowserCapacityName { get; set; }
+    public string? BowserCapacityUnit { get; set; }
 
     public DateTime RequestedDeliveryDate { get; set; }
     public DateTime? PlannedDeliveryDate { get; set; }

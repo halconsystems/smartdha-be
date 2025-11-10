@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.DriverStatus.Commands;
 // Update
-public record UpdateDriverStatusCommand(Guid Id, string Status) : IRequest<SuccessResponse<string>>;
+public record UpdateDriverStatusCommand(Guid Id, Domain.Enums.DriverStatus Status) : IRequest<SuccessResponse<string>>;
 // UPDATE
 public class UpdateDriverStatusHandler : IRequestHandler<UpdateDriverStatusCommand, SuccessResponse<string>>
 {

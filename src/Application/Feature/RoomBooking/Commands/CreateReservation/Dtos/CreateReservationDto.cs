@@ -17,7 +17,8 @@ public class CreateReservationRoomDto
 {
     public Guid RoomId { get; set; }
     public DateTime FromDate { get; set; }   // inclusive check-in
-    public DateTime ToDate { get; set; }   // exclusive or next-day checkout (your current logic uses nightly count = To-From)
+    public DateTime ToDate { get; set; }   // exclusive or next-day checkout (your current logic uses nightly count = To-From) => Room Booking 
+                                           // same day checkout => Ground Booking
     public int Adults { get; set; } = 0;
     public int Children { get; set; } = 0;
 }

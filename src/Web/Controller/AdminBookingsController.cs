@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationSta
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.ReservationStatus.Dtos;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.RoomDetails;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterNonMember;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -39,10 +40,18 @@ public class AdminBookingsController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("search-rooms"), AllowAnonymous]
-    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType, CancellationToken ct)
+    [HttpPost("create-nonmember-ground"), AllowAnonymous]
+    public async Task<IActionResult> CreateNonMemberGround([FromBody] RegisterGroundNonMemberCommand cmd, CancellationToken ct)
     {
-        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType), ct);
+        var result = await _mediator.Send(cmd, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("search-rooms"), AllowAnonymous]
+    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate,
+        [FromQuery] RoomBookingType bookingType, [FromQuery] TimeOnly? checkInTime = null, [FromQuery] TimeOnly? checkOutTime = null, CancellationToken ct = default)
+    {
+        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType, checkInTime, checkOutTime), ct);
         return Ok(result);
     }
 

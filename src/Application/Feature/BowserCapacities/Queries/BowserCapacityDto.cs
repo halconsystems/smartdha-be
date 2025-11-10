@@ -10,4 +10,5 @@ public class BowserCapacityDto
     public Guid Id { get; set; }
     public decimal Capacity { get; set; }
     public string Unit { get; set; } = default!;
+    public decimal? Rate { get; set; }
 }

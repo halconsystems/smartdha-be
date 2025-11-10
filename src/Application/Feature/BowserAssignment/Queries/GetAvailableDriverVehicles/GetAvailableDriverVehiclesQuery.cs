@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.BowserAssignment.Queries.GetAvailableDriverVehicles;
 
@@ -23,6 +24,15 @@ public class GetAvailableDriverVehiclesHandler : IRequestHandler<GetAvailableDri
         var requestDate = DateOnly.FromDateTime(request.RequestedDeliveryDate);
         var requestTime = TimeOnly.FromDateTime(request.RequestedDeliveryDate);
 
+        // Check if the phase supports this bowser capacity
+        bool isCapacityAllowed = await _context.PhaseCapacities
+            .AnyAsync(pc => pc.PhaseId == request.PhaseId && pc.BowserCapacityId == request.BowserCapacityId, cancellationToken);
+
+        if (!isCapacityAllowed)
+        {
+            throw new ArgumentException($"The selected phase does not allow bowser capacity '{request.BowserCapacityId}'.");
+        }
+
         var query = await _context.DriverShifts
             .Include(ds => ds.DriverInfo)
                 .ThenInclude(d => d.DriverStatus)
@@ -37,8 +47,8 @@ public class GetAvailableDriverVehiclesHandler : IRequestHandler<GetAvailableDri
             .Include(ds => ds.Shift)
             .Where(ds =>
                 ds.DutyDate == requestDate &&
-                ds.DriverInfo.DriverStatus.Status == "Available" &&
-                ds.Vehicle.VehicleStatus.Status == "Not Busy" &&
+                ds.DriverInfo.DriverStatus.Status == Domain.Enums.DriverStatus.Available &&
+                ds.Vehicle.VehicleStatus.Status == VehicleStatus.Active &&
                 ds.Vehicle.BowserCapacityId == request.BowserCapacityId &&
                 requestTime >= ds.Shift.StartTime &&   // requested delivery time must lie b/w driver's shift timings
                 requestTime <= ds.Shift.EndTime
