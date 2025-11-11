@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class ComplaintComment : BaseAuditableEntity
 {
-    public int ComplaintId { get; set; }
+    public Guid ComplaintId { get; set; }
     public Complaint Complaint { get; set; } = default!;
     public string Text { get; set; } = default!;
     public ComplaintVisibility Visibility { get; set; } = ComplaintVisibility.Public;

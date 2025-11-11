@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class ComplaintAttachment : BaseAuditableEntity
 {
-    public string ComplaintId { get; set; } = default!;
+    public Guid ComplaintId { get; set; }
     public Complaint Complaint { get; set; } = default!;
     public string ImageURL { get; set; } = default!;
     public string ImageExtension { get; set; } = default!;
