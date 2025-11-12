@@ -116,6 +116,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             new ComplaintPriority { Code = "URG", Name = "Urgent", Weight = 4 }
         );
 
+
+
     }
     private static void IdentityBuilder(ModelBuilder builder)
     {

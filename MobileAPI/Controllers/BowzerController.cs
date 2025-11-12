@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Contracts.Mobile;
+using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CancelBowserRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CreateRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.SubmitRequest;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MobileAPI.Authorization;
 
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
@@ -20,19 +22,23 @@ public class BowzerController : BaseApiController
     private readonly IMediator _mediator;
     public BowzerController(IMediator mediator) => _mediator = mediator;
  
-    [HttpGet("GetPhases"),AllowAnonymous]
+    [HttpGet("GetPhases")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> GetPhases(CancellationToken ct)
        => Ok(await _mediator.Send(new GetPhasesQuery(), ct));
 
-    [HttpGet("{phaseId:guid}/capacities"),AllowAnonymous]
+    [HttpGet("{phaseId:guid}/capacities")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> GetPhaseCapacities(Guid phaseId, CancellationToken ct)
         => Ok(await _mediator.Send(new GetPhaseCapacitiesQuery(phaseId), ct));
 
-    [HttpPost("/api/quotes"), AllowAnonymous]
+    [HttpPost("/api/quotes")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> Quote([FromBody] QuoteRequestDto dto, CancellationToken ct)
        => Ok(await _mediator.Send(new QuoteRequestQuery(dto), ct));
 
-    [HttpPost, AllowAnonymous]
+    [HttpPost]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> Create([FromBody] CreateRequestDto dto, CancellationToken ct)
     {
         var result = await _mediator.Send(new CreateRequestCommand(dto), ct);
@@ -40,18 +46,21 @@ public class BowzerController : BaseApiController
     }
 
     // Submit
-    [HttpPost("{id:guid}/submit"), AllowAnonymous]
+    [HttpPost("{id:guid}/submit")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> Submit(Guid id, CancellationToken ct)
         => Ok(new { status = await _mediator.Send(new SubmitRequestCommand(id), ct) });
 
-    [HttpPost("cancel-request"), AllowAnonymous]
+    [HttpPost("cancel-request")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> CancelBowserRequest([FromBody] CancelBowserRequestCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
         return Ok(new { message = result });
     }
 
-    [HttpGet("history"), AllowAnonymous]
+    [HttpGet("history")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> GetMyHistory(CancellationToken ct)
        => Ok(await _mediator.Send(new GetMyRequestsQuery(), ct));
 }
