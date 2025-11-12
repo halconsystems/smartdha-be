@@ -50,19 +50,48 @@ public class GetAllUsersHandler
 
         if (!isSuperAdmin)
         {
+
+            List<string> accessibleUserIds = new();
+
             // 3️⃣ Normal user → filter to users assigned to the same clubs
             var myClubIds = await _context.UserClubAssignments
                 .Where(uca => uca.UserId == currentUserId)
                 .Select(uca => uca.ClubId)
                 .ToListAsync(cancellationToken);
 
-            var userIdsInMyClubs = await _context.UserClubAssignments
+            if (myClubIds.Any())
+            {
+                accessibleUserIds = await _context.UserClubAssignments
                 .Where(uca => myClubIds.Contains(uca.ClubId))
                 .Select(uca => uca.UserId)
                 .Distinct()
                 .ToListAsync(cancellationToken);
+            }
+            else
+            {
+                // --- ✅ Module-based filtering (excluding "UserManagement") ---
+                var myModuleIds = await _context.UserModuleAssignments
+                    .Include(uma => uma.Module)
+                    .Where(uma => uma.UserId == currentUserId && uma.Module.Value != "UserManagement")
+                    .Select(uma => uma.ModuleId)
+                    .ToListAsync(cancellationToken);
 
-            usersQuery = usersQuery.Where(u => userIdsInMyClubs.Contains(u.Id));
+                if (myModuleIds.Any())
+                {
+                    accessibleUserIds = await _context.UserModuleAssignments
+                        .Include(uma => uma.Module)
+                        .Where(uma => myModuleIds.Contains(uma.ModuleId) &&
+                                      uma.Module.Value.ToLower() != "usermanagement")
+                        .Select(uma => uma.UserId)
+                        .Distinct()
+                        .ToListAsync(cancellationToken);
+                }
+            }
+
+            if (accessibleUserIds.Any())
+                usersQuery = usersQuery.Where(u => accessibleUserIds.Contains(u.Id));
+            else
+                usersQuery = usersQuery.Where(u => false); // no access
         }
 
         var users = await usersQuery.ToListAsync(cancellationToken);

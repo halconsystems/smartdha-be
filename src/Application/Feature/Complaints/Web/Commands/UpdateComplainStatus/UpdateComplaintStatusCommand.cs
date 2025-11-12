@@ -3,24 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Complaints.Web.Commands.UpdateComplaintStatus;
-public record UpdateComplaintStatusCommand(string UserId, Guid ComplaintId, ComplaintStatus NewStatus, string? AdminRemakrs) : IRequest<string>;
+public record UpdateComplaintStatusCommand(Guid ComplaintId, ComplaintStatus NewStatus, string? AdminRemakrs) : IRequest<string>;
 
 public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplaintStatusCommand, string>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ICurrentUserService _currentUser;
 
-    public UpdateComplaintStatusCommandHandler(IApplicationDbContext context)
+    public UpdateComplaintStatusCommandHandler(IApplicationDbContext context, ICurrentUserService currentUser)
     {
         _context = context;
+        _currentUser = currentUser;
     }
 
     public async Task<string> Handle(UpdateComplaintStatusCommand request, CancellationToken cancellationToken)
     {
+        var currentUserId = _currentUser.UserId.ToString();
+        if (string.IsNullOrEmpty(currentUserId))
+            throw new UnAuthorizedException("Invalid user context.");
+
         var complaint = await _context.Complaints
             .FirstOrDefaultAsync(x => x.Id == request.ComplaintId, cancellationToken)
             ?? throw new ArgumentException("Complaint not found.");
@@ -37,7 +44,7 @@ public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplai
             Action = "Status Updated",
             FromValue = oldStatus.ToString(),
             ToValue = request.NewStatus.ToString(),
-            ActorUserId = request.UserId,
+            ActorUserId = currentUserId,
             Created = DateTime.Now
         });
 
