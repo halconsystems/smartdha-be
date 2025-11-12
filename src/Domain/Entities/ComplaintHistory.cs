@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities;
 public class ComplaintHistory : BaseAuditableEntity
 {
-    public int ComplaintId { get; set; }
+    public Guid ComplaintId { get; set; }
     public Complaint Complaint { get; set; } = default!;
     public string Action { get; set; } = default!;                // “StatusChanged”, “Assigned”, “AttachmentAdded”, etc.
     public string? FromValue { get; set; }

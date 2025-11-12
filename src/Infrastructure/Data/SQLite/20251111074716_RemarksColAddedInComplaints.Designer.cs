@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111074716_RemarksColAddedInComplaints")]
+    partial class RemarksColAddedInComplaints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -719,7 +722,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c0b52dcd-1688-4ef8-9df3-228b2738ba03"),
+                            Id = new Guid("1c508462-f2f0-4e5a-a88a-0a2d3f2eb1b8"),
                             Code = "WATER",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -728,7 +731,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("a767a331-729b-4b49-95be-1798f154f855"),
+                            Id = new Guid("43cbb35e-0744-4ed7-a133-3516865883e5"),
                             Code = "ELECTRIC",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -737,7 +740,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("150ba363-45ef-4f19-b03f-57876cc26562"),
+                            Id = new Guid("2955554f-25d6-4267-b710-f751617c88a0"),
                             Code = "ROAD",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -746,7 +749,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("56214b01-8749-480d-b7a9-1d82a52d2003"),
+                            Id = new Guid("c149efdd-b3b3-4b72-946b-ee4defc640b5"),
                             Code = "SECURITY",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -755,7 +758,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("600a3d2a-b165-4b62-a254-d7592004ffc9"),
+                            Id = new Guid("1d769d16-6c21-4db7-b3eb-4c321e2bc69a"),
                             Code = "MAINT",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -764,7 +767,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("c2d252f8-def9-423a-88e7-c14ea6eb7263"),
+                            Id = new Guid("981e9f52-42f9-44d4-aade-71c6a108eff7"),
                             Code = "OTHER",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -935,7 +938,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f0b28ca3-6fb0-417f-9a68-ea7dea040b4a"),
+                            Id = new Guid("a955a3fb-c292-4ec0-872b-4eb6b43d34d7"),
                             Code = "LOW",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -945,7 +948,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("376b5c7d-282f-4a64-83c0-f665c30d8c2e"),
+                            Id = new Guid("c9f0b605-61e0-4eba-b775-8da932d49cee"),
                             Code = "MED",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -955,7 +958,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("d96ae061-6c92-4ede-947d-94df256394fd"),
+                            Id = new Guid("4d3816f2-34ad-4c75-b0d0-d4716d1f128a"),
                             Code = "HIGH",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -965,7 +968,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         },
                         new
                         {
-                            Id = new Guid("bdee021c-5c6b-419e-9be5-eb0ec3cb8fc7"),
+                            Id = new Guid("9ecbc224-3f00-4001-b6fb-9f5acfc36166"),
                             Code = "URG",
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             LastModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

@@ -16,6 +16,8 @@ public record UpdateModuleCommand : IRequest<SuccessResponse<Guid>>
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public string Remarks { get; set; } = default!;
+    public string Title { get; set; } = default!;
+
 }
 
 public class UpdateModuleCommandHandler : IRequestHandler<UpdateModuleCommand, SuccessResponse<Guid>>
@@ -46,6 +48,7 @@ public class UpdateModuleCommandHandler : IRequestHandler<UpdateModuleCommand, S
         module.Name = request.Name;
         module.Description = request.Description;
         module.Remarks = request.Remarks;
+        module.Title = request.Title;
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -100,21 +100,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
 
-        builder.Entity<ComplaintCategory>().HasData(
-         new ComplaintCategory { Code = "WATER", Name = "Water Supply" },
-            new ComplaintCategory { Code = "ELECTRIC", Name = "Electricity" },
-            new ComplaintCategory { Code = "ROAD", Name = "Road / Infrastructure" },
-            new ComplaintCategory { Code = "SECURITY", Name = "Security" },
-            new ComplaintCategory { Code = "MAINT", Name = "Maintenance" },
-            new ComplaintCategory { Code = "OTHER", Name = "Other" }
-        );
+        //builder.Entity<ComplaintCategory>().HasData(
+        // new ComplaintCategory { Code = "WATER", Name = "Water Supply" },
+        //    new ComplaintCategory { Code = "ELECTRIC", Name = "Electricity" },
+        //    new ComplaintCategory { Code = "ROAD", Name = "Road / Infrastructure" },
+        //    new ComplaintCategory { Code = "SECURITY", Name = "Security" },
+        //    new ComplaintCategory { Code = "MAINT", Name = "Maintenance" },
+        //    new ComplaintCategory { Code = "OTHER", Name = "Other" }
+        //);
 
-        builder.Entity<ComplaintPriority>().HasData(
-            new ComplaintPriority { Code = "LOW", Name = "Low", Weight = 1 },
-            new ComplaintPriority { Code = "MED", Name = "Medium", Weight = 2 },
-            new ComplaintPriority { Code = "HIGH", Name = "High", Weight = 3 },
-            new ComplaintPriority { Code = "URG", Name = "Urgent", Weight = 4 }
-        );
+        //builder.Entity<ComplaintPriority>().HasData(
+        //    new ComplaintPriority { Code = "LOW", Name = "Low", Weight = 1 },
+        //    new ComplaintPriority { Code = "MED", Name = "Medium", Weight = 2 },
+        //    new ComplaintPriority { Code = "HIGH", Name = "High", Weight = 3 },
+        //    new ComplaintPriority { Code = "URG", Name = "Urgent", Weight = 4 }
+        //);
 
 
 

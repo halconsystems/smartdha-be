@@ -22,6 +22,7 @@ public class Complaint : BaseAuditableEntity
     public DateTimeOffset? AcknowledgedAt { get; set; }
     public DateTimeOffset? ResolvedAt { get; set; }
     public DateTimeOffset? ClosedAt { get; set; }
+    public string? AdminRemarks { get; set; } = default!;
 
     public ICollection<ComplaintAttachment> Attachments { get; set; } = [];
     public ICollection<ComplaintComment> Comments { get; set; } = [];
