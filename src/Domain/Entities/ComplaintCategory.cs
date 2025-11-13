@@ -17,4 +17,5 @@ public class ComplaintCategory : BaseAuditableEntity
     public string Name { get; set; } = default!;
 
     public string? Description { get; set; }
+    public string? ColorCode { get; set; }    // e.g. "#1E88E5" or "rgb(30,136,229)"
 }

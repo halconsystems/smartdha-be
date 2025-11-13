@@ -27,6 +27,7 @@ public class CreateComplaintCommandHandler(
         var count = await _context.Complaints.CountAsync(cancellationToken) + 1;
         var complaintNo = $"CMP-{DateTime.Now:yyyy}-{count:D5}";
 
+       
         var entity = new Complaint
         {
             ComplaintNo = complaintNo,
@@ -52,9 +53,9 @@ public class CreateComplaintCommandHandler(
             var allowedExt = new[] { ".jpg", ".jpeg", ".png", ".webp" };
 
             // SaveFilesAsync returns list of image URLs
-            var savedPaths = await _fileStorage.SaveFilesAsync(
+            var savedPaths = await _fileStorage.SaveComplaintFilesAsync(
                 dto.Images,
-                $"complaints/{entity.Id}",
+                entity.Id,
                 cancellationToken,
                 allowedExtensions: allowedExt
             );
@@ -71,7 +72,7 @@ public class CreateComplaintCommandHandler(
                     ImageURL = path,
                     ImageExtension = ext,
                     ImageName = name,
-                    Created = DateTime.UtcNow,
+                    Created = DateTime.Now,
                     CreatedBy = userId,
                     IsActive = true,
                     IsDeleted = false

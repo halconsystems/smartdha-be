@@ -15,11 +15,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Service;
 public class FileStorageService : IFileStorageService
 {
     private static readonly string[] DefaultAllowedExt = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-
     private readonly IWebHostEnvironment _env;   // <-- add this
     private readonly FileStorageOptions _opt;
     private readonly FileExtensionContentTypeProvider _mime = new();
-
     public FileStorageService(IWebHostEnvironment env, IOptions<FileStorageOptions> opt) // <-- inject here
     {
         _env = env;
@@ -29,7 +27,6 @@ public class FileStorageService : IFileStorageService
     // Simple overload → validated overload with defaults
     public Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct)
         => SaveFileAsync(file, folderName, ct, 10 * 1024 * 1024, DefaultAllowedExt);
-
     public async Task<string> SaveFileNonMemeberAsync(
      IFormFile file,
      string folderName,
@@ -156,6 +153,77 @@ public class FileStorageService : IFileStorageService
             results.Add(await SaveFileAsync(f, folderName, ct, maxBytes, allowedExtensions));
         return results;
     }
+
+    // ✅ Save single complaint file
+    public async Task<string> SaveComplaintFileAsync(
+    IFormFile file,
+    Guid complaintId, // still passed for naming, if needed
+    CancellationToken ct,
+    long maxBytes = 10 * 1024 * 1024,
+    string[]? allowedExtensions = null)
+    {
+        // 🧩 Basic validation
+        if (file is null || file.Length == 0)
+            throw new ArgumentException("Empty file.");
+
+        if (file.Length > maxBytes)
+            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+
+        // 🧩 Validate extension
+        var ext = Path.GetExtension(file.FileName);
+        var allowed = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".webp" };
+        if (!allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+
+        // 🧩 Validate MIME type (must be image)
+        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        {
+            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+        }
+
+        // 🧩 Base folder: wwwroot/uploads/complaints/
+        var webRoot = _env.WebRootPath ?? throw new InvalidOperationException("WebRootPath is not configured.");
+        var absFolder = Path.Combine(webRoot, "uploads", "complaints");
+        Directory.CreateDirectory(absFolder);
+
+        // 🧩 Unique file name (optionally prefix complaint ID)
+        var safeExt = ext.ToLowerInvariant();
+        var fileName = $"{complaintId:N}_{Guid.NewGuid():N}{safeExt}";
+
+        var absPath = Path.Combine(absFolder, fileName);
+
+        // 🧩 Save asynchronously
+        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
+            await file.CopyToAsync(stream, ct);
+
+        // 🧩 Return relative path like: "uploads/complaints/filename.jpg"
+        var relPath = Path.Combine("uploads", "complaints", fileName)
+            .Replace("\\", "/");
+
+        return relPath;
+    }
+
+    // ✅ Save multiple complaint files
+    public async Task<List<string>> SaveComplaintFilesAsync(
+        IEnumerable<IFormFile> files,
+        Guid complaintId,
+        CancellationToken ct,
+        long maxBytes = 10 * 1024 * 1024,
+        string[]? allowedExtensions = null)
+    {
+        if (files is null || !files.Any())
+            throw new ArgumentException("No files provided.");
+
+        var results = new List<string>();
+        foreach (var file in files)
+        {
+            var path = await SaveComplaintFileAsync(file, complaintId, ct, maxBytes, allowedExtensions);
+            results.Add(path);
+        }
+        return results;
+    }
+
     public async Task<bool> DeleteFileAsync(string relativePath, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(relativePath)) return false;
@@ -189,6 +257,33 @@ public class FileStorageService : IFileStorageService
 
         var host = baseUrl ?? _opt.PublicBaseUrl;
         return string.IsNullOrWhiteSpace(host) ? urlPath : $"{host.TrimEnd('/')}{urlPath}";
+    }
+    public string GetPublicUrlOfComplaint(string relativePath, string? baseUrl = null)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return string.Empty;
+
+        // Normalize slashes
+        var urlPath = relativePath.Replace('\\', '/');
+        if (!urlPath.StartsWith("/"))
+            urlPath = "/" + urlPath;
+
+        // Resolve base URL (from parameter or app settings)
+        var host = baseUrl ?? _opt.PublicBaseUrl;
+
+        // Get physical wwwroot path
+        var webRoot = _env.WebRootPath ?? throw new InvalidOperationException("WebRootPath is not configured.");
+
+        // Build absolute physical path (wwwroot + relative path)
+        var absPath = Path.Combine(webRoot, relativePath.TrimStart('/', '\\'))
+            .Replace('\\', '/');
+
+        // Combine with baseUrl (for external/public access)
+        var fullUrl = string.IsNullOrWhiteSpace(host)
+            ? absPath
+            : $"{host.TrimEnd('/')}/wwwroot{urlPath}";
+
+        return fullUrl;
     }
 
 }

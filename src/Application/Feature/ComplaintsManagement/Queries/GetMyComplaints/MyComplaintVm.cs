@@ -12,7 +12,10 @@ public class MyComplaintVm
     public string Title { get; set; } = default!;
     public string Notes { get; set; } = default!;
     public string CategoryCode { get; set; } = default!;
+    public string CategoryName { get; set; } = default!;
+    public string ColorCode { get; set; } = default!;
     public string PriorityCode { get; set; } = default!;
+    public string PriorityName { get; set; } = default!;
     public string Status { get; set; } = default!;
     public DateTime Created { get; set; }
     public List<string> ImageUrls { get; set; } = new();
