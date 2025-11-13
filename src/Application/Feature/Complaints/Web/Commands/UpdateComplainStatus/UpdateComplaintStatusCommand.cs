@@ -37,6 +37,25 @@ public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplai
         complaint.AdminRemarks = request.AdminRemakrs ?? "";
         complaint.LastModified = DateTime.Now;
 
+        switch(request.NewStatus)
+        {
+            case ComplaintStatus.Acknowledged:
+                complaint.AcknowledgedAt = DateTimeOffset.Now;
+                break;
+
+            case ComplaintStatus.Resolved:
+                complaint.ResolvedAt = DateTimeOffset.Now;
+                break;
+
+            case ComplaintStatus.Closed:
+                complaint.ClosedAt = DateTimeOffset.Now;
+                break;
+
+            default:
+                // Do nothing for other statuses
+                break;
+        }
+
         // Add history record
         _context.ComplaintHistories.Add(new ComplaintHistory
         {
