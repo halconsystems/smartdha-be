@@ -83,7 +83,7 @@ public class UsersController : BaseApiController
     }
 
     
-    [HttpGet("GetRoles")]
+    [HttpGet("GetRoles"), AllowAnonymous]
     public async Task<IActionResult> GetRoles()
     {
         var result = await Mediator.Send(new GetRolesQuery());

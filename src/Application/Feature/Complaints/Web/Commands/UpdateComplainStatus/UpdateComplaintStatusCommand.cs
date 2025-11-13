@@ -34,7 +34,7 @@ public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplai
 
         var oldStatus = complaint.Status;
         complaint.Status = request.NewStatus;
-        complaint.AdminRemarks = request.AdminRemakrs ?? "";
+        complaint.AdminRemarks = request.AdminRemakrs;
         complaint.LastModified = DateTime.Now;
 
         switch(request.NewStatus)
@@ -60,10 +60,11 @@ public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplai
         _context.ComplaintHistories.Add(new ComplaintHistory
         {
             ComplaintId = complaint.Id,
-            Action = "Status Updated",
+            Action = $"Status Updated from {oldStatus} to {request.NewStatus}",
             FromValue = oldStatus.ToString(),
             ToValue = request.NewStatus.ToString(),
             ActorUserId = currentUserId,
+            AdminRemarks = request.AdminRemakrs,
             Created = DateTime.Now
         });
 
