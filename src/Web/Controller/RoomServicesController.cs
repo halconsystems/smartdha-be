@@ -41,6 +41,6 @@ public class RoomServicesController : BaseApiController
         => Ok(await _mediator.Send(new GetServiceByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ServiceDto>>> GetAll([FromQuery] ServiceType serviceType)
-        => Ok(await _mediator.Send(new GetServicesQuery(serviceType)));
+    public async Task<ActionResult<List<ServiceDto>>> GetAll([FromQuery] Guid clubId, ServiceType serviceType)
+        => Ok(await _mediator.Send(new GetServicesQuery(clubId, serviceType)));
 }

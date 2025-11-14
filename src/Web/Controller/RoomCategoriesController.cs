@@ -35,6 +35,6 @@ public class RoomCategoriesController : ControllerBase
         => Ok(await _mediator.Send(new GetRoomCategoryByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll([FromQuery] ClubType clubType)
-        => Ok(await _mediator.Send(new GetRoomCategoriesQuery { ClubType = clubType }));
+    public async Task<ActionResult<List<RoomCategoryDto>>> GetAll([FromQuery] Guid clubId, ClubType clubType)
+        => Ok(await _mediator.Send(new GetRoomCategoriesQuery { ClubId = clubId, ClubType = clubType }));
 }

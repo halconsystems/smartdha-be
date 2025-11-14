@@ -14,4 +14,8 @@ public class Services : BaseAuditableEntity
 
     public ServiceType ServiceType { get; set; } = ServiceType.GuestRoom;
 
+    [Required]
+    public Guid ClubId { get; set; }
+    public Club Club { get; set; } = default!;
+
 }
