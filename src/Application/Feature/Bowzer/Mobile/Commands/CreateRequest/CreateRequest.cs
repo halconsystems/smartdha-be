@@ -38,7 +38,7 @@ public sealed class CreateRequestHandler(
         var p = request.Payload;
         var userId = currentUser.UserId.ToString() ?? throw new UnauthorizedAccessException("Invalid user.");
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         // Pull everything we need in ONE query: availability + rate + labels
         var pc = await db.PhaseCapacities
