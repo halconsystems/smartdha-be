@@ -9,7 +9,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Complaints.Web.Commands.UpdateComplaintStatus;
-public record UpdateComplaintStatusCommand(Guid ComplaintId, ComplaintStatus NewStatus, string? AdminRemakrs) : IRequest<string>;
+public record UpdateComplaintStatusCommand(Guid ComplaintId, ComplaintStatus NewStatus, Guid PriorityCodeId, string? AdminRemakrs) : IRequest<string>;
 
 public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplaintStatusCommand, string>
 {
@@ -35,6 +35,7 @@ public class UpdateComplaintStatusCommandHandler : IRequestHandler<UpdateComplai
         var oldStatus = complaint.Status;
         complaint.Status = request.NewStatus;
         complaint.AdminRemarks = request.AdminRemakrs;
+        complaint.PriorityCode = request.PriorityCodeId.ToString();
         complaint.LastModified = DateTime.Now;
 
         switch(request.NewStatus)

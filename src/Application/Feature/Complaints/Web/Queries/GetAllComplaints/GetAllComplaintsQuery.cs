@@ -40,15 +40,24 @@ public class GetAllComplaintsQueryHandler : IRequestHandler<GetAllComplaintsQuer
                 })
                 .ToListAsync(ct);
 
+        var actorUserIds = complaints
+            .SelectMany(c => c.Complaint.History)
+            .Select(h => h.ActorUserId)
+            .Where(id => id != null)
+            .Distinct()
+            .ToList();
+
         var userIds = complaints
             .Select(c => c.CreatedByUserId)
             .Where(id => id != null)
             .Distinct()
             .ToList();
 
+        var allUserIds = userIds.Concat(actorUserIds).Distinct().ToList();
+
         var users = await _userManager.Users
-            .Where(u => userIds.Contains(u.Id) && u.IsActive == true && u.IsDeleted == false)
-            .Select(u => new { u.Id, u.Name, u.CNIC, u.MobileNo})
+            .Where(u => allUserIds.Contains(u.Id) && u.IsActive == true && u.IsDeleted == false)
+            .Select(u => new { u.Id, u.Name, u.MobileNo})
             .ToListAsync(ct);
 
         var result = complaints.Select(c =>
@@ -65,7 +74,6 @@ public class GetAllComplaintsQueryHandler : IRequestHandler<GetAllComplaintsQuer
                 Status = c.Complaint.Status.ToString(),
                 CreatedByUserId = c.Complaint.CreatedByUserId,
                 CreatedByUserName = user?.Name ?? "N/A",
-                CreatedByUserCNIC = user?.CNIC ?? "N/A",
                 CreatedByUserMobileNo = user?.MobileNo ?? "N/A",
                 AssignedToUserId = c.Complaint.AssignedToUserId,
                 Lat = c.Complaint.Lat,
@@ -83,14 +91,21 @@ public class GetAllComplaintsQueryHandler : IRequestHandler<GetAllComplaintsQuer
                     ImageName = a.ImageName,
                     Description = a.Description
                 }).ToList(),
-                History = c.Complaint.History.Select(h => new ComplaintHistoryDto
+                History = c.Complaint.History.Select(h =>
                 {
-                    Id = h.Id,
-                    Action = h.Action,
-                    FromValue = h.FromValue,
-                    ToValue = h.ToValue,
-                    ActorUserId = h.ActorUserId,
-                    Created = h.Created
+                    var actor = users.FirstOrDefault(u => u.Id == h.ActorUserId);
+                    return new ComplaintHistoryDto
+                    {
+                        Id = h.Id,
+                        Action = h.Action,
+                        FromValue = h.FromValue,
+                        ToValue = h.ToValue,
+                        ActorUserId = h.ActorUserId,
+                        ActorUserName = actor?.Name ?? "N/A",
+                        ActorUserMobileNo = actor?.MobileNo ?? "N/A",
+                        AdminRemarks = h.AdminRemarks,
+                        Created = h.Created
+                    };
                 }).ToList()
             };
         }).ToList();
