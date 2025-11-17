@@ -45,6 +45,8 @@ public interface IApplicationDbContext
     DbSet<ComplaintCategory> ComplaintCategories { get; }
     DbSet<ComplaintHistory> ComplaintHistories { get; }
     DbSet<ComplaintPriority> ComplaintPriorities { get; }
+    DbSet<Configuration> Configurations { get; }
+
 
 
 

@@ -36,6 +36,12 @@ public class GetAllUsersHandler
         if (string.IsNullOrEmpty(currentUserId))
             throw new UnAuthorizedException("Invalid user context.");
 
+        var SuperAdminId = await _context.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.Role.Name == "SuperAdministrator")
+            .Select(ur => ur.UserId)
+            .FirstOrDefaultAsync(cancellationToken);
+
         // 1️⃣ Check if current user is SuperAdmin
         var currentRoles = await _context.AppUserRoles
             .Include(ur => ur.Role)
@@ -81,7 +87,8 @@ public class GetAllUsersHandler
                     accessibleUserIds = await _context.UserModuleAssignments
                         .Include(uma => uma.Module)
                         .Where(uma => myModuleIds.Contains(uma.ModuleId) &&
-                                      uma.Module.Value.ToLower() != "usermanagement")
+                                      uma.Module.Value.ToLower() != "usermanagement" &&
+                                      uma.UserId != SuperAdminId)
                         .Select(uma => uma.UserId)
                         .Distinct()
                         .ToListAsync(cancellationToken);

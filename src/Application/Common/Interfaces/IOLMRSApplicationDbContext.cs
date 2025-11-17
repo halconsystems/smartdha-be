@@ -30,7 +30,6 @@ public interface IOLMRSApplicationDbContext
     DbSet<PaymentIntent> PaymentIntents { get; }
     DbSet<RefundRequest> RefundRequests { get; }
     DbSet<RefundPolicy> RefundPolicies { get; }
-    DbSet<Configuration> Configurations { get; }
     DbSet<ClubBookingStandardTime> ClubBookingStandardTimes { get; }
 
 
