@@ -67,8 +67,8 @@ public class OLHApplicationDbContext : DbContext, IOLHApplicationDbContext
 
         // Unique + operational indexes
         modelBuilder.Entity<OLH_BowserRequest>().HasIndex(x => x.RequestNo).IsUnique();
-        modelBuilder.Entity<OLH_DriverShift>().HasIndex(x => new { x.DriverId, x.DutyDate }).IsUnique();
-        modelBuilder.Entity<OLH_DriverShift>().HasIndex(x => new { x.VehicleId, x.DutyDate }).IsUnique();
+        //modelBuilder.Entity<OLH_DriverShift>().HasIndex(x => new { x.DriverId, x.DutyDate }).IsUnique();
+        //modelBuilder.Entity<OLH_DriverShift>().HasIndex(x => new { x.VehicleId, x.DutyDate }).IsUnique();
 
         // PhaseCapacity uniqueness (one active row per Phase×Capacity×window recommended)
         modelBuilder.Entity<OLH_PhaseCapacity>()

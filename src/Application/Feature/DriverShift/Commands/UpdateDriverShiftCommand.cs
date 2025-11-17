@@ -23,6 +23,24 @@ public class UpdateDriverShiftHandler : IRequestHandler<UpdateDriverShiftCommand
         if (entity == null)
             throw new ArgumentException($"Driver shift with Id '{request.Id}' not found.");
 
+        var duplicateExists = await _context.DriverShifts
+        .AnyAsync(ds =>
+            ds.Id != request.Id &&                     // exclude current record
+            ds.VehicleId == request.VehicleId &&
+            ds.DriverId == request.DriverId &&
+            ds.ShiftId == request.ShiftId &&
+            ds.DutyDate == request.DutyDate &&
+            ds.IsDeleted == false && ds.IsActive == true,
+            cancellationToken
+        );
+
+        if (duplicateExists)
+        {
+            return new SuccessResponse<string>(
+                $"A driver shift already exists for this Vehicle, Driver, Shift and Date ({request.DutyDate}). Update canceled.");
+        }
+
+
         entity.VehicleId = request.VehicleId;
         entity.DriverId = request.DriverId;
         entity.ShiftId = request.ShiftId;

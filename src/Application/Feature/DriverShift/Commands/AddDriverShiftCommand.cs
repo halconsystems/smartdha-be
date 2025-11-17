@@ -20,6 +20,22 @@ public class AddDriverShiftHandler : IRequestHandler<AddDriverShiftCommand, Succ
     {
         try
         {
+            var alreadyExists = await _context.DriverShifts
+            .AnyAsync(ds =>
+                ds.VehicleId == request.VehicleId &&
+                ds.DriverId == request.DriverId &&
+                ds.ShiftId == request.ShiftId &&
+                ds.DutyDate == request.DutyDate &&
+                ds.IsDeleted == false && ds.IsActive == true,
+                cancellationToken
+            );
+
+            if (alreadyExists)
+            {
+                return new SuccessResponse<string>(
+                    $"A driver shift already exists for Vehicle, Driver, Shift and Date ({request.DutyDate}).");
+            }
+
             var entity = new OLH_DriverShift
             {
                 VehicleId = request.VehicleId,
