@@ -1,7 +1,8 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using DHAFacilitationAPIs.Application.Feature.Configuration.Commands;
+using DHAFacilitationAPIs.Application.Feature.Configuration.Query;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
@@ -16,7 +17,14 @@ public class ConfigruationController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpPut("bowser-orders-config"), AllowAnonymous]
+    [HttpGet("get-bowser-orders-config"), AllowAnonymous]
+    public async Task<IActionResult> GetBowserOrdersConfig()
+    {
+        var result = await _mediator.Send(new GetBowserOrdersConfigQuery());
+        return Ok(result);
+    }
+
+    [HttpPut("update-bowser-orders-config"), AllowAnonymous]
     public async Task<IActionResult> UpdateBowserOrders([FromBody] UpdateBowserOrderConfigCommand command)
     {
         var result = await _mediator.Send(command);
