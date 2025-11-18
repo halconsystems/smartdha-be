@@ -38,21 +38,24 @@ public class GetAllUsersHandler
 
         var SuperAdminId = await _context.AppUserRoles
             .Include(ur => ur.Role)
-            .Where(ur => ur.Role.Name == "SuperAdministrator")
+            .Where(ur => ur.Role.Name == "SuperAdministrator" && (ur.IsDeleted==false && ur.IsActive==true))
             .Select(ur => ur.UserId)
             .FirstOrDefaultAsync(cancellationToken);
 
         // 1️⃣ Check if current user is SuperAdmin
         var currentRoles = await _context.AppUserRoles
             .Include(ur => ur.Role)
-            .Where(ur => ur.UserId == currentUserId)
+            .Where(ur => ur.UserId == currentUserId && (ur.IsDeleted == false && ur.IsActive == true))
             .Select(ur => ur.Role.Name)
             .ToListAsync(cancellationToken);
 
         bool isSuperAdmin = currentRoles.Contains("SuperAdministrator");
 
         // 2️⃣ Get base users
-        var usersQuery = _userManager.Users.AsNoTracking().AsQueryable();
+        var usersQuery = _userManager.Users
+             .Where(u => u.IsActive == true && u.IsDeleted == false)
+                .AsNoTracking()
+                .AsQueryable(); 
 
         if (!isSuperAdmin)
         {
@@ -61,14 +64,14 @@ public class GetAllUsersHandler
 
             // 3️⃣ Normal user → filter to users assigned to the same clubs
             var myClubIds = await _context.UserClubAssignments
-                .Where(uca => uca.UserId == currentUserId)
+                .Where(uca => uca.UserId == currentUserId && (uca.IsDeleted == false && uca.IsActive == true))
                 .Select(uca => uca.ClubId)
                 .ToListAsync(cancellationToken);
 
             if (myClubIds.Any())
             {
                 accessibleUserIds = await _context.UserClubAssignments
-                .Where(uca => myClubIds.Contains(uca.ClubId))
+                .Where(uca => myClubIds.Contains(uca.ClubId) && (uca.IsDeleted == false && uca.IsActive == true))
                 .Select(uca => uca.UserId)
                 .Distinct()
                 .ToListAsync(cancellationToken);
@@ -78,7 +81,7 @@ public class GetAllUsersHandler
                 // --- ✅ Module-based filtering (excluding "UserManagement") ---
                 var myModuleIds = await _context.UserModuleAssignments
                     .Include(uma => uma.Module)
-                    .Where(uma => uma.UserId == currentUserId && uma.Module.Value != "UserManagement")
+                    .Where(uma => uma.UserId == currentUserId && uma.Module.Value != "UserManagement" && (uma.IsDeleted == false && uma.IsActive == true))
                     .Select(uma => uma.ModuleId)
                     .ToListAsync(cancellationToken);
 
@@ -88,7 +91,8 @@ public class GetAllUsersHandler
                         .Include(uma => uma.Module)
                         .Where(uma => myModuleIds.Contains(uma.ModuleId) &&
                                       uma.Module.Value.ToLower() != "usermanagement" &&
-                                      uma.UserId != SuperAdminId)
+                                      uma.UserId != SuperAdminId
+                                      && (uma.IsDeleted == false && uma.IsActive == true))
                         .Select(uma => uma.UserId)
                         .Distinct()
                         .ToListAsync(cancellationToken);
@@ -109,7 +113,7 @@ public class GetAllUsersHandler
         {
             // Fetch role(s)
             var roleNames = await _context.AppUserRoles
-                .Where(ur => ur.UserId == user.Id)
+                .Where(ur => ur.UserId == user.Id && (ur.IsDeleted == false && ur.IsActive == true))
                 .Include(ur => ur.Role)
                 .Select(ur => ur.Role.Name)
                 .ToListAsync(cancellationToken);
