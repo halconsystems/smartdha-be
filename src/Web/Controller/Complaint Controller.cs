@@ -28,9 +28,9 @@ public class ComplaintController : BaseApiController
     }
 
     [HttpGet("get-all-complaints"), AllowAnonymous]
-    public async Task<IActionResult> GetAllComplaints([FromQuery] ComplaintStatus? status = null, [FromQuery] string? categoryCode = null, [FromQuery] string? priorityCode = null)
+    public async Task<IActionResult> GetAllComplaints()
     {
-        var result = await _mediator.Send(new GetAllComplaintsQuery(status, categoryCode, priorityCode));
+        var result = await _mediator.Send(new GetAllComplaintsQuery());
         return Ok(result);
     }
 

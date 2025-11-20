@@ -611,13 +611,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.OLHApplicationDb
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DriverId");
+
                     b.HasIndex("ShiftId");
 
-                    b.HasIndex("DriverId", "DutyDate")
-                        .IsUnique();
-
-                    b.HasIndex("VehicleId", "DutyDate")
-                        .IsUnique();
+                    b.HasIndex("VehicleId");
 
                     b.ToTable("DriverShifts");
                 });

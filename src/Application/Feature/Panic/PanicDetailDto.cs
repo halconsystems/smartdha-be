@@ -7,7 +7,25 @@ using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Panic;
 public record PanicDetailDto(
-    Guid Id, string CaseNo, int EmergencyCode, string EmergencyName,
-    decimal Latitude, decimal Longitude, PanicStatus Status,
-    DateTime CreatedUtc, DateTime? AcknowledgedAtUtc, DateTime? ResolvedAtUtc, DateTime? CancelledAtUtc,
-    string RequestedByUserId, string? AssignedToUserId, string? Notes, string? MediaUrl);
+    Guid Id, 
+    string CaseNo, 
+    int EmergencyCode, 
+    string EmergencyName,
+    decimal Latitude, 
+    decimal Longitude, 
+    PanicStatus Status,
+    DateTime CreatedUtc, 
+    DateTime? AcknowledgedAtUtc, 
+    DateTime? ResolvedAtUtc, 
+    DateTime? CancelledAtUtc,
+    string RequestedByUserId, 
+    string RequestedByName,
+    string? RequestedByEmail,
+    string RequestedByPhone,
+    UserType RequestedByUserType,
+    string? AssignedToUserId,
+    string? AssignedToUserName,
+    string? AssignedToUserEmail,
+    string? AssignedToUserPhone,
+    string? Notes,
+    string? MediaUrl);

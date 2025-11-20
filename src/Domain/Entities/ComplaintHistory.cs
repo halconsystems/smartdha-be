@@ -13,4 +13,5 @@ public class ComplaintHistory : BaseAuditableEntity
     public string? FromValue { get; set; }
     public string? ToValue { get; set; }
     public string ActorUserId { get; set; } = default!;
+    public string? AdminRemarks { get; set; }
 }

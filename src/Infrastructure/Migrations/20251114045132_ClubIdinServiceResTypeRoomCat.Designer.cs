@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251114045132_ClubIdinServiceResTypeRoomCat")]
+    partial class ClubIdinServiceResTypeRoomCat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,6 +189,57 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasIndex("ClubId");
 
                     b.ToTable("ClubBookingStandardTimes");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Configuration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DataType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Configurations");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ExtraServiceCharges", b =>
@@ -398,8 +452,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
 
                     b.ToTable("ResidenceTypes");
                 });
@@ -689,8 +741,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClubId");
-
                     b.ToTable("RoomCategories");
                 });
 
@@ -944,8 +994,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClubId");
 
                     b.HasIndex("RoomId");
 
@@ -1337,17 +1385,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Navigation("Reservation");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ResidenceType", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.Club", "Club")
-                        .WithMany()
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Club");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Room", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Club", "Club")
@@ -1413,17 +1450,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCategory", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.Club", "Club")
-                        .WithMany()
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Club");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCharge", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Room", "Room")
@@ -1456,17 +1482,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Services", b =>
                 {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.Club", "Club")
-                        .WithMany()
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.Room", null)
                         .WithMany("RoomServices")
                         .HasForeignKey("RoomId");
-
-                    b.Navigation("Club");
                 });
 
             modelBuilder.Entity("Payment", b =>

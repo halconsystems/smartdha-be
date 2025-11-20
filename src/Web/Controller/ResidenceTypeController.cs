@@ -35,6 +35,6 @@ public class ResidenceTypeController : BaseApiController
         => Ok(await _mediator.Send(new GetResidenceTypeByIdQuery(id), ct));
 
     [HttpGet, AllowAnonymous]
-    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll([FromQuery] ClubType clubType)
-        => Ok(await _mediator.Send(new GetResidenceTypesQuery(clubType)));
+    public async Task<ActionResult<List<ResidenceTypeDto>>> GetAll([FromQuery] Guid clubId, ClubType clubType)
+        => Ok(await _mediator.Send(new GetResidenceTypesQuery(clubId, clubType)));
 }

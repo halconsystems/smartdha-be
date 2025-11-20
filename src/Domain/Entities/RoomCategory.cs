@@ -12,6 +12,9 @@ public class RoomCategory : BaseAuditableEntity
     public string? Description { get; set; }
     public ClubType ClubType { get; set; } = ClubType.GuestRoom;
 
+    [Required]
+    public Guid ClubId { get; set; }
+    public Club Club { get; set; } = default!;
 
     public ICollection<Room> Rooms { get; set; } = new List<Room>();
 }

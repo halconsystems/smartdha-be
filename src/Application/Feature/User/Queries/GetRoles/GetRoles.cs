@@ -33,16 +33,43 @@ public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, SuccessRespon
         if (userId == Guid.Empty)
             throw new UnAuthorizedException("Invalid user context.");
 
-        var roles = await _context.AppRoles
-            .Where(r => (r.IsDeleted == null || r.IsDeleted == false)   // ✅ Only active roles
-                        && r.Name != "SuperAdministrator"               // ✅ Exclude SuperAdmin
-                        && r.CreatedBy == userId.ToString())               // ✅ Only current user created
+        // Check if current user is SuperAdmin
+        var currentRoles = await _context.AppUserRoles
+            .Include(ur => ur.Role)
+            .Where(ur => ur.UserId == userId.ToString())
+            .Select(ur => ur.Role.Name)
+            .ToListAsync(cancellationToken);
+
+        bool isSuperAdmin = currentRoles.Contains("SuperAdministrator");
+
+        var query = _context.AppRoles
+            .Where(r => (r.IsDeleted == null || r.IsDeleted == false) // Only active roles
+                        && r.Name != "SuperAdministrator");           // Exclude SuperAdmin role itself
+
+        if (!isSuperAdmin)
+        {
+            // Normal users can only see roles they created
+            query = query.Where(r => r.CreatedBy == userId.ToString());
+        }
+
+        var roles = await query
             .Select(r => new RoleDto
             {
                 Id = r.Id,
                 Name = r.Name
             })
             .ToListAsync(cancellationToken);
+
+        //var roles = await _context.AppRoles
+        //    .Where(r => (r.IsDeleted == null || r.IsDeleted == false)   // ✅ Only active roles
+        //                && r.Name != "SuperAdministrator"               // ✅ Exclude SuperAdmin
+        //                && r.CreatedBy == userId.ToString())               // ✅ Only current user created
+        //    .Select(r => new RoleDto
+        //    {
+        //        Id = r.Id,
+        //        Name = r.Name
+        //    })
+        //    .ToListAsync(cancellationToken);
 
         return new SuccessResponse<List<RoleDto>>(roles, "Roles fetched successfully", "Roles");
     }

@@ -62,6 +62,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ComplaintHistory> ComplaintHistories => Set<ComplaintHistory>();
     public DbSet<ComplaintPriority> ComplaintPriorities => Set<ComplaintPriority>();
     public DbSet<SmartPayLog> SmartPayLogs => Set<SmartPayLog>();
+    public DbSet<Configuration> Configurations => Set<Configuration>();
+
+
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)

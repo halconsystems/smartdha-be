@@ -38,7 +38,6 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<PaymentIntent> PaymentIntents => Set<PaymentIntent>();
     public DbSet<RefundPolicy> RefundPolicies => Set<RefundPolicy>();
     public DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
-    public DbSet<Configuration> Configurations => Set<Configuration>();
     public DbSet<ClubBookingStandardTime> ClubBookingStandardTimes => Set<ClubBookingStandardTime>();
 
 
