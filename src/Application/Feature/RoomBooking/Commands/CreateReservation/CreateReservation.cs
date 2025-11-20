@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using DHAFacilitationAPIs.Application.Common.Contracts;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CreateRequest;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation.Dtos;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -12,7 +14,9 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using static Dapper.SqlMapper;
 
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
@@ -30,20 +34,33 @@ public record class CreateReservationCommand : IRequest<ReservationInfoDto>
 public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, ReservationInfoDto>
 {
     private readonly IOLMRSApplicationDbContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ISmartPayService _smartPayService;
+    private readonly ICurrentUserService _currentUser;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILogger<CreateRequestHandler> _logger;
 
-    public CreateReservationCommandHandler(IOLMRSApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+
+    public CreateReservationCommandHandler(IOLMRSApplicationDbContext context, ISmartPayService smartPayService, ICurrentUserService currentUserService, UserManager<ApplicationUser> userManager, ILogger<CreateRequestHandler> logger)
     {
         _context = context;
-        _httpContextAccessor = httpContextAccessor;
+        _smartPayService = smartPayService;
+        _currentUser=currentUserService;
+        _userManager = userManager;
+        _logger = logger;
     }
 
     public async Task<ReservationInfoDto> Handle(CreateReservationCommand dto, CancellationToken ct)
     {
-        var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrWhiteSpace(userIdStr))
-            throw new UnauthorizedAccessException("Invalid or missing UserId in token.");
-        var userId = Guid.Parse(userIdStr);
+        //var userIdStr = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        //if (string.IsNullOrWhiteSpace(userIdStr))
+        //    throw new UnauthorizedAccessException("Invalid or missing UserId in token.");
+
+
+        //var userId = Guid.Parse(userIdStr);
+
+        var userId = _currentUser.UserId.ToString();
+
+        var clickedUser = await _userManager.FindByIdAsync(userId);
 
         if (dto.Rooms == null || !dto.Rooms.Any())
             throw new InvalidOperationException("At least one room must be provided.");
@@ -158,11 +175,11 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
         if (string.IsNullOrWhiteSpace(club.AccountNoAccronym))
             throw new Exception($"Club {club.Id} has no valid AccountNoAccronym configured.");
 
-        string onebillId = SmartPayBillId.GenerateOneBillId(club.AccountNoAccronym);
+        string onebillId = SmartPayBillId.GenerateOneBillId("6010");
 
         var reservation = new Reservation
         {
-            UserId = userId,
+            UserId = Guid.Parse(userId),
             ClubId = dto.ClubId,
             Status = ReservationStatus.AwaitingPayment,
             ExpiresAt = DateTime.Now.AddMinutes(30),
@@ -256,6 +273,30 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
                 Subtotal = rr.Subtotal
             }).ToList()
         };
+
+        var uploadRequest = new SmartPayUploadBillRequest
+        {
+            Consumer_Number = reservation.OneBillId,
+            Consumer_Detail = clickedUser?.Name ?? "",                     // OR member name
+            Billing_Month = DateTime.Now.ToString("yyMM"),
+            DueDate = reservation.ExpiresAt.ToString("yyyyMMddhhmmss"),
+            ExpDate = reservation.ExpiresAt.ToString("yyyyMMddhhmmss"),
+            Amount = reservation.DepositAmountRequired,                     // ONLY deposit!
+            LateFee = 0,
+            CellNo = clickedUser?.RegisteredMobileNo ?? "",                 // add in your request
+            EMail = clickedUser?.Email ?? "",
+            ReferenceInfo = $"Club-{club.Name}"
+        };
+
+        try
+        {
+             await _smartPayService.UploadBillAsync(uploadRequest, ct);
+        }
+        catch (Exception ex)
+        {
+            //throw new InvalidOperationException("SmartPay bill upload failed: " + ex.Message);
+            _logger.LogError(ex, "SmartPay Club upload failed for RequestId: {RequestId}", reservation.OneBillId);
+        }
 
         return result;
     }

@@ -28,7 +28,7 @@ public class RoomBookingController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("get-user-clubs"), AllowAnonymous]
+    [HttpGet("get-user-clubs")]
     public async Task<IActionResult> GetUserClubs()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -44,7 +44,7 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("search-rooms"), AllowAnonymous]
+    [HttpGet("search-rooms")]
     public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
@@ -80,21 +80,21 @@ public class RoomBookingController : ControllerBase
 //        return Ok(result);
 //    }
 
-    [HttpGet("get-room-details"), AllowAnonymous]
+    [HttpGet("get-room-details")]
     public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
         return Ok(result);
     }
 
-    [HttpPost("create-reservation"), AllowAnonymous]
+    [HttpPost("create-reservation")]
     public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand cmd, CancellationToken ct)
     {
         var reservationId = await _mediator.Send(cmd);
         return Ok(reservationId);
     }
 
-    [HttpGet("get-all-reservations"), AllowAnonymous]
+    [HttpGet("get-all-reservations")]
     public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -110,14 +110,14 @@ public class RoomBookingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("get-reservation-status"), AllowAnonymous]
+    [HttpGet("get-reservation-status")]
     public async Task<ActionResult<ReservationStatusDto>> GetReservationStatus(Guid reservationId)
     {
         var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
         return Ok(result);
     }
 
-    [HttpPost("create-refund-request"), AllowAnonymous]
+    [HttpPost("create-refund-request")]
     public async Task<ActionResult<Guid>> CreateRefundRequest([FromBody] CreateRefundRequestCommand cmd, CancellationToken ct)
     {
         var id = await _mediator.Send(cmd, ct);

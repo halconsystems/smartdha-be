@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Contracts;
 using DHAFacilitationAPIs.Application.Common.Contracts.Mobile;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
 
 using DHAFacilitationAPIs.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using ReqStatus = DHAFacilitationAPIs.Domain.Enums.BowserStatus;
 
 namespace DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CreateRequest;
@@ -30,7 +33,7 @@ public sealed record CreateRequestResultDto(
 public sealed record CreateRequestCommand(CreateRequestDto Payload) : IRequest<CreateRequestResultDto>;
 public sealed class CreateRequestHandler(
     IOLHApplicationDbContext db,
-    ICurrentUserService currentUser)
+    ICurrentUserService currentUser,UserManager<ApplicationUser> _userManager,ISmartPayService _smartPayService,ILogger<CreateRequestHandler> _logger)
     : IRequestHandler<CreateRequestCommand, CreateRequestResultDto>
 {
     public async Task<CreateRequestResultDto> Handle(CreateRequestCommand request, CancellationToken ct)
@@ -38,7 +41,10 @@ public sealed class CreateRequestHandler(
         var p = request.Payload;
         var userId = currentUser.UserId.ToString() ?? throw new UnauthorizedAccessException("Invalid user.");
 
-        var now = DateTime.UtcNow;
+        var clickedUser = await _userManager.FindByIdAsync(userId);
+
+
+        var now = DateTime.Now;
 
         // Pull everything we need in ONE query: availability + rate + labels
         var pc = await db.PhaseCapacities
@@ -68,7 +74,7 @@ public sealed class CreateRequestHandler(
 
         // Unique IDs
         var requestNo = NextRequestNo();
-        var paymentId = SmartPayBillId.GenerateOneBillId("Bowz"); // ensure uniqueness against existing payments
+        var paymentId = SmartPayBillId.GenerateOneBillId("6010"); // ensure uniqueness against existing payments
 
         var entity = new OLH_BowserRequest
         {
@@ -124,6 +130,32 @@ public sealed class CreateRequestHandler(
 
         await db.SaveChangesAsync(ct);
 
+        // SmartPay bill upload (only this block)
+        var uploadRequest = new SmartPayUploadBillRequest
+        {
+            Consumer_Number = paymentId,                   // the OneBill ID you generated
+            Consumer_Detail = clickedUser?.Name ?? "",                     // OR member name
+            Billing_Month = DateTime.Now.ToString("yyMM"),
+            DueDate = DateTime.Now.AddMinutes(30).ToString("yyyyMMddhhmmss"),
+            ExpDate = DateTime.Now.AddMinutes(30).ToString("yyyyMMddhhmmss"),
+            Amount = amount,                      // base rate (your deposit/amount)
+            LateFee = 0,
+            CellNo = clickedUser?.RegisteredMobileNo ?? "",
+            EMail = clickedUser?.Email ?? "",
+            ReferenceInfo = $"Bowser-Request"
+        };
+
+        try
+        {
+            await _smartPayService.UploadBillAsync(uploadRequest, ct);
+        }
+        catch (Exception ex)
+        {
+            // throw new InvalidOperationException("SmartPay bill upload failed: " + ex.Message);
+            _logger.LogError(ex, "SmartPay Bowzer upload failed for RequestId: {RequestId}", paymentId);
+        }
+
+
         // Return receipt-ready data for the app
         return new CreateRequestResultDto(
             entity.Id,
@@ -142,7 +174,7 @@ public sealed class CreateRequestHandler(
     // Readable request number (timestamp + 6-hex suffix)
     private static string NextRequestNo()
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         Span<byte> rnd = stackalloc byte[3]; // 3 bytes → 6 hex chars
         RandomNumberGenerator.Fill(rnd);
         var suffix = Convert.ToHexString(rnd);

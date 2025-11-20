@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CancelBowserRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.CreateRequest;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Commands.SubmitRequest;
+using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetMyRequestById;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetMyRequests;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetPhaseCapacities;
 using DHAFacilitationAPIs.Application.Feature.Bowzer.Mobile.Queries.GetPhases;
@@ -63,4 +64,15 @@ public class BowzerController : BaseApiController
     [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> GetMyHistory(CancellationToken ct)
        => Ok(await _mediator.Send(new GetMyRequestsQuery(), ct));
+
+    [HttpGet("MyRequest/{id:guid}")]
+    public async Task<IActionResult> GetMyRequestById(string Id)
+    {
+        if (!Guid.TryParse(Id, out var requestId))
+            return BadRequest("Invalid Request Id.");
+
+        var result = await Mediator.Send(new GetMyRequestByIdQuery(requestId));
+
+        return Ok(result);
+    }
 }
