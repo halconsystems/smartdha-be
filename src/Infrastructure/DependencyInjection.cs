@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Data.Interceptors;
 using DHAFacilitationAPIs.Infrastructure.Identity;
 using DHAFacilitationAPIs.Infrastructure.Service;
+using DHAFacilitationAPIs.Infrastructure.Service.Geocoding;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -158,7 +159,12 @@ public static class DependencyInjection
         services
             .Configure<DatabaseSettings>(configuration.GetSection(nameof(DatabaseSettings)));
 
-       
+        services.Configure<GoogleMapsOptions>(
+            configuration.GetSection(GoogleMapsOptions.SectionName));
+
+        // HttpClient-based Google Geocoding Service
+        services.AddHttpClient<IGeocodingService, GoogleGeocodingService>();
+
 
 
 

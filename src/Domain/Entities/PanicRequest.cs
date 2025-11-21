@@ -34,6 +34,8 @@ public class PanicRequest : BaseAuditableEntity
     // optional notes/media
     [MaxLength(1000)] public string? Notes { get; set; }
     [MaxLength(500)] public string? MediaUrl { get; set; }
+    [MaxLength(15)] public string? MobileNumber { get; set; }
+
 
     // optimistic concurrency
     [Timestamp] public byte[] RowVersion { get; set; } = default!;

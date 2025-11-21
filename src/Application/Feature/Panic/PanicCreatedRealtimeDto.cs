@@ -15,6 +15,9 @@ public sealed record PanicCreatedRealtimeDto(
     decimal Longitude,
     PanicStatus Status,
     DateTime CreatedUtc,
+    string Address,
+    string Note,
+    string MobileNumber,
 
     // 👇 User details
     string RequestedByName,

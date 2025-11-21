@@ -121,10 +121,10 @@ builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, 
 //Rate Limiting
 builder.Services.AddRateLimiter(options =>
 {
-    // Return 429 instead of default 503
+    // Return proper 429 instead of default 503
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    // Optional: unified JSON for rejected requests + Retry-After seconds (if available)
+    // Unified JSON structure for rejections
     options.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.ContentType = "application/json";
@@ -144,13 +144,11 @@ builder.Services.AddRateLimiter(options =>
         await context.HttpContext.Response.WriteAsJsonAsync(payload, cancellationToken: token);
     };
 
-    //  Anonymous limiter (10 req/min per client IP)
+    // Anonymous limiter (for public endpoints like Login, Register, OTP)
     options.AddPolicy("AnonymousLimiter", httpContext =>
     {
-        // Identify client by IP
+        // Identify unique client by IP + route (ensures fairness per endpoint)
         var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-
-        // You can also add route info to partition key for fairness
         var path = httpContext.Request.Path.Value?.ToLowerInvariant() ?? "unknown";
         var partitionKey = $"anon:{path}:{clientIp}";
 
@@ -158,18 +156,17 @@ builder.Services.AddRateLimiter(options =>
             partitionKey,
             _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = 10,                   // 10 requests
-                Window = TimeSpan.FromMinutes(1),   // per minute
+                PermitLimit = 10,                   // Max 10 requests
+                Window = TimeSpan.FromMinutes(1),   // Per minute
                 QueueLimit = 1,
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst
             });
     });
 
-
-    // (Optional) A global “background” policy you can use elsewhere if needed
+    // Global background limiter (for authenticated users or fallback)
     options.AddFixedWindowLimiter("GlobalFixed", cfg =>
     {
-        cfg.PermitLimit = 100;                // e.g., 100 requests per minute
+        cfg.PermitLimit = 100;                // 100 requests per minute per app instance
         cfg.Window = TimeSpan.FromMinutes(1);
         cfg.QueueLimit = 10;
         cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
@@ -212,8 +209,11 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
+app.MapControllers().RequireRateLimiting("GlobalFixed");
+
 
 //app.MapHub<PanicHub>("/hubs/panic");
 

@@ -12,7 +12,7 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 
 namespace DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreatePanicRequest;
 public record CreatePanicRequestCommand(
-    Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl
+    Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl, string? MobileNumber
 ) : IRequest<PanicRequestDto>;
 
 public class CreatePanicRequestValidator : AbstractValidator<CreatePanicRequestCommand>
@@ -32,10 +32,12 @@ public class CreatePanicRequestHandler : IRequestHandler<CreatePanicRequestComma
     private readonly IPanicRealtime _realtime;
     private readonly ICaseNoGenerator _caseNo;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IGeocodingService _geocodingService;
 
 
-    public CreatePanicRequestHandler(IApplicationDbContext ctx, ICurrentUserService current, IPanicRealtime realtime, ICaseNoGenerator caseNo,UserManager<ApplicationUser> userManager)
-        => (_ctx, _current, _realtime, _caseNo, _userManager) = (ctx, current, realtime, caseNo,userManager);
+
+    public CreatePanicRequestHandler(IApplicationDbContext ctx, ICurrentUserService current, IPanicRealtime realtime, ICaseNoGenerator caseNo,UserManager<ApplicationUser> userManager,IGeocodingService geocodingService)
+        => (_ctx, _current, _realtime, _caseNo, _userManager,_geocodingService) = (ctx, current, realtime, caseNo,userManager,geocodingService);
 
     public async Task<PanicRequestDto> Handle(CreatePanicRequestCommand r, CancellationToken ct)
     {
@@ -58,7 +60,9 @@ public class CreatePanicRequestHandler : IRequestHandler<CreatePanicRequestComma
             Longitude = r.Longitude,
             Notes = r.Notes,
             MediaUrl = r.MediaUrl,
+            MobileNumber = r.MobileNumber,
             Status = PanicStatus.Created,
+            Address= await _geocodingService.GetAddressFromLatLngAsync(r.Latitude, r.Longitude, ct),
             CaseNo = await _caseNo.NextAsync(ct)
         };
 
@@ -86,6 +90,9 @@ public class CreatePanicRequestHandler : IRequestHandler<CreatePanicRequestComma
             Longitude: entity.Longitude,
             Status: entity.Status,
             CreatedUtc: entity.Created,
+            Address: entity.Address ?? "",
+            Note:entity.Notes ?? "",
+            MobileNumber:entity.MobileNumber ?? "",
 
             RequestedByName: user.Name,
             RequestedByEmail: user.Email ?? user.RegisteredEmail ?? string.Empty,

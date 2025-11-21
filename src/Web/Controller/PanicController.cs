@@ -2,7 +2,10 @@
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicNote;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AssignPanic;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateEmergencyType;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeleteEmergencyType;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeletePanicResponder;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateEmergencyType;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
@@ -119,4 +122,28 @@ public class PanicController : BaseApiController
 
     [HttpGet("emergency-types")]
     public Task<List<EmergencyTypeDto>> Types() => _med.Send(new GetEmergencyTypesQuery());
+
+    //Need to implement Create, Update, Delete Emergency Type endpoints below
+    [HttpPost("Create")]
+    public async Task<IActionResult> Create(CreateEmergencyTypeCommand command)
+    {
+        var id = await _med.Send(command);
+        return Ok(new { Message = "Emergency type created successfully", Id = id });
+    }
+    [HttpPut("Update/{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateEmergencyTypeCommand command)
+    {
+        if (id != command.Id)
+            return BadRequest("ID in URL and body must match.");
+
+        await _med.Send(command);
+        return Ok(new { Message = "Emergency type updated successfully" });
+    }
+
+    [HttpDelete("Delete/{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _med.Send(new DeleteEmergencyTypeCommand { Id = id });
+        return Ok(new { Message = "Emergency type deleted successfully" });
+    }
 }

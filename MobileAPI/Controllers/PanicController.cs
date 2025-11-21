@@ -20,11 +20,11 @@ public class PanicController : BaseApiController
     [HttpGet("emergency-types")]
     public Task<List<EmergencyTypeDto>> Types() => _med.Send(new GetEmergencyTypesQuery());
 
-    public record CreateBody(Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl);
+    public record CreateBody(Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl,string? MobileNumber);
 
-    [HttpPost,AllowAnonymous]
+    [HttpPost]
     public Task<PanicRequestDto> Create([FromBody] CreateBody b)
-        => _med.Send(new CreatePanicRequestCommand(b.EmergencyTypeId, b.Latitude, b.Longitude, b.Notes, b.MediaUrl));
+        => _med.Send(new CreatePanicRequestCommand(b.EmergencyTypeId, b.Latitude, b.Longitude, b.Notes, b.MediaUrl,b.MobileNumber));
 
     [HttpGet("my/active")]
     public Task<List<PanicRequestDto>> MyActive() => _med.Send(new GetMyActivePanicQuery());
