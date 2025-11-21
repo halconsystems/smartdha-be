@@ -45,7 +45,7 @@ public class GetClubMembersQueryHandler : IRequestHandler<GetClubMembersQuery, L
                 .Where(u =>
                     userIds.Contains(u.Id) &&
                     u.AppType == AppType.Mobile &&
-                    u.UserType == UserType.Member &&
+               //     u.UserType == UserType.Member &&
                     u.IsDeleted == false &&
                     u.IsActive == true)
                 .ToListAsync(cancellationToken);
