@@ -46,8 +46,7 @@ public interface IApplicationDbContext
     DbSet<ComplaintHistory> ComplaintHistories { get; }
     DbSet<ComplaintPriority> ComplaintPriorities { get; }
     DbSet<Configuration> Configurations { get; }
-
-
+    DbSet<SmartPayLog> SmartPayLogs { get; }
 
 
 

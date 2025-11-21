@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Data.Interceptors;
 using DHAFacilitationAPIs.Infrastructure.Identity;
+using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -156,6 +157,10 @@ public static class DependencyInjection
 
         services
             .Configure<DatabaseSettings>(configuration.GetSection(nameof(DatabaseSettings)));
+
+       
+
+
 
         return services;
     }

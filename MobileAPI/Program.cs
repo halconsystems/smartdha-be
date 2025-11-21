@@ -3,8 +3,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,6 +43,9 @@ builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
+
+builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
+builder.Services.AddScoped<ISmartPayService, SmartPayService>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -170,11 +175,6 @@ builder.Services.AddRateLimiter(options =>
         cfg.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 });
-
-
-
-
-
 
 
 var app = builder.Build();

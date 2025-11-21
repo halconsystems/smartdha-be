@@ -61,6 +61,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ComplaintCategory> ComplaintCategories => Set<ComplaintCategory>();
     public DbSet<ComplaintHistory> ComplaintHistories => Set<ComplaintHistory>();
     public DbSet<ComplaintPriority> ComplaintPriorities => Set<ComplaintPriority>();
+    public DbSet<SmartPayLog> SmartPayLogs => Set<SmartPayLog>();
     public DbSet<Configuration> Configurations => Set<Configuration>();
 
 
