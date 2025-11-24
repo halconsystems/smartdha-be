@@ -57,6 +57,9 @@ public class GetAllPanicRequestsQueryHandler
                 x.Longitude,
                 (PanicStatus)x.Status,
                 x.Created,
+                x.Address ?? "",
+                x.Notes ?? "",
+                x.MobileNumber ?? "",
 
                 user?.Name ?? "",   // 👈 adjust property names
                 user?.Email ?? "",

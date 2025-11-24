@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.Refund.Command.CreateRefundRequest;
 using DHAFacilitationAPIs.Application.Feature.Refunds.Queries;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
@@ -15,11 +16,13 @@ using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MobileAPI.Authorization;
+using MobileAPI.Controllers;
 
 namespace MobileAPI.Controller;
 [ApiController]
 [Route("api/[controller]")]
-public class RoomBookingController : ControllerBase
+public class RoomBookingController : BaseApiController
 {
     private readonly IMediator _mediator;
 
@@ -29,6 +32,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("get-user-clubs")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<IActionResult> GetUserClubs()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -45,6 +49,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("search-rooms")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
@@ -81,6 +86,7 @@ public class RoomBookingController : ControllerBase
 //    }
 
     [HttpGet("get-room-details")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] RoomBookingType bookingType)
     {
         var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
@@ -88,6 +94,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpPost("create-reservation")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand cmd, CancellationToken ct)
     {
         var reservationId = await _mediator.Send(cmd);
@@ -95,6 +102,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("get-all-reservations")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
@@ -111,13 +119,16 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("get-reservation-status")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<ActionResult<ReservationStatusDto>> GetReservationStatus(Guid reservationId)
     {
         var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
         return Ok(result);
     }
 
+
     [HttpPost("create-refund-request")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<ActionResult<Guid>> CreateRefundRequest([FromBody] CreateRefundRequestCommand cmd, CancellationToken ct)
     {
         var id = await _mediator.Send(cmd, ct);
@@ -125,6 +136,7 @@ public class RoomBookingController : ControllerBase
     }
 
     [HttpGet("get-refund-request")]
+    [ModuleAuthorize(Modules.Club)]
     public async Task<IActionResult> GetMyRefundRequests(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetRefundRequestsQuery(), ct);

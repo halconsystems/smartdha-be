@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class GroundBookingController : ControllerBase
+public class GroundBookingController : BaseApiController
 {
     private readonly IMediator _mediator;
 
@@ -23,7 +23,7 @@ public class GroundBookingController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("get-user-grounds"), AllowAnonymous]
+    [HttpGet("get-user-grounds")]
     public async Task<IActionResult> GetUserClubs()
     {
         var result = await _mediator.Send(new GetGroundClubsQuery());

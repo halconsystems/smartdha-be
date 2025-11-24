@@ -66,6 +66,7 @@ public class BowzerController : BaseApiController
        => Ok(await _mediator.Send(new GetMyRequestsQuery(), ct));
 
     [HttpGet("MyRequest/{id:guid}")]
+    [ModuleAuthorize(Modules.Bowser)]
     public async Task<IActionResult> GetMyRequestById(string Id)
     {
         if (!Guid.TryParse(Id, out var requestId))

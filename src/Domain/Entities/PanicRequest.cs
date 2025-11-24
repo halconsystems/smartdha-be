@@ -17,8 +17,8 @@ public class PanicRequest : BaseAuditableEntity
     public EmergencyType EmergencyType { get; set; } = default!;
 
     // geo
-    [Column(TypeName = "decimal(9,6)")] public decimal Latitude { get; set; }
-    [Column(TypeName = "decimal(9,6)")] public decimal Longitude { get; set; }
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
     [MaxLength(300)] public string? Address { get; set; }
 
     // lifecycle

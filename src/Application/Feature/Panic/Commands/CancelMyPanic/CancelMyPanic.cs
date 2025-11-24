@@ -38,7 +38,7 @@ public class CancelMyPanicCommandHandler
 
         var from = e.Status;
         e.Status = PanicStatus.Cancelled;
-        e.CancelledAt = DateTime.UtcNow;
+        e.CancelledAt = DateTime.Now;
 
         _ctx.PanicActionLogs.Add(new PanicActionLog
         {

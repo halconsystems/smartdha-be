@@ -43,7 +43,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
-
+builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
+builder.Services.AddScoped<ISmartPayService, SmartPayService>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>

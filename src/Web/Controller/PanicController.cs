@@ -2,21 +2,36 @@
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicNote;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AddPanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AssignPanic;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AssignPanicToVehicle;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateEmergencyType;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateSvPoint;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateSvVehicle;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeleteEmergencyType;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeletePanicResponder;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetEmergencyTypeStatus;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetSvPointStatus;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetSvVehicleStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateEmergencyType;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicResponder;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvPoint;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicle;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicleStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicResponders;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDashboardSummary;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetNearestVehicles;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicLogs;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicPaged;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicSummary;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicTrail;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvMapPoints;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvPoints;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicles;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicleStatusSummary;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicleSummary;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -124,13 +139,13 @@ public class PanicController : BaseApiController
     public Task<List<EmergencyTypeDto>> Types() => _med.Send(new GetEmergencyTypesQuery());
 
     //Need to implement Create, Update, Delete Emergency Type endpoints below
-    [HttpPost("Create")]
+    [HttpPost("emergencytypes-Create")]
     public async Task<IActionResult> Create(CreateEmergencyTypeCommand command)
     {
         var id = await _med.Send(command);
         return Ok(new { Message = "Emergency type created successfully", Id = id });
     }
-    [HttpPut("Update/{id:guid}")]
+    [HttpPut("emergencytypes-Update/{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateEmergencyTypeCommand command)
     {
         if (id != command.Id)
@@ -140,10 +155,145 @@ public class PanicController : BaseApiController
         return Ok(new { Message = "Emergency type updated successfully" });
     }
 
-    [HttpDelete("Delete/{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpPatch("emergencytypes/{id:guid}/status")]
+    public async Task<IActionResult> SetStatus(Guid id, [FromQuery] bool isActive)
     {
-        await _med.Send(new DeleteEmergencyTypeCommand { Id = id });
-        return Ok(new { Message = "Emergency type deleted successfully" });
+        await _med.Send(new SetEmergencyTypeStatusCommand(id, isActive));
+
+        return Ok(new
+        {
+            Message = isActive
+                ? "Emergency type activated successfully"
+                : "Emergency type deactivated successfully"
+        });
     }
+
+
+    [HttpPost("MarkLocation")]
+    public async Task<ActionResult<Guid>> CreatePoint(CreateSvPointCommand cmd)
+    {
+        var id = await _med.Send(cmd);
+        return Ok(id);
+    }
+
+    [HttpGet("GetLocations")]
+    public async Task<ActionResult<List<SvPointDto>>> GetPoints()
+    {
+        var result = await _med.Send(new GetSvPointsQuery());
+        return Ok(result);
+    }
+
+    // UPDATE POINT
+    [HttpPut("MarkLocation/{id:guid}")]
+    public async Task<IActionResult> UpdatePoint(Guid id, UpdateSvPointCommand cmd)
+    {
+        if (id != cmd.Id) return BadRequest("ID mismatch");
+        await _med.Send(cmd);
+        return NoContent();
+    }
+
+    // ACTIVATE/DEACTIVATE POINT
+    [HttpPatch("MarkLocation/{id:guid}/status")]
+    public async Task<IActionResult> SetPointStatus(Guid id, [FromQuery] bool isActive)
+    {
+        await _med.Send(new SetSvPointStatusCommand(id, isActive));
+
+        return Ok(new
+        {
+            PointId = id,
+            Message = isActive
+                ? "Location activated successfully"
+                : "Location deactivated successfully"
+        });
+    }
+
+
+    [HttpPost("Vehicles")]
+    public async Task<ActionResult<Guid>> CreateVehicle(CreateSvVehicleCommand cmd)
+    {
+        var id = await _med.Send(cmd);
+        return Ok(id);
+    }
+
+    [HttpGet("Vehicles")]
+    public async Task<ActionResult<List<SvVehicleListDto>>> GetVehicles()
+    {
+        var result = await _med.Send(new GetSvVehiclesQuery());
+        return Ok(result);
+    }
+
+    // UPDATE VEHICLE
+    [HttpPut("vehicles/{id:guid}")]
+    public async Task<IActionResult> UpdateVehicle(Guid id, UpdateSvVehicleCommand cmd)
+    {
+        if (id != cmd.Id) return BadRequest("ID mismatch");
+        await _med.Send(cmd);
+        return NoContent();
+    }
+
+    // ACTIVATE/DEACTIVATE VEHICLE
+    [HttpPatch("vehicles/{id:guid}/status")]
+    public async Task<IActionResult> SetVehicleStatus(Guid id, [FromQuery] bool isActive)
+    {
+        await _med.Send(new SetSvVehicleStatusCommand(id, isActive));
+
+        return Ok(new
+        {
+            VehicleId = id,
+            Message = isActive
+                ? "Vehicle activated successfully"
+                : "Vehicle deactivated successfully"
+        });
+    }
+
+    [HttpPatch("Vehicles/{id:guid}/Update-Status")]
+    public async Task<IActionResult> UpdateVehicleStatus(Guid id, [FromQuery] SvVehicleStatus status)
+    {
+        var result = await _med.Send(new UpdateSvVehicleStatusCommand(id, status));
+        return Ok(new
+        {
+            VehicleId = result,
+            Message = $"Vehicle status updated to {status}"
+        });
+    }
+
+    [HttpGet("Vehicles/Summary")]
+    public async Task<ActionResult<SvVehicleStatusSummaryDto>> GetVehicleStatusSummary()
+    {
+        var result = await _med.Send(new GetSvVehicleStatusSummaryQuery());
+        return Ok(result);
+    }
+
+    [HttpPost("{PanicId:guid}/AssignVehicle")]
+    public async Task<ActionResult<Guid>> AssignVehicle(Guid panicId, Guid vehicleId)
+    {
+        var id = await _med.Send(new AssignPanicToVehicleCommand(panicId, vehicleId));
+        return Ok(id);
+    }
+
+    [HttpGet("map-points")]
+    public async Task<ActionResult<List<SvMapPointDto>>> GetMapPoints()
+    {
+        var result = await _med.Send(new GetSvMapPointsQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("{panicId:guid}/Nearest-Vehicles")]
+    public async Task<ActionResult<List<NearestVehicleDto>>> GetNearestVehicles(Guid panicId)
+    {
+        // fetch panic location
+        var panic = await _med.Send(new GetPanicByIdQuery(panicId)); // you likely already have
+        var result = await _med.Send(new GetNearestVehiclesQuery(
+            panic.Latitude, panic.Longitude));
+        return Ok(result);
+    }
+
+    [HttpGet("VehiclesMAP-Summary")]
+    public async Task<ActionResult<SvVehicleSummaryDto>> GetVehicleSummary()
+    {
+        var result = await _med.Send(new GetSvVehicleSummaryQuery());
+        return Ok(result);
+    }
+
+
 }

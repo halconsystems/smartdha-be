@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DHAFacilitationAPIs.Domain.Enums;
+public enum PanicDispatchStatus
+{
+    Assigned = 1,   // Control room assigned
+    Accepted = 2,   // Driver accepted
+    OnRoute = 3,    // Driver moving towards panic
+    Arrived = 4,    // Reached location
+    Completed = 5,  // Action completed
+    Cancelled = 6
+}

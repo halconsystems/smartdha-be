@@ -7,6 +7,6 @@ using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.Panic;
 // Application/Panic/DTOs/EmergencyTypeDto.cs
-public record EmergencyTypeDto(Guid Id, int Code, string Name, string? HelplineNumber, string? Description);
+public record EmergencyTypeDto(Guid Id, int Code, string Name, string? HelplineNumber, string? Description, bool? IsActive);
 
 

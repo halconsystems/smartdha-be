@@ -987,6 +987,61 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("EmergencyTypes");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GoogleApiLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FormattedAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ResponseStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoogleApiLogs");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MemberTypeModuleAssignment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1379,6 +1434,87 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("PanicActionLogs");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTimeOffset?>("AcceptedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("ArrivedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("AssignedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("AssignedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("CancelledAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("CompletedAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ControlRoomRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DriverRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("OnRouteAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("PanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PanicRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SvVehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanicRequestId");
+
+                    b.HasIndex("SvVehicleId");
+
+                    b.ToTable("PanicDispatches");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1480,11 +1616,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("decimal(9,6)");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
 
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("decimal(9,6)");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("MediaUrl")
                         .HasMaxLength(500)
@@ -2022,6 +2158,134 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasIndex("ModuleId");
 
                     b.ToTable("SubModules");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvPoint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SvPoints");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DriverUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("LastLatitude")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset?>("LastLocationAtUtc")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal?>("LastLongitude")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MapIconKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SvPointId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("VehicleType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SvPointId");
+
+                    b.ToTable("SvVehicles");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserActivityLog", b =>
@@ -2645,6 +2909,25 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("PanicRequest");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
+                        .WithMany()
+                        .HasForeignKey("PanicRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvVehicle", "SvVehicle")
+                        .WithMany("PanicDispatches")
+                        .HasForeignKey("SvVehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PanicRequest");
+
+                    b.Navigation("SvVehicle");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
@@ -2696,6 +2979,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasForeignKey("ModuleId");
 
                     b.Navigation("Module");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicle", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvPoint", "SvPoint")
+                        .WithMany("Vehicles")
+                        .HasForeignKey("SvPointId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SvPoint");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubAssignment", b =>
@@ -2876,6 +3170,16 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SubModule", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvPoint", b =>
+                {
+                    b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicle", b =>
+                {
+                    b.Navigation("PanicDispatches");
                 });
 #pragma warning restore 612, 618
         }

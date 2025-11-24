@@ -30,10 +30,14 @@ public class DeleteEmergencyTypeCommandHandler
         if (entity == null)
             throw new NotFoundException(nameof(EmergencyType), request.Id.ToString());
 
-        _context.EmergencyTypes.Remove(entity);
+        // Soft Delete → mark inactive
+        entity.IsActive = false;
+        entity.LastModified = DateTime.Now;
+
         await _context.SaveChangesAsync(ct);
 
         return entity.Id;
     }
+
 }
 

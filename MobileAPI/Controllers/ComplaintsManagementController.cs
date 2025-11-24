@@ -1,4 +1,5 @@
-﻿using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Commands.CreateComplaint;
+﻿using DHAFacilitationAPIs.Application.Common.Security;
+using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Commands.CreateComplaint;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetComplaintDropdowns;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaints;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaintStatusCount;
@@ -7,6 +8,7 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MobileAPI.Authorization;
 
 namespace MobileAPI.Controllers;
 
@@ -17,11 +19,12 @@ public class ComplaintsManagementController : BaseApiController
     private readonly IMediator _med;
     public ComplaintsManagementController(IMediator med) => _med = med;
 
-    [HttpGet("Complaint-Categories"),AllowAnonymous]
+    [HttpGet("Complaint-Categories")]
+    [ModuleAuthorize(Modules.Complaint)]
     public Task<ComplaintDropdownVm> Types() => _med.Send(new GetComplaintDropdownsQuery());
 
     [HttpPost]
-    [Authorize]
+    [ModuleAuthorize(Modules.Complaint)]
     [RequestSizeLimit(20_000_000)]
     public async Task<IActionResult> CreateComplaint([FromForm] CreateComplaintRequest request)
     {
@@ -30,7 +33,7 @@ public class ComplaintsManagementController : BaseApiController
     }
 
     [HttpGet("GetComplaints")]
-    [Authorize]
+    [ModuleAuthorize(Modules.Complaint)]
     public async Task<IActionResult> GetMyComplaints()
     {
         var result = await Mediator.Send(new GetMyComplaintsQuery());
@@ -38,7 +41,7 @@ public class ComplaintsManagementController : BaseApiController
     }
 
     [HttpGet("Status-Summary")]
-    [Authorize]
+    [ModuleAuthorize(Modules.Complaint)]
     public async Task<IActionResult> GetMyComplaintStatusSummary()
     {
         var result = await Mediator.Send(new GetMyComplaintStatusCountQuery());

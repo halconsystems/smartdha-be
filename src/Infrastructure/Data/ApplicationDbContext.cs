@@ -54,6 +54,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
     public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
     public DbSet<PanicResponder> PanicResponders => Set<PanicResponder>();
+    public DbSet<SvPoint> SvPoints => Set<SvPoint>();
+    public DbSet<SvVehicle> SvVehicles => Set<SvVehicle>();
+    public DbSet<PanicDispatch> PanicDispatches => Set<PanicDispatch>();
+
+
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
   
    public DbSet<Complaint> Complaints => Set<Complaint>();
@@ -63,6 +68,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ComplaintPriority> ComplaintPriorities => Set<ComplaintPriority>();
     public DbSet<SmartPayLog> SmartPayLogs => Set<SmartPayLog>();
     public DbSet<Configuration> Configurations => Set<Configuration>();
+    public DbSet<GoogleApiLog> GoogleApiLogs => Set<GoogleApiLog>();
 
 
 

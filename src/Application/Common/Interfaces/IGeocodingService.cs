@@ -8,7 +8,7 @@ namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface IGeocodingService
 {
     Task<string?> GetAddressFromLatLngAsync(
-        decimal latitude,
-        decimal longitude,
+        double latitude,
+        double longitude,
         CancellationToken cancellationToken = default);
 }

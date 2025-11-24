@@ -12,7 +12,7 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 
 namespace DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreatePanicRequest;
 public record CreatePanicRequestCommand(
-    Guid EmergencyTypeId, decimal Latitude, decimal Longitude, string? Notes, string? MediaUrl, string? MobileNumber
+    Guid EmergencyTypeId, double Latitude, double Longitude, string? Notes, string? MediaUrl, string? MobileNumber
 ) : IRequest<PanicRequestDto>;
 
 public class CreatePanicRequestValidator : AbstractValidator<CreatePanicRequestCommand>

@@ -19,7 +19,7 @@ public class GetEmergencyTypesQueryHandler : IRequestHandler<GetEmergencyTypesQu
          .IgnoreQueryFilters()                    // bypasses the global IsDeleted filter
          .Where(x => x.IsDeleted != true)         // safe local filter
          .OrderBy(x => x.Code)
-         .Select(x => new EmergencyTypeDto(x.Id, x.Code, x.Name, x.HelplineNumber, x.Description))
+         .Select(x => new EmergencyTypeDto(x.Id, x.Code, x.Name, x.HelplineNumber, x.Description, x.IsActive))
          .ToListAsync(ct);
 
 }

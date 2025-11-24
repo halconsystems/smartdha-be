@@ -47,7 +47,10 @@ public interface IApplicationDbContext
     DbSet<ComplaintPriority> ComplaintPriorities { get; }
     DbSet<Configuration> Configurations { get; }
     DbSet<SmartPayLog> SmartPayLogs { get; }
-
+    DbSet<SvPoint> SvPoints { get; }
+    DbSet<SvVehicle> SvVehicles { get; }
+    DbSet<PanicDispatch> PanicDispatches { get; }
+    DbSet<GoogleApiLog> GoogleApiLogs { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

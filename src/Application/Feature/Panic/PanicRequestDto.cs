@@ -8,4 +8,4 @@ using DHAFacilitationAPIs.Domain.Enums;
 namespace DHAFacilitationAPIs.Application.Feature.Panic;
 public record PanicRequestDto(
     Guid Id, string CaseNo, int EmergencyCode, string EmergencyName,
-    decimal Latitude, decimal Longitude, PanicStatus Status, DateTime CreatedUtc);
+    double Latitude, double Longitude, PanicStatus Status, DateTime CreatedUtc);

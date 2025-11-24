@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.SmartPay.Commands.UploadBill;
 using DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.BillInquiry;
 using DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.ConsumerHistory;
@@ -7,6 +8,7 @@ using DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.ConsumerInquiry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MobileAPI.Authorization;
 
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
@@ -21,6 +23,7 @@ public class SmartPayController : BaseApiController
     }
 
     [HttpGet("ConsumerInquiry/{cellNo}")]
+    [ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> ConsumerInquiry(string cellNo)
     {
         var query = new ConsumerInquiryQuery { CellNo = cellNo };
@@ -29,6 +32,7 @@ public class SmartPayController : BaseApiController
     }
 
     [HttpGet("BillInquiry/{consumerNo}")]
+    [ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> BillInquiry(string consumerNo)
     {
         var query = new BillInquiryQuery { ConsumerNo = consumerNo };
@@ -45,6 +49,7 @@ public class SmartPayController : BaseApiController
     //}
 
     [HttpGet("MyBillInquiry")]
+    [ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> MyConsumerInquiry()
     {
         var cellNo = "923222781985";
@@ -54,6 +59,7 @@ public class SmartPayController : BaseApiController
     }
 
     [HttpGet("MyHistory")]
+    [ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> MyHistory()
     {
         var consumerNo = "600214081";

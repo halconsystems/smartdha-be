@@ -18,9 +18,10 @@ public class MembershipPurposesController : BaseApiController
         return Ok(await Mediator.Send(new GetAllMembershipPurposesQuery()));
     }
 
-    [HttpPost("AddMembershipPurposes"), AllowAnonymous]
-    public async Task<IActionResult> AddMembershipPurposes(AddMembershipPurposeCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+    //[HttpPost("AddMembershipPurposes")]
+
+    //public async Task<IActionResult> AddMembershipPurposes(AddMembershipPurposeCommand request)
+    //{
+    //    return Ok(await Mediator.Send(request));
+    //}
 }
