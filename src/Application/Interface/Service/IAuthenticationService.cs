@@ -16,6 +16,7 @@ public interface IAuthenticationService : IServicesType.IScopedService
     Task<string> GenerateWebUserToken(ApplicationUser user);
     Task<string> GenerateTemporaryToken(ApplicationUser user, string purpose, TimeSpan expiresIn);
     Task<ClaimsPrincipal?> GetPrincipalFromExpiredToken(string token); // 👈 NEW
+    Task<string> GenerateDriverToken(ApplicationUser user);
 
 
 }

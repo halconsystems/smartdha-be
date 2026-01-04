@@ -987,6 +987,68 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("EmergencyTypes");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FirebaseApiLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResponseJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FirebaseApiLogs");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GoogleApiLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1441,24 +1503,34 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<DateTimeOffset?>("AcceptedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("AcceptedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("ArrivedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<string>("AcceptedAtAddress")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
-                    b.Property<DateTimeOffset>("AssignedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<double?>("AcceptedAtLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("AcceptedAtLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("ArrivedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("AssignedByUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset?>("CancelledAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset?>("CompletedAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ControlRoomRemarks")
                         .HasColumnType("nvarchar(max)");
@@ -1469,7 +1541,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double?>("DistanceFromPanicKm")
+                        .HasColumnType("float");
+
                     b.Property<string>("DriverRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DriverRemarksAudioPath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActive")
@@ -1478,17 +1556,14 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastLocationUpdateAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset?>("OnRouteAtUtc")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid>("PanicId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PanicRequestId")
                         .HasColumnType("uniqueidentifier");
@@ -1513,6 +1588,58 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasIndex("SvVehicleId");
 
                     b.ToTable("PanicDispatches");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatchMedia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MediaType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PanicDispatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanicDispatchId");
+
+                    b.ToTable("PanicDispatchMedias");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
@@ -1657,6 +1784,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("TakeReview")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmergencyTypeId");
@@ -1729,6 +1859,54 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasIndex("EmergencyTypeId");
 
                     b.ToTable("PanicResponders");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicReview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PanicRequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReviewText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanicRequestId");
+
+                    b.ToTable("PanicReviews");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RefreshToken", b =>
@@ -2230,6 +2408,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DriverId")
+                        .HasColumnType("nvarchar(85)");
+
                     b.Property<string>("DriverUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -2239,14 +2420,14 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("LastLatitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LastLatitude")
+                        .HasColumnType("float");
 
-                    b.Property<DateTimeOffset?>("LastLocationAtUtc")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime?>("LastLocationAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("LastLongitude")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("LastLongitude")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
@@ -2275,7 +2456,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SvPointId")
+                    b.Property<Guid?>("SvPointId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("VehicleType")
@@ -2283,9 +2464,68 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DriverId");
+
                     b.HasIndex("SvPointId");
 
                     b.ToTable("SvVehicles");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicleAssignmentHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DriverId")
+                        .HasColumnType("nvarchar(85)");
+
+                    b.Property<string>("DriverUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<DateTime?>("UnassignedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("VehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("SvVehicleAssignmentHistories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserActivityLog", b =>
@@ -2374,6 +2614,73 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasIndex("UserId");
 
                     b.ToTable("UserClubAssignments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserLoginAudit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceOS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LoginAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LogoutAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(85)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLoginAudits");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMembershipPurpose", b =>
@@ -2912,7 +3219,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
-                        .WithMany()
+                        .WithMany("PanicDispatches")
                         .HasForeignKey("PanicRequestId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2926,6 +3233,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("PanicRequest");
 
                     b.Navigation("SvVehicle");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatchMedia", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", "PanicDispatch")
+                        .WithMany("Media")
+                        .HasForeignKey("PanicDispatchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PanicDispatch");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicLocationUpdate", b =>
@@ -2961,6 +3279,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("EmergencyType");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicReview", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
+                        .WithMany()
+                        .HasForeignKey("PanicRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PanicRequest");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestProcessStep", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.RequestTracking", "RequestTracking")
@@ -2983,16 +3312,48 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicle", b =>
                 {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvPoint", "SvPoint")
                         .WithMany("Vehicles")
-                        .HasForeignKey("SvPointId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("SvPointId");
+
+                    b.Navigation("Driver");
 
                     b.Navigation("SvPoint");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicleAssignmentHistory", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvVehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubAssignment", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserLoginAudit", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
@@ -3160,6 +3521,16 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("SubModules");
 
                     b.Navigation("UserAssignments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", b =>
+                {
+                    b.Navigation("Media");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicRequest", b =>
+                {
+                    b.Navigation("PanicDispatches");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RequestTracking", b =>

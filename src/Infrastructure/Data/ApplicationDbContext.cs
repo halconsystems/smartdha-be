@@ -57,11 +57,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<SvPoint> SvPoints => Set<SvPoint>();
     public DbSet<SvVehicle> SvVehicles => Set<SvVehicle>();
     public DbSet<PanicDispatch> PanicDispatches => Set<PanicDispatch>();
-
-
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-  
-   public DbSet<Complaint> Complaints => Set<Complaint>();
+    public DbSet<Complaint> Complaints => Set<Complaint>();
     public DbSet<ComplaintAttachment> ComplaintAttachments => Set<ComplaintAttachment>();
     public DbSet<ComplaintCategory> ComplaintCategories => Set<ComplaintCategory>();
     public DbSet<ComplaintHistory> ComplaintHistories => Set<ComplaintHistory>();
@@ -69,6 +66,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<SmartPayLog> SmartPayLogs => Set<SmartPayLog>();
     public DbSet<Configuration> Configurations => Set<Configuration>();
     public DbSet<GoogleApiLog> GoogleApiLogs => Set<GoogleApiLog>();
+    public DbSet<SvVehicleAssignmentHistory> SvVehicleAssignmentHistories => Set<SvVehicleAssignmentHistory>();
+    public DbSet<UserLoginAudit> UserLoginAudits => Set<UserLoginAudit>();
+    public DbSet<FirebaseApiLog> FirebaseApiLogs => Set<FirebaseApiLog>();
+    public DbSet<PanicDispatchMedia> PanicDispatchMedias => Set<PanicDispatchMedia>();
+    public DbSet<PanicReview> PanicReviews => Set<PanicReview>();
+
 
 
 
@@ -260,7 +263,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         //Panic Button Module
         builder.Entity<EmergencyType>()
-    .HasQueryFilter(e => e.IsDeleted != true);
+        .HasQueryFilter(e => e.IsDeleted != true);
+
+        builder.Entity<PanicDispatchMedia>()
+        .HasOne(x => x.PanicDispatch)
+        .WithMany(d => d.Media)
+        .HasForeignKey(x => x.PanicDispatchId)
+        .OnDelete(DeleteBehavior.Cascade);
+
 
 
 

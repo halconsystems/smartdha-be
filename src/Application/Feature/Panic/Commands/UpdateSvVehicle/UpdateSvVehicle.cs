@@ -13,7 +13,7 @@ public record UpdateSvVehicleCommand(
     string RegistrationNo,
     SvVehicleType VehicleType,
     string? MapIconKey,
-    Guid SvPointId,
+    Guid? SvPointId,
     string? DriverUserId,
     SvVehicleStatus Status
 ) : IRequest<Guid>;

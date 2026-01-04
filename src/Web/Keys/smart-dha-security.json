@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "smart-dha-security",
+  "private_key_id": "eb12cb3b5a3181f29d9c18e944f39020ffd7a142",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQDB3Xg0rcrZOx3t\nIgmqvAWMdCrqvWZ0eFqvR6MgCjXBu0yRiQyg05PDrvpK5GJ249pjJHSQjv9Y6VVh\nvXOvhLbo2eLwHHNsl2ZK3+Yr6ySBUIa1Ylmq+44I5a7D0O/cXqZwmJT/OHNkRynt\nTYSH4xvY54v4qGwAbRUvJ+qsijSdoLXcxCBo2AgE18X6G1qEnh088vOKsDH2iHnk\ns4VIrKCnWyf0C0AELR0A3tFXb3hJVlimvT/adBaaM5mktH3yB3caW1ZZDiKeRmS8\nOQui8MNp6H4iGFrQ9gVDuWTI8rBNOeJLX0Lv3CW87oqOPOfuZg1TUuMyKo7Yv0Nx\nOT2VEB+nAgMBAAECggEADcS7aU5ghj4XGYTd1+Tjpf6IH8TU1nfHxQQa90cSW1CA\nlyN7JJ7yMyclupTu00/Kblkj+DJXu0pTGI56fWA5F1+GKRR0NCWqi63MLJlWLeL4\ntkAmayjThRk+6MRZjLaiLoP/rQKm21vcg/CJ9ZaxHx4OyFm51evpYcB9f8SPCRTF\nvMVj6ybrZyBjQCCyjXZ49yhthhO1wB3lAl02UGCpT0cmt9XLdpCCigkTd2tP8UKv\nrsCxhcn62Dw7UolxwC84Cs4V42q9WCzaLSo0o+LBlhGhGxSrvZLYeF9nAYVd4rIC\nHfQfsLl/VZvFZ/lY5wx3/k0Sc0q6N20Ywem2gJPMhQKBgQDl/vji++LfUi1ioc+d\nbWlBvzrZWu0UtexOtAlFskSMTniCpsK+OVZjjIE6aTs7BqSdErL179+yvuZZJ/w8\nXY1NvVu6NojagjEwc7l543J4XyffyrS816h0iHfNpvF2d3rJ7pvtH3gHkk6RMVW2\nBOo6FpU14jkO01oJdrcQoC6ZJQKBgQDXyLi/1F4Y0+W9i4EUSQIRfpPY0XNtkAzi\nqFyM4saylkurYVSJJITElvRfmackncSg6AhnUKkXJYVSYAW1Z2703SuSe2wFpW+U\nCcbVT6fK5n7F9Sui6RK2XgmNLpRUerLsQQeOMqquJu8eeYtg3Fh8KBWp/gKh3Y7L\n+hj94zyZ2wJ/HaXAb4IIvMDbGNvC54gzCUadT2dpKEJLM9oBV/qi23NCFZVphRvf\nBvYVsnHeML2qepTufMVvEJuLFfMRkLZ+gIboTBi7i2886AIC5rNrDhk2CqMWqUEj\ndeIhj2D1v0+nhGA9uVNVJaS2fADgC5aWmuZOVaPTtxWHhbDH6Fy9pQKBgQDNguS6\nBner67wlvwSrnjDzGnuTB0CI+6XaBQFISP92vP/KdIM/rmEonqCVoFB45i2MFhFS\n3JZ+bgTBBKTLNXyOh0plU1j5M6vF8V3GcPvcmZPp02vA13wz5fHw3Yj1wHpB2llo\ny8aU4I3il13wXUuEy+R+J2a4ZLwIduRwgYiI+wKBgCUqYejhCMTofTm79tCDR1rN\nPTVjGG3n4HgudNFqN/LASdEpjUY5BBSh6JNGWWNEjElrzeaU+okvIUShLhLj/XS+\n+o/sDR0Oj3RQmcnqkHcmmpEE5yMYNI3Dtja4Mq3AfPxX2tLqHnK/10xRbH2WSq7D\nYqPBYd0USzBZ67Bn7p+K\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@smart-dha-security.iam.gserviceaccount.com",
+  "client_id": "117698913227193062016",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40smart-dha-security.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

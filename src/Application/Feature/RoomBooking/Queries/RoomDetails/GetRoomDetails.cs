@@ -55,7 +55,7 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
                     .Where(rc => rc.Id == r.RoomCategoryId)
                     .Select(rc => rc.Name)
                     .FirstOrDefault() ?? string.Empty,
-
+                r.ClubId,
                 //// Just pick the first matching availability range
                 //FromDate = _context.RoomAvailabilities
                 //    .Where(a => a.RoomId == r.Id)
@@ -72,6 +72,8 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
 
         if (roomData == null)
             return new RoomDetailsDto();
+
+        var getClub = await _context.Clubs.Where(x => x.Id == roomData.ClubId).FirstOrDefaultAsync(cancellationToken);
 
         // Get raw image paths first (from DB)
         var imagePaths = await _context.RoomImages
@@ -99,7 +101,8 @@ public class GetRoomDetailsQueryHandler : IRequestHandler<GetRoomDetailsQuery, R
             //CheckOutDate = roomData.ToDate,
             ResidenceTypeName=roomData.ResidenceTypeName,
             CategoryName=roomData.CategoryName,
-            Description=roomData.Description
+            Description=roomData.Description,
+            ClubName= getClub?.Name ?? ""
         };
     }
 }

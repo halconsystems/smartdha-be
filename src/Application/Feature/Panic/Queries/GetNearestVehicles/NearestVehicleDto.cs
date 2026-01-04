@@ -13,7 +13,8 @@ public class NearestVehicleDto
     public string RegistrationNo { get; set; } = default!;
     public SvVehicleType VehicleType { get; set; }
     public string? MapIconKey { get; set; }
-    public decimal? LastLatitude { get; set; }
-    public decimal? LastLongitude { get; set; }
-    public double? DistanceKm { get; set; }
+    public double? LastLatitude { get; set; }
+    public double? LastLongitude { get; set; }
+    public double? DistanceKm { get; set; } = default!;
+    public double? EstimatedMinutes { get; set; } = default!;
 }

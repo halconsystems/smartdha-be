@@ -14,26 +14,29 @@ public class DbCaseNoGenerator : ICaseNoGenerator
 
     public async Task<string> NextAsync(CancellationToken ct = default)
     {
-        var start = DateTime.UtcNow.Date;         // 00:00 UTC today
-        var end = start.AddDays(1);             // 00:00 UTC tomorrow
+        var today = DateTime.UtcNow.Date;
+        var tomorrow = today.AddDays(1);
 
-        // Get the highest CaseNo for *today* (prefix is same, suffix is 6-digit zero-padded, so string order works)
+        // Get most recent CaseNo for today
         var last = await _ctx.PanicRequests.AsNoTracking()
-            .Where(x => x.Created >= start && x.Created < end)
+            .Where(x => x.Created >= today && x.Created < tomorrow)
             .OrderByDescending(x => x.CaseNo)
             .Select(x => x.CaseNo)
             .FirstOrDefaultAsync(ct);
 
-        var nextSeq = 1;
+        int nextSeq = 1;
+
         if (!string.IsNullOrEmpty(last))
         {
-            // PAN-YYYYMMDD-######  -> take last segment
+            // Expected format: P-ddMMyy-###
             var parts = last.Split('-');
-            if (parts.Length == 3 && int.TryParse(parts[2], out var n))
-                nextSeq = n + 1;
+            if (parts.Length == 3 && int.TryParse(parts[2], out int seq))
+                nextSeq = seq + 1;
         }
 
-        var dateStr = start.ToString("yyyyMMdd");
-        return $"PAN-{dateStr}-{nextSeq:000000}";
+        string date = today.ToString("ddMMyy");
+
+        return $"P-{date}-{nextSeq:000}";
     }
+
 }

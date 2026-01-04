@@ -90,7 +90,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
                 // Charges (requested according to BookingType & 1 Occupant)
                 Price = _context.RoomCharges
                             .AsNoTracking()
-                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType && c.ExtraOccupancy == 0)
+                            .Where(c => c.RoomId == r.Id && c.BookingType == request.BookingType && c.ExtraOccupancy == 0 && c.IsActive==true && c.IsDeleted==false)
                             .Select(c => (decimal?)c.Charges)
                             .FirstOrDefault(),
 
@@ -105,7 +105,7 @@ public class SearchRoomsQueryHandler : IRequestHandler<SearchRoomsQuery, List<Se
               // Main Image
                 DefaultImage = _context.RoomImages
                             .AsNoTracking()
-                            .Where(img => img.RoomId == r.Id && img.Category == ImageCategory.Main)
+                            .Where(img => img.RoomId == r.Id && img.Category == ImageCategory.Main && r.IsActive==true && r.IsDeleted==false)
                             .OrderBy(img => img.Id)
                             .Select(img => img.ImageURL)
                             .FirstOrDefault() ?? string.Empty,

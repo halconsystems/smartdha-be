@@ -53,7 +53,7 @@ public class ResendOtpCommandHandler : IRequestHandler<ResendOtpCommand, Success
 
         // Generate OTP
         var otp = new Random().Next(100000, 999999);
-        string sentMessage = $"{otp} is your OTP to sign-up DHA Karachi mobile application.";
+        string sentMessage = $"{otp} is your OTP to DHA Karachi mobile application. Do not share it with anyone.";
         string returnMessage = $"An OTP has been sent to the mobile number registered with your membership {otp}";
 
         // Send SMS

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.Extensions.Options;
+using static System.Net.WebRequestMethods;
 
 namespace DHAFacilitationAPIs.Infrastructure.Service.Geocoding;
 public class GoogleGeocodingService : IGeocodingService
@@ -80,6 +83,27 @@ public class GoogleGeocodingService : IGeocodingService
             await SaveLogAsync(log, cancellationToken);
             return null;
         }
+    }
+
+    public async Task<GoogleRouteResult?> GetDistanceAndTimeAsync(double originLat, double originLng, double destLat, double destLng, CancellationToken ct)
+    {
+        var url =
+             $"https://maps.googleapis.com/maps/api/directions/json?" +
+             $"origin={originLat},{originLng}&destination={destLat},{destLng}&" +
+             $"mode=driving&departure_time=now&key={_options.ApiKey}";
+
+        var resp = await _httpClient.GetFromJsonAsync<GoogleDirectionsResponse>(url, ct);
+
+        var leg = resp?.routes?.FirstOrDefault()?.legs?.FirstOrDefault();
+        if (leg == null) return null;
+
+        return new GoogleRouteResult
+        {
+            DistanceKm = leg.distance.value / 1000.0,
+            DurationMinutes = leg.duration_in_traffic != null
+                ? leg.duration_in_traffic.value / 60.0
+                : leg.duration.value / 60.0
+        };
     }
 
     private async Task SaveLogAsync(GoogleApiLog log, CancellationToken ct)

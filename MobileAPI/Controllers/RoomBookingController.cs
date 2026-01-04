@@ -2,6 +2,7 @@
 using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.Refund.Command.CreateRefundRequest;
 using DHAFacilitationAPIs.Application.Feature.Refunds.Queries;
+using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.ConfirmPaidRoomBooking;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Commands.CreateReservation;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Clubs;
 using DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.Reservations;
@@ -100,6 +101,15 @@ public class RoomBookingController : BaseApiController
         var reservationId = await _mediator.Send(cmd);
         return Ok(reservationId);
     }
+
+    [HttpPost("create-confirmpaidroombooking")]
+    [ModuleAuthorize(Modules.Club)]
+    public async Task<ActionResult<Guid>> CreateBooking([FromBody] ConfirmPaidRoomBookingCommand cmd, CancellationToken ct)
+    {
+        var reservationId = await _mediator.Send(cmd);
+        return Ok(reservationId);
+    }
+
 
     [HttpGet("get-all-reservations")]
     [ModuleAuthorize(Modules.Club)]

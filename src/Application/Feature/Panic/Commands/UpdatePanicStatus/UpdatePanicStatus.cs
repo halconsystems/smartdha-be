@@ -29,7 +29,7 @@ public class UpdatePanicStatusHandler : IRequestHandler<UpdatePanicStatusCommand
         if (!string.IsNullOrWhiteSpace(r.AssignToUserId))
             e.AssignedToUserId = r.AssignToUserId;
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         if (e.Status == PanicStatus.Acknowledged) e.AcknowledgedAt = now;
         if (e.Status == PanicStatus.Resolved) e.ResolvedAt = now;
         if (e.Status == PanicStatus.Cancelled) e.CancelledAt = now;

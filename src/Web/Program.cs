@@ -102,13 +102,19 @@ builder.Services.AddCors(options =>
             "http://localhost:3000",
             "https://dfpwebapi.dhakarachi.org",
             "https://gw.dhakarachi.org",
-            "http://172.16.10.123:3000"
+            "http://172.16.10.123:3000",
+            "https://dfp.dhakarachi.org"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
     );
 });
+
+builder.Services.Configure<FirebaseSettings>(
+    builder.Configuration.GetSection("FirebaseSettings"));
+
+
 
 var app = builder.Build();
 

@@ -51,6 +51,12 @@ public interface IApplicationDbContext
     DbSet<SvVehicle> SvVehicles { get; }
     DbSet<PanicDispatch> PanicDispatches { get; }
     DbSet<GoogleApiLog> GoogleApiLogs { get; }
+    DbSet<SvVehicleAssignmentHistory> SvVehicleAssignmentHistories { get; }
+    DbSet<UserLoginAudit> UserLoginAudits { get; }
+    DbSet<FirebaseApiLog> FirebaseApiLogs { get; }
+    DbSet<PanicDispatchMedia> PanicDispatchMedias { get; }
+    DbSet<PanicReview> PanicReviews { get; }
+
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

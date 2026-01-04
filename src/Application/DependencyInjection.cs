@@ -45,6 +45,7 @@ public static class DependencyInjection
         #region Get Section Settings
 
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        services.Configure<FirebaseOptions>(configuration.GetSection(FirebaseOptions.SectionName));
 
         #endregion
 

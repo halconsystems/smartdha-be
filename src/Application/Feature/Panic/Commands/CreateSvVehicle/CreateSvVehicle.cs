@@ -13,8 +13,7 @@ public record CreateSvVehicleCommand(
     string RegistrationNo,
     SvVehicleType VehicleType,
     string? MapIconKey,
-    Guid SvPointId,
-    string? DriverUserId,
+    Guid? SvPointId,
     SvVehicleStatus Status
 ) : IRequest<Guid>;
 public class CreateSvVehicleCommandHandler
@@ -30,10 +29,16 @@ public class CreateSvVehicleCommandHandler
     public async Task<Guid> Handle(CreateSvVehicleCommand request, CancellationToken ct)
     {
         // Optional: verify point exists
-        var pointExists = await _context.SvPoints
-            .AnyAsync(p => p.Id == request.SvPointId && p.IsActive == true, ct);
+        // Check only if a point was provided
+        if (request.SvPointId.HasValue)
+        {
+            var pointExists = await _context.SvPoints
+                .AnyAsync(p => p.Id == request.SvPointId.Value && p.IsActive==true, ct);
 
-        if (!pointExists) throw new NotFoundException("SvPoint", request.SvPointId.ToString());
+            if (!pointExists)
+                throw new NotFoundException("SvPoint", request.SvPointId.Value.ToString());
+        }
+
 
         var entity = new SvVehicle
         {
@@ -42,8 +47,7 @@ public class CreateSvVehicleCommandHandler
             RegistrationNo = request.RegistrationNo,
             VehicleType = request.VehicleType,
             MapIconKey = request.MapIconKey,
-            SvPointId = request.SvPointId,
-            DriverUserId = request.DriverUserId,
+            SvPointId = request.SvPointId,         // ✔ nullable value
             Status = request.Status
         };
 

@@ -45,7 +45,7 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
 
         var clubs = await _context.Clubs
         .AsNoTracking()
-        .Where(x=>x.ClubType== ClubType.GuestRoom)
+        .Where(x=>x.ClubType== ClubType.GuestRoom && x.IsDeleted==false && x.IsActive==true)
         .Select(c => new UserClubDto
         {
             ClubId = c.Id.ToString(),
@@ -53,7 +53,6 @@ public class GetUserClubsQueryHandler : IRequestHandler<GetUserClubsQuery, List<
         })
         .OrderBy(x => x.Name)
         .ToListAsync(cancellationToken);
-
 
         return clubs;
     }

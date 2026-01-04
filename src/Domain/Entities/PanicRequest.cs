@@ -39,4 +39,8 @@ public class PanicRequest : BaseAuditableEntity
 
     // optimistic concurrency
     [Timestamp] public byte[] RowVersion { get; set; } = default!;
+
+    public Boolean? TakeReview { get; set; } = false;
+
+    public ICollection<PanicDispatch> PanicDispatches { get; set; } = new List<PanicDispatch>();
 }

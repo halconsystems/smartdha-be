@@ -11,6 +11,7 @@ public enum PanicStatus
     Acknowledged = 2,
     InProgress = 3,
     Resolved = 4,
-    Cancelled = 5
+    Cancelled = 5,
+    Arrived = 6
 }
 

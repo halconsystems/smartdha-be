@@ -38,4 +38,5 @@ public class ReservationRoomInfoDto
     public decimal TotalNights { get; set; }
     public decimal PricePerNight { get; set; }
     public decimal Subtotal { get; set; }
+    public string BookingStatus { get; set; } = string.Empty;
 }

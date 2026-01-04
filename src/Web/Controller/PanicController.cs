@@ -8,6 +8,8 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateSvPoint;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateSvVehicle;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeleteEmergencyType;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.DeletePanicResponder;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.RegisterDriver;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SendEmergencyAlert;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetEmergencyTypeStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetSvPointStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.SetSvVehicleStatus;
@@ -16,10 +18,13 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicResponde
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdatePanicStatus;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvPoint;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicle;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicleLocation;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicleStatus;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllDrivers;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicResponders;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDashboardSummary;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDriverById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetNearestVehicles;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
@@ -32,6 +37,10 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvPoints;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicles;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicleStatusSummary;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicleSummary;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.DeleteDriver;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.SetDriverStatus;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateDriverInfo;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateDriverPassword;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -70,8 +79,15 @@ public class PanicController : BaseApiController
 
 
 
+    //[HttpGet("{id:guid}")]
+    //public Task<PanicHistoryDetailDto> Get(Guid id) => _med.Send(new GetPanicHistoryByIdQuery(id));
+
     [HttpGet("{id:guid}")]
-    public Task<PanicDetailDto> Get(Guid id) => _med.Send(new GetPanicByIdQuery(id));
+    public async Task<IActionResult> GetPanicHistoryById(Guid id)
+    {
+        var result = await _med.Send(new GetPanicHistoryByIdQuery(id));
+        return Ok(result);
+    }
 
     [HttpGet("{id:guid}/trail")]
     public Task<List<PanicTrailPointDto>> Trail(Guid id) => _med.Send(new GetPanicTrailQuery(id));
@@ -145,6 +161,7 @@ public class PanicController : BaseApiController
         var id = await _med.Send(command);
         return Ok(new { Message = "Emergency type created successfully", Id = id });
     }
+   
     [HttpPut("emergencytypes-Update/{id:guid}")]
     public async Task<IActionResult> Update(Guid id, UpdateEmergencyTypeCommand command)
     {
@@ -167,7 +184,6 @@ public class PanicController : BaseApiController
                 : "Emergency type deactivated successfully"
         });
     }
-
 
     [HttpPost("MarkLocation")]
     public async Task<ActionResult<Guid>> CreatePoint(CreateSvPointCommand cmd)
@@ -206,7 +222,6 @@ public class PanicController : BaseApiController
                 : "Location deactivated successfully"
         });
     }
-
 
     [HttpPost("Vehicles")]
     public async Task<ActionResult<Guid>> CreateVehicle(CreateSvVehicleCommand cmd)
@@ -264,14 +279,7 @@ public class PanicController : BaseApiController
         return Ok(result);
     }
 
-    [HttpPost("{PanicId:guid}/AssignVehicle")]
-    public async Task<ActionResult<Guid>> AssignVehicle(Guid panicId, Guid vehicleId)
-    {
-        var id = await _med.Send(new AssignPanicToVehicleCommand(panicId, vehicleId));
-        return Ok(id);
-    }
-
-    [HttpGet("map-points")]
+    [HttpGet("Map-Vehicle")]
     public async Task<ActionResult<List<SvMapPointDto>>> GetMapPoints()
     {
         var result = await _med.Send(new GetSvMapPointsQuery());
@@ -295,5 +303,97 @@ public class PanicController : BaseApiController
         return Ok(result);
     }
 
+    //*************** Assign Panic ********************
 
+    [HttpPost("Panic/{panicId:guid}/Assign")]
+    public async Task<IActionResult> AssignPanic(
+     Guid panicId,
+     [FromBody] AssignPanicToVehicleRequest dto)
+    {
+        var dispatchId = await _med.Send(new AssignPanicToVehicleCommand(
+            panicId,
+            dto.VehicleId,
+            dto.ControlRoomRemarks
+        ));
+
+        return Ok(new
+        {
+            DispatchId = dispatchId,
+            Message = "Panic assigned to vehicle successfully."
+        });
+    }
+
+    [HttpPatch("Vehicles/{id:guid}/Update-location")]
+    public async Task<IActionResult> UpdateVehicleLocation(Guid id, [FromBody] UpdateVehicleLocationRequest dto)
+    {
+        var result = await _med.Send(
+            new UpdateSvVehicleLocationCommand(
+                id,
+                dto.Latitude,
+                dto.Longitude
+            )
+        );
+        return Ok(new
+        {
+            VehicleId = result,
+            Message = "Vehicle location updated successfully."
+        });
+    }
+
+    [HttpPost("Drivers/Register")]
+    public async Task<ActionResult> RegisterDriver(RegisterDriverCommand cmd)
+    {
+        var result = await _med.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpGet("Drivers")]
+    public async Task<IActionResult> GetDrivers()
+    {
+        var result = await _med.Send(new GetAllDriversQuery());
+        return Ok(result);
+    }
+    
+    [HttpGet("Drivers/{id:guid}")]
+    public async Task<IActionResult> GetDriver(Guid id)
+    {
+        var result = await _med.Send(new GetDriverByIdQuery(id));
+        return Ok(result);
+    }
+   
+    [HttpPut("Drivers/{id:guid}")]
+    public async Task<IActionResult> UpdateDriver(Guid id, UpdateDriverInfoCommand cmd)
+    {
+        var updated = await _med.Send(cmd with { DriverId = id });
+        return Ok(new { message = "Driver updated successfully" });
+    }
+
+    [HttpPut("Drivers/{id:guid}/Password")]
+    public async Task<IActionResult> UpdateDriverPassword(Guid id, UpdateDriverPasswordCommand cmd)
+    {
+        await _med.Send(cmd with { DriverId = id });
+        return Ok(new { message = "Password updated successfully." });
+    }
+
+    [HttpPatch("Drivers/{id:guid}/Status")]
+    public async Task<IActionResult> SetDriverStatus(Guid id, bool isActive)
+    {
+        await _med.Send(new SetDriverStatusCommand(id, isActive));
+        return Ok(new { message = "Driver status updated." });
+    }
+
+    [HttpDelete("Drivers/{id:guid}")]
+    public async Task<IActionResult> DeleteDriver(Guid id)
+    {
+        await _med.Send(new DeleteDriverCommand(id));
+        return Ok(new { message = "Driver deleted successfully." });
+    }
+
+
+    [HttpPost("send"),AllowAnonymous]
+    public async Task<IActionResult> SendNotification(SendEmergencyAlertCommand command)
+    {
+        await _med.Send(command);
+        return Ok(new { message = "Notification sent." });
+    }
 }

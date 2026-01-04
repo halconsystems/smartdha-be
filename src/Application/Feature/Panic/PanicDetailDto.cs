@@ -14,7 +14,7 @@ public record PanicDetailDto(
     double Latitude, 
     double Longitude, 
     PanicStatus Status,
-    DateTime CreatedUtc, 
+    DateTime Created, 
     DateTime? AcknowledgedAtUtc, 
     DateTime? ResolvedAtUtc, 
     DateTime? CancelledAtUtc,

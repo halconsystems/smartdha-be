@@ -21,7 +21,8 @@ public static class CorsExtension
             "http://localhost:3000",
             "http://localhost:5173",
             "https://dfpwebapi.dhakarachi.org",
-            "https://gw.dhakarachi.org"   // add your frontend origins too if different
+            "https://gw.dhakarachi.org",   // add your frontend origins too if different
+            "https://dfp.dhakarachi.org"
         )
                 .AllowAnyHeader()
                 .AllowAnyMethod()

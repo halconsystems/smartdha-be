@@ -115,6 +115,27 @@ public class AuthenticationService : IAuthenticationService
         return GenerateAccessToken(claims);
     }
 
+
+    public async Task<string> GenerateDriverToken(ApplicationUser user)
+    {
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Name ?? ""),
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Email, user.Email ?? ""),
+        new Claim("CNIC", user.CNIC ?? ""),
+        new Claim("MobileNo", user.MobileNo ?? ""),
+        new Claim("UserType", user.UserType.ToString()),  // always Driver
+    };
+
+        // Add role
+        var roles = await _userManager.GetRolesAsync(user);
+        foreach (var role in roles)
+            claims.Add(new Claim(ClaimTypes.Role, role));
+
+        return GenerateAccessToken(claims);
+    }
+
     public async Task<string> GenerateWebUserToken(ApplicationUser user)
     {
         IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
@@ -205,7 +226,7 @@ public class AuthenticationService : IAuthenticationService
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(2500),
+            expires: DateTime.Now.AddMinutes(25000),
             signingCredentials: signinCredentials
         );
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

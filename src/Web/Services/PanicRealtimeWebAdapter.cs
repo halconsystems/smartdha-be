@@ -1,5 +1,7 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Panic;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Web.RealTime;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,15 +18,18 @@ public class PanicRealtimeWebAdapter : IPanicRealtime
        // await _hub.Clients.All.SummaryChanged();
     }
 
-    //public async Task PanicUpdatedAsync(Guid panicId)
-    //{
-    //    await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).PanicUpdated(panicId);
-    //    await _hub.Clients.All.SummaryChanged();
-    //}
+    public async Task PanicUpdateAsync(PanicCreatedRealtimeDto dto)
+    {
+        await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).PanicUpdated(dto);
+    }
 
-    //public Task LocationUpdatedAsync(Guid panicId, Guid locationUpdateId)
-    //    => _hub.Clients.Group(PanicHub.PanicGroups.Panic(panicId)).LocationUpdated(panicId, locationUpdateId);
+    public async Task SendPanicUpdatedAsync(PanicUpdatedRealtimeDto dto, CancellationToken ct)
+    {
+        await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).SendPanicUpdatedAsync(dto);
+    }
 
-    //public Task SummaryChangedAsync()
-    //    => _hub.Clients.All.SummaryChanged();
+    public async Task UpdateLocationAsync(UpdateLocation dto)
+    {
+        await _hub.Clients.Group(PanicHub.PanicGroups.Dispatchers).VehicleLocationUpdate(dto);
+    }
 }

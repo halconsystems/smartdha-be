@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
+using MobileAPI.Hubs;
 using MobileAPI.Infrastructure;
 using MobileAPI.Services;
 using StackExchange.Redis;
@@ -213,6 +214,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 app.MapControllers().RequireRateLimiting("GlobalFixed");
+
+
+app.MapHub<VehicleLocationHub>("/hubs/vehicle-location");
 
 
 //app.MapHub<PanicHub>("/hubs/panic");

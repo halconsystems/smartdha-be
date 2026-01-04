@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Data.Interceptors;
 using DHAFacilitationAPIs.Infrastructure.Identity;
+using DHAFacilitationAPIs.Infrastructure.Notifications;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using DHAFacilitationAPIs.Infrastructure.Service.Geocoding;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -165,7 +166,11 @@ public static class DependencyInjection
         // HttpClient-based Google Geocoding Service
         services.AddHttpClient<IGeocodingService, GoogleGeocodingService>();
 
+        services.AddHttpClient<INotificationService, FirebaseNotificationService>();
 
+        services.AddScoped<IFirebaseTokenProvider, FirebaseTokenProvider>();
+
+        services.AddSingleton<IVehicleLocationStore, VehicleLocationStore>();
 
 
         return services;
