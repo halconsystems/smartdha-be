@@ -37,6 +37,7 @@ public class SmartPayConsumerInquiryBill
     public string Consumer_Number { get; set; } = default!;
     public string Consumer_Detail { get; set; } = default!;
     public string Reference_Info { get; set; } = default!;
+    public string BillAmount { get; set; } = default!;
 }
 
 //SmartPayBillInquiryResponse 

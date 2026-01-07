@@ -31,6 +31,7 @@ public class PanicDispatch : BaseAuditableEntity
     [MaxLength(300)] public string? AcceptedAtAddress { get; set; }
     public double? DistanceFromPanicKm { get; set; }
     public DateTime? LastLocationUpdateAt { get; set; }
+    public string? DriverUserId { get; set; }    // nullable
     //Add navigation in PanicDispatch (optional but useful):
     public ICollection<PanicDispatchMedia> Media { get; set; } = new List<PanicDispatchMedia>();
 

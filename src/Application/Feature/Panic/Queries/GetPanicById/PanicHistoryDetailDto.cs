@@ -71,7 +71,15 @@ public class PanicHistoryDetailDto
     [MaxLength(300)] public string? AcceptedAtAddress { get; set; }
     public double? DistanceFromPanicKm { get; set; }
     public DateTime? LastLocationUpdateAt { get; set; }
+    public PanicReviewDto? Review { get; set; }
 }
+public class PanicReviewDto
+{
+    public int Rating { get; set; }
+    public string? ReviewText { get; set; }
+    public DateTime CreatedAt { get; set; }
+}
+
 public class PanicDispatchMediaDto
 {
     public PanicDispatchMediaType MediaType { get; set; }   // Image / Video

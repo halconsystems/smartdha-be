@@ -71,6 +71,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<FirebaseApiLog> FirebaseApiLogs => Set<FirebaseApiLog>();
     public DbSet<PanicDispatchMedia> PanicDispatchMedias => Set<PanicDispatchMedia>();
     public DbSet<PanicReview> PanicReviews => Set<PanicReview>();
+    public DbSet<PaymentIpnLog> PaymentIpnLogs => Set<PaymentIpnLog>();
+    public DbSet<WebhookCallbackLog> WebhookCallbackLogs => Set<WebhookCallbackLog>();
 
 
 
@@ -271,10 +273,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         .HasForeignKey(x => x.PanicDispatchId)
         .OnDelete(DeleteBehavior.Cascade);
 
-
-
-
-
+       
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {

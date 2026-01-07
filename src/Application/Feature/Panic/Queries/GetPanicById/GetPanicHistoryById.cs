@@ -61,19 +61,17 @@ public class GetPanicHistoryByIdQueryHandler
         ApplicationUser? driver = null;
 
         // Priority 1: use LastModifiedBy if exists
-        if (!string.IsNullOrWhiteSpace(dispatch.LastModifiedBy))
+        if (!string.IsNullOrWhiteSpace(dispatch.DriverUserId))
+        {
+            driver = await _userManager.FindByIdAsync(dispatch.DriverUserId);
+        }
+        else if (!string.IsNullOrWhiteSpace(dispatch.LastModifiedBy))
         {
             driver = await _userManager.FindByIdAsync(dispatch.LastModifiedBy);
         }
-        // Priority 2: else use CreatedBy
         else if (!string.IsNullOrWhiteSpace(dispatch.CreatedBy))
         {
             driver = await _userManager.FindByIdAsync(dispatch.CreatedBy);
-        }
-        // Priority 3: fallback (vehicle may still have DriverUserId)
-        else if (!string.IsNullOrWhiteSpace(vehicle.DriverUserId))
-        {
-            driver = await _userManager.FindByIdAsync(vehicle.DriverUserId);
         }
 
         // Live JSON Location
@@ -88,6 +86,10 @@ public class GetPanicHistoryByIdQueryHandler
             .OrderBy(m => m.Created)
             .ToListAsync(ct);
 
+        // Review (optional)
+        var review = await _ctx.PanicReviews
+            .AsNoTracking()
+            .FirstOrDefaultAsync(rw => rw.PanicRequestId == panic.Id, ct);
 
         // Construct DTO
         return new PanicHistoryDetailDto
@@ -181,7 +183,16 @@ public class GetPanicHistoryByIdQueryHandler
             AcceptedAtLongitude=dispatch.AcceptedAtLongitude,
             AcceptedAtAddress=dispatch.AcceptedAtAddress,
             DistanceFromPanicKm= dispatch.DistanceFromPanicKm,
-            LastLocationUpdateAt= dispatch.LastLocationUpdateAt
+            LastLocationUpdateAt= dispatch.LastLocationUpdateAt,
+            // Review info
+            Review = review == null
+                    ? null
+                    : new PanicReviewDto
+                    {
+                        Rating = review.Rating,
+                        ReviewText = review.ReviewText,
+                        CreatedAt = review.Created
+                    },
         };
     }
 }
