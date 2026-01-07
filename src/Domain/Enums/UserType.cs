@@ -10,6 +10,8 @@ public enum UserType
     Member = 1,
     NonMember = 2,
     Employee = 3,
-    Driver=4
+    Driver=4,
+    MemStaff = 5
+
 }
 

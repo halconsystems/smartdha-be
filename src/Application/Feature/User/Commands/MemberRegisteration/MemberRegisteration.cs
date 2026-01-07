@@ -198,7 +198,7 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
             PhoneNumberConfirmed = true,
             TwoFactorEnabled = false,
             AppType = AppType.Mobile,
-            UserType = !string.IsNullOrEmpty(memno) ? UserType.Member : !string.IsNullOrEmpty(staffno) ? UserType.Employee : UserType.NonMember,
+            UserType = !string.IsNullOrEmpty(memno) ? UserType.Member : !string.IsNullOrEmpty(staffno) ? UserType.Employee : !string.IsNullOrEmpty(staffno) && !string.IsNullOrEmpty(memno) ? UserType.MemStaff : UserType.NonMember,
             RegisteredMobileNo = cellno,
             IsVerified = true,
             IsOtpRequired = true,
