@@ -67,13 +67,14 @@ public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Suc
             {
                 ["Smart DHA"] = 1,
                 ["Panic"] = 2,
-                ["My Bills"] = 3,
-                ["Club"] = 4,
-                ["Property"] = 5,
-                ["Ground Booking"] = 6,
-                ["Bowser"] = 7,
-                ["Complaint"] = 8,
-                ["QR"] = 9
+                ["Property"] = 3,
+                ["My Bills"] = 4,
+                ["Services"] = 5,
+                ["Complaint"] = 6,
+                ["Ground Booking"] = 7,
+                ["Bowser"] = 8,
+                ["Club"] = 9,
+                ["QR"] = 10
             };
 
             modules = modules

@@ -28,6 +28,9 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             cfg.RegisterServicesFromAssembly(typeof(GetDropdownQueryHandler<>).Assembly);
+            cfg.AddOpenBehavior(typeof(PerformanceBehavior<,>));
+
+
         });
 
 
@@ -49,6 +52,8 @@ public static class DependencyInjection
 
         #endregion
 
+
+        
         return services;
     }
 
