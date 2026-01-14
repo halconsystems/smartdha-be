@@ -21,7 +21,7 @@ public class GetPanicPagedQueryHandler : IRequestHandler<GetPanicPagedQuery, Lis
 
     public async Task<List<PanicRequestListDto>> Handle(GetPanicPagedQuery r, CancellationToken ct)
     {
-        var q = _ctx.PanicRequests.AsNoTracking().Include(x => x.EmergencyType).AsQueryable();
+        var q = _ctx.PanicRequests.Where(x=>x.IsDeleted==false).AsNoTracking().Include(x => x.EmergencyType).AsQueryable();
 
         if (r.Code is not null) q = q.Where(x => x.EmergencyType.Code == r.Code);
         if (r.Status is not null) q = q.Where(x => x.Status == r.Status);

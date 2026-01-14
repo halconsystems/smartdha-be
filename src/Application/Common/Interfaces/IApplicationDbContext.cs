@@ -56,6 +56,8 @@ public interface IApplicationDbContext
     DbSet<FirebaseApiLog> FirebaseApiLogs { get; }
     DbSet<PanicDispatchMedia> PanicDispatchMedias { get; }
     DbSet<PanicReview> PanicReviews { get; }
+    DbSet<PaymentIpnLog> PaymentIpnLogs { get; }
+    DbSet<WebhookCallbackLog> WebhookCallbackLogs { get; }
 
 
 

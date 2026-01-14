@@ -22,8 +22,8 @@ public class SmartPayController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpGet("ConsumerInquiry/{cellNo}")]
-    [ModuleAuthorize(Modules.MyBills)]
+    [HttpGet("ConsumerInquiry/{cellNo}"),AllowAnonymous]
+   // [ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> ConsumerInquiry(string cellNo)
     {
         var query = new ConsumerInquiryQuery { CellNo = cellNo };
@@ -31,8 +31,8 @@ public class SmartPayController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("BillInquiry/{consumerNo}")]
-    [ModuleAuthorize(Modules.MyBills)]
+    [HttpGet("BillInquiry/{consumerNo}"),AllowAnonymous]
+    //[ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> BillInquiry(string consumerNo)
     {
         var query = new BillInquiryQuery { ConsumerNo = consumerNo };
@@ -48,8 +48,8 @@ public class SmartPayController : BaseApiController
     //    return Ok(result);
     //}
 
-    [HttpGet("MyBillInquiry")]
-    [ModuleAuthorize(Modules.MyBills)]
+    [HttpGet("MyBillInquiry"),AllowAnonymous]
+    //[ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> MyConsumerInquiry()
     {
         var cellNo = "923222781985";

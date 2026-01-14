@@ -1,0 +1,60 @@
+2026-01-13 15:12:25.498 +05:00 [INF] [CQRS]
+TraceId  : 0HNIIHGQ8E40J:00000009
+Request  : AppUserLoginCommand
+Duration : 420 ms
+2026-01-13 15:12:25.544 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIIHGQ8E40J:00000009
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 713 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"********9068"}}
+==============================================
+2026-01-13 15:33:52.145 +05:00 [INF] User profile is available. Using 'C:\Users\PC-ROCK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-01-13 15:33:52.594 +05:00 [WRN] Entity 'EmergencyType' has a global query filter defined and is the required end of a relationship with the entity 'PanicRequest'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-01-13 15:33:52.595 +05:00 [WRN] Entity 'EmergencyType' has a global query filter defined and is the required end of a relationship with the entity 'PanicResponder'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-01-13 15:33:52.653 +05:00 [WRN] No store type was specified for the decimal property 'Amount' on entity type 'PaymentIpnLog'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-01-13 15:33:52.654 +05:00 [WRN] No store type was specified for the decimal property 'DiscountedAmount' on entity type 'PaymentIpnLog'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-01-13 15:33:52.654 +05:00 [WRN] No store type was specified for the decimal property 'MerchantAmount' on entity type 'PaymentIpnLog'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-01-13 15:33:52.654 +05:00 [WRN] No store type was specified for the decimal property 'TransactionAmount' on entity type 'PaymentIpnLog'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-01-13 15:33:53.081 +05:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-01-13 15:33:53.115 +05:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-01-13 15:33:53.124 +05:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-01-13 15:33:53.137 +05:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-01-13 15:33:53.173 +05:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-01-13 15:33:53.193 +05:00 [INF] No migrations were applied. The database is already up to date.
+2026-01-13 15:33:53.340 +05:00 [INF] Executed DbCommand (22ms) [Parameters=[@__normalizedEmail_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [u].[Id], [u].[AccessFailedCount], [u].[AppType], [u].[CNIC], [u].[ConcurrencyStamp], [u].[CreatedDateTime], [u].[Email], [u].[EmailConfirmed], [u].[IsActive], [u].[IsDeleted], [u].[IsOtpRequired], [u].[IsVerified], [u].[LockoutEnabled], [u].[LockoutEnd], [u].[MEMPK], [u].[MobileNo], [u].[Name], [u].[NormalizedEmail], [u].[NormalizedUserName], [u].[PasswordHash], [u].[PhoneNumber], [u].[PhoneNumberConfirmed], [u].[RegisteredEmail], [u].[RegisteredMobileNo], [u].[RegistrationDate], [u].[RegistrationNo], [u].[SecurityStamp], [u].[TwoFactorEnabled], [u].[UserName], [u].[UserType]
+FROM [Users] AS [u]
+WHERE [u].[NormalizedEmail] = @__normalizedEmail_0
+2026-01-13 15:33:53.542 +05:00 [INF] Connecting to Redis endpoints: 172.16.10.123:6379. Using Server Name: DESKTOP-0MT9LEF_0d16bf7b60fe4ba48fb6ba442a7cdffc
+2026-01-13 15:33:53.719 +05:00 [INF] Connected to Redis.
+2026-01-13 15:33:53.803 +05:00 [INF] Now listening on: https://localhost:7009
+2026-01-13 15:33:53.803 +05:00 [INF] Now listening on: http://localhost:5116
+2026-01-13 15:33:53.849 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-01-13 15:33:53.850 +05:00 [INF] Hosting environment: Development
+2026-01-13 15:33:53.850 +05:00 [INF] Content root path: F:\Dev\DHA Projects\DHA Facilitation APIs\MobileAPI
+2026-01-13 15:33:54.416 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7009/swagger/index.html - null null
+2026-01-13 15:33:54.557 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7009/swagger/index.html - 200 null text/html;charset=utf-8 152.8715ms
+2026-01-13 15:33:54.573 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7009/_vs/browserLink - null null
+2026-01-13 15:33:54.573 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7009/_framework/aspnetcore-browser-refresh.js - null null
+2026-01-13 15:33:54.578 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7009/_framework/aspnetcore-browser-refresh.js - 200 13754 application/javascript; charset=utf-8 4.9613ms
+2026-01-13 15:33:54.604 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7009/_vs/browserLink - 200 null text/javascript; charset=UTF-8 31.9434ms
+2026-01-13 15:33:54.637 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7009/swagger/v1/swagger.json - null null
+2026-01-13 15:33:54.657 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7009/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 20.6984ms

@@ -10,10 +10,12 @@ using DHAFacilitationAPIs.Application.Feature.Panic.Commands.ReachedPanicDispatc
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.UpdateSvVehicleLocation;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.DriverLogin;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.DriverProfile;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetCurrentUserPanicHistory;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetEmergencyTypes;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetMyActivePanic;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetMyAssignedPanic;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetMyPanicHistory;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetPanicById;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetSvVehicles;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.DriverRefreshToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RefreshToken;
@@ -176,5 +178,13 @@ public class PanicController : BaseApiController
         ));
 
         return Ok(new { ReviewId = id, Message = "Review submitted successfully." });
+    }
+
+    [HttpGet("user-history")]
+    [ModuleAuthorize(Modules.Panic)]
+    public async Task<List<PanicHistoryDetailDto>> UserHistory()
+    {
+        var list = await _med.Send(new GetCurrentUserPanicHistoryQuery());
+        return list;
     }
 }

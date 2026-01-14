@@ -62,7 +62,27 @@ public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Suc
         else
         {
             modules = await GetDefaultModules(UserType.Member);
-        }
+
+            var moduleOrder = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Smart DHA"] = 1,
+                ["Panic"] = 2,
+                ["Property"] = 3,
+                ["My Bills"] = 4,
+                ["Services"] = 5,
+                ["Complaint"] = 6,
+                ["Ground Booking"] = 7,
+                ["Bowser"] = 8,
+                ["Club"] = 9,
+                ["QR"] = 10
+            };
+
+            modules = modules
+           .OrderBy(m => moduleOrder.TryGetValue(m.Name, out var order) ? order : int.MaxValue)
+           .ThenBy(m => m.Name)
+           .ToList();
+
+         }
 
         // Wrap in SuccessResponse
         return new SuccessResponse<List<AllModuleDto>>(modules);

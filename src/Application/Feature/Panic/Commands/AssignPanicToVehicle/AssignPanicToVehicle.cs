@@ -86,7 +86,8 @@ public class AssignPanicToVehicleCommandHandler
                 Status = PanicDispatchStatus.Assigned,
                 AssignedAt = DateTime.Now,
                 AssignedByUserId = _currentUser.UserId.ToString(),
-                ControlRoomRemarks = request.ControlRoomRemarks
+                ControlRoomRemarks = request.ControlRoomRemarks,
+                DriverUserId= vehicle.DriverUserId
             };
 
             _context.PanicDispatches.Add(dispatch);
