@@ -95,30 +95,22 @@ builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.Authenticatio
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("CorsPolicy", b => b
-//        .WithOrigins(
-//            "http://localhost:3000",
-//            "https://dfpwebapi.dhakarachi.org",
-//            "https://gw.dhakarachi.org",
-//            "http://172.16.10.123:3000",
-//            "https://dfp.dhakarachi.org"
-//        )
-//        .AllowAnyHeader()
-//        .AllowAnyMethod()
-//        .AllowCredentials()
-//    );
-//});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", b => b
-        .AllowAnyOrigin()
+        .WithOrigins(
+            "http://localhost:3000",
+            "https://dfpwebapi.dhakarachi.org",
+            "https://gw.dhakarachi.org",
+            "http://172.16.10.123:3000",
+            "https://dfp.dhakarachi.org"
+        )
         .AllowAnyHeader()
         .AllowAnyMethod()
+        .AllowCredentials()
     );
 });
+
 
 
 builder.Services.Configure<FirebaseSettings>(
