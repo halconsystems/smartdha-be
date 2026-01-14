@@ -41,26 +41,26 @@ public class ConsumerInquiryQueryHandler
             {
                  new SmartPayConsumerInquiryBill
                   {
-                      Institution = "DHA Karachi",
+                      Institution = "Security Charges",
                       Consumer_Number = "1001",
-                      Consumer_Detail = "Security Charges - Phase 2",
+                      Consumer_Detail = "DHA Karachi - Phase 2",
                       Reference_Info = "SC-2025-0001",
                       BillAmount="5000",
 
                   },
                   new SmartPayConsumerInquiryBill
                   {
-                      Institution = "DHA Karachi",
+                      Institution = "Maintenance Charges",
                       Consumer_Number = "1002",
-                      Consumer_Detail = "Maintenance Charges - Phase 7",
+                      Consumer_Detail = "DHA Karachi - Phase 7",
                       Reference_Info = "MNT-2025-0042",
                        BillAmount="12000",
                   },
                   new SmartPayConsumerInquiryBill
                   {
-                      Institution = "DHA Karachi",
+                      Institution = "DA Club",
                       Consumer_Number = "1003",
-                      Consumer_Detail = "DA Club",
+                      Consumer_Detail = "DHA Karachi - Club Bill",
                       Reference_Info = "DA-2025-0110",
                        BillAmount="10",
                   }

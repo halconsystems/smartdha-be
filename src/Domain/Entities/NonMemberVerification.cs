@@ -13,4 +13,26 @@ public class NonMemberVerification : BaseAuditableEntity
     public VerificationStatus Status { get; set; } = VerificationStatus.Pending;
     public DateTime? ApprovedAt { get; set; } = default!;
     public string? ApprovedBy { get; set; } = default!;// Admin UserId
+
+    [Required]
+    public HomeType HomeType { get; set; } = default!;
+    [Required]
+    public PropertyType PropertyType { get; set; } = default!;
+
+    [Required]
+    public Domain.Enums.ResidenceTypes ResidenceType { get; set; } = default!;
+
+    [Required]
+    public ResidenceStatus ResidenceStatus { get; set; } = default!;
+
+    public string? PhaseNo { get; set; }
+    public string? LaneNo { get; set; }
+    public string? PlotNo { get; set; }
+    public string? Floors { get; set; }
+
+    public string? TenantOwnerName { get; set; }
+    public string? TenantOwnerContact { get; set; }
+    public DateTime? TenantOwnerAgreemenrStartDate { get; set; }
+    public DateTime? TenantOwnerAgreemenrEndDate { get; set; }
+
 }

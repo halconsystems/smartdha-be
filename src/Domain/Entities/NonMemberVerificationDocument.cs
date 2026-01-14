@@ -23,6 +23,14 @@ public class NonMemberVerificationDocument : BaseAuditableEntity
     [MaxLength(500)]
     public string CNICBackImagePath { get; set; } = default!;
 
+    [Required]
+    [MaxLength(500)]
+    public string ProfilePicture { get; set; } = default!;
+
+    [Required]
+    [MaxLength(500)]
+    public string UtilityBill { get; set; } = default!;
+
     [MaxLength(500)]
     public string? SupportingDocumentPath { get; set; } // optional 
 

@@ -19,6 +19,9 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public string CNIC { get; set; } = default!;
 
     [Required]
+    public string UserName { get; set; } = default!;
+
+    [Required]
     public string Name { get; set; } = default!;
     [Required]
     public string Email { get; set; } = default!;
@@ -30,14 +33,42 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public string Password { get; set; } = default!;
 
     [Required]
+    public HomeType HomeType { get; set; } = default!;
+    [Required]
+    public PropertyType PropertyType { get; set; } = default!;
+
+    [Required]
+    public Domain.Enums.ResidenceTypes ResidenceType { get; set; } = default!;
+
+    [Required]
+    public ResidenceStatus ResidenceStatus { get; set; } = default!;
+
+    public string? PhaseNo { get; set; }
+    public string? LaneNo { get; set; }
+    public string? PlotNo { get; set; }
+    public string? Floors { get; set; }
+
+    public string? TenantOwnerName { get; set; }
+    public string? TenantOwnerContact { get; set; }
+    public DateTime? TenantOwnerAgreemenrStartDate { get; set; }
+    public DateTime? TenantOwnerAgreemenrEndDate { get; set; }
+
+
+    [Required]
     public IFormFile CNICFrontImage { get; set; } = default!;
 
     [Required]
     public IFormFile CNICBackImage { get; set; } = default!;
 
+    [Required]
+    public IFormFile ProfilePicture { get; set; } = default!;
+
+    [Required]
+    public IFormFile UtilityBill { get; set; } = default!;
+
     public IFormFile? SupportingDocument { get; set; }
 
-    public List<Guid>? PurposeIds { get; set; } = new();  // Accept multiple
+    //public List<Guid>? PurposeIds { get; set; } = new();  // Accept multiple
 
 }
 
@@ -48,7 +79,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
     private readonly IFileStorageService _fileStorage;
     private readonly ISmsService _otpService;
 
-    public RegisterNonMemberCommandHandler(UserManager<ApplicationUser> userManager, IApplicationDbContext context, IFileStorageService fileStorageService,ISmsService otpService)
+    public RegisterNonMemberCommandHandler(UserManager<ApplicationUser> userManager, IApplicationDbContext context, IFileStorageService fileStorageService, ISmsService otpService)
     {
         _userManager = userManager;
         _context = context;
@@ -70,7 +101,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
 
             // 1. Check if user already exists by CNIC
             var existingUser = await _userManager.Users
-             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC || u.RegisteredMobileNo==request.MobileNo, cancellationToken);
+             .FirstOrDefaultAsync(u => u.CNIC == request.CNIC || u.RegisteredMobileNo == request.MobileNo, cancellationToken);
 
             if (existingUser != null)
             {
@@ -103,7 +134,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                 return SuccessResponse<string>.FromMessage(msg);
             }
 
-            
+
 
             var user = new ApplicationUser
             {
@@ -117,7 +148,8 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                 AppType = AppType.Mobile,
                 UserType = UserType.NonMember,
                 IsVerified = false,
-                UserName = request.CNIC,
+                //UserName = request.CNIC,
+                UserName = request.UserName,
                 Email = request.Email,
                 IsOtpRequired = true,
                 MEMPK = "-"
@@ -133,25 +165,40 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                 UserId = user.Id,
                 CNIC = request.CNIC,
                 Status = VerificationStatus.Pending,
-                Remarks = "Submitted with documents"
+                Remarks = "Submitted with documents",
+                HomeType=request.HomeType,
+                PropertyType=request.PropertyType,
+                ResidenceType=request.ResidenceType,
+                ResidenceStatus=request.ResidenceStatus,
+                PhaseNo=request.PhaseNo,
+                LaneNo=request.LaneNo,
+                PlotNo=request.PlotNo,
+                Floors=request.Floors,
+                TenantOwnerName=request.TenantOwnerName,
+                TenantOwnerContact=request.TenantOwnerContact,
+                TenantOwnerAgreemenrStartDate=request.TenantOwnerAgreemenrStartDate,
+                TenantOwnerAgreemenrEndDate=request.TenantOwnerAgreemenrEndDate,
+
             };
             _context.NonMemberVerifications.Add(verification);
 
             // Store purposes
-            if (request.PurposeIds != null && request.PurposeIds.Any())
-            {
-                var purposeLinks = request.PurposeIds.Select(pid => new UserMembershipPurpose
-                {
-                    UserId = user.Id,
-                    PurposeId = pid
-                }).ToList();
+            //if (request.PurposeIds != null && request.PurposeIds.Any())
+            //{
+            //    var purposeLinks = request.PurposeIds.Select(pid => new UserMembershipPurpose
+            //    {
+            //        UserId = user.Id,
+            //        PurposeId = pid
+            //    }).ToList();
 
-                await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
-            }
+            //    await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
+            //}
 
             // Save documents
             var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
             var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
+            var profilePicture = await _fileStorage.SaveFileNonMemeberAsync(request.ProfilePicture, "cnic", cancellationToken);
+            var utilityBill = await _fileStorage.SaveFileNonMemeberAsync(request.UtilityBill, "cnic", cancellationToken);
             string? supportPath = null;
             if (request.SupportingDocument != null)
             {
@@ -163,6 +210,8 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                 VerificationId = verification.Id,
                 CNICFrontImagePath = frontPath,
                 CNICBackImagePath = backPath,
+                ProfilePicture = profilePicture,
+                UtilityBill = utilityBill,
                 SupportingDocumentPath = supportPath
             };
 
@@ -177,10 +226,12 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
             string appmsg = "Registration submitted successfully. Your request is pending review.";
             return SuccessResponse<string>.FromMessage(appmsg);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             await transaction.RollbackAsync(cancellationToken);
             throw new DBOperationException(ex.ToString());
         }
-   }
+    }
 }
+
 

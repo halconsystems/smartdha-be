@@ -18,7 +18,10 @@ using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
 using MobileAPI.Hubs;
 using MobileAPI.Infrastructure;
+using MobileAPI.Middlewares;
 using MobileAPI.Services;
+using Serilog;
+using Serilog.Events;
 using StackExchange.Redis;
 
 
@@ -29,6 +32,38 @@ var options = new WebApplicationOptions
 };
 
 var builder = WebApplication.CreateBuilder(options);
+
+var logDirectory = Path.Combine(
+    builder.Environment.WebRootPath ?? "wwwroot",
+    "logs"
+);
+
+Directory.CreateDirectory(logDirectory);
+
+var logPath = Path.Combine(logDirectory, "api-log-.txt");
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Error)
+    .MinimumLevel.Override("StackExchange.Redis", LogEventLevel.Error)
+
+    //API & CQRS logs
+    .WriteTo.File(
+        "wwwroot/logs/api-log-.txt",
+        rollingInterval: RollingInterval.Day,
+        restrictedToMinimumLevel: LogEventLevel.Information
+    )
+
+    //Infra errors only
+    .WriteTo.File(
+        "wwwroot/logs/infra-error-.txt",
+        rollingInterval: RollingInterval.Day,
+        restrictedToMinimumLevel: LogEventLevel.Error
+    )
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 
 // Add services to the container.
@@ -210,6 +245,8 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
@@ -220,7 +257,7 @@ app.MapHub<VehicleLocationHub>("/hubs/vehicle-location");
 
 
 //app.MapHub<PanicHub>("/hubs/panic");
-
 app.UseMiddleware<CustomExceptionMiddleware>();
+app.MapHealthChecks("/health");
 app.UseRateLimiter();
 app.Run();
