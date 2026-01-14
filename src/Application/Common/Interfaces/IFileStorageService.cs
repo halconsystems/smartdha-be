@@ -41,6 +41,8 @@ public interface IFileStorageService
      long maxVideoBytes = 50 * 1024 * 1024
  );
 
+    Task<string> SaveFileMemeberrequestAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes = 10 * 1024 * 1024, string[]? allowedExtensions = null);
+
 }
 
 public enum MediaKind

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
@@ -96,4 +97,14 @@ public class AuthController : BaseApiController
         return Ok(result);
     }
 
+    [Authorize(Policy = "SetPasswordPolicy")]
+    [HttpPost("Forget-Password")]
+    public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
+    {
+        var purpose = User.FindFirstValue("purpose");
+
+        if (purpose != "set_password")
+            return Forbid(); // extra defense in depth
+        return Ok(await Mediator.Send(request));
+    }
 }

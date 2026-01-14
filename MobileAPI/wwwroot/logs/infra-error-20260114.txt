@@ -1,0 +1,79 @@
+2026-01-14 17:32:29.462 +05:00 [ERR] Failed executing DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [NonMemberVerifications] ADD [Floors] nvarchar(max) NULL;
+2026-01-14 17:34:00.177 +05:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [NonMemberVerifications] ADD [Floors] nvarchar(max) NULL;
+2026-01-14 17:41:24.257 +05:00 [ERR] Failed executing DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MemberChildrens] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [MemberShipId] uniqueidentifier NOT NULL,
+    [MemberRequestId] uniqueidentifier NULL,
+    [FullName] nvarchar(max) NOT NULL,
+    [Relation] int NOT NULL,
+    [MobileNo] nvarchar(max) NULL,
+    [IsAdult] bit NOT NULL,
+    [PicturePath] nvarchar(500) NULL,
+    [CNICFrontImagePath] nvarchar(500) NULL,
+    [CNICBackImagePath] nvarchar(500) NULL,
+    [CnicNo] nvarchar(max) NULL,
+    [CnicExpiryDate] datetime2 NOT NULL,
+    [NadraBForm] nvarchar(500) NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_MemberChildrens] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MemberChildrens_MemberRequests_MemberRequestId] FOREIGN KEY ([MemberRequestId]) REFERENCES [MemberRequests] ([Id])
+);
+2026-01-14 17:42:40.969 +05:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MemberChildrens] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [MemberShipId] uniqueidentifier NOT NULL,
+    [MemberRequestId] uniqueidentifier NULL,
+    [FullName] nvarchar(max) NOT NULL,
+    [Relation] int NOT NULL,
+    [MobileNo] nvarchar(max) NULL,
+    [IsAdult] bit NOT NULL,
+    [PicturePath] nvarchar(500) NULL,
+    [CNICFrontImagePath] nvarchar(500) NULL,
+    [CNICBackImagePath] nvarchar(500) NULL,
+    [CnicNo] nvarchar(max) NULL,
+    [CnicExpiryDate] datetime2 NOT NULL,
+    [NadraBForm] nvarchar(500) NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_MemberChildrens] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MemberChildrens_MemberRequests_MemberRequestId] FOREIGN KEY ([MemberRequestId]) REFERENCES [MemberRequests] ([Id])
+);
+2026-01-14 17:50:54.077 +05:00 [ERR] Failed executing DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MemberChildrens] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [MemberShipId] uniqueidentifier NOT NULL,
+    [MemberRequestId] uniqueidentifier NULL,
+    [FullName] nvarchar(max) NOT NULL,
+    [Relation] int NOT NULL,
+    [MobileNo] nvarchar(max) NULL,
+    [IsAdult] bit NOT NULL,
+    [PicturePath] nvarchar(500) NULL,
+    [CNICFrontImagePath] nvarchar(500) NULL,
+    [CNICBackImagePath] nvarchar(500) NULL,
+    [CnicNo] nvarchar(max) NULL,
+    [CnicExpiryDate] datetime2 NOT NULL,
+    [NadraBForm] nvarchar(500) NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_MemberChildrens] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MemberChildrens_MemberRequests_MemberRequestId] FOREIGN KEY ([MemberRequestId]) REFERENCES [MemberRequests] ([Id])
+);

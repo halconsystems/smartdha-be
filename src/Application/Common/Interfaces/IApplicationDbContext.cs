@@ -58,10 +58,17 @@ public interface IApplicationDbContext
     DbSet<PanicReview> PanicReviews { get; }
     DbSet<PaymentIpnLog> PaymentIpnLogs { get; }
     DbSet<WebhookCallbackLog> WebhookCallbackLogs { get; }
-
+    DbSet<MemberShips> MemberShips { get; }
+    DbSet<MemberShipCatergories> MemberShipCatergories { get; }
+    DbSet<Religion> Religions { get; }
+    DbSet<ReligonSect> ReligonSects { get; }
+    DbSet<MemberRequest> MemberRequests { get; }
+    DbSet<MemberSpouse> MemberSpouses { get; }
+    DbSet<MemberChildren> MemberChildrens { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
+
 }

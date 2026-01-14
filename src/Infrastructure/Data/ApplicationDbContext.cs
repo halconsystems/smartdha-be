@@ -73,6 +73,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<PanicReview> PanicReviews => Set<PanicReview>();
     public DbSet<PaymentIpnLog> PaymentIpnLogs => Set<PaymentIpnLog>();
     public DbSet<WebhookCallbackLog> WebhookCallbackLogs => Set<WebhookCallbackLog>();
+    public DbSet<MemberShips> MemberShips => Set<MemberShips>();
+    public DbSet<Religion> Religions => Set<Religion>();
+    public DbSet<ReligonSect> ReligonSects => Set<ReligonSect>();
+    public DbSet<MemberShipCatergories> MemberShipCatergories => Set<MemberShipCatergories>();
+    public DbSet<MemberRequest> MemberRequests => Set<MemberRequest>();
+    public DbSet<MemberChildren> MemberChildrens => Set<MemberChildren>();
+    public DbSet<MemberSpouse> MemberSpouses => Set<MemberSpouse>();
+
 
 
 
