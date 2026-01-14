@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.PMS;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace DHAFacilitationAPIs.Application.Common.Interfaces;
+public interface IPMSApplicationDbContext
+{
+    DbSet<Directorate> Directorates { get; }
+
+    DbSet<ServiceCategory> ServiceCategories { get; }
+    DbSet<ServiceProcess> ServiceProcesses { get; }
+    DbSet<ProcessStep> ProcessSteps { get; }
+
+    DbSet<PrerequisiteDefinition> PrerequisiteDefinitions { get; }
+    DbSet<ProcessPrerequisite> ProcessPrerequisites { get; }
+
+    DbSet<UserProperty> Properties { get; }
+    DbSet<PropertyCase> PropertyCases { get; }
+    DbSet<CaseStepHistory> CaseStepHistories { get; }
+    DbSet<CasePrerequisiteValue> CasePrerequisiteValues { get; }
+    DbSet<CaseDocument> CaseDocuments { get; }
+
+    DbSet<CaseVoucher> CaseVouchers { get; }
+    DbSet<CasePayment> CasePayments { get;}
+
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    DatabaseFacade Database { get; }
+}

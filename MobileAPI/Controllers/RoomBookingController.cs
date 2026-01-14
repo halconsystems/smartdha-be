@@ -23,6 +23,7 @@ using MobileAPI.Controllers;
 namespace MobileAPI.Controller;
 [ApiController]
 [Route("api/[controller]")]
+[ApiExplorerSettings(GroupName = "club")]
 public class RoomBookingController : BaseApiController
 {
     private readonly IMediator _mediator;

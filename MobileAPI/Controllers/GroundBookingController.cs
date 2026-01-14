@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "other")]
 public class GroundBookingController : BaseApiController
 {
     private readonly IMediator _mediator;

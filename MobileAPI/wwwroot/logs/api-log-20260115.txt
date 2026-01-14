@@ -1,0 +1,150 @@
+2026-01-15 00:00:23.632 +05:00 [ERR] Failed executing DbCommand (68ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[Name]
+FROM [ServiceCategories] AS [s]
+ORDER BY [s].[Name]
+2026-01-15 00:00:23.641 +05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ServiceCategories'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:b409a572-10cf-40df-b464-5353fa1bd123
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ServiceCategories'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:b409a572-10cf-40df-b464-5353fa1bd123
+Error Number:208,State:1,Class:16
+2026-01-15 00:00:24.094 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIJJQVFMT8E:0000001B
+Method   : GET
+Path     : /api/servicecategories
+Status   : 500
+Duration : 9474 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Invalid object name 'ServiceCategories'."}
+==============================================
+2026-01-15 00:02:47.503 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIJJTUJDS9G:00000009
+Method   : GET
+Path     : /api/servicecategories
+Status   : 401
+Duration : 194 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-15 00:03:40.652 +05:00 [ERR] Failed executing DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [s].[Id], [s].[Name]
+FROM [ServiceCategories] AS [s]
+ORDER BY [s].[Name]
+2026-01-15 00:03:40.747 +05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ServiceCategories'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:ce3e4264-6dd7-41f3-a15a-d73588528407
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ServiceCategories'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:ce3e4264-6dd7-41f3-a15a-d73588528407
+Error Number:208,State:1,Class:16
+2026-01-15 00:03:41.257 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIJJUBAV8D4:00000009
+Method   : GET
+Path     : /api/servicecategories
+Status   : 500
+Duration : 14112 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Invalid object name 'ServiceCategories'."}
+==============================================
+2026-01-15 00:07:45.353 +05:00 [INF] [CQRS]
+TraceId  : 0HNIJK0L3L2RB:00000009
+Request  : GetServiceCategoriesQuery
+Duration : 4024 ms
+2026-01-15 00:07:45.404 +05:00 [WRN] CMS Long Running Request: GetServiceCategoriesQuery (4075 milliseconds)   {"$type":"GetServiceCategoriesQuery"}
+2026-01-15 00:07:45.457 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIJK0L3L2RB:00000009
+Method   : GET
+Path     : /api/servicecategories
+Status   : 200
+Duration : 4392 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"ab4f9849-482f-476b-be49-69293c9bb4b1","name":"Lease Services"},{"id":"8a8f61c5-c21b-43ab-acd7-d1b75e851002","name":"Mutation"},{"id":"f8485fdb-d29a-481b-9b56-8030df9f6ad7","name":"No Objection Certificate"}]}
+==============================================
+2026-01-15 00:08:56.495 +05:00 [INF] [CQRS]
+TraceId  : 0HNIJK1D5MJ69:00000009
+Request  : GetServiceCategoriesQuery
+Duration : 653 ms
+2026-01-15 00:08:56.543 +05:00 [WRN] CMS Long Running Request: GetServiceCategoriesQuery (703 milliseconds)   {"$type":"GetServiceCategoriesQuery"}
+2026-01-15 00:08:56.590 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIJK1D5MJ69:00000009
+Method   : GET
+Path     : /api/servicecategories
+Status   : 200
+Duration : 1035 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"ab4f9849-482f-476b-be49-69293c9bb4b1","name":"Lease Services","code":"LEASE"},{"id":"8a8f61c5-c21b-43ab-acd7-d1b75e851002","name":"Mutation","code":"MUT"},{"id":"f8485fdb-d29a-481b-9b56-8030df9f6ad7","name":"No Objection Certificate","code":"NOC"}]}
+==============================================

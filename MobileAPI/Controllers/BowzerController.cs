@@ -18,6 +18,7 @@ using MobileAPI.Authorization;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "other")]
 public class BowzerController : BaseApiController
 {
     private readonly IMediator _mediator;

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Common.Behaviours;
 using DHAFacilitationAPIs.Application.Common.DependencyResolver;
 using DHAFacilitationAPIs.Application.Common.Settings;
 using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.CreateDirectorate;
 using DHAFacilitationAPIs.Application.Interface;
 using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,7 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
             cfg.RegisterServicesFromAssembly(typeof(GetDropdownQueryHandler<>).Assembly);
             cfg.AddOpenBehavior(typeof(PerformanceBehavior<,>));
+            cfg.RegisterServicesFromAssembly(typeof(CreateDirectorateHandler).Assembly);
 
 
         });

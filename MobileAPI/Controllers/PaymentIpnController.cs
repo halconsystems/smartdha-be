@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "other")]
 public class PaymentIpnController : BaseApiController
 {
     private readonly IMediator _med;

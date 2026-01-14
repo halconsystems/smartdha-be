@@ -31,6 +31,7 @@ namespace MobileAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "panic")]
 public class PanicController : BaseApiController
 {
     private readonly IMediator _med;

@@ -52,6 +52,7 @@ namespace DHAFacilitationAPIs.Web.Controller;
 
 [ApiController]
 [Route("api/panic")]
+[ApiExplorerSettings(GroupName = "panic")]
 public class PanicController : BaseApiController
 {
     private readonly IMediator _med;

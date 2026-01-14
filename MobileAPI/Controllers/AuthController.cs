@@ -17,6 +17,7 @@ namespace MobileAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "auth")]
 public class AuthController : BaseApiController
 {
     [AllowAnonymous]

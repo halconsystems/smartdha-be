@@ -10,6 +10,7 @@ namespace MobileAPI.Controllers;
 
 [ApiController]
 [Route("api/dropdowns")]
+[ApiExplorerSettings(GroupName = "other")]
 public class DropdownsController : BaseApiController
 {
     private readonly IMediator _mediator;
