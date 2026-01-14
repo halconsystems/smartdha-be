@@ -73,6 +73,19 @@ public static class DependencyInjection
         services.AddScoped<IOLHApplicationDbContext>(provider =>
         provider.GetRequiredService<OLHApplicationDbContext>());
 
+        //PMS
+
+        var pms = configuration.GetConnectionString("PMSConnection");
+        Guard.Against.Null(pms, message: "Connection string 'PMSConnection' not found.");
+        services.AddDbContext<PMSApplicationDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(pms);
+
+        });
+        services.AddScoped<IPMSApplicationDbContext>(provider =>
+        provider.GetRequiredService<PMSApplicationDbContext>());
+
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 

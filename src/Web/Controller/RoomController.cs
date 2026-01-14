@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "club")]
 public class RoomController : ControllerBase
 {
     private readonly IMediator _mediator;

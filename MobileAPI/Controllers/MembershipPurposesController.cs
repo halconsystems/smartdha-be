@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "club")]
 public class MembershipPurposesController : BaseApiController
 {
     [HttpGet("GetMembershipPurposes"), AllowAnonymous]

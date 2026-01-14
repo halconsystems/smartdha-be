@@ -14,6 +14,7 @@ namespace MobileAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "other")]
 public class ComplaintsManagementController : BaseApiController
 {
     private readonly IMediator _med;

@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "Auth")]
 public class UsersController : BaseApiController
 {
     private readonly IUser _loggedInUser;

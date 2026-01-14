@@ -12,6 +12,7 @@ namespace DHAFacilitationAPIs.Web.Controller;
 
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "club")]
 public class RoomBookingController : BaseApiController
 {
     private readonly IMediator _mediator;
