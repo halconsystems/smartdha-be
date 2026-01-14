@@ -157,28 +157,28 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         if (int.TryParse(userOtp, out var otp) && otp > 0)
         {
             var newUser = new ApplicationUser
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = name,
-            UserName = request.CNIC,
-            NormalizedUserName = request.CNIC,//email.ToUpper(),
-            Email = email,
-            NormalizedEmail = email.ToUpper(),
-            MobileNo = cellno,
-            CNIC = request.CNIC,
-            EmailConfirmed = true,
-            PhoneNumberConfirmed = true,
-            TwoFactorEnabled = false,
-            AppType = AppType.Mobile,
-            UserType = !string.IsNullOrEmpty(memno) ? UserType.Member : !string.IsNullOrEmpty(staffno) ? UserType.Employee : UserType.NonMember,
-            RegisteredMobileNo = cellno,
-            IsVerified = true,
-            IsOtpRequired = true,
-            MEMPK = mempk//"DHAM-97563"
-        };
-        await _userManager.CreateAsync(newUser);
-        // Send OTP to MobileNo
-        string sentmsg = $"{userOtp} is your OTP for DHA Karachi Mobile App. Do not share it.";
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = FullName,
+                UserName = request.CNIC,
+                NormalizedUserName = requestEmail.ToUpper(),
+                Email = requestEmail,
+                NormalizedEmail = requestEmail.ToUpper(),
+                MobileNo = outCellNo,
+                CNIC = request.CNIC,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                AppType = AppType.Mobile,
+                UserType = UserType.Member,
+                RegisteredMobileNo = outCellNo,
+                IsVerified = true,
+                IsOtpRequired = true,
+                MEMPK = "DHAM-97563"
+            };
+            await _userManager.CreateAsync(newUser);
+            // Send OTP to MobileNo
+            string sentmsg = $"{userOtp} is your OTP for DHA Karachi Mobile App. Do not share it.";
 
             var result = await _otpService.SendSmsAsync(outCellNo, sentmsg, cancellationToken);
             if (result == "SUCCESSFUL")
@@ -244,5 +244,6 @@ public class MemberRegisterationCommandHandler : IRequestHandler<MemberRegistera
         return masked;
     }
 }
+
 
 
