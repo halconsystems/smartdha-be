@@ -31,10 +31,10 @@ public class PMSController : ControllerBase
     public async Task<IActionResult> AddCase(AddCaseCommand command)
        => Ok(await _mediator.Send(command));
 
-   
+    [AllowAnonymous]
     [HttpGet("GetProcess")]
-    public async Task<IActionResult> GetProcess([FromQuery] int userId)
-        => Ok(await _mediator.Send(new GetProcessTypesQuery(userId, AppType.Mobile)));
+    public async Task<IActionResult> GetProcess()
+        => Ok(await _mediator.Send(new GetProcessTypesQuery(AppType.Mobile)));
     
     [HttpGet("GetProcessPrerequisites")]
     public async Task<IActionResult> GetProcessPrerequisites(
