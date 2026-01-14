@@ -11,27 +11,34 @@ using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.PMS.Queries.GetProcesses;
 public record GetProcessTypesQuery(
-    int UserId,
-    AppType AppID
+     AppType AppID
 ) : IRequest<SuccessResponse<List<ProcessTypeDto>>>;
 
 public class GetProcessTypesQueryHandler
     : IRequestHandler<GetProcessTypesQuery, SuccessResponse<List<ProcessTypeDto>>>
 {
     private readonly IProcedureService _sp;
+    private readonly ICurrentUserService _current;
 
-    public GetProcessTypesQueryHandler(IProcedureService sp)
+    public GetProcessTypesQueryHandler(IProcedureService sp, ICurrentUserService current)
     {
         _sp = sp;
+        _current = current;
     }
 
     public async Task<SuccessResponse<List<ProcessTypeDto>>> Handle(
         GetProcessTypesQuery request,
         CancellationToken cancellationToken)
     {
+
+        //var userId = _current.UserId;
+
+        //if (userId == Guid.Empty)
+        //    throw new UnauthorizedAccessException("User not identified");
+
         var parameters = new DynamicParameters();
 
-        parameters.Add("@user_ID", request.UserId, DbType.Int32);
+        parameters.Add("@user_ID", Guid.NewGuid(), DbType.Guid);
         parameters.Add("@AppID", request.AppID, DbType.Int32);
         parameters.Add("@msg", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
 
