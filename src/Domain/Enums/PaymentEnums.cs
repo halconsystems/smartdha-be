@@ -4,6 +4,6 @@ public enum BookingStatus { Provisional = 1, Confirmed = 2, CheckedIn = 3, Check
 
 public enum PaymentStatus { Authorized = 1, Paid = 2, Refunded = 3, Failed = 4, Pending =5, PartiallyRefunded =6, Cancelled =7, Initiated = 8, Success=9 }
 
-public enum PaymentMethod { Cash = 1, Card = 2, Wallet = 3, BankTransfer = 4 }
+public enum PaymentMethod { Cash = 1, Card = 2, Wallet = 3, BankTransfer = 4, Online = 5 }
 
 public enum PaymentProvider { None = 0, Stripe = 1, PayPal = 2, JazzCash = 3, EasyPaisa = 4, Onebill = 5 }

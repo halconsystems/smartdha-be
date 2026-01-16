@@ -119,9 +119,9 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Version = "v1"
                 });
 
-                o.SwaggerDoc("payment", new OpenApiInfo
+                o.SwaggerDoc("laundry", new OpenApiInfo
                 {
-                    Title = "Payment Module",
+                    Title = "Laudry Module",
                     Version = "v1"
                 });
 

@@ -87,6 +87,20 @@ public static class DependencyInjection
         provider.GetRequiredService<PMSApplicationDbContext>());
 
 
+        //LMS
+
+        var lms = configuration.GetConnectionString("LMSConnection");
+        Guard.Against.Null(lms, message: "Connection string 'LMSConnection' not found.");
+        services.AddDbContext<LaundrySystemDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(lms);
+
+        });
+        services.AddScoped<ILaundrySystemDbContext>(provider =>
+        provider.GetRequiredService<LaundrySystemDbContext>());
+
+
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IProcedureService, StoredProcedures>();

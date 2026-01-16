@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DHAFacilitationAPIs.Web.Controller;
 
+[ApiController]
+[Route("api/[controller]")]
+[ApiExplorerSettings(GroupName = "MemberShip")]
 public class MemberShipController : BaseApiController
 {
     private readonly IMediator _mediator;
