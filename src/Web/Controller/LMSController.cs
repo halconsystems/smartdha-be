@@ -12,6 +12,7 @@ using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
 using DHAFacilitationAPIs.Application.Feature.Orders.Command;
+using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Queries;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Command;
@@ -31,7 +32,7 @@ public class LMSController : BaseApiController
     public LMSController(IMediator med) => _mediator = med;
 
     [HttpPost("Create-Discount-Tax"), AllowAnonymous]
-    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateDiscountCommand cmd, CancellationToken ct)
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateOrderDiscountCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd, ct));
 
 

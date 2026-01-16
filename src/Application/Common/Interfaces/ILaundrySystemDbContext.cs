@@ -21,6 +21,8 @@ public interface ILaundrySystemDbContext
     DbSet<PaymentDTSetting> PaymentDTSettings { get; }
     DbSet<DeliveryDetails> DeliveryDetails { get; }
     DbSet<OrderDTSetting> OrderDTSettings { get; }
+    DbSet<ConfirmedOrder> ConfirmedOrders { get; }
+    DbSet<OrderPaymentIpnLogs> OrderPaymentIpnLogs { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

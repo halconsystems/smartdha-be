@@ -10,10 +10,8 @@ using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Command;
 
-public record class CreateDiscountCommand : IRequest<SuccessResponse<string>>
+public record class CreateOrderDiscountCommand : IRequest<SuccessResponse<string>>
 {
-
-    public Guid UserId { get; set; }
     public Domain.Enums.Settings Name { get; set; }
     public Domain.Enums.ValueType ValueType { get; set; }
     public string? Value { get; set; }
@@ -21,18 +19,21 @@ public record class CreateDiscountCommand : IRequest<SuccessResponse<string>>
     public string DisplayName { get; set; } = default!;
 }
 
-public class CreateDiscountCommandHandler
-    : IRequestHandler<CreateDiscountCommand, SuccessResponse<string>>
+public class CreateOrderDiscountCommandHandler
+    : IRequestHandler<CreateOrderDiscountCommand, SuccessResponse<string>>
 {
     private readonly ILaundrySystemDbContext _context;
+    private readonly ICurrentUserService _currentUserService;
 
-    public CreateDiscountCommandHandler(ILaundrySystemDbContext context)
+    public CreateOrderDiscountCommandHandler(ILaundrySystemDbContext context, ICurrentUserService currentUserService)
     {
         _context = context;
+        _currentUserService = currentUserService;
     }
 
-    public async Task<SuccessResponse<string>> Handle(CreateDiscountCommand command, CancellationToken ct)
+    public async Task<SuccessResponse<string>> Handle(CreateOrderDiscountCommand command, CancellationToken ct)
     {
+        string UsedId = _currentUserService.UserId.ToString();
 
 
         var discount = new Domain.Entities.LMS.OrderDTSetting
@@ -41,7 +42,7 @@ public class CreateDiscountCommandHandler
             ValueType = command.ValueType,
             Value = command.Value,
             DisplayName = command.DisplayName,
-            CreatedBy = command.UserId.ToString(),
+            CreatedBy = UsedId,
             DTCode = command.Name.ToString().Substring(0, command.Name.ToString().Length / 2).ToUpper(),
             IsDiscount = SettingRules.IsDiscount(command.Name)
 

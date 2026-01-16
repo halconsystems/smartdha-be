@@ -25,10 +25,10 @@ public class HangerPriceAdjustmentQueryHandler : IRequestHandler<HangerPriceAdju
 
         if(package == null )
             throw new KeyNotFoundException("Package not found.");
-        if (package.Code == "HANGE")
+        if (package.Code == "HAN")
         {
             decimal increment = 0;
-            var increasePrice = await _context.OrderDTSettings.Where(x => x.DTCode == "HANGE").FirstOrDefaultAsync();
+            var increasePrice = await _context.OrderDTSettings.Where(x => x.DTCode == "HAN").FirstOrDefaultAsync();
             if(increasePrice == null)
             {
                 throw new KeyNotFoundException("Price Increase not found.");
@@ -44,23 +44,16 @@ public class HangerPriceAdjustmentQueryHandler : IRequestHandler<HangerPriceAdju
                 DisplayName = x.DisplayName,
                 Code = x.Code,
                 CategoryID = x.CategoryId.ToString(),
-                ItemPrice = x.ItemPrice + increment,
+                ItemPrice = ((Convert.ToDecimal(x.ItemPrice)) + increment).ToString(),
             }).ToList();
 
             return result;
         }
         else
         {
-            decimal increment = 0;
-            var increasePrice = await _context.OrderDTSettings.Where(x => x.DTCode == "HANGE").FirstOrDefaultAsync();
-            if (increasePrice == null)
-            {
-                throw new KeyNotFoundException("Price Increase not found.");
-            }
-            increment = increasePrice.ValueType == Domain.Enums.ValueType.Percent ? (Convert.ToDecimal(increasePrice.Value) / 100) : (Convert.ToDecimal(increasePrice.Value));
             var LaundryItems = await _context.LaundryItems
-            .AsNoTracking()
-            .ToListAsync(ct);
+           .AsNoTracking()
+           .ToListAsync(ct);
 
             var result = LaundryItems.Select(x => new LaundryItemsDTO
             {
@@ -68,10 +61,11 @@ public class HangerPriceAdjustmentQueryHandler : IRequestHandler<HangerPriceAdju
                 DisplayName = x.DisplayName,
                 Code = x.Code,
                 CategoryID = x.CategoryId.ToString(),
-                ItemPrice = x.ItemPrice + increment,
+                ItemPrice = x.ItemPrice,
             }).ToList();
 
             return result;
+
         }
 
 

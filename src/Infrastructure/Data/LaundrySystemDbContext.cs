@@ -31,6 +31,8 @@ public class LaundrySystemDbContext : DbContext ,  ILaundrySystemDbContext
     public DbSet<PaymentDTSetting> PaymentDTSettings => Set<PaymentDTSetting>();
     public DbSet<DeliveryDetails> DeliveryDetails => Set<DeliveryDetails>();
     public DbSet<OrderDTSetting> OrderDTSettings => Set<OrderDTSetting>();
+    public DbSet<ConfirmedOrder> ConfirmedOrders => Set<ConfirmedOrder>();
+    public DbSet<OrderPaymentIpnLogs> OrderPaymentIpnLogs => Set<OrderPaymentIpnLogs>();
 
     public override async Task<int> SaveChangesAsync(
        CancellationToken cancellationToken = default)

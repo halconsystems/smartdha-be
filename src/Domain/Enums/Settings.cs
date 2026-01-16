@@ -16,6 +16,7 @@ public enum Settings
     FED = 6,
     AdvanceTax = 7,
     Shipping = 8,
+    Hanger = 9,
 }
 
 public enum ValueType
