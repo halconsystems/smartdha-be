@@ -24,11 +24,8 @@ public class ServiceProcessesController : BaseApiController
         => Ok(await _mediator.Send(new GetProcessesByCategoryQuery(categoryId), ct));
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id,UpdateServiceProcessCommand cmd,CancellationToken ct)
+    public async Task<IActionResult> Update(UpdateServiceProcessCommand cmd,CancellationToken ct)
     {
-        if (id != cmd.Id)
-            return BadRequest("Mismatched process id.");
-
         return Ok(await _mediator.Send(cmd, ct));
     }
 

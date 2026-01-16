@@ -39,7 +39,7 @@ public class GetProcessAllPrerequisitesHandler
         // 1️⃣ Validate process
         // 1️⃣ Validate process
         var process = await _db.Set<ServiceProcess>()
-       .Where(x => x.Id == request.ProcessId)
+       .Where(x => x.Id == request.ProcessId && x.IsActive==true && x.IsDeleted==false)
        .Select(x => new
        {
            x.IsFeeRequired,
@@ -58,6 +58,7 @@ public class GetProcessAllPrerequisitesHandler
 
         // 2️⃣ Load USER PROPERTIES
         var properties = await _db.Set<UserProperty>()
+            .Where(x => x.IsActive == true && x.IsDeleted == false)
             .AsNoTracking()
             .Where(x => x.CreatedBy == _currentUser.Id)
             .Select(x => new UserPropertyDto(
@@ -69,7 +70,7 @@ public class GetProcessAllPrerequisitesHandler
             .ToListAsync(ct);
 
         // 3️⃣ Load prerequisites
-        var prerequisites = await _db.Set<ProcessPrerequisite>()
+        var prerequisites = await _db.Set<ProcessPrerequisite>().Where(x => x.IsActive == true && x.IsDeleted == false)
             .AsNoTracking()
             .Where(x => x.ProcessId == request.ProcessId)
             .OrderBy(x => x.RequiredByStepNo)

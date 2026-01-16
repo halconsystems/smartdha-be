@@ -21,6 +21,7 @@ public class GetDirectoratesHandler : IRequestHandler<GetDirectoratesQuery, ApiR
     public async Task<ApiResult<List<IdNameDto>>> Handle(GetDirectoratesQuery request, CancellationToken ct)
     {
         var list = await _db.Set<Directorate>()
+            .Where(x=>x.IsActive==true && x.IsDeleted==false)
             .OrderBy(x => x.Name)
             .Select(x => new IdNameDto(x.Id, x.Name, x.Code))
             .ToListAsync(ct);

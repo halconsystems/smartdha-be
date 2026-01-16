@@ -1,4 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.CreateDirectorate;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.DeleteDirectorate;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.UpdateDirectorate;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Queries.GetDirectorates;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,4 +21,24 @@ public class DirectoratesController : BaseApiController
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken ct)
         => Ok(await _mediator.Send(new GetDirectoratesQuery(), ct));
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(
+        Guid id,
+        [FromBody] UpdateDirectorateCommandBody body,
+        CancellationToken ct)
+    {
+        var cmd = new UpdateDirectorateCommand(id, body.Name, body.Code);
+        return Ok(await _mediator.Send(cmd, ct));
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken ct)
+        => Ok(await _mediator.Send(new DeleteDirectorateCommand(id), ct));
 }
+public record UpdateDirectorateCommandBody(
+    string Name,
+    string Code
+);

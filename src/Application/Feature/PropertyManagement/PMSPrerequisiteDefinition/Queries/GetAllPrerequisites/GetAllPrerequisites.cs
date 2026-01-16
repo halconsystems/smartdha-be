@@ -36,6 +36,7 @@ public class GetAllPrerequisitesHandler
         CancellationToken ct)
     {
         var list = await _db.Set<PrerequisiteDefinition>()
+            .Where(x => x.IsActive == true && x.IsDeleted == false)
             .AsNoTracking()
             .OrderBy(x => x.Name)
             .Select(x => new PrerequisiteDefinitionDto(

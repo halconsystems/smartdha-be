@@ -30,3 +30,17 @@ CREATE TABLE [OrderDTSettings] (
     CONSTRAINT [PK_OrderDTSettings] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_OrderDTSettings_DiscountSetting_SettingId] FOREIGN KEY ([SettingId]) REFERENCES [DiscountSetting] ([Id]) ON DELETE CASCADE
 );
+2026-01-16 11:11:50.278 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIKONMORFAE:00000001
+Method   : GET
+Path     : /api/laundry/get-laundrycategory
+Status   : 401
+Duration : 715 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
