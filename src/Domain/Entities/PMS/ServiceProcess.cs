@@ -20,9 +20,14 @@ public class ServiceProcess : BaseAuditableEntity
     public string Code { get; set; } = default!;
 
     // If user must pay immediately on submit
-    public bool IsFeeAtSubmission { get; set; } = false;
+    public bool IsFeeRequired { get; set; } = false;       // fee exists for this process
+    public bool IsFeeAtSubmission { get; set; } = false;   // if true → fee required before submit
 
     // If finance voucher can be generated at some step
-    public bool IsVoucherPossible { get; set; } = true;
+    public bool IsVoucherPossible { get; set; } = false;
+    public bool IsNadraVerificationRequired { get; set; } = false;
+    public bool IsfeeSubmit { get; set; } = false;
+    public bool IsInstructionAtStart { get; set; } = false;
+    public string? Instruction { get; set; } = default!;
 }
 

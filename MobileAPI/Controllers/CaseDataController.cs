@@ -4,6 +4,8 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Command
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SaveCasePrerequisiteValue;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetMyCasesByCategory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +25,11 @@ public class CaseDataController : BaseApiController
     CancellationToken ct)
     {
         var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
-            request.PrerequisiteValuesJson);
+    request.PrerequisiteValuesJson,
+    new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    });
 
         var cmd = new SubmitCaseCommand(
             request.UserPropertyId,
@@ -39,9 +45,16 @@ public class CaseDataController : BaseApiController
         return Ok(await _mediator.Send(cmd, ct));
     }
 
+    [HttpGet("hitory/{categoryId:guid}")]
+    public async Task<IActionResult> GetMyCasesByCategory(
+        Guid categoryId,
+        CancellationToken ct)
+        => Ok(await _mediator.Send(
+            new GetMyCasesByCategoryQuery(categoryId), ct));
+
     [HttpGet("hitory")]
     public async Task<IActionResult> GetWorkflow()
-       => Ok(await _mediator.Send(new GetMyCasesHistoryQuery()));
+       => Ok(await _mediator.Send(new GetMyCasesQuery()));
 
     [HttpGet("{caseId:guid}/workflow")]
     public async Task<IActionResult> GetWorkflow(Guid caseId, CancellationToken ct)

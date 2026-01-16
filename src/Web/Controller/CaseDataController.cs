@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.AddCaseDocument;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAdminCaseDetail;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAllCasesForAdmin;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SaveCasePrerequisiteValue;
@@ -17,28 +19,28 @@ public class CaseDataController : BaseApiController
     private readonly IMediator _mediator;
     public CaseDataController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost("submit")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Submit(
-    [FromForm] SubmitCaseRequest request,
-    CancellationToken ct)
-    {
-        var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
-            request.PrerequisiteValuesJson);
+    //[HttpPost("submit")]
+    //[Consumes("multipart/form-data")]
+    //public async Task<IActionResult> Submit(
+    //[FromForm] SubmitCaseRequest request,
+    //CancellationToken ct)
+    //{
+    //    var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
+    //        request.PrerequisiteValuesJson);
 
-        var cmd = new SubmitCaseCommand(
-            request.UserPropertyId,
-            request.ProcessId,
-            request.ApplicantName,
-            request.ApplicantCnic,
-            request.ApplicantMobile,
-            request.ApplicantRemarks,
-            prereqs!,
-            request.Files
-        );
+    //    var cmd = new SubmitCaseCommand(
+    //        request.UserPropertyId,
+    //        request.ProcessId,
+    //        request.ApplicantName,
+    //        request.ApplicantCnic,
+    //        request.ApplicantMobile,
+    //        request.ApplicantRemarks,
+    //        prereqs!,
+    //        request.Files
+    //    );
 
-        return Ok(await _mediator.Send(cmd, ct));
-    }
+    //    return Ok(await _mediator.Send(cmd, ct));
+    //}
 
     //[HttpPost]
     //public async Task<IActionResult> Create(CreateCaseCommand cmd, CancellationToken ct)
@@ -62,9 +64,22 @@ public class CaseDataController : BaseApiController
     //    return Ok(await _mediator.Send(request, ct));
     //}
 
-    [HttpGet("hitory")]
-    public async Task<IActionResult> GetWorkflow()
-       => Ok(await _mediator.Send(new GetMyCasesHistoryQuery()));
+    //[HttpGet("hitory")]
+    //public async Task<IActionResult> GetWorkflow()
+    //   => Ok(await _mediator.Send(new GetMyCasesQuery()));
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllCases(CancellationToken ct)
+       => Ok(await _mediator.Send(new GetAllCasesForAdminQuery(), ct));
+
+    [HttpGet("{caseId:guid}")]
+    public async Task<IActionResult> GetCaseDetail(
+    Guid caseId,
+    CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new GetAdminCaseDetailQuery(caseId), ct));
+    }
 
     [HttpGet("{caseId:guid}/workflow")]
     public async Task<IActionResult> GetWorkflow(Guid caseId, CancellationToken ct)

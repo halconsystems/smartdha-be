@@ -107,49 +107,121 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
         List<Guid> userSubModuleIds = new(); // ✅ declare here so it’s available later
         List<Module> modules;
 
+        //if (isSuperAdmin)
+        //{
+        //    // ✅ SuperAdmin → all modules + submodules + permissions
+        //    modules = await _context.Modules
+        //        .Where(m => m.AppType == AppType.Web)
+        //        .Include(m => m.SubModules)
+        //            .ThenInclude(sm => sm.Permissions)
+        //        .ToListAsync(cancellationToken);
+
+        //    userPermissionIds = modules.SelectMany(m => m.SubModules)
+        //                               .SelectMany(sm => sm.Permissions)
+        //                               .Select(p => p.Id)
+        //                               .ToList();
+
+        //    // for consistency, give superadmin all submodules
+        //    userSubModuleIds = modules.SelectMany(m => m.SubModules)
+        //                              .Select(sm => sm.Id)
+        //                              .ToList();
+        //}
+        //else
+        //{
+        //    // ✅ Normal user → only assigned modules + submodules + permissions
+        //    var userModuleIds = await _context.UserModuleAssignments
+        //        .Where(x => x.UserId == user.Id)
+        //        .Select(x => x.ModuleId)
+        //        .ToListAsync(cancellationToken);
+
+        //    userSubModuleIds = await _context.UserSubModuleAssignments
+        //        .Where(x => x.UserId == user.Id)
+        //        .Select(x => x.SubModuleId)
+        //        .ToListAsync(cancellationToken);
+
+        //    userPermissionIds = await _context.UserPermissionAssignments
+        //        .Where(up => up.UserId == user.Id)
+        //        .Select(up => up.PermissionId)
+        //        .ToListAsync(cancellationToken);
+
+        //    modules = await _context.Modules
+        //        .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
+        //        .Include(m => m.SubModules)
+        //            .ThenInclude(sm => sm.Permissions)
+        //        .ToListAsync(cancellationToken);
+        //}
+
         if (isSuperAdmin)
         {
-            // ✅ SuperAdmin → all modules + submodules + permissions
+            // ✅ SuperAdmin → all ACTIVE & NOT-DELETED modules + submodules + permissions
             modules = await _context.Modules
-                .Where(m => m.AppType == AppType.Web)
-                .Include(m => m.SubModules)
-                    .ThenInclude(sm => sm.Permissions)
+                .Where(m =>
+                    m.AppType == AppType.Web &&
+                    m.IsActive==true &&
+                    m.IsDeleted==false)
+                .Include(m => m.SubModules
+                    .Where(sm => sm.IsActive==true && sm.IsDeleted==false))
+                    .ThenInclude(sm => sm.Permissions
+                        .Where(p => p.IsActive==true && p.IsDeleted==false))
                 .ToListAsync(cancellationToken);
 
-            userPermissionIds = modules.SelectMany(m => m.SubModules)
-                                       .SelectMany(sm => sm.Permissions)
-                                       .Select(p => p.Id)
-                                       .ToList();
+            userPermissionIds = modules
+                .SelectMany(m => m.SubModules)
+                .SelectMany(sm => sm.Permissions)
+                .Select(p => p.Id)
+                .ToList();
 
-            // for consistency, give superadmin all submodules
-            userSubModuleIds = modules.SelectMany(m => m.SubModules)
-                                      .Select(sm => sm.Id)
-                                      .ToList();
+            userSubModuleIds = modules
+                .SelectMany(m => m.SubModules)
+                .Select(sm => sm.Id)
+                .ToList();
         }
         else
         {
-            // ✅ Normal user → only assigned modules + submodules + permissions
+            // ✅ Normal user → only ACTIVE & NOT-DELETED assignments
             var userModuleIds = await _context.UserModuleAssignments
-                .Where(x => x.UserId == user.Id)
+                .Where(x =>
+                    x.UserId == user.Id &&
+                    x.IsActive==true &&
+                    x.IsDeleted==false)
                 .Select(x => x.ModuleId)
                 .ToListAsync(cancellationToken);
 
             userSubModuleIds = await _context.UserSubModuleAssignments
-                .Where(x => x.UserId == user.Id)
+                .Where(x =>
+                    x.UserId == user.Id &&
+                    x.IsActive==true &&
+                    x.IsDeleted==false)
                 .Select(x => x.SubModuleId)
                 .ToListAsync(cancellationToken);
 
             userPermissionIds = await _context.UserPermissionAssignments
-                .Where(up => up.UserId == user.Id)
+                .Where(up =>
+                    up.UserId == user.Id &&
+                    up.IsActive==true &&
+                    up.IsDeleted==false)
                 .Select(up => up.PermissionId)
                 .ToListAsync(cancellationToken);
 
             modules = await _context.Modules
-                .Where(m => userModuleIds.Contains(m.Id) && m.AppType == AppType.Web)
-                .Include(m => m.SubModules)
-                    .ThenInclude(sm => sm.Permissions)
+                .Where(m =>
+                    userModuleIds.Contains(m.Id) &&
+                    m.AppType == AppType.Web &&
+                    m.IsActive==true &&
+                    m.IsDeleted==false)
+                .Include(m => m.SubModules
+                    .Where(sm =>
+                        userSubModuleIds.Contains(sm.Id) &&
+                        sm.IsActive==true &&
+                        sm.IsDeleted==false))
+                    .ThenInclude(sm => sm.Permissions
+                        .Where(p =>
+                            userPermissionIds.Contains(p.Id) &&
+                            p.IsActive==true &&
+                            p.IsDeleted == false))
                 .ToListAsync(cancellationToken);
         }
+
 
         // 5️⃣ Build DTO tree
         var moduleresult = modules.Select(m => new ModuleTreeDto
