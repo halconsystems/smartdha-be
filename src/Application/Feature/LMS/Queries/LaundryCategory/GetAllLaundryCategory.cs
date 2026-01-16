@@ -26,6 +26,7 @@ public class GetAllLaundryCategoryQueryHandler : IRequestHandler<GetAllLaundryCa
 
         var result = MemberShips.Select(x => new LaundryCategoryDTO
         {
+            Id = x.Id,
             Name = x.Name,
             DisplayName = x.DisplayName,
             Code = x.Code,

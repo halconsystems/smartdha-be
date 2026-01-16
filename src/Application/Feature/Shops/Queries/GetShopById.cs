@@ -8,10 +8,6 @@ using DHAFacilitationAPIs.Domain.Entities.LMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.Shops.Queries;
 
-public class GetShopById
-{
-}
-
 public record GetShopByIdQuery(Guid Id) : IRequest<ShopQueryDTO>;
 public class GetShopByIdQueryHandler : IRequestHandler<GetShopByIdQuery, ShopQueryDTO>
 {

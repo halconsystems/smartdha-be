@@ -8,6 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 
 public class LaundryItemsDTO
 {
+    public Guid Id { get; set; }
     public string? Name { get; set; }
     public string? DisplayName { get; set; }
     public string? Code { get; set; }
