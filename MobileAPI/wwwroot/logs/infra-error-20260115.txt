@@ -68,3 +68,19 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Service
    at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
 ClientConnectionId:ce3e4264-6dd7-41f3-a15a-d73588528407
 Error Number:208,State:1,Class:16
+2026-01-15 11:33:27.213 +05:00 [ERR] Failed executing DbCommand (70ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:35:41.831 +05:00 [ERR] Failed executing DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:38:36.704 +05:00 [ERR] Failed executing DbCommand (283ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:39:25.049 +05:00 [ERR] Failed executing DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:40:10.441 +05:00 [ERR] Failed executing DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:40:34.564 +05:00 [ERR] Failed executing DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_LaundryPackagings_SettingId] ON [LaundryPackagings] ([SettingId]);
+2026-01-15 11:42:15.089 +05:00 [ERR] Failed executing DbCommand (143ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [LaundryPackagings] DROP CONSTRAINT [FK_LaundryPackagings_DiscountSetting_SettingId];
+2026-01-15 11:54:02.927 +05:00 [ERR] Failed executing DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [LaundryPackagings] DROP CONSTRAINT [FK_LaundryPackagings_DiscountSetting_SettingId];

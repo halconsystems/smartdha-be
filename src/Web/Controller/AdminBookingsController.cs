@@ -85,4 +85,22 @@ public class AdminBookingsController : BaseApiController
         var result = await _mediator.Send(new GetReservationStatusQuery(reservationId), ct);
         return Ok(result);
     }
+
+    //[HttpGet("get-Discounts"), AllowAnonymous]
+    //public async Task<ActionResult<DiscountSettingDto>> GetAllDiscounts(CancellationToken ct)
+    //{
+    //    var result = await _mediator.Send(new GetAllDiscountQuery(), ct);
+    //    return Ok(result);
+    //}
+
+    //[HttpPost("Add-Discounts"), AllowAnonymous]
+    //public async Task<ActionResult<SuccessResponse<Guid>>> Create(CreateDiscountCommand cmd, CancellationToken ct)
+    //    => Ok(await _mediator.Send(cmd, ct));
+
+    //[HttpPost("Update-Discounts"), AllowAnonymous]
+    //public async Task<IActionResult> UpdateDiscount([FromBody] UpdateDiscountsCommand command, CancellationToken ct)
+    //{
+    //    var result = await _mediator.Send(command, ct);
+    //    return result ? Ok(new { Message = "Discounts updated successfully." }) : NotFound("Discount not found on this User Type.");
+    //}
 }

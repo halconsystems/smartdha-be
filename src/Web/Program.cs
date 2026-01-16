@@ -139,6 +139,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/auth/swagger.json", "Auth Module");
     c.SwaggerEndpoint("/swagger/club/swagger.json", "Club Module");
     c.SwaggerEndpoint("/swagger/panic/swagger.json", "Panic Module");
+    c.SwaggerEndpoint("/swagger/laundry/swagger.json", "Laundry Module");
 });
 
 //app.UseHealthChecks("/health");

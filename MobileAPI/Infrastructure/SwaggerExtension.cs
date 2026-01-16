@@ -119,6 +119,17 @@ namespace MobileAPI.Infrastructure
                     Title = "Panic Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("MemberShip", new OpenApiInfo
+                {
+                    Title = "MemberShip Module",
+                    Version = "v1"
+                });
+
+                o.SwaggerDoc("Laundry", new OpenApiInfo
+                {
+                    Title = "Laundry Module",
+                    Version = "v1"
+                });
 
                 o.SwaggerDoc("other", new OpenApiInfo
                 {

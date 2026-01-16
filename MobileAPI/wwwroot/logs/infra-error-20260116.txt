@@ -1,0 +1,32 @@
+2026-01-16 09:46:37.119 +05:00 [ERR] Failed executing DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [OrderDTSettings] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [SettingId] uniqueidentifier NOT NULL,
+    [DTCode] nvarchar(max) NULL,
+    [IsDiscount] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_OrderDTSettings] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_OrderDTSettings_DiscountSetting_SettingId] FOREIGN KEY ([SettingId]) REFERENCES [DiscountSetting] ([Id]) ON DELETE CASCADE
+);
+2026-01-16 09:47:47.930 +05:00 [ERR] Failed executing DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [OrderDTSettings] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [SettingId] uniqueidentifier NOT NULL,
+    [DTCode] nvarchar(max) NULL,
+    [IsDiscount] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_OrderDTSettings] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_OrderDTSettings_DiscountSetting_SettingId] FOREIGN KEY ([SettingId]) REFERENCES [DiscountSetting] ([Id]) ON DELETE CASCADE
+);

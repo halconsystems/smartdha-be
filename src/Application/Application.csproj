@@ -49,7 +49,10 @@
     <Folder Include="Feature\ApprovalProcess\Commands\" />
     <Folder Include="Feature\BowserCapacityRates\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
+    <Folder Include="Feature\DiscountSetting\Queries\" />
     <Folder Include="Feature\ForgetPassword\Queries\" />
+    <Folder Include="Feature\Orders\Queries\" />
+    <Folder Include="Feature\OrderTaxDiscount\Queries\" />
     <Folder Include="Feature\PaymentIpn\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\PropertyManagement\PMSVoucher\Queries\" />
