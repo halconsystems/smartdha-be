@@ -13,7 +13,12 @@ public record CreateServiceProcessCommand(
     string Name,
     string Code,
     bool IsFeeAtSubmission,
-    bool IsVoucherPossible
+    bool IsVoucherPossible,
+    bool IsFeeRequired,
+    bool IsNadraVerificationRequired,
+    bool IsfeeSubmit,
+    bool IsInstructionAtStart,
+    string? Instruction
 ) : IRequest<ApiResult<Guid>>;
 
 public class CreateServiceProcessHandler : IRequestHandler<CreateServiceProcessCommand, ApiResult<Guid>>
@@ -37,7 +42,12 @@ public class CreateServiceProcessHandler : IRequestHandler<CreateServiceProcessC
             Name = r.Name.Trim(),
             Code = r.Code.Trim().ToUpperInvariant(),
             IsFeeAtSubmission = r.IsFeeAtSubmission,
-            IsVoucherPossible = r.IsVoucherPossible
+            IsVoucherPossible = r.IsVoucherPossible,
+            IsFeeRequired = r.IsFeeRequired,
+            IsNadraVerificationRequired = r.IsNadraVerificationRequired,
+            IsfeeSubmit = r.IsfeeSubmit,
+            IsInstructionAtStart = r.IsInstructionAtStart,
+            Instruction = r.Instruction
         };
 
         _db.Set<ServiceProcess>().Add(entity);

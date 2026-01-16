@@ -19,6 +19,7 @@ public class GetServiceCategoriesHandler : IRequestHandler<GetServiceCategoriesQ
     public async Task<ApiResult<List<IdNameDto>>> Handle(GetServiceCategoriesQuery request, CancellationToken ct)
     {
         var list = await _db.Set<ServiceCategory>()
+             .Where(x=>x.IsActive==true &&x.IsDeleted==false)
             .OrderBy(x => x.Name)
             .Select(x => new IdNameDto(x.Id, x.Name, x.Code))
             .ToListAsync(ct);

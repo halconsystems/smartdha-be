@@ -34,6 +34,10 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<CaseVoucher> CaseVouchers => Set<CaseVoucher>();
     public DbSet<CasePayment> CasePayments => Set<CasePayment>();
 
+    public DbSet<FeeDefinition> FeeDefinitions => Set<FeeDefinition>();
+    public DbSet<FeeSlab> FeeSlabs => Set<FeeSlab>();
+    public DbSet<CaseFee> CaseFees => Set<CaseFee>();
+
     /* =========================
        SaveChanges – Auditing
        ========================= */
@@ -134,6 +138,16 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
         // Voucher one active voucher per case (optional)
         modelBuilder.Entity<CaseVoucher>()
             .HasIndex(x => x.CaseId);
+
+        modelBuilder.Entity<FeeDefinition>()
+    .HasIndex(x => x.ProcessId);
+
+        modelBuilder.Entity<FeeSlab>()
+            .HasIndex(x => new { x.FeeDefinitionId, x.FromArea, x.ToArea });
+
+        modelBuilder.Entity<CaseFee>()
+            .HasIndex(x => x.CaseId)
+            .IsUnique(); // one fee snapshot per case
 
         base.OnModelCreating(modelBuilder);
 

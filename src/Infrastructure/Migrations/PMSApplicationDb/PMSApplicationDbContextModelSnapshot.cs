@@ -86,6 +86,75 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.ToTable("CaseDocuments");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseFee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("AreaUnit")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FeeDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FeeSlabId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOverridden")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("PropertyArea")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId")
+                        .IsUnique();
+
+                    b.HasIndex("FeeDefinitionId");
+
+                    b.HasIndex("FeeSlabId");
+
+                    b.ToTable("CaseFees");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePayment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -404,6 +473,121 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .IsUnique();
 
                     b.ToTable("Directorates");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<bool>("AllowOverride")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("AreaUnit")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EffectiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("EffectiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FeeType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("FixedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("ProcessId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcessId");
+
+                    b.ToTable("FeeDefinitions");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeSlab", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FeeDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("FromArea")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<decimal>("ToArea")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FeeDefinitionId", "FromArea", "ToArea");
+
+                    b.ToTable("FeeSlabs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
@@ -741,6 +925,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Instruction")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -750,7 +937,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<bool>("IsFeeAtSubmission")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFeeRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInstructionAtStart")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNadraVerificationRequired")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVoucherPossible")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsfeeSubmit")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModified")
@@ -851,6 +1050,29 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Navigation("PrerequisiteDefinition");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseFee", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", "FeeDefinition")
+                        .WithMany()
+                        .HasForeignKey("FeeDefinitionId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.FeeSlab", "FeeSlab")
+                        .WithMany()
+                        .HasForeignKey("FeeSlabId");
+
+                    b.Navigation("Case");
+
+                    b.Navigation("FeeDefinition");
+
+                    b.Navigation("FeeSlab");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePayment", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
@@ -921,6 +1143,28 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Navigation("Case");
 
                     b.Navigation("GeneratedAtStep");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", "Process")
+                        .WithMany()
+                        .HasForeignKey("ProcessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Process");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeSlab", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", "FeeDefinition")
+                        .WithMany()
+                        .HasForeignKey("FeeDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FeeDefinition");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessPrerequisite", b =>

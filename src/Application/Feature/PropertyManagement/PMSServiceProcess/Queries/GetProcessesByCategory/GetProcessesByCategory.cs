@@ -19,7 +19,7 @@ public class GetProcessesByCategoryHandler : IRequestHandler<GetProcessesByCateg
     public async Task<ApiResult<List<ProcessDto>>> Handle(GetProcessesByCategoryQuery q, CancellationToken ct)
     {
         var list = await _db.Set<ServiceProcess>()
-            .Where(x => x.CategoryId == q.CategoryId)
+            .Where(x => x.CategoryId == q.CategoryId && x.IsActive==true && x.IsDeleted==false)
             .OrderBy(x => x.Name)
             .Select(x => new ProcessDto(x.Id, x.CategoryId, x.Name, x.Code))
             .ToListAsync(ct);

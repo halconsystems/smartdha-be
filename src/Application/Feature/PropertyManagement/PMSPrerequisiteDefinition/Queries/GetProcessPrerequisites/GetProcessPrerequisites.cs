@@ -24,30 +24,84 @@ public record ProcessPrerequisiteDto
     int? MaxLength,
     string? AllowedExtensions
 );
+public record UserPropertyDto(
+    Guid PropertyId,
+    string PropertyNo,
+    string? Sector,
+    string? Phase
+);
 
-public record GetProcessPrerequisiteQuery(Guid ProcessId) : IRequest<ApiResult<List<ProcessPrerequisiteDto>>>;
+public record ProcessPrerequisiteResponseDto
+(
+    List<UserPropertyDto> Properties,
+    bool IsNadra,
+    bool IsFeeRequired,      
+    bool IsFeeAtSubmission,  
+    bool IsVoucherPossible,
+    bool IsfeeSubmit,
+    bool IsInstructionAtStart,
+    string? Instruction,
+    List<ProcessPrerequisiteDto> Prerequisites
+);
 
-public class GetProcessPrerequisitesHandler : IRequestHandler<GetProcessPrerequisiteQuery, ApiResult<List<ProcessPrerequisiteDto>>>
+public record GetProcessPrerequisiteQuery(Guid ProcessId)
+    : IRequest<ApiResult<ProcessPrerequisiteResponseDto>>;
+
+public class GetProcessPrerequisitesHandler
+    : IRequestHandler<GetProcessPrerequisiteQuery, ApiResult<ProcessPrerequisiteResponseDto>>
 {
     private readonly IPMSApplicationDbContext _db;
+    private readonly IUser _currentUser;
 
-    public GetProcessPrerequisitesHandler(IPMSApplicationDbContext db)
+    public GetProcessPrerequisitesHandler(
+        IPMSApplicationDbContext db,
+        IUser currentUser)
     {
         _db = db;
+        _currentUser = currentUser;
     }
 
-    public async Task<ApiResult<List<ProcessPrerequisiteDto>>> Handle(
+    public async Task<ApiResult<ProcessPrerequisiteResponseDto>> Handle(
         GetProcessPrerequisiteQuery request,
         CancellationToken ct)
     {
-        var processExists = await _db.Set<ServiceProcess>()
-            .AnyAsync(x => x.Id == request.ProcessId, ct);
+        if (string.IsNullOrEmpty(_currentUser.Id))
+            return ApiResult<ProcessPrerequisiteResponseDto>
+                .Fail("User not authenticated.");
 
-        if (!processExists)
-            return ApiResult<List<ProcessPrerequisiteDto>>
-                .Fail("Process not found.");
+        // 1️⃣ Validate process
+        var process = await _db.Set<ServiceProcess>()
+    .Where(x => x.Id == request.ProcessId)
+    .Select(x => new
+    {
+        x.IsFeeRequired,
+        x.IsFeeAtSubmission,
+        x.IsVoucherPossible,
+        x.IsfeeSubmit,
+        x.IsInstructionAtStart,
+        x.IsNadraVerificationRequired,
+        x.Instruction
+    })
+    .FirstOrDefaultAsync(ct);
 
-        var result = await _db.Set<ProcessPrerequisite>()
+        if (process == null)
+            return ApiResult<ProcessPrerequisiteResponseDto>.Fail("Process not found.");
+
+        // 2️⃣ Load USER PROPERTIES
+        var properties = await _db.Set<UserProperty>()
+            .AsNoTracking()
+            .Where(x => x.CreatedBy == _currentUser.Id)
+            .Select(x => new UserPropertyDto(
+                x.Id,
+                x.PropertyNo,
+                x.Sector,
+                x.Phase
+            ))
+            .ToListAsync(ct);
+
+        // 3️⃣ Load prerequisites
+        var prerequisites = await _db.Set<ProcessPrerequisite>()
+            .AsNoTracking()
             .Where(x => x.ProcessId == request.ProcessId)
             .OrderBy(x => x.RequiredByStepNo)
             .Select(x => new ProcessPrerequisiteDto(
@@ -63,7 +117,21 @@ public class GetProcessPrerequisitesHandler : IRequestHandler<GetProcessPrerequi
             ))
             .ToListAsync(ct);
 
-        return ApiResult<List<ProcessPrerequisiteDto>>.Ok(result);
+        
+
+        // 6️⃣ Final response
+        var response = new ProcessPrerequisiteResponseDto(
+            properties,
+            process.IsNadraVerificationRequired,
+            process.IsFeeRequired,
+            process.IsFeeAtSubmission,
+            process.IsVoucherPossible,
+            process.IsfeeSubmit,
+            process.IsInstructionAtStart,
+            process.Instruction,
+            prerequisites
+        );
+
+        return ApiResult<ProcessPrerequisiteResponseDto>.Ok(response);
     }
 }
-

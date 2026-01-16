@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.PMS.Queries.GetProcessPrerequisites;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessAllPrerequisite;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public class ProcessReadController : BaseApiController
         CancellationToken ct)
     {
         var result = await _mediator.Send(
-            new GetProcessPrerequisiteQuery(processId), ct);
+            new GetProcessAllPrerequisiteQuery(processId), ct);
 
         return Ok(result);
     }

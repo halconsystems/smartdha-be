@@ -24,9 +24,12 @@ public interface IPMSApplicationDbContext
     DbSet<CaseStepHistory> CaseStepHistories { get; }
     DbSet<CasePrerequisiteValue> CasePrerequisiteValues { get; }
     DbSet<CaseDocument> CaseDocuments { get; }
-
     DbSet<CaseVoucher> CaseVouchers { get; }
     DbSet<CasePayment> CasePayments { get;}
+    DbSet<FeeDefinition> FeeDefinitions { get; }
+    DbSet<FeeSlab> FeeSlabs { get; }
+    DbSet<CaseFee> CaseFees { get; }
+
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

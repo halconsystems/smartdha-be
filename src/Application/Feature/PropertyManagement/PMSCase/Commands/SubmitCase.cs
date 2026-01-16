@@ -41,6 +41,7 @@ public class PrerequisiteValueInput
 }
 
 
+
 public record SubmitCaseCommand(
     Guid UserPropertyId,
     Guid ProcessId,
@@ -147,13 +148,35 @@ public class SubmitCaseHandler
             .Select(x => x.PrerequisiteDefinitionId)
             .ToListAsync(ct);
 
-        var providedDefs = await _db.Set<CasePrerequisiteValue>()
+        
+
+        // Get provided NON-FILE prerequisites
+        var providedValueDefs = await _db.Set<CasePrerequisiteValue>()
             .Where(x => x.CaseId == c.Id)
             .Select(x => x.PrerequisiteDefinitionId)
             .ToListAsync(ct);
 
-        if (requiredDefs.Except(providedDefs).Any())
-            return ApiResult<SubmitCaseResponse>.Fail("Missing required prerequisites.");
+        // Get provided FILE prerequisites
+        var providedFileDefs = await _db.Set<CaseDocument>()
+            .Where(x => x.CaseId == c.Id && x.PrerequisiteDefinitionId != null)
+            .Select(x => x.PrerequisiteDefinitionId!.Value)
+            .ToListAsync(ct);
+
+        // Merge both
+        var providedAllDefs = providedValueDefs
+            .Union(providedFileDefs)
+            .Distinct()
+            .ToList();
+
+        // Validate
+        var missing = requiredDefs.Except(providedAllDefs).ToList();
+
+        if (missing.Any())
+        {
+            return ApiResult<SubmitCaseResponse>.Fail(
+                $"Missing required prerequisites: {missing.Count}");
+        }
+
 
         // 5️⃣ Move to Step-1
         var step1 = await _db.Set<ProcessStep>()

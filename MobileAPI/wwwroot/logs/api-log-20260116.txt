@@ -30,6 +30,7 @@ CREATE TABLE [OrderDTSettings] (
     CONSTRAINT [PK_OrderDTSettings] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_OrderDTSettings_DiscountSetting_SettingId] FOREIGN KEY ([SettingId]) REFERENCES [DiscountSetting] ([Id]) ON DELETE CASCADE
 );
+<<<<<<< HEAD
 2026-01-16 11:47:01.760 +05:00 [ERR] Connection to Redis failed.
 StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 134) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 4419s ago, last-write: 21s ago, unanswered-write: 21s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 9 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
  ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
@@ -48,6 +49,14 @@ Method   : GET
 Path     : /api/laundry/get-laundryservices
 Status   : 401
 Duration : 79 ms
+=======
+2026-01-16 11:11:50.278 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIKONMORFAE:00000001
+Method   : GET
+Path     : /api/laundry/get-laundrycategory
+Status   : 401
+Duration : 715 ms
+>>>>>>> 7a51df4182a865f363244723cdb11ba3ba937d74
 IP       : ::1
 
 Request:
@@ -56,6 +65,7 @@ Request:
 Response:
 [EMPTY]
 ==============================================
+<<<<<<< HEAD
 2026-01-16 11:51:56.051 +05:00 [ERR] An error occurred using the connection to database 'DFP' on server '172.16.10.45'.
 2026-01-16 11:51:56.063 +05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContext'.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
@@ -489,3 +499,5 @@ Request:
 Response:
 {"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
 ==============================================
+=======
+>>>>>>> 7a51df4182a865f363244723cdb11ba3ba937d74
