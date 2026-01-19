@@ -68,10 +68,22 @@ public class OrdersProcessAtShopCommandHandler
                 .FirstOrDefaultAsync(d => d.OrderId == request.OrderId, ct)
                 ?? throw new NotFoundException("Dispatch not found", request.OrderId.ToString());
 
-            order.WashnPressProcessAt = DateTime.Now;
-            order.OrderStatus = OrderStatus.InProgress;
+            if (request.WashProcess)
+            {
+                order.WashnPressProcessAt = DateTime.Now;
+                order.OrderStatus = OrderStatus.InProgress;
 
-            dispatch.Status = OrderDispatchStatus.WashnPressProcess;
+                dispatch.Status = OrderDispatchStatus.WashnPressProcess;
+
+            }
+            else
+            {
+                order.ParcelReadyAt = DateTime.Now;
+                order.OrderStatus = OrderStatus.InProgress;
+
+                dispatch.Status = OrderDispatchStatus.ParcelReady;
+
+            }
 
 
             var id = order.UserId.ToString();

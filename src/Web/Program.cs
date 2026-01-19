@@ -93,6 +93,7 @@ builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.Authenticatio
 
 // *** ADD: Host-specific realtime adapter (overrides any previous IPanicRealtime registration)
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
+builder.Services.AddScoped<IOrderRealTime, OrderRealtimeWebAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
 builder.Services.AddCors(options =>
@@ -176,6 +177,7 @@ app.MapControllers().RequireAuthorization();
 
 // *** ADD: Map the hub (path must match MobileApi)
 app.MapHub<PanicHub>("/hubs/panic").RequireAuthorization();
+app.MapHub<OrderHub>("/hubs/order").RequireAuthorization();
 
 app.UseMiddleware<CustomExceptionMiddleware>();
 
