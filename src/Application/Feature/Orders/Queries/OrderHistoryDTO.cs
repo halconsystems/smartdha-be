@@ -23,6 +23,14 @@ public class OrderHistoryDTO
     public string? TotalPrice { get; set; }
     public string? ItemCount { get; set; }
     public Guid PackageId { get; set; }
+    public Guid PickupAssignedByUserId { get; set; }
+    public Guid DeliverAssignedByUserId { get; set; }
+    public ApplicationUser? PickUpByUser { get; set; }
+    public Guid PickupDriverId { get; set; }
+    public ApplicationUser? PickupDrivers { get; set; }
+    public Guid DeliverDriverId { get; set; }
+    public ApplicationUser? DeliverDrivers { get; set; }
+    public ApplicationUser? DeliverByUser { get; set; }
     public LaundryPackaging? LaundryPackaging { get; set; }
 
     public List<Guid>? OrderSummariesId { get; set; }
@@ -30,7 +38,8 @@ public class OrderHistoryDTO
     public List<Guid>? OrderDTiD { get; set; }
     public List<PaymentDTSetting>? PaymentDTSettings { get; set; }
     public Guid OrderConfirmId { get; set; }
-    public ConfirmedOrder? ConfirmedOrder { get; set; }
+    public Domain.Entities.LMS.OrderDispatch? OrderDispatches { get; set; }
+
 
     public Guid DeliveryDetailId { get; set; }
     public DeliveryDetails? DeliveryDetails { get; set; }
@@ -41,5 +50,19 @@ public class OrderHistoryDTO
 
     public List<LaundryCategoryDTO>? LaundryCategories { get; set; }
     public List<LaundryItemsDTO>? LaundryItems { get; set; }
+    public Domain.Entities.LMS.Shops? Shops { get; set; }
+
+
+    //public DateTime? AcceptPickupAt { get; set; }
+    //public DateTime? RiderArrivedToPickupAddressAt { get; set; }
+    //public DateTime? ParcelPickedParcelFromAddressAt { get; set; }
+    //public DateTime? RiderArrivedOnShopAt { get; set; }
+
+    //public DateTime? AcceptDeliveredAt { get; set; }
+    //public DateTime? RiderArrivedToPickDeliveryFromShopAt { get; set; }
+    //public DateTime? ParcelPickedParcelFromShopAt { get; set; }
+    //public DateTime? PickUpAssignedAt { get; set; }
+    //public DateTime? DeliveredAssignedAt { get; set; }
+    //public string? OrderRemarks { get; set; }
 
 }

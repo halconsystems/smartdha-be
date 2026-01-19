@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Domain.Entities.LMS;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
 // Domain/Entities/SvVehicle.cs
@@ -26,6 +27,6 @@ public class SvVehicle : BaseAuditableEntity
     public double? LastLongitude { get; set; }  
     public DateTime? LastLocationAt { get; set; }
     public SvVehicleStatus Status { get; set; } = SvVehicleStatus.Offline;
-    public ICollection<PanicDispatch> PanicDispatches { get; set; } = new List<PanicDispatch>();
+    public ICollection<OrderDispatch> OrderDispatches { get; set; } = new List<OrderDispatch>();
 }
 

@@ -5,11 +5,16 @@ using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryPackaging;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryService;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
+using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.Delivery;
+using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.PickUp;
 using DHAFacilitationAPIs.Application.Feature.OrderPaymentIpn.Command;
 using DHAFacilitationAPIs.Application.Feature.Orders.Command;
 using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AcceptPanicDispatch;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
 using DHAFacilitationAPIs.Application.Feature.Shops.Queries;
+using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Command;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -155,10 +160,46 @@ public class LaundryController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("get-OrderHsitory-ById"), AllowAnonymous]
+    [HttpGet("get-OrderHsitory-ById")]
     public async Task<ActionResult<OrderHistoryDTO>> GetOrderHisotryById(Guid CategoryId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetOrderHistoryIdQuery(CategoryId), ct);
         return Ok(result);
     }
+
+    [HttpPost("Drivers/AssignDriverToShop")]
+    public async Task<ActionResult> AssignVehicle(AssignDriverToShopCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpPost("Drivers/AssignDriverToVehicle")]
+    public async Task<ActionResult> AssignVehicle(AssignedDriverToVehiclesCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpPost("Order/Order-Dispatch")]
+    public async Task<ActionResult<string>> AcceptDispatch(AssignOrderDispatchCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpPost("Order/RidersTask")]
+    public async Task<ActionResult<string>> AcceptDispatch(RiderPickupOrderDispatch cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+    [HttpPost("Order/ShopProcess")]
+    public async Task<ActionResult<string>> ShopProcess(OrdersProcessAtShopCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+
+
 }

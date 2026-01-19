@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2026-01-19 00:21:49.229 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIMOR1ASR6S:00000001
 Method   : POST
@@ -257,6 +258,51 @@ Method   : POST
 Path     : /api/auth/login
 Status   : 200
 Duration : 599 ms
+=======
+2026-01-19 11:14:48.753 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (53): The network path was not found.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:53,State:0,Class:20
+2026-01-19 11:16:01.749 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN48CBRG15:00000001
+Request  : AppUserLoginCommand
+Duration : 744 ms
+2026-01-19 11:16:01.859 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (774 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 11:16:01.884 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG15:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1074 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
@@ -266,11 +312,19 @@ Request:
 }
 
 Response:
+<<<<<<< HEAD
 {"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
 ==============================================
 2026-01-19 00:23:34.699 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 11:21:48.336 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -281,8 +335,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
 ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
 Error Number:547,State:0,Class:16
+=======
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -297,7 +356,11 @@ Error Number:547,State:0,Class:16
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+<<<<<<< HEAD
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -308,8 +371,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
 ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
 Error Number:547,State:0,Class:16
+=======
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -323,6 +391,7 @@ Error Number:547,State:0,Class:16
    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+<<<<<<< HEAD
 2026-01-19 00:23:35.272 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIMOR1ASR6V:00000001
 Method   : POST
@@ -402,10 +471,48 @@ Content-Disposition: form-data; name="files"; filename=""
 
 ----------------------------572651601116020711120380--
 
+=======
+2026-01-19 11:21:48.593 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG17:00000001
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 500
+Duration : 179975 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 3
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 2
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "nearByLandMark": "DHA Head Office",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
 2026-01-19 00:25:59.451 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
@@ -540,10 +647,145 @@ Content-Disposition: form-data; name="files"; filename=""
 
 ----------------------------067283857338766433201056--
 
+=======
+2026-01-19 11:22:05.990 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG18:00000001
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 500
+Duration : 657 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Delivery Not Found."}
+==============================================
+2026-01-19 11:22:55.471 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG18:00000003
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 500
+Duration : 772 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Delivery Not Found."}
+==============================================
+2026-01-19 11:23:00.368 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG18:00000005
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 500
+Duration : 1437 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Delivery Not Found."}
+==============================================
+2026-01-19 11:24:07.819 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-19 11:24:08.028 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG18:00000007
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 500
+Duration : 3378 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 3
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 2
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "nearByLandMark": "DHA Head Office",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
 2026-01-19 00:26:08.276 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIMOR1ASR73:00000001
 Method   : POST
@@ -630,6 +872,11 @@ Response:
 2026-01-19 00:28:24.418 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
+2026-01-19 11:25:25.644 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -640,8 +887,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
 ClientConnectionId:3f108212-424a-436d-aba8-5acf939d0d33
 Error Number:547,State:0,Class:16
+=======
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -656,7 +908,11 @@ Error Number:547,State:0,Class:16
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+<<<<<<< HEAD
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -667,8 +923,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
 ClientConnectionId:3f108212-424a-436d-aba8-5acf939d0d33
 Error Number:547,State:0,Class:16
+=======
+ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
+Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -682,6 +943,7 @@ Error Number:547,State:0,Class:16
    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+<<<<<<< HEAD
 2026-01-19 00:28:25.009 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIMOU9IS41K:00000001
 Method   : POST
@@ -761,10 +1023,48 @@ Content-Disposition: form-data; name="files"; filename=""
 
 ----------------------------189984334675363049671806--
 
+=======
+2026-01-19 11:25:25.885 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN48CBRG18:00000009
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 500
+Duration : 74100 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 3
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 2
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "nearByLandMark": "DHA Head Office",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
 2026-01-19 00:34:38.014 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
@@ -968,6 +1268,19 @@ Method   : POST
 Path     : /api/auth/login
 Status   : 200
 Duration : 769 ms
+=======
+2026-01-19 11:28:58.947 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4FT18J7G:00000001
+Request  : AppUserLoginCommand
+Duration : 612 ms
+2026-01-19 11:28:59.094 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (637 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 11:28:59.114 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4FT18J7G:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 933 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
@@ -977,6 +1290,7 @@ Request:
 }
 
 Response:
+<<<<<<< HEAD
 {"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
 ==============================================
 2026-01-19 01:19:30.302 +05:00 [INF] ================ HTTP REQUEST =================
@@ -1022,11 +1336,457 @@ Method   : GET
 Path     : /api/casedata/ae385ba8-b62d-47b6-b9c8-59d3cff2471c/workflow
 Status   : 200
 Duration : 246 ms
+=======
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 11:29:42.654 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:3db2b685-32a7-47fc-bf2f-0618b7eea4cf
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:3db2b685-32a7-47fc-bf2f-0618b7eea4cf
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-19 11:31:42.820 +05:00 [ERR] Failed executing DbCommand (200ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [OrderDispatches] DROP CONSTRAINT [FK_OrderDispatches_SvVehicle_SvVehicleId];
+2026-01-19 11:33:40.888 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4I71KMJS:0000000B
+Request  : AppUserLoginCommand
+Duration : 2992 ms
+2026-01-19 11:33:41.213 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (3035 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 11:33:41.244 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4I71KMJS:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 3544 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 11:34:16.718 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4I71KMJS:0000000F
+Request  : OrderPlaceCommand
+Duration : 5509 ms
+2026-01-19 11:34:16.763 +05:00 [WRN] CMS Long Running Request: OrderPlaceCommand (5509 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"OrderType":"SnowWhiteEcono","ServiceId":"f65d3914-6641-4e83-b5b4-e7e81e91f186","PackageId":"eeb68634-fd0d-4f26-9462-b30e63863acd","ItemsId":[{"ItemId":"2027347a-14a3-45f2-9bc4-1c3856e60260","Quantity":3,"$type":"OrderItemDto"},{"ItemId":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","Quantity":2,"$type":"OrderItemDto"}],"OrderCity":"Karachi","CompleteAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","NearByLandMark":"DHA Head Office","PhoneNumber":"03242796067","DeliveryInstruction":"Nothing","PaymentMethod":"Cash","BascketId":"","PickupAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","DeliverAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","ShopId":"977c3244-48c3-4367-a57b-0558fe6d50e8","OrderStatus":"Confirmed","$type":"OrderPlaceCommand"}
+2026-01-19 11:34:16.769 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4I71KMJS:0000000F
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 200
+Duration : 5626 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 3
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 2
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "nearByLandMark": "DHA Head Office",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+
+Response:
+{"status":200,"title":"Created","detail":"Record created successfully.","data":"d207381b-63b3-44c0-a5b3-5201348e220b"}
+==============================================
+2026-01-19 11:36:16.111 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4I71KMJS:00000011
+Request  : OrderPlaceCommand
+Duration : 43950 ms
+2026-01-19 11:36:16.334 +05:00 [WRN] CMS Long Running Request: OrderPlaceCommand (43951 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"OrderType":"SnowWhiteEcono","ServiceId":"f65d3914-6641-4e83-b5b4-e7e81e91f186","PackageId":"eeb68634-fd0d-4f26-9462-b30e63863acd","ItemsId":[{"ItemId":"2027347a-14a3-45f2-9bc4-1c3856e60260","Quantity":4,"$type":"OrderItemDto"},{"ItemId":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","Quantity":5,"$type":"OrderItemDto"}],"OrderCity":"Karachi","CompleteAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","NearByLandMark":"DHA Head Office","PhoneNumber":"03242796067","DeliveryInstruction":"Nothing","PaymentMethod":"Cash","BascketId":"","PickupAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","DeliverAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","ShopId":"977c3244-48c3-4367-a57b-0558fe6d50e8","OrderStatus":"Confirmed","$type":"OrderPlaceCommand"}
+2026-01-19 11:36:16.336 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4I71KMJS:00000011
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 200
+Duration : 44179 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 4
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 5
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "nearByLandMark": "DHA Head Office",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+
+Response:
+{"status":200,"title":"Created","detail":"Record created successfully.","data":"8885d11e-d936-485d-b7a0-92fc330e414f"}
+==============================================
+2026-01-19 11:36:31.487 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4I71KMJS:00000013
+Request  : GetAllOrderListQuery
+Duration : 1409 ms
+2026-01-19 11:36:31.699 +05:00 [WRN] CMS Long Running Request: GetAllOrderListQuery (1410 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllOrderListQuery"}
+2026-01-19 11:36:31.772 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4I71KMJS:00000013
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 1704 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":[{"stepNo":1,"stepName":"Initial Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-19T01:17:38.6768554","remarks":"Submitted via generic form"},{"stepNo":2,"stepName":"Final Review and Decision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null},{"stepNo":3,"stepName":"Financial Settelments","directorateName":"Finance","status":"NotStarted","actionDate":null,"remarks":null}]}
+=======
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 11:38:49.598 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4I71KMJS:00000015
+Request  : GetAllOrderListQuery
+Duration : 124 ms
+2026-01-19 11:38:49.599 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4I71KMJS:00000015
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 131 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 11:43:35.135 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4NS76KD1:0000000B
+Request  : AppUserLoginCommand
+Duration : 1212 ms
+2026-01-19 11:43:35.327 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1253 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 11:43:35.355 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4NS76KD1:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1634 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 11:44:02.663 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4NS76KD1:0000000F
+Request  : GetAllOrderListQuery
+Duration : 4304 ms
+2026-01-19 11:44:02.814 +05:00 [WRN] CMS Long Running Request: GetAllOrderListQuery (4305 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllOrderListQuery"}
+2026-01-19 11:44:02.896 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4NS76KD1:0000000F
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 4630 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 11:48:48.505 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4QVB7VU5:0000000B
+Request  : AppUserLoginCommand
+Duration : 1149 ms
+2026-01-19 11:48:48.789 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1186 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 11:48:48.827 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4QVB7VU5:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1657 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 11:49:13.020 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4QVB7VU5:0000000F
+Request  : GetAllOrderListQuery
+Duration : 3442 ms
+2026-01-19 11:49:13.058 +05:00 [WRN] CMS Long Running Request: GetAllOrderListQuery (3443 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllOrderListQuery"}
+2026-01-19 11:49:13.139 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4QVB7VU5:0000000F
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 3641 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 11:49:44.783 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4QVB7VU5:00000011
+Request  : GetAllOrderListQuery
+Duration : 24811 ms
+2026-01-19 11:49:44.806 +05:00 [WRN] CMS Long Running Request: GetAllOrderListQuery (24812 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllOrderListQuery"}
+2026-01-19 11:49:44.808 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4QVB7VU5:00000011
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 24841 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 11:50:04.497 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4QVB7VU6:00000001
+Request  : GetOrderHistoryIdQuery
+Duration : 279 ms
+2026-01-19 11:50:04.563 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4QVB7VU6:00000001
+Method   : GET
+Path     : /api/laundry/get-orderhsitory-byid
+Status   : 200
+Duration : 374 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":null,"itemCount":null,"packageId":"00000000-0000-0000-0000-000000000000","pickupAssignedByUserId":"00000000-0000-0000-0000-000000000000","deliverAssignedByUserId":"00000000-0000-0000-0000-000000000000","pickUpByUser":null,"pickupDriverId":"00000000-0000-0000-0000-000000000000","pickupDrivers":null,"deliverDriverId":"00000000-0000-0000-0000-000000000000","deliverDrivers":null,"deliverByUser":null,"laundryPackaging":null,"orderSummariesId":null,"orderSummaries":[{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"2027347a-14a3-45f2-9bc4-1c3856e60260","laundryItems":null,"itemCount":"3","itemPrice":"120","totalCountPrice":"360","created":"2026-01-19T11:34:15.1432654","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432654","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":13,"id":"eff736b2-95f6-4744-926a-0dad79761514"},{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","laundryItems":null,"itemCount":"2","itemPrice":"120","totalCountPrice":"240","created":"2026-01-19T11:34:15.1432747","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432747","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":12,"id":"07a3f848-4640-461b-857f-c8eff85b19a8"}],"orderDTiD":null,"paymentDTSettings":[],"orderConfirmId":"00000000-0000-0000-0000-000000000000","orderDispatches":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"city":"Karachi","completeAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","nearByLandMark":"DHA Head Office","latitude":0,"longitude":0,"phoneNumber":"03242796067","deliveryInstruction":"Nothing","subTotal":600.00,"total":600.00,"discount":0.00,"taxes":0.00,"paidAmount":0.00,"remainingBalance":600.00,"paymentMethod":"Cash","created":"2026-01-19T11:34:16.5393073","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:16.5393073","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":6,"id":"7a14bef0-4eb4-43e1-aeaa-95aafeb19cab"},"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":null,"orderStatus":"Confirmed","shopName":null,"laundryCategories":null,"laundryItems":null}
+==============================================
+2026-01-19 11:57:39.055 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN4QVB7VU6:00000003
+Request  : GetOrderHistoryIdQuery
+Duration : 358724 ms
+2026-01-19 11:57:39.117 +05:00 [WRN] CMS Long Running Request: GetOrderHistoryIdQuery (358724 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"OrderId":"d207381b-63b3-44c0-a5b3-5201348e220b","$type":"GetOrderHistoryIdQuery"}
+2026-01-19 11:57:39.119 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN4QVB7VU6:00000003
+Method   : GET
+Path     : /api/laundry/get-orderhsitory-byid
+Status   : 200
+Duration : 358790 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":null,"itemCount":null,"packageId":"00000000-0000-0000-0000-000000000000","pickupAssignedByUserId":"00000000-0000-0000-0000-000000000000","deliverAssignedByUserId":"00000000-0000-0000-0000-000000000000","pickUpByUser":null,"pickupDriverId":"00000000-0000-0000-0000-000000000000","pickupDrivers":null,"deliverDriverId":"00000000-0000-0000-0000-000000000000","deliverDrivers":null,"deliverByUser":null,"laundryPackaging":null,"orderSummariesId":null,"orderSummaries":[{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"2027347a-14a3-45f2-9bc4-1c3856e60260","laundryItems":null,"itemCount":"3","itemPrice":"120","totalCountPrice":"360","created":"2026-01-19T11:34:15.1432654","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432654","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":13,"id":"eff736b2-95f6-4744-926a-0dad79761514"},{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","laundryItems":null,"itemCount":"2","itemPrice":"120","totalCountPrice":"240","created":"2026-01-19T11:34:15.1432747","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432747","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":12,"id":"07a3f848-4640-461b-857f-c8eff85b19a8"}],"orderDTiD":null,"paymentDTSettings":[],"orderConfirmId":"00000000-0000-0000-0000-000000000000","orderDispatches":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"city":"Karachi","completeAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","nearByLandMark":"DHA Head Office","latitude":0,"longitude":0,"phoneNumber":"03242796067","deliveryInstruction":"Nothing","subTotal":600.00,"total":600.00,"discount":0.00,"taxes":0.00,"paidAmount":0.00,"remainingBalance":600.00,"paymentMethod":"Cash","created":"2026-01-19T11:34:16.5393073","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:16.5393073","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":6,"id":"7a14bef0-4eb4-43e1-aeaa-95aafeb19cab"},"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":null,"orderStatus":"Confirmed","shopName":null,"laundryCategories":null,"laundryItems":null}
+==============================================
+2026-01-19 12:04:34.699 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN53MR5L60:00000001
+Request  : AppUserLoginCommand
+Duration : 817 ms
+2026-01-19 12:04:34.840 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (863 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 12:04:34.879 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN53MR5L60:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1235 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 12:05:10.649 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN53MR5L60:00000005
+Request  : GetAllOrderListQuery
+Duration : 5157 ms
+2026-01-19 12:05:10.698 +05:00 [WRN] CMS Long Running Request: GetAllOrderListQuery (5157 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllOrderListQuery"}
+2026-01-19 12:05:10.765 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN53MR5L60:00000005
+Method   : GET
+Path     : /api/laundry/get-orderlist
+Status   : 200
+Duration : 5354 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
+==============================================
+2026-01-19 12:05:26.948 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN53MR5L60:00000007
+Request  : GetOrderHistoryIdQuery
+Duration : 1856 ms
+2026-01-19 12:05:26.996 +05:00 [WRN] CMS Long Running Request: GetOrderHistoryIdQuery (1857 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"OrderId":"d207381b-63b3-44c0-a5b3-5201348e220b","$type":"GetOrderHistoryIdQuery"}
+2026-01-19 12:05:27.071 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN53MR5L60:00000007
+Method   : GET
+Path     : /api/laundry/get-orderhsitory-byid
+Status   : 200
+Duration : 1995 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":null,"itemCount":null,"packageId":"00000000-0000-0000-0000-000000000000","pickupAssignedByUserId":"00000000-0000-0000-0000-000000000000","deliverAssignedByUserId":"00000000-0000-0000-0000-000000000000","pickUpByUser":null,"pickupDriverId":"00000000-0000-0000-0000-000000000000","pickupDrivers":null,"deliverDriverId":"00000000-0000-0000-0000-000000000000","deliverDrivers":null,"deliverByUser":null,"laundryPackaging":null,"orderSummariesId":null,"orderSummaries":[{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"2027347a-14a3-45f2-9bc4-1c3856e60260","laundryItems":null,"itemCount":"3","itemPrice":"120","totalCountPrice":"360","created":"2026-01-19T11:34:15.1432654","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432654","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":13,"id":"eff736b2-95f6-4744-926a-0dad79761514"},{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"itemId":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","laundryItems":null,"itemCount":"2","itemPrice":"120","totalCountPrice":"240","created":"2026-01-19T11:34:15.1432747","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:15.1432747","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":12,"id":"07a3f848-4640-461b-857f-c8eff85b19a8"}],"orderDTiD":null,"paymentDTSettings":[],"orderConfirmId":"00000000-0000-0000-0000-000000000000","orderDispatches":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":{"orderId":"d207381b-63b3-44c0-a5b3-5201348e220b","orders":null,"city":"Karachi","completeAddress":"DHA Head Officer Phase 1 Near McDonalds Resturant Karachi pakistan","nearByLandMark":"DHA Head Office","latitude":0,"longitude":0,"phoneNumber":"03242796067","deliveryInstruction":"Nothing","subTotal":600.00,"total":600.00,"discount":0.00,"taxes":0.00,"paidAmount":0.00,"remainingBalance":600.00,"paymentMethod":"Cash","created":"2026-01-19T11:34:16.5393073","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-19T11:34:16.5393073","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":6,"id":"7a14bef0-4eb4-43e1-aeaa-95aafeb19cab"},"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":null,"orderStatus":"Confirmed","shopName":null,"laundryCategories":null,"laundryItems":null,"shops":{"name":"XYZ Wash And Press Center","displayName":"XYZ Wash And Press Center","code":"XYZ WASH AND","address":"DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan","latitude":0,"longitude":0,"ownerName":"Syed Moiz","ownerEmail":"smoizmr@gmail.com","ownerPhone":"03242796067","shopPhoneNumber":"032427960367","created":"2026-01-16T12:51:12.1801388","createdBy":null,"lastModified":"2026-01-16T12:51:12.1801388","lastModifiedBy":null,"isDeleted":false,"isActive":true,"ser":1,"id":"977c3244-48c3-4367-a57b-0558fe6d50e8"}}
+==============================================
+2026-01-19 12:16:02.446 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN5A3PR4IG:00000001
+Request  : AppUserLoginCommand
+Duration : 1316 ms
+2026-01-19 12:16:02.655 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1362 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 12:16:02.696 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN5A3PR4IG:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1792 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 12:17:48.946 +05:00 [INF] [CQRS]
+TraceId  : 0HNIN5A3PR4II:00000001
+Request  : AssignDriverToShopCommand
+Duration : 1105 ms
+2026-01-19 12:17:49.036 +05:00 [WRN] CMS Long Running Request: AssignDriverToShopCommand (1106 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"ShopId":"977c3244-48c3-4367-a57b-0558fe6d50e8","UserId":"a02644dd-a143-4d47-8e5e-704c1658c31f","$type":"AssignDriverToShopCommand"}
+2026-01-19 12:17:49.041 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIN5A3PR4II:00000001
+Method   : POST
+Path     : /api/laundry/drivers/assigndrivertoshop
+Status   : 200
+Duration : 1282 ms
+IP       : ::1
+
+Request:
+{
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "userId": "a02644dd-a143-4d47-8e5e-704c1658c31f"
+}
+
+Response:
+{"status":200,"title":"Created","detail":"Record created successfully.","data":"aaa25133-68f9-4a31-b2dc-c558e70e3ec7"}
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 ==============================================

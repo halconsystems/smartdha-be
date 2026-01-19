@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Entities.LMS;
 
-public class ConfirmedOrder : BaseAuditableEntity
+public class ShopDrivers :BaseAuditableEntity
 {
-    public Guid OrderId     { get; set; }
-    public Orders? Orders { get; set; }
+    public Guid ShopId { get; set; }
+    public Shops? Shops { get; set; }
+    public Guid DriverId    { get; set; }
 
 
 }

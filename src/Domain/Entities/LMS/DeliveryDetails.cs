@@ -16,8 +16,6 @@ public class DeliveryDetails : BaseAuditableEntity
     [Required]
     public string City { get; set; } = default!;
     [Required]
-    public string? FullName { get; set; } = default!;
-    [Required]
     public string CompleteAddress { get; set; } = default!;
     public string? NearByLandMark { get; set; }
     [Required]
