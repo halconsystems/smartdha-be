@@ -132,6 +132,7 @@ builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
 // (F) Host-specific realtime adapter (Mobile)
 builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
+builder.Services.AddScoped<IOrderRealTime, OrderRealtimeMobileAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
 
@@ -145,6 +146,16 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, client) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Realtime:BaseUrl"]
+        ?? throw new InvalidOperationException("Realtime:BaseUrl missing");
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromSeconds(10);
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
+});
+
+builder.Services.AddHttpClient<IOrderRealTime, OrderRealtimeMobileAdapter>((sp, client) =>
 {
     var cfg = sp.GetRequiredService<IConfiguration>();
     var baseUrl = cfg["Realtime:BaseUrl"]

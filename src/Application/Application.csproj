@@ -51,6 +51,7 @@
     <Folder Include="Feature\ConfirmBooking\Queries\" />
     <Folder Include="Feature\DiscountSetting\Queries\" />
     <Folder Include="Feature\ForgetPassword\Queries\" />
+    <Folder Include="Feature\OrderDispatch\Queries\" />
     <Folder Include="Feature\OrderPaymentIpn\Queries\" />
     <Folder Include="Feature\OrderTaxDiscount\Queries\" />
     <Folder Include="Feature\PaymentIpn\Queries\" />

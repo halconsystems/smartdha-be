@@ -22,3 +22,20 @@ public enum SvVehicleStatus
     Busy = 2,
     Maintenance = 3
 }
+
+public enum ShopVehicleType
+{
+    Motorcycle = 1,
+    Rikshaw = 2,
+    Car = 3,
+    Truck = 4,
+    Other = 99
+}
+
+public enum ShopVehicleStatus
+{
+    Offline = 0,
+    Available = 1,
+    Busy = 2,
+    Maintenance = 3
+}

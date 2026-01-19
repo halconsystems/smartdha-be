@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.Shops.Command;
 using DHAFacilitationAPIs.Application.Feature.Shops.Queries;
+using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Command;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,4 +38,12 @@ public class ShopsController : BaseApiController
         var result = await _mediator.Send(new GetShopByIdQuery(ShopId), ct);
         return Ok(result);
     }
+
+    [HttpPost("Assign-Driver-Shops"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToShops(AssignDriverToShopCommand cmd, CancellationToken ct)
+      => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
+      => Ok(await _mediator.Send(cmd, ct));
 }

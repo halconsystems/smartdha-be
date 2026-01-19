@@ -4,47 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 
 namespace DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 
-
-public record GetAllOrderListQuery : IRequest<List<OrderDTO>>;
-public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery, List<OrderDTO>>
+public record GetOrderListByShopIdQuery(Guid ShopiD) : IRequest<List<OrderDTO>>;
+public class GetOrderListByShopIdQueryHandler : IRequestHandler<GetOrderListByShopIdQuery, List<OrderDTO>>
 {
     private readonly ILaundrySystemDbContext _context;
     private readonly ICurrentUserService _currentUser;
 
-    public GetAllOrderListQueryHandler(ILaundrySystemDbContext context, ICurrentUserService currentUser)
+    public GetOrderListByShopIdQueryHandler(ILaundrySystemDbContext context, ICurrentUserService currentUser)
     {
         _context = context;
         _currentUser = currentUser;
     }
 
-    public async Task<List<OrderDTO>> Handle(GetAllOrderListQuery request, CancellationToken ct)
+    public async Task<List<OrderDTO>> Handle(GetOrderListByShopIdQuery request, CancellationToken ct)
     {
-        var userID = _currentUser.UserId.ToString();
-        if (string.IsNullOrWhiteSpace(userID))
-            throw new UnauthorizedAccessException("User not authenticated.");
 
-        var orders = await _context.Orders.Where(x => x.UserId == userID)
+        var orders = _context.Orders.Where(x => x.ShopId == request.ShopiD)
             .Include(x => x.LaundryPackaging)
             .Include(x => x.LaundryService)
             .Include(x => x.Shops)
             .AsNoTracking()
-            .ToListAsync(ct);
+            .ToList();
 
-        var ordersumarries = await _context.OrderSummaries.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync(ct);
+        var ordersumarries = await _context.OrderSummaries.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync();
 
-        var OrderspaymentsDT = await _context.PaymentDTSettings.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync(ct);
+        var OrderspaymentsDT = await _context.PaymentDTSettings.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync();
 
-        var DeliveryDetails = await _context.DeliveryDetails.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().FirstOrDefaultAsync(ct);
+        var DeliveryDetails = await _context.DeliveryDetails.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().FirstOrDefaultAsync();
 
-        if(DeliveryDetails == null)
+        if (DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");
 
         var confirmedOrder = await _context.ConfirmedOrders.Where(x => orders.Select(x => x.Id).Contains(x.OrderId))
-            .AsNoTracking().FirstOrDefaultAsync(ct);
+            .AsNoTracking().FirstOrDefaultAsync();
 
 
         var result = orders.Select(x => new OrderDTO

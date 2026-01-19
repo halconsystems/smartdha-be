@@ -1,0 +1,155 @@
+2026-01-17 12:35:41.177 +05:00 [INF] [CQRS]
+TraceId  : 0HNILJB0ON1KL:00000001
+Request  : AppUserLoginCommand
+Duration : 972 ms
+2026-01-17 12:35:41.329 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1045 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-17 12:35:41.397 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNILJB0ON1KL:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1582 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-17 12:38:25.421 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNILJB0ON1KN:00000001
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 500
+Duration : 382 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 2
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 3
+    },
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "nearByLandMark": "DHA",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Value cannot be null. (Parameter 'request')"}
+==============================================
+2026-01-17 12:48:30.813 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:3ca39e17-2585-4abe-af69-73951783bb4b
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:3ca39e17-2585-4abe-af69-73951783bb4b
+Error Number:515,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-17 12:48:31.703 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNILJB0ON1KO:00000001
+Method   : POST
+Path     : /api/laundry/create-order
+Status   : 500
+Duration : 555137 ms
+IP       : ::1
+
+Request:
+{
+  "orderType": "SnowWhiteEcono",
+  "serviceId": "F65D3914-6641-4E83-B5B4-E7E81E91F186",
+  "packageId": "EEB68634-FD0D-4F26-9462-B30E63863ACD",
+  "itemsId": [
+    {
+      "itemId": "2027347A-14A3-45F2-9BC4-1C3856E60260",
+      "quantity": 2
+    },
+{
+      "itemId": "41CE93D5-53D2-4BB6-8788-EAAC1D29FEA4",
+      "quantity": 3
+    }
+  ],
+  "orderCity": "Karachi",
+  "completeAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "nearByLandMark": "DHA",
+  "phoneNumber": "03242796067",
+  "deliveryInstruction": "Nothing",
+  "paymentMethod": "Cash",
+  "bascketId": "",
+  "pickupAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "deliverAddress": "DHA Head Officer Phase 1 Near McDonald's Resturant Karachi pakistan",
+  "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
+  "orderStatus": "Confirmed"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
+==============================================
