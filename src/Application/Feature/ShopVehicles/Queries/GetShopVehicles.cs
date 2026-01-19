@@ -26,15 +26,15 @@ public class GetShopVehiclesQueryHandler : IRequestHandler<GetShopVehiclesQuery,
 
     public async Task<List<ShopVehicleDTO>> Handle(GetShopVehiclesQuery request, CancellationToken ct)
     {
-        var ShopVehicles = _context.ShopVehicles
+        var ShopVehicles =await _context.ShopVehicles
             .AsNoTracking()
-            .ToList();
+            .ToListAsync();
         var shops = _context.Shops.Where(x => ShopVehicles.Select(x => x.ShopId).Contains(x.Id)).AsNoTracking().ToList();
 
         if(shops == null)
             throw new NotFoundException("Shops not Found.","NotFound");
 
-        var result = ShopVehicles.Select(x => new ShopVehicleDTO
+        var result =ShopVehicles.Select(x => new ShopVehicleDTO
         {
             Id = x.Id,
             Name = x.Name,
