@@ -9,5 +9,7 @@ public enum FeeType
 {
     Fixed = 0,
     AreaBased = 1,
-    Manual = 2 // Finance enters amount at runtime
+    Manual = 2, // Finance enters amount at runtime
+    OptionBased = 3,              // Ordinary / Urgent
+    OptionBasedWithCategory = 4   // Category A/B + Ordinary/Urgent
 }

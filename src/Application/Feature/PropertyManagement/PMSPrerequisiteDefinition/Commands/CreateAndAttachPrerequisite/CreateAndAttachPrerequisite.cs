@@ -9,10 +9,10 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.CreateAndAttachPrerequisite;
+
 public record CreateAndAttachPrerequisiteCommand
 (
     Guid ProcessId,
-
     // Definition data
     string Name,
     string Code,
@@ -20,10 +20,11 @@ public record CreateAndAttachPrerequisiteCommand
     int? MinLength,
     int? MaxLength,
     string? AllowedExtensions,
-
     // Process mapping
     bool IsRequired,
-    int RequiredByStepNo
+    int RequiredByStepNo,
+    //NEW: For Dropdown/MultiSelect/CheckboxGroup/RadioGroup
+    List<PrerequisiteOptionInput>? Options
 ) : IRequest<ApiResult<Guid>>;
 
 
@@ -88,8 +89,58 @@ public class CreateAndAttachPrerequisiteHandler
         };
 
         _db.Set<ProcessPrerequisite>().Add(mapping);
-        await _db.SaveChangesAsync(ct);
 
+        bool isStaticLabel = r.Type == PrerequisiteType.StaticLabel;
+
+        // ❌ StaticLabel must not have options
+        if (isStaticLabel && r.Options != null && r.Options.Count > 0)
+        {
+            return ApiResult<Guid>.Fail("StaticLabel cannot have options.");
+        }
+
+        // ✅ Allowed types that need options
+        bool needsOptions =
+            r.Type == PrerequisiteType.Dropdown ||
+            r.Type == PrerequisiteType.MultiSelect ||
+            r.Type == PrerequisiteType.CheckboxGroup ||
+            r.Type == PrerequisiteType.RadioGroup;
+
+        if (needsOptions)
+        {
+            if (r.Options == null || r.Options.Count == 0)
+                return ApiResult<Guid>.Fail("Options are required for dropdown/multiselect/checkbox/radio types.");
+
+            // Remove duplicates in input
+            var distinct = r.Options
+                .GroupBy(x => x.Value.Trim())
+                .Select(g => g.First())
+                .ToList();
+
+            // Insert options (only those not already present)
+            var existingValues = await _db.Set<PrerequisiteOption>()
+                .Where(x => x.PrerequisiteDefinitionId == definition.Id)
+                .Select(x => x.Value)
+                .ToListAsync(ct);
+
+            var newOptions = distinct
+                .Where(x => !existingValues.Contains(x.Value.Trim()))
+                .Select(x => new PrerequisiteOption
+                {
+                    PrerequisiteDefinitionId = definition.Id,
+                    Label = x.Label.Trim(),
+                    Value = x.Value.Trim(),
+                    SortOrder = x.SortOrder
+                })
+                .ToList();
+
+            if (newOptions.Count > 0)
+            {
+                _db.Set<PrerequisiteOption>().AddRange(newOptions);
+                
+            }
+        }
+
+        await _db.SaveChangesAsync(ct);
         return ApiResult<Guid>.Ok(mapping.Id, "Prerequisite created and attached.");
     }
 }

@@ -22,7 +22,8 @@ public record ProcessPrerequisiteDto
 
     int? MinLength,
     int? MaxLength,
-    string? AllowedExtensions
+    string? AllowedExtensions,
+    List<PrerequisiteOptionDto> Options
 );
 public record UserPropertyDto(
     Guid PropertyId,
@@ -101,23 +102,43 @@ public class GetProcessPrerequisitesHandler
 
         // 3️⃣ Load prerequisites
         var prerequisites = await _db.Set<ProcessPrerequisite>()
-            .AsNoTracking()
-            .Where(x => x.ProcessId == request.ProcessId)
-            .OrderBy(x => x.RequiredByStepNo)
-            .Select(x => new ProcessPrerequisiteDto(
-                x.PrerequisiteDefinitionId,
-                x.PrerequisiteDefinition.Code,
-                x.PrerequisiteDefinition.Name,
-                x.PrerequisiteDefinition.Type,
-                x.IsRequired,
-                x.RequiredByStepNo,
-                x.PrerequisiteDefinition.MinLength,
-                x.PrerequisiteDefinition.MaxLength,
-                x.PrerequisiteDefinition.AllowedExtensions
-            ))
-            .ToListAsync(ct);
+    .AsNoTracking()
+    .Where(x => x.ProcessId == request.ProcessId)
+    .OrderBy(x => x.RequiredByStepNo)
+    .Select(x => new ProcessPrerequisiteDto(
+        x.PrerequisiteDefinitionId,
+        x.PrerequisiteDefinition.Code,
+        x.PrerequisiteDefinition.Name,
+        x.PrerequisiteDefinition.Type,
+        x.IsRequired,
+        x.RequiredByStepNo,
+        x.PrerequisiteDefinition.MinLength,
+        x.PrerequisiteDefinition.MaxLength,
+        x.PrerequisiteDefinition.AllowedExtensions,
 
-        
+        // ✅ Load options correctly
+        x.PrerequisiteDefinition.Type == PrerequisiteType.Dropdown ||
+        x.PrerequisiteDefinition.Type == PrerequisiteType.MultiSelect ||
+        x.PrerequisiteDefinition.Type == PrerequisiteType.CheckboxGroup ||
+        x.PrerequisiteDefinition.Type == PrerequisiteType.RadioGroup
+            ? _db.Set<PrerequisiteOption>()
+                .Where(o =>
+                    o.PrerequisiteDefinitionId == x.PrerequisiteDefinitionId &&
+                    o.IsDeleted == false)
+                .OrderBy(o => o.SortOrder)
+                .Select(o => new PrerequisiteOptionDto(
+                    o.Id,
+                    o.Label,
+                    o.Value,
+                    o.SortOrder
+                ))
+                .ToList()
+            : new List<PrerequisiteOptionDto>()
+    ))
+    .ToListAsync(ct);
+
+
+
 
         // 6️⃣ Final response
         var response = new ProcessPrerequisiteResponseDto(

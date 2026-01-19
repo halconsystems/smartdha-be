@@ -29,7 +29,9 @@ public interface IPMSApplicationDbContext
     DbSet<FeeDefinition> FeeDefinitions { get; }
     DbSet<FeeSlab> FeeSlabs { get; }
     DbSet<CaseFee> CaseFees { get; }
-
+    DbSet<PrerequisiteOption> PrerequisiteOptions { get; }
+    DbSet<FeeOption> FeeOptions { get; }
+    DbSet<FeeCategory> FeeCategories { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

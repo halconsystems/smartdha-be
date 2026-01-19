@@ -1,3 +1,264 @@
+<<<<<<< HEAD
+2026-01-19 00:21:49.229 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR6S:00000001
+Method   : POST
+Path     : /api/casedata/submit
+Status   : 401
+Duration : 1137 ms
+IP       : ::1
+
+Request:
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------542618992116769284615516
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------542618992116769284615516--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-19 00:22:09.098 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR6S:00000002
+Method   : POST
+Path     : /api/casedata/submit
+Status   : 401
+Duration : 8 ms
+IP       : ::1
+
+Request:
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------509857608382087436991663
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------509857608382087436991663--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-19 00:22:11.523 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR6S:00000003
+Method   : POST
+Path     : /api/casedata/submit
+Status   : 401
+Duration : 6 ms
+IP       : ::1
+
+Request:
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------333349697140093481532493
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------333349697140093481532493--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-19 00:23:05.371 +05:00 [INF] [CQRS]
+TraceId  : 0HNIMOR1ASR6T:00000003
+Request  : AppUserLoginCommand
+Duration : 485 ms
+2026-01-19 00:23:05.403 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR6T:00000003
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 599 ms
+=======
 2026-01-19 11:14:48.753 +05:00 [ERR] An error occurred while initialising the database.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
  ---> System.ComponentModel.Win32Exception (53): The network path was not found.
@@ -41,6 +302,7 @@ Method   : POST
 Path     : /api/auth/login
 Status   : 200
 Duration : 1074 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
@@ -50,11 +312,19 @@ Request:
 }
 
 Response:
+<<<<<<< HEAD
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 00:23:34.699 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
 {"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
 ==============================================
 2026-01-19 11:21:48.336 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -65,8 +335,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
+ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
+Error Number:547,State:0,Class:16
+=======
 ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
 Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -81,7 +356,11 @@ Error Number:515,State:2,Class:16
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+<<<<<<< HEAD
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -92,8 +371,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
+ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
+Error Number:547,State:0,Class:16
+=======
 ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
 Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -107,6 +391,87 @@ Error Number:515,State:2,Class:16
    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+<<<<<<< HEAD
+2026-01-19 00:23:35.272 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR6V:00000001
+Method   : POST
+Path     : /api/casedata/submit
+Status   : 500
+Duration : 11316 ms
+IP       : ::1
+
+Request:
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------572651601116020711120380
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------572651601116020711120380--
+
+=======
 2026-01-19 11:21:48.593 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIN48CBRG17:00000001
 Method   : POST
@@ -142,10 +507,147 @@ Request:
   "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
   "orderStatus": "Confirmed"
 }
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
+2026-01-19 00:25:59.451 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:fb59a427-4aec-4751-895c-a26035e5c0a4
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-19 00:25:59.839 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR71:00000001
+Method   : POST
+Path     : /api/casedata/submit
+Status   : 500
+Duration : 58296 ms
+IP       : ::1
+
+Request:
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------067283857338766433201056
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------067283857338766433201056--
+
+=======
 2026-01-19 11:22:05.990 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIN48CBRG18:00000001
 Method   : GET
@@ -278,13 +780,103 @@ Request:
   "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
   "orderStatus": "Confirmed"
 }
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
+2026-01-19 00:26:08.276 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOR1ASR73:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 500
+Duration : 353 ms
+IP       : ::1
+
+Request:
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------785313579032675884520366
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------785313579032675884520366--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"No service for type 'MediatR.IRequestHandler`2[DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.SubmitCase_V1.SubmitCase_V1Command,DHAFacilitationAPIs.Application.Common.Models.ApiResult`1[DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.SubmitCaseResponse]]' has been registered."}
+==============================================
+2026-01-19 00:28:24.418 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
 2026-01-19 11:25:25.644 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -295,8 +887,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
+ClientConnectionId:3f108212-424a-436d-aba8-5acf939d0d33
+Error Number:547,State:0,Class:16
+=======
 ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
 Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -311,7 +908,11 @@ Error Number:515,State:2,Class:16
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+<<<<<<< HEAD
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+=======
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert the value NULL into column 'FullName', table 'LMS.dbo.DeliveryDetails'; column does not allow nulls. INSERT fails.
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -322,8 +923,13 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
    at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+<<<<<<< HEAD
+ClientConnectionId:3f108212-424a-436d-aba8-5acf939d0d33
+Error Number:547,State:0,Class:16
+=======
 ClientConnectionId:ba10ac9a-c12f-48be-a8ba-45c60cc3d843
 Error Number:515,State:2,Class:16
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
    --- End of inner exception stack trace ---
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
@@ -337,6 +943,87 @@ Error Number:515,State:2,Class:16
    at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+<<<<<<< HEAD
+2026-01-19 00:28:25.009 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMOU9IS41K:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 500
+Duration : 61102 ms
+IP       : ::1
+
+Request:
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------189984334675363049671806
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------189984334675363049671806--
+
+=======
 2026-01-19 11:25:25.885 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNIN48CBRG18:00000009
 Method   : POST
@@ -372,10 +1059,216 @@ Request:
   "shopId": "977C3244-48C3-4367-A57B-0558FE6D50E8",
   "orderStatus": "Confirmed"
 }
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 
 Response:
 {"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
 ==============================================
+<<<<<<< HEAD
+2026-01-19 00:34:38.014 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:4f835cec-da03-4512-8d7e-2689d4f069f2
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:4f835cec-da03-4512-8d7e-2689d4f069f2
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-19 00:46:13.723 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:4f835cec-da03-4512-8d7e-2689d4f069f2
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_PropertyCases_ServiceProcesses_ProcessId". The conflict occurred in database "PMS", table "dbo.ServiceProcesses", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:4f835cec-da03-4512-8d7e-2689d4f069f2
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-19 00:46:14.291 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMP14QNQE5:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 500
+Duration : 785029 ms
+IP       : ::1
+
+Request:
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="userPropertyId"
+
+7931BDFE-489C-4716-9E8E-D39DDF0D4EA7
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="processId"
+
+0FF3CA4D-F8ED-4697-977D-869EDC5C6C68
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[ {
+  "prerequisiteDefinitionId" : "07673711-90af-4f45-9250-0c1011c29fe2",
+  "value" : "OFF_GRID"
+}, {
+  "prerequisiteDefinitionId" : "809dff46-7bfb-42d9-b44b-e63a65e68e8c",
+  "value" : "LONGI,JA"
+}, {
+  "prerequisiteDefinitionId" : "21136674-fdb2-445e-a90f-ba1694190b69",
+  "value" : ""
+}, {
+  "prerequisiteDefinitionId" : "e9ff261f-f5f5-48a5-be1c-fc1025fb0f04",
+  "value" : "sassafras"
+}, {
+  "prerequisiteDefinitionId" : "c2b34bd4-43d8-4cc0-a641-01ee743cedf4",
+  "value" : "sdafcDfdfdsfa"
+}, {
+  "prerequisiteDefinitionId" : "20645087-9ed5-4859-9536-63061b0eb34d",
+  "value" : "dfsadasdass"
+}, {
+  "prerequisiteDefinitionId" : "c3b6888e-e55f-4a3a-b236-3cf0ac869e2e",
+  "value" : "dsadasdas"
+}, {
+  "prerequisiteDefinitionId" : "5c31ba2e-4566-4f3b-a218-2d7733a4b68d",
+  "value" : "dasdasdasdsa"
+}, {
+  "prerequisiteDefinitionId" : "f5c0eae7-d366-4a57-93fc-e5a79de08a3a",
+  "value" : "sassafrassadsas"
+}, {
+  "prerequisiteDefinitionId" : "afbcad6b-60e4-4759-8571-9806167c84d0",
+  "value" : "asdasdsadas"
+}, {
+  "prerequisiteDefinitionId" : "fb67cbe3-17dc-446a-9c08-29cd703d2442",
+  "value" : "dsadasdsadds"
+}, {
+  "prerequisiteDefinitionId" : "b4bc1a89-2860-4e56-9da3-ddb86b013ced",
+  "value" : "C Lease"
+} ]
+----------------------------683633067574642214572520
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------683633067574642214572520--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
+==============================================
+2026-01-19 01:19:00.921 +05:00 [INF] [CQRS]
+TraceId  : 0HNIMPR1LIRB2:0000000B
+Request  : AppUserLoginCommand
+Duration : 429 ms
+2026-01-19 01:19:00.982 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMPR1LIRB2:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 769 ms
+=======
 2026-01-19 11:28:58.947 +05:00 [INF] [CQRS]
 TraceId  : 0HNIN4FT18J7G:00000001
 Request  : AppUserLoginCommand
@@ -387,6 +1280,7 @@ Method   : POST
 Path     : /api/auth/login
 Status   : 200
 Duration : 933 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
@@ -396,6 +1290,53 @@ Request:
 }
 
 Response:
+<<<<<<< HEAD
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 01:19:30.302 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMPR1LIRB2:0000000F
+Method   : GET
+Path     : /api/casedata/hitory
+Status   : 401
+Duration : 12 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-19 01:19:41.217 +05:00 [INF] [CQRS]
+TraceId  : 0HNIMPR1LIRB2:00000011
+Request  : GetMyCasesQuery
+Duration : 640 ms
+2026-01-19 01:19:41.250 +05:00 [WRN] CMS Long Running Request: GetMyCasesQuery (641 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"$type":"GetMyCasesQuery"}
+2026-01-19 01:19:41.282 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMPR1LIRB2:00000011
+Method   : GET
+Path     : /api/casedata/hitory
+Status   : 200
+Duration : 775 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"caseId":"ae385ba8-b62d-47b6-b9c8-59d3cff2471c","caseNo":"PMS-20260118201738135","status":"Submitted","processName":"Solar Panel for Under Construction Buildings","categoryName":"Permissions / Approvals","currentStepName":"Initial Review","currentDirectorate":"Central Control Cell","createdAt":"2026-01-19T01:17:38.2394264"},{"caseId":"728bb228-f28d-4c62-985b-7e0c6312c008","caseNo":"PMS-20260118200344015","status":"Submitted","processName":"Solar Panel for Under Construction Buildings","categoryName":"Permissions / Approvals","currentStepName":"Initial Review","currentDirectorate":"Central Control Cell","createdAt":"2026-01-19T01:03:44.1126209"},{"caseId":"16dc28fa-e29a-45ad-be35-82e666f7c29b","caseNo":"PMS-20260116101231686","status":"Submitted","processName":"Solar Panel for Under Construction Buildings","categoryName":"Permissions / Approvals","currentStepName":"Initial Review","currentDirectorate":"Central Control Cell","createdAt":"2026-01-16T15:12:31.7773859"}]}
+==============================================
+2026-01-19 01:20:06.241 +05:00 [INF] [CQRS]
+TraceId  : 0HNIMPR1LIRB2:00000013
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 208 ms
+2026-01-19 01:20:06.256 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIMPR1LIRB2:00000013
+Method   : GET
+Path     : /api/casedata/ae385ba8-b62d-47b6-b9c8-59d3cff2471c/workflow
+Status   : 200
+Duration : 246 ms
+=======
 {"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
 ==============================================
 2026-01-19 11:29:42.654 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.LaundrySystemDbContext'.
@@ -576,12 +1517,16 @@ Method   : GET
 Path     : /api/laundry/get-orderlist
 Status   : 200
 Duration : 1704 ms
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"success":true,"message":null,"data":[{"stepNo":1,"stepName":"Initial Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-19T01:17:38.6768554","remarks":"Submitted via generic form"},{"stepNo":2,"stepName":"Final Review and Decision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null},{"stepNo":3,"stepName":"Financial Settelments","directorateName":"Finance","status":"NotStarted","actionDate":null,"remarks":null}]}
+=======
 [{"orderUniqueId":"Order-20260119-000002","orderType":"SnowWhiteEcono","id":"d207381b-63b3-44c0-a5b3-5201348e220b","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:34:14.7756038","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000001","orderType":"SnowWhiteEcono","id":"6074e967-8e04-4b19-9d97-55192b85e078","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:29:39.7430687","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null},{"orderUniqueId":"Order-20260119-000003","orderType":"SnowWhiteEcono","id":"8885d11e-d936-485d-b7a0-92fc330e414f","serviceId":"00000000-0000-0000-0000-000000000000","laundryService":null,"serviceName":null,"packageName":null,"totalPrice":"1080.00","itemCount":"19","packageId":"00000000-0000-0000-0000-000000000000","laundryPackaging":null,"orderSummariesId":null,"orderSummaries":null,"orderDTiD":null,"paymentDTSettings":null,"orderConfirmId":"00000000-0000-0000-0000-000000000000","confirmedOrder":null,"deliveryDetailId":"00000000-0000-0000-0000-000000000000","deliveryDetails":null,"orderDate":"2026-01-19T11:36:10.0757241","paymentMethod":"Cash","orderStatus":"Confirmed","shopName":null}]
 ==============================================
 2026-01-19 11:38:49.598 +05:00 [INF] [CQRS]
@@ -843,4 +1788,5 @@ Request:
 
 Response:
 {"status":200,"title":"Created","detail":"Record created successfully.","data":"aaa25133-68f9-4a31-b2dc-c558e70e3ec7"}
+>>>>>>> c9fe73e5556ebf264b940a07e52081482d6c86f4
 ==============================================
