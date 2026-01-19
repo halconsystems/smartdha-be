@@ -38,7 +38,7 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
 
         var OrderspaymentsDT = await _context.PaymentDTSettings.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync(ct);
 
-        var DeliveryDetails = await _context.DeliveryDetails.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().FirstOrDefaultAsync(ct);
+        var DeliveryDetails = await _context.DeliveryDetails.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync(ct);
 
         if(DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");
@@ -53,9 +53,9 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             ServiceName = x.LaundryService?.DisplayName,
             PackageName = x.LaundryPackaging?.DisplayName,
             OrderDate = x.Created,
-            TotalPrice = DeliveryDetails?.Total.ToString(),
+            TotalPrice = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.Total.ToString(),
             ItemCount = ordersumarries.Sum(x => Convert.ToDecimal(x.ItemCount)).ToString(),
-            PaymentMethod = DeliveryDetails?.PaymentMethod,
+            PaymentMethod = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.PaymentMethod,
             OrderStatus = x.OrderStatus,
             ShopName = x.Shops?.DisplayName,
             OrderType = x.OrderType,

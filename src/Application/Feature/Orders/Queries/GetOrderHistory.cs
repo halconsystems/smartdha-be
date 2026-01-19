@@ -53,7 +53,7 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
 
         var DeliveryDetails = await _context.DeliveryDetails.Where(x => x.OrderId == orders.Id).AsNoTracking().FirstOrDefaultAsync();
         
-        var OrderDispatch = await _context.OrderDispatches.Where(x => x.OrderId == orders.Id).AsNoTracking().FirstOrDefaultAsync();
+        var OrderDispatch = await _context.OrderDispatches.Where(x => x.OrdersId == orders.Id).AsNoTracking().FirstOrDefaultAsync();
 
         if (DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");

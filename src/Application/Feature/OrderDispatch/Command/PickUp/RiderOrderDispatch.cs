@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
@@ -56,6 +57,7 @@ public class ReachedPickupOrderDispatchHandler
         Domain.Entities.LMS.OrderDispatch? dispatch = null;
         // Get logged-in driver
         var userId = _currentUser.UserId.ToString();
+        var UserID = _currentUser.UserId;
         if (userId == null)
             throw new UnauthorizedAccessException("Driver not authenticated.");
 
@@ -63,8 +65,13 @@ public class ReachedPickupOrderDispatchHandler
         if (driver == null)
             throw new UnauthorizedAccessException("Driver not found.");
 
+        var vehicleDetails = _laundry.ShopVehicles.Where(x => x.DriverUserId == UserID).FirstOrDefault();
+        if (vehicleDetails == null)
+            throw new UnauthorizedAccessException("Vehicle not found.");
+
+
         // Fetch dispatch
-        if(request.PickUp == true)
+        if (request.PickUp == true)
         {
             dispatch = await _laundry.OrderDispatches
             .Include(d => d.Orders)
@@ -75,7 +82,7 @@ public class ReachedPickupOrderDispatchHandler
         else
         {
             dispatch = await _laundry.OrderDispatches
-            .Include(d => d.Orders)
+            .Include(d => d.Orders!)
             .Include(d => d.DeliverShopVehicles)
             .FirstOrDefaultAsync(d => d.Id == request.DispatchId, ct)
             ?? throw new NotFoundException("Dispatch not found");
@@ -86,7 +93,7 @@ public class ReachedPickupOrderDispatchHandler
         }
 
         var getOrder = await _laundry.Orders
-            .FirstOrDefaultAsync(p => p.Id == dispatch.OrderId, ct);
+            .FirstOrDefaultAsync(p => p.Id == dispatch.OrdersId, ct);
         if (getOrder != null)
         {
             //For Pickup
@@ -118,11 +125,13 @@ public class ReachedPickupOrderDispatchHandler
                 if (dispatch.PickupDriverId.ToString() != userId)
                     throw new UnauthorizedAccessException("You are not assigned to this vehicle.");
 
-                // Validate state
-                if (dispatch.Status != OrderDispatchStatus.AssignedToRider)
-                    throw new InvalidOperationException("Dispatch cannot be accepted at this stage.");
 
-                var location = await _fileService.GetLocationAsync(dispatch.PickupVehicleId);
+                VehicleLocationDto? location = null;
+                if (dispatch.PickupVehicleId.HasValue)
+                {
+                    location = await _fileService.GetLocationAsync(dispatch.PickupVehicleId.Value);
+                }
+
 
                 if (location != null)
                 {
@@ -146,28 +155,28 @@ public class ReachedPickupOrderDispatchHandler
                     dispatch.Status = OrderDispatchStatus.RiderOnTheWay;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
-                if (request.ReachedToPickup)
+                else if (request.ReachedToPickup)
                 {
                     dispatch.Status = OrderDispatchStatus.RiderArrivedToAddress;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else if (request.PickUpParcel)
                 {
                     dispatch.Status = OrderDispatchStatus.ParcelPickedParcelFromAddress;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
-                else
+                else if(request.Delivered)
                 {
                     dispatch.Status = OrderDispatchStatus.DeliveredToShop;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Available;
+                    vehicleDetails.Status = ShopVehicleStatus.Available;
                 }
             }
             else
@@ -187,7 +196,7 @@ public class ReachedPickupOrderDispatchHandler
                     getOrder.ParcelPickedParcelFromShopAt = DateTime.Now;
                     getOrder.OrderStatus = OrderStatus.InProgress;
                 }
-                else
+                else if(request.Delivered)
                 {
                     getOrder.ParcelDeliveredParcelAddressAt = DateTime.Now;
                     getOrder.OrderStatus = OrderStatus.Resolved;
@@ -201,7 +210,13 @@ public class ReachedPickupOrderDispatchHandler
                 if (dispatch.Status != OrderDispatchStatus.AssignedToRider)
                     throw new InvalidOperationException("Dispatch cannot be accepted at this stage.");
 
-                var location = await _fileService.GetLocationAsync(dispatch.DeliverVehicleId);
+                VehicleLocationDto? location = null;
+                if (dispatch.DeliverVehicleId.HasValue)
+                {
+                    location = await _fileService.GetLocationAsync(dispatch.DeliverVehicleId.Value);
+                }
+
+
 
                 if (location != null)
                 {
@@ -225,67 +240,39 @@ public class ReachedPickupOrderDispatchHandler
                     dispatch.Status = OrderDispatchStatus.RiderOnTheWay;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.DeliverShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 if (request.ReachedToDelivered)
                 {
                     dispatch.Status = OrderDispatchStatus.RiderArrivedToPickDeliveryFromShop;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else if (request.PickUpParcel)
                 {
                     dispatch.Status = OrderDispatchStatus.RiderWayFromShopToHome;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Busy;
+                    vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else
                 {
                     dispatch.Status = OrderDispatchStatus.ParcelDelivered;
 
                     // Optional: update vehicle status (if required)
-                    dispatch.PickupShopVehicles.Status = ShopVehicleStatus.Available;
+                    vehicleDetails.Status = ShopVehicleStatus.Available;
                 }
             }
         }
         
 
-        await _context.SaveChangesAsync(ct);
-
-        // Prepare realtime DTO
-        var updateDto = new OrderUpdateRealTimeDTO
-        {
-            OrderId = dispatch.OrderId,
-            DispatchId = dispatch.Id,
-            PanicStatus = dispatch.Orders.OrderStatus,
-            AssignedAt = dispatch.PickUpAssignedAt == DateTime.MinValue ? dispatch.DeliveredAssignedAt : dispatch.PickUpAssignedAt,
-            AcceptedAt = dispatch.Orders.AcceptPickupAt == DateTime.MinValue ? dispatch.Orders.AcceptDeliveredAt : dispatch.Orders.AcceptPickupAt,
-
-            // Vehicle Info
-            VehicleId = dispatch.PickupVehicleId.ToString() == null ? dispatch.DeliverVehicleId : dispatch.PickupVehicleId,
-            VehicleName = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.Name : dispatch.PickupShopVehicles.Name,
-            RegistrationNo = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.RegistrationNo : dispatch.PickupShopVehicles.RegistrationNo,
-            VehicleType = dispatch.PickupShopVehicles == null ?  dispatch.DeliverShopVehicles.VehicleType.ToString() : dispatch.PickupShopVehicles.VehicleType.ToString(),
-            VehicleStatus = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.Status.ToString() : dispatch.PickupShopVehicles.Status.ToString(),
-            MapIconKey = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.MapIconKey : dispatch.PickupShopVehicles.MapIconKey,
-            LastLatitude = dispatch.PickupShopVehicles  == null ? dispatch.DeliverShopVehicles.LastLatitude : dispatch.PickupShopVehicles.LastLatitude,
-            LastLongitude = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.LastLongitude : dispatch.PickupShopVehicles.LastLongitude,
-            LastLocationAt = dispatch.PickupShopVehicles == null ? dispatch.DeliverShopVehicles.LastLocationAt : dispatch.PickupShopVehicles.LastLocationAt,
-
-            // Driver Info
-            RequestedByName = driver.Name,
-            RequestedByEmail = driver.Email ?? "",
-            RequestedByPhone = driver.PhoneNumber ?? ""
-        };
-
-        // Notify control room & dashboards
-        await _realtime.SendOrderUpdatedAsync(updateDto, ct);
+        await _laundry.SaveChangesAsync(ct);
 
 
 
-        return "Assignment successful. Vehicle en route.";
+
+        return dispatch.Id.ToString();
     }
 
     public static class GeoDistanceHelper

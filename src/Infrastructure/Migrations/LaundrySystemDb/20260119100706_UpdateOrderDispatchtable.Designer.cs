@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.LaundrySystemDb
 {
     [DbContext(typeof(LaundrySystemDbContext))]
-    partial class LaundrySystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260119100706_UpdateOrderDispatchtable")]
+    partial class UpdateOrderDispatchtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,10 +252,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.LaundrySystemDb
                     b.Property<Guid?>("DeliverDriverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DeliverShopVehiclesId")
+                    b.Property<Guid>("DeliverShopVehiclesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("DeliverVehicleId")
+                    b.Property<Guid>("DeliverVehiclesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DeliveredAssignedAt")
@@ -297,10 +300,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.LaundrySystemDb
                     b.Property<Guid?>("PickupDriverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PickupShopVehiclesId")
+                    b.Property<Guid>("PickupShopVehiclesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PickupVehicleId")
+                    b.Property<Guid>("PickupVehiclesId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Ser")
@@ -1830,7 +1833,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.LaundrySystemDb
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", "DeliverShopVehicles")
                         .WithMany()
-                        .HasForeignKey("DeliverShopVehiclesId");
+                        .HasForeignKey("DeliverShopVehiclesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", "Orders")
                         .WithMany()
@@ -1840,7 +1845,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.LaundrySystemDb
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", "PickupShopVehicles")
                         .WithMany()
-                        .HasForeignKey("PickupShopVehiclesId");
+                        .HasForeignKey("PickupShopVehiclesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DeliverShopVehicles");
 

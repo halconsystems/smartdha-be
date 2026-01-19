@@ -25,29 +25,14 @@ public record AssignOrderDispatchCommand(
 public class AssignOrderDispatchCommandHandler
     : IRequestHandler<AssignOrderDispatchCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
-    private readonly IOrderRealTime _realtime;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly INotificationService _notificationService;
-    private readonly IVehicleLocationStore _vehicleLocationStore;
     private readonly ILaundrySystemDbContext _laundrySystemDb;
 
     public AssignOrderDispatchCommandHandler(
-        IApplicationDbContext context,
         ICurrentUserService currentUser,
-        IOrderRealTime realtime,
-        UserManager<ApplicationUser> userManager,
-        INotificationService notificationService,
-        IVehicleLocationStore vehicleLocationStore,
         ILaundrySystemDbContext laundrySystemDb)
     {
-        _context = context;
         _currentUser = currentUser;
-        _realtime = realtime;
-        _userManager = userManager;
-        _notificationService = notificationService;
-        _vehicleLocationStore = vehicleLocationStore;
         _laundrySystemDb = laundrySystemDb;
     }
 
@@ -58,7 +43,7 @@ public class AssignOrderDispatchCommandHandler
         if (request.Pickup == true)
         {
              existingDispatch = await _laundrySystemDb.OrderDispatches
-                .Where(x => x.OrderId == request.OrderId &&
+                .Where(x => x.OrdersId == request.OrderId &&
                 x.PickupVehicleId == request.VehicleId &&
                 x.Status != OrderDispatchStatus.Completed && x.Status != OrderDispatchStatus.Cancelled)
                 .OrderByDescending(x => x.PickUpAssignedAt)
@@ -67,7 +52,7 @@ public class AssignOrderDispatchCommandHandler
         else
         {
              existingDispatch = await _laundrySystemDb.OrderDispatches
-                .Where(x => x.OrderId == request.OrderId &&
+                .Where(x => x.OrdersId == request.OrderId &&
                 x.DeliverVehicleId == request.VehicleId &&
                 x.Status != OrderDispatchStatus.Completed && x.Status != OrderDispatchStatus.Cancelled)
                 .OrderByDescending(x => x.DeliveredAssignedAt)
@@ -80,13 +65,10 @@ public class AssignOrderDispatchCommandHandler
             return existingDispatch.Id;
         }
 
-
-        await using var transaction = await _laundrySystemDb.Database.BeginTransactionAsync(ct);
         try
         {
             // Get Panic
             var order = await _laundrySystemDb.Orders
-                .Include(x => x.OrderType)
                 .FirstOrDefaultAsync(p => p.Id == request.OrderId, ct)
                 ?? throw new NotFoundException(nameof(Domain.Entities.LMS.Orders), request.OrderId.ToString());
 
@@ -108,13 +90,13 @@ public class AssignOrderDispatchCommandHandler
                 // Create Dispatch record
                 dispatch = new Domain.Entities.LMS.OrderDispatch
                 {
-                    OrderId = order.Id,
+                    OrdersId = order.Id,
                     PickupVehicleId = vehicle.Id,
                     Status = OrderDispatchStatus.AssignedToRider,
                     PickUpAssignedAt = DateTime.Now,
                     PickupAssignedByUserId = _currentUser.UserId,
                     OrderRemarks = request.OrderRemarks,
-                    PickupDriverId = vehicle.DriverUserId
+                    PickupDriverId = vehicle.DriverUserId,
                 };
 
                 _laundrySystemDb.OrderDispatches.Add(dispatch);
@@ -127,7 +109,7 @@ public class AssignOrderDispatchCommandHandler
                 // Fetch dispatch
                 dispatch = await _laundrySystemDb.OrderDispatches
                     .Include(d => d.Orders)
-                    .FirstOrDefaultAsync(d => d.OrderId == request.OrderId, ct)
+                    .FirstOrDefaultAsync(d => d.OrdersId == request.OrderId, ct)
                     ?? throw new NotFoundException("Dispatch not found", request.OrderId.ToString());
 
                 order.DeliveredToRiderAt = DateTime.Now;
@@ -143,13 +125,12 @@ public class AssignOrderDispatchCommandHandler
             // Mark vehicle busy
             vehicle.Status = ShopVehicleStatus.Busy;
 
-            await _context.SaveChangesAsync(ct);
+            await _laundrySystemDb.SaveChangesAsync(ct);
             return dispatch.Id;
 
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync(ct);
             throw new InvalidOperationException(e.ToString());
         }
 
