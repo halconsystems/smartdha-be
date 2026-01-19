@@ -86,20 +86,20 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PMSApplicationDbContext).Assembly);
 
         // Global filter: exclude soft deleted records
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
-            {
-                modelBuilder.Entity(entityType.ClrType)
-                    .Property<int>("Ser")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnOrder(1);
+        //foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        //{
+        //    if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+        //    {
+        //        modelBuilder.Entity(entityType.ClrType)
+        //            .Property<int>("Ser")
+        //            .ValueGeneratedOnAdd()
+        //            .HasColumnOrder(1);
 
-                modelBuilder.Entity(entityType.ClrType)
-                    .Property<Guid>("Id")
-                    .HasColumnOrder(2);
-            }
-        }
+        //        modelBuilder.Entity(entityType.ClrType)
+        //            .Property<Guid>("Id")
+        //            .HasColumnOrder(2);
+        //    }
+        //}
 
 
         // Directorate unique code
@@ -147,8 +147,6 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
         modelBuilder.Entity<CaseFee>()
             .HasIndex(x => x.CaseId)
             .IsUnique(); // one fee snapshot per case
-
-        base.OnModelCreating(modelBuilder);
 
         base.OnModelCreating(modelBuilder);
     }

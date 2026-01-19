@@ -72,7 +72,7 @@ public class GetProcessPrerequisitesHandler
 
         // 1️⃣ Validate process
         var process = await _db.Set<ServiceProcess>()
-    .Where(x => x.Id == request.ProcessId)
+    .Where(x => x.Id == request.ProcessId && x.IsActive==true && x.IsDeleted==false)
     .Select(x => new
     {
         x.IsFeeRequired,
@@ -91,7 +91,7 @@ public class GetProcessPrerequisitesHandler
         // 2️⃣ Load USER PROPERTIES
         var properties = await _db.Set<UserProperty>()
             .AsNoTracking()
-            .Where(x => x.CreatedBy == _currentUser.Id)
+            .Where(x => x.CreatedBy == _currentUser.Id && x.IsActive==true && x.IsDeleted==false)
             .Select(x => new UserPropertyDto(
                 x.Id,
                 x.PropertyNo,
@@ -103,7 +103,7 @@ public class GetProcessPrerequisitesHandler
         // 3️⃣ Load prerequisites
         var prerequisites = await _db.Set<ProcessPrerequisite>()
     .AsNoTracking()
-    .Where(x => x.ProcessId == request.ProcessId)
+    .Where(x => x.ProcessId == request.ProcessId && x.IsActive == true && x.IsDeleted == false)
     .OrderBy(x => x.RequiredByStepNo)
     .Select(x => new ProcessPrerequisiteDto(
         x.PrerequisiteDefinitionId,
@@ -123,7 +123,7 @@ public class GetProcessPrerequisitesHandler
         x.PrerequisiteDefinition.Type == PrerequisiteType.RadioGroup
             ? _db.Set<PrerequisiteOption>()
                 .Where(o =>
-                    o.PrerequisiteDefinitionId == x.PrerequisiteDefinitionId &&
+                    o.PrerequisiteDefinitionId == x.PrerequisiteDefinitionId && x.IsActive==true &&
                     o.IsDeleted == false)
                 .OrderBy(o => o.SortOrder)
                 .Select(o => new PrerequisiteOptionDto(

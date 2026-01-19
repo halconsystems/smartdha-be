@@ -3,6 +3,8 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Comm
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.CreateFeeDefinition;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.CreateFeeDefinitionWithOptions;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.GenerateVoucherByCase;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.SoftDeleteFeeDefinition;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.UpdateFeeDefinitionWithOptions;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeByProcess;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinition;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinitionByProcessId;
@@ -29,6 +31,21 @@ public class PMSFeeManagementController : BaseApiController
         CreateFeeDefinitionWithOptionsCommand cmd,
         CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPut("update")]
+    public async Task<IActionResult> Update(
+        UpdateFeeDefinitionWithOptionsCommand cmd,
+        CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpDelete("{feeDefinitionId:guid}")]
+    public async Task<IActionResult> Delete(
+    Guid feeDefinitionId,
+    CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new SoftDeleteFeeDefinitionCommand(feeDefinitionId), ct));
+    }
 
     [HttpGet("by-process/{processId:guid}")]
     public async Task<IActionResult> GetByProcess(
