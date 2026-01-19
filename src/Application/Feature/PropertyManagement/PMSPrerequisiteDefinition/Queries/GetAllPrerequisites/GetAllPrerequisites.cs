@@ -9,6 +9,7 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetAllPrerequisites;
+
 public record PrerequisiteDefinitionDto
 (
     Guid Id,
@@ -17,7 +18,8 @@ public record PrerequisiteDefinitionDto
     PrerequisiteType Type,
     int? MinLength,
     int? MaxLength,
-    string? AllowedExtensions
+    string? AllowedExtensions,
+    List<PrerequisiteOptionDto> Options
 );
 public record GetAllPrerequisitesQuery()
     : IRequest<ApiResult<List<PrerequisiteDefinitionDto>>>;
@@ -46,7 +48,24 @@ public class GetAllPrerequisitesHandler
                 x.Type,
                 x.MinLength,
                 x.MaxLength,
-                x.AllowedExtensions
+                x.AllowedExtensions,
+
+                // ✅ Load options only if applicable
+                x.Type == PrerequisiteType.Dropdown ||
+                x.Type == PrerequisiteType.MultiSelect ||
+                x.Type == PrerequisiteType.CheckboxGroup ||
+                x.Type == PrerequisiteType.RadioGroup
+                    ? _db.Set<PrerequisiteOption>()
+                        .Where(o => o.PrerequisiteDefinitionId == x.Id && o.IsDeleted == false)
+                        .OrderBy(o => o.SortOrder)
+                        .Select(o => new PrerequisiteOptionDto(
+                            o.Id,
+                            o.Label,
+                            o.Value,
+                            o.SortOrder
+                        ))
+                        .ToList()
+                    : new List<PrerequisiteOptionDto>()
             ))
             .ToListAsync(ct);
 

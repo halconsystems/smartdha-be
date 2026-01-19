@@ -8,6 +8,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
+using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessAllPrerequisite;
 
@@ -83,7 +84,22 @@ public class GetProcessAllPrerequisitesHandler
                 x.RequiredByStepNo,
                 x.PrerequisiteDefinition.MinLength,
                 x.PrerequisiteDefinition.MaxLength,
-                x.PrerequisiteDefinition.AllowedExtensions
+                x.PrerequisiteDefinition.AllowedExtensions,
+                x.PrerequisiteDefinition.Type == PrerequisiteType.Dropdown ||
+                x.PrerequisiteDefinition.Type == PrerequisiteType.MultiSelect ||
+                x.PrerequisiteDefinition.Type == PrerequisiteType.CheckboxGroup ||
+                x.PrerequisiteDefinition.Type == PrerequisiteType.RadioGroup
+                    ? _db.Set<PrerequisiteOption>()
+                        .Where(o => o.PrerequisiteDefinitionId == x.Id && o.IsDeleted == false)
+                        .OrderBy(o => o.SortOrder)
+                        .Select(o => new PrerequisiteOptionDto(
+                            o.Id,
+                            o.Label,
+                            o.Value,
+                            o.SortOrder
+                        ))
+                        .ToList()
+                    : new List<PrerequisiteOptionDto>()
             ))
             .ToListAsync(ct);
 

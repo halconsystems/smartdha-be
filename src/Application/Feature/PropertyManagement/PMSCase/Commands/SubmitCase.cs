@@ -11,37 +11,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands;
 
-public class SubmitCaseRequest
-{
-    // Case
-    public Guid UserPropertyId { get; set; }
-    public Guid ProcessId { get; set; }
-
-    public string? ApplicantName { get; set; }
-    public string? ApplicantCnic { get; set; }
-    public string? ApplicantMobile { get; set; }
-    public string? ApplicantRemarks { get; set; }
-
-    // Prerequisite VALUES (JSON string)
-    // Example: [{ "prerequisiteDefinitionId":"...", "valueText":"ABC Solar" }]
-    public string PrerequisiteValuesJson { get; set; } = default!;
-
-    // Documents (key = prerequisiteDefinitionId)
-    public List<IFormFile>? Files { get; set; }
-}
-
-
-public class PrerequisiteValueInput
-{
-    public Guid PrerequisiteDefinitionId { get; set; }
-    public string? ValueText { get; set; }
-    public decimal? ValueNumber { get; set; }
-    public DateTime? ValueDate { get; set; }
-    public bool? ValueBool { get; set; }
-}
-
-
-
 public record SubmitCaseCommand(
     Guid UserPropertyId,
     Guid ProcessId,
@@ -52,9 +21,6 @@ public record SubmitCaseCommand(
     List<PrerequisiteValueInput> PrerequisiteValues,
     List<IFormFile>? Files
 ) : IRequest<ApiResult<SubmitCaseResponse>>;
-
-public record SubmitCaseResponse(Guid CaseId, string CaseNo);
-
 public class SubmitCaseHandler
     : IRequestHandler<SubmitCaseCommand, ApiResult<SubmitCaseResponse>>
 {

@@ -21,22 +21,21 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<ServiceCategory> ServiceCategories => Set<ServiceCategory>();
     public DbSet<ServiceProcess> ServiceProcesses => Set<ServiceProcess>();
     public DbSet<ProcessStep> ProcessSteps => Set<ProcessStep>();
-
     public DbSet<PrerequisiteDefinition> PrerequisiteDefinitions => Set<PrerequisiteDefinition>();
     public DbSet<ProcessPrerequisite> ProcessPrerequisites => Set<ProcessPrerequisite>();
-
     public DbSet<UserProperty> Properties => Set<UserProperty>();
     public DbSet<PropertyCase> PropertyCases => Set<PropertyCase>();
     public DbSet<CaseStepHistory> CaseStepHistories => Set<CaseStepHistory>();
     public DbSet<CasePrerequisiteValue> CasePrerequisiteValues => Set<CasePrerequisiteValue>();
     public DbSet<CaseDocument> CaseDocuments => Set<CaseDocument>();
-
     public DbSet<CaseVoucher> CaseVouchers => Set<CaseVoucher>();
     public DbSet<CasePayment> CasePayments => Set<CasePayment>();
-
     public DbSet<FeeDefinition> FeeDefinitions => Set<FeeDefinition>();
     public DbSet<FeeSlab> FeeSlabs => Set<FeeSlab>();
     public DbSet<CaseFee> CaseFees => Set<CaseFee>();
+    public DbSet<PrerequisiteOption> PrerequisiteOptions => Set<PrerequisiteOption>();
+    public DbSet<FeeOption> FeeOptions => Set<FeeOption>();
+    public DbSet<FeeCategory> FeeCategories => Set<FeeCategory>();
 
     /* =========================
        SaveChanges – Auditing
