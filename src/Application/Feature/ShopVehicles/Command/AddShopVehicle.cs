@@ -27,6 +27,7 @@ public class CreateShopVehicleCommandHandler : IRequestHandler<CreateShopVehicle
         {
             var entity = new Domain.Entities.LMS.ShopVehicles
             {
+                ShopId = command.ShopID,
                 Name = command.Name,
                 RegistrationNo = command.RegistrationNo,
                 VehicleType = command.ShopVehicleType,

@@ -68,7 +68,7 @@ public class AssignDriverToShopCommandHandler
             DriverId = request.UserId
         };
         _laundrySystemDb.ShopDrivers.Add(entity);
-        await _context.SaveChangesAsync(ct);
+        await _laundrySystemDb.SaveChangesAsync(ct);
 
         return Success.Created(entity.Id.ToString());
     }

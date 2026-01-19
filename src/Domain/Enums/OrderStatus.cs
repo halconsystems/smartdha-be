@@ -23,13 +23,13 @@ public enum OrderDispatchStatus
 {
     Confirmed = 1,
     Acknowledged = 2,
-    AssignedToRider = 3,
+    AssignedToRider = 3, //used
     RiderOnTheWay = 4,
     RiderArrivedToAddress = 5,
     ParcelPickedParcelFromAddress = 6,
     RiderWayToTheShop = 7,
     RiderArrivedOnShop = 8,
-    DeliveredToShop = 9,
+    DeliveredToShop = 9, //used
     WashnPressProcess = 10,
     ParcelReady = 11,
     DeliveredToRider = 12,

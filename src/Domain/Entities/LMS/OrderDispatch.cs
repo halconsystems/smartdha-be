@@ -9,13 +9,13 @@ namespace DHAFacilitationAPIs.Domain.Entities.LMS;
 
 public class OrderDispatch :BaseAuditableEntity
 {
-    public Guid OrderId {  get; set; }
+    public Guid OrdersId {  get; set; }
     public Orders Orders { get; set; } = default!;
-    public Guid DeliverVehicleId {  get; set; }
-    public ShopVehicles DeliverShopVehicles { get; set; } = default!;
+    public Guid? DeliverVehicleId {  get; set; }
+    public ShopVehicles? DeliverShopVehicles { get; set; }
 
-    public Guid PickupVehicleId { get; set; }
-    public ShopVehicles PickupShopVehicles { get; set; } = default!;
+    public Guid? PickupVehicleId { get; set; }
+    public ShopVehicles? PickupShopVehicles { get; set; }
     public OrderDispatchStatus Status { get; set; } = OrderDispatchStatus.Confirmed;
 
     public DateTime PickUpAssignedAt { get; set; }

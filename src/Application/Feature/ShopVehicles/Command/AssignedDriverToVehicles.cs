@@ -20,29 +20,16 @@ public record AssignedDriverToVehiclesCommand(
 public class AssignedDriverToVehiclesCommandHandler
     : IRequestHandler<AssignedDriverToVehiclesCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
+   
     private readonly ILaundrySystemDbContext _laundrySystemDb;
     private readonly ICurrentUserService _currentUser;
-    private readonly IPanicRealtime _realtime;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly INotificationService _notificationService;
-    private readonly IVehicleLocationStore _vehicleLocationStore;
 
     public AssignedDriverToVehiclesCommandHandler(
-        IApplicationDbContext context,
         ICurrentUserService currentUser,
-        IPanicRealtime realtime,
-        UserManager<ApplicationUser> userManager,
-        INotificationService notificationService,
-        IVehicleLocationStore vehicleLocationStore,
         ILaundrySystemDbContext laundrySystemDb)
     {
-        _context = context;
+        
         _currentUser = currentUser;
-        _realtime = realtime;
-        _userManager = userManager;
-        _notificationService = notificationService;
-        _vehicleLocationStore = vehicleLocationStore;
         _laundrySystemDb = laundrySystemDb;
     }
 
@@ -64,7 +51,7 @@ public class AssignedDriverToVehiclesCommandHandler
 
         shopVehicles.DriverUserId = UsedId;
         shopVehicles.Status = ShopVehicleStatus.Available;
-        await _context.SaveChangesAsync(ct);
+        await _laundrySystemDb.SaveChangesAsync(ct);
 
         return shopVehicles.Id;
     }
