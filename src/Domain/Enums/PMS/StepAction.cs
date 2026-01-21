@@ -12,6 +12,7 @@ public enum StepAction
     Return = 2,
     Reject = 3,
     Approve = 4,
-    Hold = 5,
-    Resume = 6
+    Complete=5,
+    Hold = 6,
+    Resume = 7
 }

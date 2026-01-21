@@ -83,7 +83,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("CaseDocuments", (string)null);
+                    b.ToTable("CaseDocuments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseFee", b =>
@@ -152,7 +152,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeSlabId");
 
-                    b.ToTable("CaseFees", (string)null);
+                    b.ToTable("CaseFees");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePayment", b =>
@@ -223,7 +223,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("CasePayments", (string)null);
+                    b.ToTable("CasePayments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
@@ -294,7 +294,75 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("CaseId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
-                    b.ToTable("CasePrerequisiteValues", (string)null);
+                    b.ToTable("CasePrerequisiteValues");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseResultDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentType")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFinal")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("CaseResultDocuments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
@@ -316,6 +384,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FromUserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -328,19 +399,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("NextStepId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("NextStepNo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PerformedBy")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<string>("PerformedByUserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
@@ -352,13 +415,16 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<Guid>("StepId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ToUserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CaseId");
 
                     b.HasIndex("StepId");
 
-                    b.ToTable("CaseStepHistories", (string)null);
+                    b.ToTable("CaseStepHistories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseVoucher", b =>
@@ -422,7 +488,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("GeneratedAtStepId");
 
-                    b.ToTable("CaseVouchers", (string)null);
+                    b.ToTable("CaseVouchers");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", b =>
@@ -455,6 +521,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -472,7 +541,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Directorates", (string)null);
+                    b.ToTable("Directorates");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeCategory", b =>
@@ -519,7 +588,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("FeeCategories", (string)null);
+                    b.ToTable("FeeCategories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", b =>
@@ -583,7 +652,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("ProcessId");
 
-                    b.ToTable("FeeDefinitions", (string)null);
+                    b.ToTable("FeeDefinitions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeOption", b =>
@@ -649,7 +718,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeDefinitionId");
 
-                    b.ToTable("FeeOptions", (string)null);
+                    b.ToTable("FeeOptions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeSlab", b =>
@@ -700,7 +769,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeDefinitionId", "FromArea", "ToArea");
 
-                    b.ToTable("FeeSlabs", (string)null);
+                    b.ToTable("FeeSlabs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
@@ -763,7 +832,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("PrerequisiteDefinitions", (string)null);
+                    b.ToTable("PrerequisiteDefinitions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteOption", b =>
@@ -876,7 +945,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("ProcessId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
-                    b.ToTable("ProcessPrerequisites", (string)null);
+                    b.ToTable("ProcessPrerequisites");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", b =>
@@ -941,7 +1010,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("ProcessId", "StepNo")
                         .IsUnique();
 
-                    b.ToTable("ProcessSteps", (string)null);
+                    b.ToTable("ProcessSteps");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", b =>
@@ -978,11 +1047,20 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CurrentAssignedUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CurrentModuleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("CurrentStepId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CurrentStepNo")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
@@ -1019,11 +1097,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("CurrentStepId");
 
+                    b.HasIndex("DirectorateId");
+
                     b.HasIndex("ProcessId");
 
                     b.HasIndex("UserPropertyId");
 
-                    b.ToTable("PropertyCases", (string)null);
+                    b.ToTable("PropertyCases");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceCategory", b =>
@@ -1073,7 +1153,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("ServiceCategories", (string)null);
+                    b.ToTable("ServiceCategories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", b =>
@@ -1147,7 +1227,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("CategoryId", "Code")
                         .IsUnique();
 
-                    b.ToTable("ServiceProcesses", (string)null);
+                    b.ToTable("ServiceProcesses");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.UserProperty", b =>
@@ -1156,6 +1236,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
+
+                    b.Property<string>("Area")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CellNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -1175,18 +1262,33 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MemberNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MemberPk")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OwnerCnic")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Phase")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PlotNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PropertyNo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PropertyPk")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sector")
                         .HasMaxLength(100)
@@ -1201,7 +1303,125 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Properties", (string)null);
+                    b.ToTable("Properties");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Enums.PMS.CaseFeeReceipt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("BankRefNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FeeDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FeeOptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GatewayTransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("NADRA_FEE")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SERVICE_FEE")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<decimal?>("TotalPayable")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CaseFeeReceipts");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Enums.PMS.FeeSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FeeSettings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseDocument", b =>
@@ -1279,6 +1499,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Navigation("Case");
 
                     b.Navigation("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseResultDocument", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
@@ -1412,6 +1643,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasForeignKey("CurrentStepId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", "Directorate")
+                        .WithMany()
+                        .HasForeignKey("DirectorateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", "Process")
                         .WithMany()
                         .HasForeignKey("ProcessId")
@@ -1425,6 +1662,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .IsRequired();
 
                     b.Navigation("CurrentStep");
+
+                    b.Navigation("Directorate");
 
                     b.Navigation("Process");
 

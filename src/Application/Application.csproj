@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Feature\PropertyManagement\PMSCase\Commands\MoveCase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="Dapper" />
@@ -45,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Dto\" />
     <Folder Include="Feature\ApprovalProcess\Commands\" />
     <Folder Include="Feature\BowserCapacityRates\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
@@ -57,6 +60,8 @@
     <Folder Include="Feature\PaymentIpn\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\PropertyManagement\PMSVoucher\Queries\" />
+    <Folder Include="Feature\PropertyManagement\PMSCaseResultDocument\Queries\" />
+    <Folder Include="Feature\PropertyManagement\WorkFlow\Queries\" />
     <Folder Include="Feature\RoomServices\Queries\" />
     <Folder Include="Feature\User\Commands\ForgetPassword\" />
     <Folder Include="Feature\User\Commands\RegisterUser\" />

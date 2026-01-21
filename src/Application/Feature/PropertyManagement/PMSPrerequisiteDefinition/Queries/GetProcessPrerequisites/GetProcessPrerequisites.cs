@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using DHAFacilitationAPIs.Application.Common.Dto;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 
 public record ProcessPrerequisiteDto
 (
+    Guid Id,
+    Guid ProcessId,
     Guid PrerequisiteDefinitionId,
     string Code,
     string Name,
@@ -52,23 +60,78 @@ public class GetProcessPrerequisitesHandler
     : IRequestHandler<GetProcessPrerequisiteQuery, ApiResult<ProcessPrerequisiteResponseDto>>
 {
     private readonly IPMSApplicationDbContext _db;
-    private readonly IUser _currentUser;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IProcedureService _procedureService;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IPropertyProcedureRepository _repo;
+
 
     public GetProcessPrerequisitesHandler(
         IPMSApplicationDbContext db,
-        IUser currentUser)
+        ICurrentUserService currentUserService,
+        IProcedureService procedureService,
+        UserManager<ApplicationUser> userManager,
+    IPropertyProcedureRepository repo
+)
     {
         _db = db;
-        _currentUser = currentUser;
+        _currentUserService = currentUserService;
+        _procedureService = procedureService;
+        _userManager = userManager;
+        _repo = repo;
     }
 
     public async Task<ApiResult<ProcessPrerequisiteResponseDto>> Handle(
         GetProcessPrerequisiteQuery request,
         CancellationToken ct)
     {
-        if (string.IsNullOrEmpty(_currentUser.Id))
-            return ApiResult<ProcessPrerequisiteResponseDto>
-                .Fail("User not authenticated.");
+
+        var userId = _currentUserService.UserId.ToString() ?? throw new UnauthorizedAccessException("Invalid user.");
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new UnAuthorizedException("Invalid CNIC. Please verify and try again.");
+        }
+
+        // 1️⃣ Get properties from Stored Procedure
+        //var spProperties =
+        //    await _repo.GetPropertiesByCnicAsync(user.CNIC, ct);
+
+        //if (!spProperties.Any())
+        //    throw new Exception("No Propertties Found.");
+
+        // 2️⃣ Deactivate existing properties
+        //var existing = await _db.Properties
+        //    .Where(x =>
+        //        x.OwnerCnic == user.CNIC &&
+        //        x.IsActive == true && x.IsDeleted != true)
+        //    .ToListAsync(ct);
+
+        //foreach (var prop in existing)
+        //{
+        //    prop.IsActive = false;
+        //    prop.IsDeleted = true;
+        //}
+
+        // 3️⃣ Insert fresh properties
+        //var newEntities = spProperties.Select(x => new UserProperty
+        //{
+        //    PropertyNo = x.PLOT_NO ?? x.PLTNO!,
+        //    PlotNo = x.PLOT_NO ?? x.PLTNO!,
+        //    Sector = x.STNAME ?? x.SUBDIV,
+        //    Phase = x.PHASE,
+        //    Area = x.ACTUAL_SIZE,
+        //    OwnerCnic = x.NIC,
+        //    PropertyPk = x.PLOTPK,
+        //    MemberPk = x.MEMPK,
+        //    MemberNo = x.MEMNO,
+        //    CellNo = x.CELLNO,
+        //    IsActive = true,
+        //    IsDeleted = false
+        //});
+
+        //await _db.Properties.AddRangeAsync(newEntities, ct);
+        //await _db.SaveChangesAsync(ct);
 
         // 1️⃣ Validate process
         var process = await _db.Set<ServiceProcess>()
@@ -91,7 +154,8 @@ public class GetProcessPrerequisitesHandler
         // 2️⃣ Load USER PROPERTIES
         var properties = await _db.Set<UserProperty>()
             .AsNoTracking()
-            .Where(x => x.CreatedBy == _currentUser.Id && x.IsActive==true && x.IsDeleted==false)
+            .Where(x => x.OwnerCnic == user.CNIC && x.IsActive==true && x.IsDeleted==false)
+            .OrderByDescending(x=> x.Created)
             .Select(x => new UserPropertyDto(
                 x.Id,
                 x.PropertyNo,
@@ -106,6 +170,8 @@ public class GetProcessPrerequisitesHandler
     .Where(x => x.ProcessId == request.ProcessId && x.IsActive == true && x.IsDeleted == false)
     .OrderBy(x => x.RequiredByStepNo)
     .Select(x => new ProcessPrerequisiteDto(
+        x.Id,
+        x.ProcessId,
         x.PrerequisiteDefinitionId,
         x.PrerequisiteDefinition.Code,
         x.PrerequisiteDefinition.Name,

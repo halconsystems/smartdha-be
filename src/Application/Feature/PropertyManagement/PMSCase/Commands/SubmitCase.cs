@@ -26,19 +26,24 @@ public class SubmitCaseHandler
 {
     private readonly IPMSApplicationDbContext _db;
     private readonly IFileStorageService _fileStorage;
+    private readonly ICurrentUserService _currentUserService;
 
     public SubmitCaseHandler(
         IPMSApplicationDbContext db,
-        IFileStorageService fileStorage)
+        IFileStorageService fileStorage,
+        ICurrentUserService currentUserService)
     {
         _db = db;
         _fileStorage = fileStorage;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ApiResult<SubmitCaseResponse>> Handle(
         SubmitCaseCommand r,
         CancellationToken ct)
     {
+        var userId = _currentUserService.UserId.ToString() ?? throw new UnauthorizedAccessException("Invalid user.");
+
         using var trx = await _db.Database.BeginTransactionAsync(ct);
 
         // 1️⃣ Create Case
@@ -145,8 +150,25 @@ public class SubmitCaseHandler
 
 
         // 5️⃣ Move to Step-1
+        //var step1 = await _db.Set<ProcessStep>()
+        //    .FirstAsync(x => x.ProcessId == r.ProcessId && x.StepNo == 1, ct);
+
+        //c.Status = CaseStatus.Submitted;
+        //c.CurrentStepNo = 1;
+        //c.CurrentStepId = step1.Id;
+
+        //_db.Set<CaseStepHistory>().Add(new CaseStepHistory
+        //{
+        //    CaseId = c.Id,
+        //    StepId = step1.Id,
+        //    Action = StepAction.Submit,
+        //    Remarks = "Submitted in single request",
+        //    NextStepId = step1.Id,
+        //    NextStepNo = 1
+        //});
+
         var step1 = await _db.Set<ProcessStep>()
-            .FirstAsync(x => x.ProcessId == r.ProcessId && x.StepNo == 1, ct);
+        .FirstAsync(x => x.ProcessId == r.ProcessId && x.StepNo == 1, ct);
 
         c.Status = CaseStatus.Submitted;
         c.CurrentStepNo = 1;
@@ -155,11 +177,10 @@ public class SubmitCaseHandler
         _db.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
-            StepId = step1.Id,
-            Action = StepAction.Submit,
-            Remarks = "Submitted in single request",
-            NextStepId = step1.Id,
-            NextStepNo = 1
+            StepId = step1.Id,                // external step entered
+            Action = CaseAction.Received,
+            Remarks = "Application received.",
+            PerformedByUserId = userId
         });
 
         await _db.SaveChangesAsync(ct);

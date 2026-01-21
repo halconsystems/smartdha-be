@@ -40,5 +40,9 @@ public class PropertyCase : BaseAuditableEntity
     // Remarks at submission
     [MaxLength(500)]
     public string? ApplicantRemarks { get; set; }
+    public Guid? CurrentModuleId { get; set; }
+    public Guid DirectorateId { get; set; }
+    public Directorate Directorate { get; set; } = default!;
+    public string? CurrentAssignedUserId { get; set; } // internal runtime owner
 }
 

@@ -15,4 +15,5 @@ public class Directorate : BaseAuditableEntity
     // Short code like "CC", "LAND", "TPBC", "FIN"
     [Required, MaxLength(20)]
     public string Code { get; set; } = default!;
-}
+    public Guid ModuleId { get; set; } = default!;
+    }

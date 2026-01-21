@@ -66,10 +66,10 @@ public class GetAllModulesQueryHandler : IRequestHandler<GetAllModulesQuery, Suc
             var moduleOrder = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
             {
                 ["Smart DHA"] = 1,
-                ["Panic"] = 2,
-                ["Property"] = 3,
-                ["My Bills"] = 4,
-                ["Services"] = 5,
+                ["Property"] = 2,
+                ["My Bills"] = 3,
+                ["Services"] = 4,
+                ["Panic"] = 5,
                 ["Complaint"] = 6,
                 ["Ground Booking"] = 7,
                 ["Bowser"] = 8,

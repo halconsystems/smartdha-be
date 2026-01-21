@@ -13,6 +13,7 @@ public interface IFileStorageService
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct);
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
     Task<string> SaveAudioAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
+    Task<string> SavePMSDocumentAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
     Task<List<string>> SaveFilesAsync(IEnumerable<IFormFile> files, string folderName, CancellationToken ct, long maxBytes = 10 * 1024 * 1024, string[]? allowedExtensions = null);
     // Save single complaint image
     Task<string> SaveComplaintFileAsync(

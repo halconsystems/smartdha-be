@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAdminCaseDetail;
 
@@ -37,7 +39,6 @@ public class AdminCaseDocumentDto
 
     public DateTime UploadedAt { get; set; }
 }
-
 public class AdminCaseDetailDto
 {
     public Guid CaseId { get; set; }
@@ -48,11 +49,12 @@ public class AdminCaseDetailDto
 
     public CaseStatus Status { get; set; }
 
+    public AdminCasePropertyDto Property { get; set; } = default!;
+    public AdminCaseOwnerDto Owner { get; set; } = default!;
+
     public List<AdminCasePrerequisiteDto> Prerequisites { get; set; } = new();
     public List<AdminCaseDocumentDto> Documents { get; set; } = new();
 }
-
-
 
 public record GetAdminCaseDetailQuery(Guid CaseId)
     : IRequest<ApiResult<AdminCaseDetailDto>>;
@@ -61,10 +63,14 @@ public class GetAdminCaseDetailHandler
     : IRequestHandler<GetAdminCaseDetailQuery, ApiResult<AdminCaseDetailDto>>
 {
     private readonly IPMSApplicationDbContext _db;
+    private readonly IFileStorageService _fileStorageService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GetAdminCaseDetailHandler(IPMSApplicationDbContext db)
+    public GetAdminCaseDetailHandler(IPMSApplicationDbContext db,IFileStorageService fileStorageService, UserManager<ApplicationUser> userManager)
     {
         _db = db;
+        _fileStorageService = fileStorageService;
+        _userManager=userManager;
     }
 
     public async Task<ApiResult<AdminCaseDetailDto>> Handle(
@@ -73,7 +79,7 @@ public class GetAdminCaseDetailHandler
     {
         var c = await _db.Set<PropertyCase>()
             .AsNoTracking()
-            .Where(x => x.Id == request.CaseId)
+            .Where(x => x.Id == request.CaseId && x.IsDeleted != true)
             .Select(x => new
             {
                 x.Id,
@@ -81,12 +87,41 @@ public class GetAdminCaseDetailHandler
                 x.Status,
                 ProcessName = x.Process.Name,
                 CategoryName = x.Process.Category.Name,
-                x.ProcessId
+                Property = new AdminCasePropertyDto
+                {
+                    PropertyId = x.UserProperty.Id,
+                    PropertyNo = x.UserProperty.PropertyNo,
+                    PlotNo = x.UserProperty.PropertyNo,
+                    Sector = x.UserProperty.Sector,
+                    Area = x.UserProperty.Area
+                },
+                x.ProcessId,
+                x.ApplicantCnic,
             })
             .FirstOrDefaultAsync(ct);
 
         if (c == null)
             return ApiResult<AdminCaseDetailDto>.Fail("Case not found.");
+
+        var owner = await _userManager.Users
+        .AsNoTracking()
+        .FirstOrDefaultAsync(u => u.CNIC == c.ApplicantCnic, ct);
+
+        if (owner == null)
+            return ApiResult<AdminCaseDetailDto>.Fail("Owner not found.");
+
+        if (string.IsNullOrWhiteSpace(owner.RegisteredMobileNo))
+            return ApiResult<AdminCaseDetailDto>.Fail("Owner mobile number missing.");
+
+        var adminCaseOwnerDto = new AdminCaseOwnerDto
+        {
+            UserId = owner.Id,
+            Name = owner.Name,
+            CNIC = owner.CNIC,
+            Email=owner.Email ?? "",
+            MobileNumber = owner.RegisteredMobileNo!
+        };
+
 
         // 1️⃣ Prerequisite definitions + values
         var prereqs = await (
@@ -97,7 +132,7 @@ public class GetAdminCaseDetailHandler
                 .Where(v => v.CaseId == request.CaseId)
                 on pd.Id equals pv.PrerequisiteDefinitionId into pvj
             from pv in pvj.DefaultIfEmpty()
-            where pp.ProcessId == c.ProcessId
+            where pp.ProcessId == c.ProcessId && pp.IsDeleted != true && pd.IsDeleted != true
             orderby pp.RequiredByStepNo
             select new AdminCasePrerequisiteDto
             {
@@ -117,13 +152,13 @@ public class GetAdminCaseDetailHandler
         // 2️⃣ Documents
         var docs = await _db.Set<CaseDocument>()
             .AsNoTracking()
-            .Where(x => x.CaseId == request.CaseId)
+            .Where(x => x.CaseId == request.CaseId && x.IsDeleted != true)
             .Select(x => new AdminCaseDocumentDto
             {
                 DocumentId = x.Id,
                 PrerequisiteDefinitionId = x.PrerequisiteDefinitionId,
                 FileName = x.FileName,
-                FileUrl = x.FileUrl,
+                FileUrl = _fileStorageService.GetPublicUrl(x.FileUrl,""),
                 ContentType = x.ContentType!,
                 FileSize = x.FileSize ?? 0,
                 UploadedAt = x.Created
@@ -137,6 +172,8 @@ public class GetAdminCaseDetailHandler
             ProcessName = c.ProcessName,
             CategoryName = c.CategoryName,
             Status = c.Status,
+            Property = c.Property,
+            Owner = adminCaseOwnerDto,
             Prerequisites = prereqs,
             Documents = docs
         };

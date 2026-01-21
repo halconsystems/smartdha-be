@@ -1,0 +1,201 @@
+2026-01-21 00:06:40.637 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOAS435LGI:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 755 ms
+2026-01-21 00:06:40.744 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (783 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 00:06:40.806 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOAS435LGI:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 1342 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":true,"status":"0","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 00:07:47.678 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOAS435LGK:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 52 ms
+2026-01-21 00:07:47.680 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOAS435LGK:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 61 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 00:27:23.199 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOB7N7V11J:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 824 ms
+2026-01-21 00:27:23.340 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (873 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 00:27:23.410 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOB7N7V11J:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 2109 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 00:43:39.381 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOBGOT0DN5:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 840 ms
+2026-01-21 00:43:39.479 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (872 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 00:43:39.534 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOBGOT0DN5:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 1293 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 01:04:13.193 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (5): Access is denied.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in F:\Dev\DHA Projects\DHA Facilitation APIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:5,State:0,Class:20
+2026-01-21 01:04:29.900 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOBSDP5VSH:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 907 ms
+2026-01-21 01:04:30.028 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (944 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 01:04:30.081 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOBSDP5VSH:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 1424 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 01:04:41.296 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOBSDP5VSH:00000002
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 58 ms
+2026-01-21 01:04:41.299 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOBSDP5VSH:00000002
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 71 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 01:05:56.623 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOBSDP5VSH:00000003
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 19256 ms
+2026-01-21 01:05:56.634 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (19256 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 01:05:56.635 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOBSDP5VSH:00000003
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 19298 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================
+2026-01-21 01:09:38.859 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOBV8FT4CH:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 6784 ms
+2026-01-21 01:09:38.972 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (6817 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"40ff014b-ca4e-4075-8134-cc55471cb391","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 01:09:39.041 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOBV8FT4CH:00000001
+Method   : GET
+Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
+Status   : 200
+Duration : 7254 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[{"documentType":"application/pdf","fileName":"Noc Approved.pdf","downloadUrl":"https://gw.dhakarachi.org/CBMS/pms/cases/40ff014b-ca4e-4075-8134-cc55471cb391/result/375a6a9da05d4432851a3bafe675fcf2.pdf"}]}
+==============================================
+2026-01-21 01:53:28.182 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOCNM130U3:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 1218 ms
+2026-01-21 01:53:28.242 +05:00 [WRN] CMS Long Running Request: GetCaseWorkflowHierarchyQuery (1257 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CaseId":"b37cbfe1-979d-4336-98d9-797e43841d6d","$type":"GetCaseWorkflowHierarchyQuery"}
+2026-01-21 01:53:28.284 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOCNM130U3:00000001
+Method   : GET
+Path     : /api/casedata/B37CBFE1-979D-4336-98D9-797E43841D6D/workflow
+Status   : 200
+Duration : 1637 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-21T01:32:54.5472757","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+==============================================

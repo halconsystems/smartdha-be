@@ -28,7 +28,7 @@ public class DirectoratesController : BaseApiController
         [FromBody] UpdateDirectorateCommandBody body,
         CancellationToken ct)
     {
-        var cmd = new UpdateDirectorateCommand(id, body.Name, body.Code);
+        var cmd = new UpdateDirectorateCommand(id, body.Name, body.Code,body.ModuleId);
         return Ok(await _mediator.Send(cmd, ct));
     }
 
@@ -40,5 +40,6 @@ public class DirectoratesController : BaseApiController
 }
 public record UpdateDirectorateCommandBody(
     string Name,
-    string Code
+    string Code,
+    Guid ModuleId
 );

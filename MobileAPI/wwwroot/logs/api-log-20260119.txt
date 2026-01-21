@@ -3133,3 +3133,130 @@ Request:
 Response:
 9e9f9839-3478-4db7-ba1f-3e50163a42ae
 ==============================================
+2026-01-19 18:20:02.117 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 1926 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-19 18:20:14.225 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:0000000D
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 422 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid CNIC. Please verify and try again."}
+==============================================
+2026-01-19 18:20:46.738 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:0000000F
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 571 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-19 18:21:59.413 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:00000011
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 24572 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-19 18:27:47.725 +05:00 [INF] [CQRS]
+TraceId  : 0HNINBLJIV458:00000013
+Request  : AppUserLoginCommand
+Duration : 2112 ms
+2026-01-19 18:27:47.758 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (2113 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"CNIC":"3220312345678","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-19 18:27:47.773 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:00000013
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 2162 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-19 18:28:28.871 +05:00 [INF] [CQRS]
+TraceId  : 0HNINBLJIV458:00000017
+Request  : GetProcessPrerequisiteQuery
+Duration : 399 ms
+2026-01-19 18:28:28.896 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:00000017
+Method   : GET
+Path     : /api/servicecategories/2A5520EF-C853-4CAC-8656-E3EBD076CE40/prerequisites
+Status   : 200
+Duration : 471 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"properties":[{"propertyId":"7931bdfe-489c-4716-9e8e-d39ddf0d4ea7","propertyNo":"1001","sector":"J","phase":"Phase-8"}],"isNadra":false,"isFeeRequired":true,"isFeeAtSubmission":true,"isVoucherPossible":true,"isfeeSubmit":true,"isInstructionAtStart":false,"instruction":"The same fee structure applies to Category A, Category B, Corporate applicants, and Foreigners.","prerequisites":[{"prerequisiteDefinitionId":"07673711-90af-4f45-9250-0c1011c29fe2","code":"INVERTER_TYPE","name":"Inverter Type","type":"RadioGroup","isRequired":false,"requiredByStepNo":0,"minLength":null,"maxLength":null,"allowedExtensions":null,"options":[{"id":"c7c87a40-1b3e-45d1-a51d-9f6c43998eaf","label":"On-Grid","value":"ON_GRID","sortOrder":1},{"id":"602bc040-b5e0-4621-8d11-8b559c8f8c8d","label":"Off-Grid","value":"OFF_GRID","sortOrder":2},{"id":"6fb0bc46-5257-4548-8448-94156110d621","label":"Hybrid","value":"HYBRID","sortOrder":3}]},{"prerequisiteDefinitionId":"809dff46-7bfb-42d9-b44b-e63a65e68e8c","code":"SOLAR_PANEL_BRAND","name":"Solar Panel Brand","type":"CheckboxGroup","isRequired":false,"requiredByStepNo":0,"minLength":null,"maxLength":null,"allowedExtensions":null,"options":[{"id":"0d0f2275-1f4f-4df6-a078-176b86fc06e1","label":"Longi","value":"LONGI","sortOrder":1},{"id":"f64fd4c0-2f2a-44ad-8011-b2ca5ad02aee","label":"JA Solar","value":"JA","sortOrder":2},{"id":"de06601a-fd9d-4528-b3be-c5ca6cbba8ff","label":"Canadian Solar","value":"CANADIAN","sortOrder":3}]},{"prerequisiteDefinitionId":"21136674-fdb2-445e-a90f-ba1694190b69","code":"SOLAR_SECTION_1","name":"Solar Installation Details","type":"StaticLabel","isRequired":false,"requiredByStepNo":0,"minLength":null,"maxLength":null,"allowedExtensions":null,"options":[]},{"prerequisiteDefinitionId":"e9ff261f-f5f5-48a5-be1c-fc1025fb0f04","code":"OWN_N","name":"Owner Name","type":"Text","isRequired":true,"requiredByStepNo":1,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"c2b34bd4-43d8-4cc0-a641-01ee743cedf4","code":"OWN_CNIC","name":"Owner CNIC","type":"Text","isRequired":true,"requiredByStepNo":2,"minLength":10,"maxLength":15,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"20645087-9ed5-4859-9536-63061b0eb34d","code":"OWN_CELL","name":"Owner Contact","type":"Text","isRequired":true,"requiredByStepNo":3,"minLength":10,"maxLength":15,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"c3b6888e-e55f-4a3a-b236-3cf0ac869e2e","code":"SCON","name":"Solar Company Owner Name","type":"Text","isRequired":true,"requiredByStepNo":4,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"5c31ba2e-4566-4f3b-a218-2d7733a4b68d","code":"SICN","name":"Solar Installation Company Name","type":"Text","isRequired":true,"requiredByStepNo":5,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"f5c0eae7-d366-4a57-93fc-e5a79de08a3a","code":"PEC_N","name":"PEC Licensed Engineer / Consultant","type":"Text","isRequired":true,"requiredByStepNo":6,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"afbcad6b-60e4-4759-8571-9806167c84d0","code":"PEC_L","name":"PEC Licensed Engineer / Consultant License No","type":"Text","isRequired":true,"requiredByStepNo":7,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"fb67cbe3-17dc-446a-9c08-29cd703d2442","code":"SCOC","name":"Solar Company Owner CNIC","type":"Text","isRequired":true,"requiredByStepNo":8,"minLength":1,"maxLength":50,"allowedExtensions":"","options":[]},{"prerequisiteDefinitionId":"b4bc1a89-2860-4e56-9da3-ddb86b013ced","code":"LEASER TYPE","name":"Leaser Type","type":"Dropdown","isRequired":false,"requiredByStepNo":12,"minLength":null,"maxLength":null,"allowedExtensions":null,"options":[{"id":"c6a6d51e-9893-4480-bbfc-4beaa37793d2","label":"A Lease","value":"A Lease","sortOrder":1},{"id":"59591694-3f1c-4827-ab55-de0af599aced","label":"B Lease","value":"B Lease","sortOrder":2},{"id":"b2185e2e-adf5-4898-a7a6-0c16b0307fc8","label":"C Lease","value":"C Lease","sortOrder":3}]}]}
+==============================================
+2026-01-19 18:32:53.651 +05:00 [INF] [CQRS]
+TraceId  : 0HNINBLJIV458:00000019
+Request  : GetFeeDefinitionByProcessIdQuery
+Duration : 2845 ms
+2026-01-19 18:32:53.663 +05:00 [WRN] CMS Long Running Request: GetFeeDefinitionByProcessIdQuery (2846 milliseconds) 6841f8e2-837d-4077-a861-238a8d71130f 3220312345678 {"ProcessId":"2a5520ef-c853-4cac-8656-e3ebd076ce40","$type":"GetFeeDefinitionByProcessIdQuery"}
+2026-01-19 18:32:53.692 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNINBLJIV458:00000019
+Method   : GET
+Path     : /api/casedata/by-process/2A5520EF-C853-4CAC-8656-E3EBD076CE40
+Status   : 200
+Duration : 2896 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"feeDefinitionId":"2da87d5a-df21-4baa-b23c-67ba6f8acd12","feeType":"OptionBasedWithCategory","fixedAmount":null,"areaUnit":null,"allowOverride":false,"effectiveFrom":"2026-01-19T00:00:00","effectiveTo":"2026-02-18T00:00:00","notes":"","categories":[{"id":"840771b4-4abb-4158-8b97-dbd6774c213b","code":"CAT_A&B","name":"Category 'A' & 'B'","options":[{"id":"e77aaeaf-2768-4e1d-a295-60b42278ed7d","code":"ORDINARY","name":"ORDINARY","processingDays":12,"amount":5000.00,"sorOrder":1},{"id":"02a47490-68c5-4f45-8ac5-926e6c1b6a0b","code":"URGENT","name":"URGENT","processingDays":3,"amount":40000.00,"sorOrder":2}]},{"id":"4c41e29f-5e05-46e9-a028-7d2c04771868","code":"CAT_CORP","name":"Corporate","options":[{"id":"78f41dcd-dabb-4b4a-a343-5050b783d09e","code":"CORPORATE URGENT","name":"CORPORATE URGENT","processingDays":3,"amount":75000.00,"sorOrder":101},{"id":"83b201e2-2824-4825-8c99-b1fee87f080b","code":"CORPORATE ORDINARY","name":"CORPORATE ORDINARY","processingDays":12,"amount":20000.00,"sorOrder":102}]},{"id":"1554c466-585c-40da-8ce6-5da6497fa70d","code":"FOREIGNERS","name":"Foreigners","options":[{"id":"cbb8602d-0860-4e35-a298-a4705ec44959","code":"FOREIGNERS ORDINARY","name":"FOREIGNERS ORDINARY","processingDays":12,"amount":30000.00,"sorOrder":5},{"id":"27627655-3fe9-447e-8696-5c64a00b8c7d","code":"FOREIGNERS URGENT","name":"FOREIGNERS URGENT","processingDays":3,"amount":1000000.00,"sorOrder":6}]}],"options":null}
+==============================================

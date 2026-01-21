@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controller\PropertyCasesController.cs" />
     <Compile Remove="Controller\RolesController.cs" />
     <Compile Remove="Controller\TodoItemsController.cs" />
     <Compile Remove="Controller\TodoListsController.cs" />

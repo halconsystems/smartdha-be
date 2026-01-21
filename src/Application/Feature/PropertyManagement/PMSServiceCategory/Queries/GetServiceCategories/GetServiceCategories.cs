@@ -21,7 +21,7 @@ public class GetServiceCategoriesHandler : IRequestHandler<GetServiceCategoriesQ
         var list = await _db.Set<ServiceCategory>()
              .Where(x=>x.IsActive==true &&x.IsDeleted==false)
             .OrderBy(x => x.Name)
-            .Select(x => new IdNameDto(x.Id, x.Name, x.Code))
+            .Select(x => new IdNameDto(x.Id, x.Name, x.Code,""))
             .ToListAsync(ct);
 
         return ApiResult<List<IdNameDto>>.Ok(list);

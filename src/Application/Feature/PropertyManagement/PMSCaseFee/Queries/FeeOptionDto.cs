@@ -10,7 +10,8 @@ public record FeeOptionDto(
     string Code,
     string Name,
     int ProcessingDays,
-    decimal Amount
+    decimal Amount,
+    int SorOrder
 );
 
 
