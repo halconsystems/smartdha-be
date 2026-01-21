@@ -26,6 +26,7 @@ public class GetAllReligonCategoryQueryHandler : IRequestHandler<GetAllReligonCa
 
         var result = Religions.Select(x => new ReligonDTO
         {
+            Id = x.Id,
             Name = x.Name,
             DisplayName = x.DisplayName,
             Code = x.Code,

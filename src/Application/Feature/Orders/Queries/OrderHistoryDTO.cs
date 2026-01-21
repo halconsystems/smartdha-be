@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
+using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.LMS;
 using DHAFacilitationAPIs.Domain.Enums;
@@ -50,6 +51,7 @@ public class OrderHistoryDTO
 
     public List<LaundryCategoryDTO>? LaundryCategories { get; set; }
     public List<LaundryItemsDTO>? LaundryItems { get; set; }
+    public List<OrderDTSettingDTO>? OrderDTs { get; set; }
     public Domain.Entities.LMS.Shops? Shops { get; set; }
 
 

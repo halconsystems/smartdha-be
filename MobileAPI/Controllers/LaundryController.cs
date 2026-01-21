@@ -10,6 +10,7 @@ using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.PickUp;
 using DHAFacilitationAPIs.Application.Feature.OrderPaymentIpn.Command;
 using DHAFacilitationAPIs.Application.Feature.Orders.Command;
 using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
+using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AcceptPanicDispatch;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
@@ -200,6 +201,11 @@ public class LaundryController : BaseApiController
         var result = await _mediator.Send(cmd);
         return Ok(result);
     }
-
+    [HttpGet("GetOrder-Dsicount-Tax"), AllowAnonymous]
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllOrderDTSetting(), ct);
+        return Ok(result);
+    }
 
 }

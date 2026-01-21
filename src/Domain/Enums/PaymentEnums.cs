@@ -1,4 +1,4 @@
-﻿public enum AvailabilityAction { Available = 1, Blocked = 2 }
+﻿public enum AvailabilityAction { Available = 1, Blocked = 2, Booked = 3 }
 
 public enum BookingStatus { Provisional = 1, Confirmed = 2, CheckedIn = 3, CheckedOut = 4, Cancelled = 5 }
 

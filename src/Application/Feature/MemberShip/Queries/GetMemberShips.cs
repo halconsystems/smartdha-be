@@ -25,6 +25,7 @@ public class GetAllMemberShipQueryHandler : IRequestHandler<GetAllMemberShipQuer
 
         var result = MemberShips.Select(x => new MemberShipDTO
         {
+            Id = x.Id,
             Name = x.Name,
             DisplayName = x.DisplayName,
             Code = x.Code,

@@ -57,6 +57,7 @@ public class HangerPriceAdjustmentQueryHandler : IRequestHandler<HangerPriceAdju
 
             var result = LaundryItems.Select(x => new LaundryItemsDTO
             {
+                Id = x.Id,
                 Name = x.Name,
                 DisplayName = x.DisplayName,
                 Code = x.Code,

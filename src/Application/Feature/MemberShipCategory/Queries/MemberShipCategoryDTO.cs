@@ -8,6 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
 
 public class MemberShipCategoryDTO
 {
+    public Guid Id { get; set; }
     public Guid MemberShipId { get; set; }
     public string? Name { get; set; }
     public string? DisplayName { get; set; }

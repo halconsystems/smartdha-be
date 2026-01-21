@@ -130,6 +130,11 @@ namespace MobileAPI.Infrastructure
                     Title = "Laundry Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("GroundBooking", new OpenApiInfo
+                {
+                    Title = "Ground Booking Module",
+                    Version = "v1"
+                });
 
                 o.SwaggerDoc("other", new OpenApiInfo
                 {
