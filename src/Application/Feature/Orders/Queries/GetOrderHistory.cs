@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
+using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 
 namespace DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 
@@ -45,6 +46,10 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
 
         var OrderShops = await _context.Shops.Where(x => x.Id == orders.ShopId).AsNoTracking().FirstOrDefaultAsync();
 
+        var OrderService = await _context.LaundryServices.Where(x => x.Id == orders.ServiceId).AsNoTracking().FirstOrDefaultAsync();
+
+        var OrderPackage = await _context.LaundryPackagings.Where(x => x.Id == orders.PackageId).AsNoTracking().FirstOrDefaultAsync();
+
         var OrderspaymentsDT = await _context.PaymentDTSettings.Where(x => x.OrderId == orders.Id).AsNoTracking().ToListAsync();
 
         var laundryItems = await _context.LaundryItems.Where(x => ordersumarries.Select(x => x.ItemId).Contains(x.Id)).AsNoTracking().ToListAsync();
@@ -55,6 +60,8 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
         
         var OrderDispatch = await _context.OrderDispatches.Where(x => x.OrdersId == orders.Id).AsNoTracking().FirstOrDefaultAsync();
 
+        var OrderDT = await _context.OrderDTSettings.Where(x => x.DTCode != "HAN").AsNoTracking().ToListAsync();
+
         if (DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");
 
@@ -63,12 +70,13 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
         {
             Id = orders.Id,
             OrderUniqueId = orders.UniqueFormID,
-            ServiceName = orders.LaundryService?.DisplayName,
+            ServiceName = OrderService?.DisplayName,
+            TotalPrice = orders.CollectedAmount.ToString(),
             OrderDate = orders.Created,
             OrderType = orders.OrderType,
             OrderSummaries = ordersumarries,
             PaymentDTSettings = OrderspaymentsDT,
-            PackageName = orders.LaundryPackaging?.DisplayName,
+            PackageName = OrderPackage?.DisplayName,
             DeliveryDetails = DeliveryDetails,
             OrderStatus = orders.OrderStatus,
             OrderDispatches = OrderDispatch,
@@ -88,7 +96,13 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
                     ItemPrice = x.ItemPrice,
                     CategoryID = x.CategoryId.ToString()
                 })
-        .ToList()
+        .ToList(),
+            OrderDTs = OrderDT.Select(x => new OrderDTSettingDTO
+            {
+                DisplayName = x.DisplayName,
+                DTCode = x.DTCode,
+                IsDiscount = x.IsDiscount,
+            }).ToList()
         }; 
         return result;
     }

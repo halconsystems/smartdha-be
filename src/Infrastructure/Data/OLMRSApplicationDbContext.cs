@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.GBMS;
 using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Infrastructure.Data;
@@ -40,6 +41,14 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<RefundRequest> RefundRequests => Set<RefundRequest>();
     public DbSet<ClubBookingStandardTime> ClubBookingStandardTimes => Set<ClubBookingStandardTime>();
     public DbSet<DiscountSetting> DiscountSettings => Set<DiscountSetting>();
+    public DbSet<Grounds> Grounds => Set<Grounds>();
+    public DbSet<GroundSetting> GroundSettings => Set<GroundSetting>();
+    public DbSet<GroundSlots> GroundSlots => Set<GroundSlots>();
+    public DbSet<GroundStandtardTime> GroundStandtardTimes => Set<GroundStandtardTime>();
+    public DbSet<GroundBooking> GroundBookings => Set<GroundBooking>();
+    public DbSet<GroundBookingSlot> GroundBookingSlots => Set<GroundBookingSlot>();
+    public DbSet<GroundImages> GroundImages => Set<GroundImages>();
+    public DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs => Set<GroundPaymentIpnLogs>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class

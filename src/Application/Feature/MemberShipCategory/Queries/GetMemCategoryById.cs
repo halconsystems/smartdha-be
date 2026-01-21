@@ -25,6 +25,7 @@ public class GetMemberShipCategoryByIdQueryHandler : IRequestHandler<GetMemberSh
 
         var result = MemberShips.Select(x => new MemberShipCategoryDTO
         {
+            Id = x.Id,
             Name = x.name,
             DisplayName = x.displayname,
             Code = x.Code,

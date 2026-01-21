@@ -17,6 +17,7 @@ public enum Settings
     AdvanceTax = 7,
     Shipping = 8,
     Hanger = 9,
+    Academy = 10,
 }
 
 public enum ValueType

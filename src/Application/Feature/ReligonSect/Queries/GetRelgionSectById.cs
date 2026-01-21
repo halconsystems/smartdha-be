@@ -25,6 +25,7 @@ public class GetReligonSectByIdQueryHandler : IRequestHandler<GetReligonSectById
 
         var result = MemberShips.Select(x => new ReligonSectDTO
         {
+            Id = x.Id,
             Name = x.Name,
             DisplayName = x.DisplayName,
             Code = x.Code,

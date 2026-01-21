@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.GBMS;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -32,6 +33,14 @@ public interface IOLMRSApplicationDbContext
     DbSet<RefundPolicy> RefundPolicies { get; }
     DbSet<ClubBookingStandardTime> ClubBookingStandardTimes { get; }
     DbSet<DiscountSetting> DiscountSettings { get; }
+    DbSet<Grounds> Grounds { get; }
+    DbSet<GroundSlots> GroundSlots { get; }
+    DbSet<GroundImages> GroundImages { get; }
+    DbSet<GroundSetting> GroundSettings { get; }
+    DbSet<GroundStandtardTime> GroundStandtardTimes { get; }
+    DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs { get; }
+    DbSet<GroundBooking> GroundBookings { get; }
+    DbSet<GroundBookingSlot> GroundBookingSlots { get; }
 
 
 

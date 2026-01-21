@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2026-01-21 00:06:40.637 +05:00 [INF] [CQRS]
 TraceId  : 0HNIOAS435LGI:00000001
 Request  : GetCaseWorkflowHierarchyQuery
@@ -9,12 +10,48 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 1342 ms
+=======
+2026-01-21 11:50:46.611 +05:00 [INF] [CQRS]
+TraceId  : 0HNION59UR7UE:0000000B
+Request  : AppUserLoginCommand
+Duration : 506 ms
+2026-01-21 11:50:46.678 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (546 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 11:50:46.704 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNION59UR7UE:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 803 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 11:53:17.741 +05:00 [INF] [CQRS]
+TraceId  : 0HNION6GSEM9V:0000000B
+Request  : GetGroundQuery
+Duration : 2070 ms
+2026-01-21 11:53:17.945 +05:00 [WRN] CMS Long Running Request: GetGroundQuery (2112 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"GroundCategory":"Academy","$type":"GetGroundQuery"}
+2026-01-21 11:53:18.080 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNION6GSEM9V:0000000B
+Method   : GET
+Path     : /api/groundbooking/getground
+Status   : 200
+Duration : 2653 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":true,"status":"0","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 00:07:47.678 +05:00 [INF] [CQRS]
@@ -27,12 +64,28 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 61 ms
+=======
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":null,"groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"1","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"}}]
+==============================================
+2026-01-21 11:53:46.966 +05:00 [INF] [CQRS]
+TraceId  : 0HNION6GSEM9V:0000000D
+Request  : GetGroundQueryById
+Duration : 556 ms
+2026-01-21 11:53:47.078 +05:00 [WRN] CMS Long Running Request: GetGroundQueryById (557 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"Id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","GroundCategory":"Academy","$type":"GetGroundQueryById"}
+2026-01-21 11:53:47.092 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNION6GSEM9V:0000000D
+Method   : GET
+Path     : /api/groundbooking/getgrounddetail
+Status   : 200
+Duration : 703 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 00:27:23.199 +05:00 [INF] [CQRS]
@@ -46,12 +99,201 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 2109 ms
+=======
+{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":null,"groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":null,"accountNoAccronym":null,"mainImageUrl":null,"slotCount":null,"groundImages":[{"id":"00000000-0000-0000-0000-000000000000","groudId":"00000000-0000-0000-0000-000000000000","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front"}],"slots":[{"groundId":"00000000-0000-0000-0000-000000000000","id":"00000000-0000-0000-0000-000000000000","slotName":"Slot 1","displayName":"Morning Slot","code":null,"slotPrice":"6000","fromDate":"2026-03-21T21:00:00","fromDateOnly":"2026-03-21","fromTimeOnly":"21:00:00","toDate":"2026-04-21T23:00:00","toDateOnly":"2026-04-21","toTimeOnly":"21:00:00","action":"Available"}],"groundStandtardTimes":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"}],"groundStandtardTime":null}
+==============================================
+2026-01-21 12:00:10.935 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNION6GSEMA0:00000001
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 500
+Duration : 814 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Want to Book",
+  "bookingDate": "2026-01-22T06:55:58.722Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Ground Creation failed: Unable to cast object of type 'System.Guid' to type 'System.IConvertible'."}
+==============================================
+2026-01-21 12:14:57.975 +05:00 [INF] [CQRS]
+TraceId  : 0HNIONIO5FPU5:0000000B
+Request  : AppUserLoginCommand
+Duration : 532 ms
+2026-01-21 12:14:58.034 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (565 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 12:14:58.075 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONIO5FPU5:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 825 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 12:16:42.898 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONIO5FPU5:0000000F
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 500
+Duration : 40755 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Check",
+  "bookingDate": "2026-01-22T07:15:24.185Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Ground Creation failed: The input string '45%' was not in a correct format."}
+==============================================
+2026-01-21 12:18:57.798 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONIO5FPU5:00000011
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 500
+Duration : 130072 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Check",
+  "bookingDate": "2026-01-22T07:15:24.185Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Ground Creation failed: The input string '45%' was not in a correct format."}
+==============================================
+2026-01-21 12:22:36.434 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.OLMRSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_GroundBookings_Grounds_GroundsId". The conflict occurred in database "CBMS", table "dbo.Grounds", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:e1e2a426-5397-4241-a282-77cbf3d16e22
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_GroundBookings_Grounds_GroundsId". The conflict occurred in database "CBMS", table "dbo.Grounds", column 'Id'.
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:e1e2a426-5397-4241-a282-77cbf3d16e22
+Error Number:547,State:0,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-21 12:34:11.182 +05:00 [INF] [CQRS]
+TraceId  : 0HNIONSA4V2G4:0000000B
+Request  : GroundReserveCommand
+Duration : 4625 ms
+2026-01-21 12:34:11.431 +05:00 [WRN] CMS Long Running Request: GroundReserveCommand (4699 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"GroundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","Description":"Nothing","BookingDate":"2026-01-22T07:32:09.1870000Z","Slots":["a6b3b59f-22b3-443b-a8f3-56f4f6a01e06"],"BuketId":"","PaymentMethod":"Cash","$type":"GroundReserveCommand"}
+2026-01-21 12:34:11.499 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONSA4V2G4:0000000B
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 200
+Duration : 5472 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Nothing",
+  "bookingDate": "2026-01-22T07:32:09.187Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Ground Reserved successfully.","data":"GB-20260121-000001"}
+==============================================
+2026-01-21 12:35:16.107 +05:00 [INF] [CQRS]
+TraceId  : 0HNIONSA4V2G4:0000000D
+Request  : GetAllBookingQuery
+Duration : 222 ms
+2026-01-21 12:35:16.185 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONSA4V2G4:0000000D
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 321 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 00:43:39.381 +05:00 [INF] [CQRS]
@@ -65,17 +307,160 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 1293 ms
+=======
+[{"bookingCode":"GB-20260121-000001","groundName":"Sports Club","bookingDescription":"Nothing","groundType":"CricketGround","groundCategory":"Academy","id":"84be8830-3528-4d9a-9442-acea30cb66f9","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-22T07:32:09.187","totalPrice":"5955","slotsCount":"1","slots":null,"orderDTiD":null,"groundSettings":null,"groundImages":null,"paymentMethod":"Cash","mainImage":null}]
+==============================================
+2026-01-21 12:37:10.709 +05:00 [INF] [CQRS]
+TraceId  : 0HNIONSA4V2G4:0000000F
+Request  : GetAllBookingQuery
+Duration : 57298 ms
+2026-01-21 12:37:10.723 +05:00 [WRN] CMS Long Running Request: GetAllBookingQuery (57298 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllBookingQuery"}
+2026-01-21 12:37:10.725 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONSA4V2G4:0000000F
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 57322 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 01:04:13.193 +05:00 [ERR] An error occurred while initialising the database.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
  ---> System.ComponentModel.Win32Exception (5): Access is denied.
+=======
+[{"bookingCode":"GB-20260121-000001","groundName":"Sports Club","bookingDescription":"Nothing","groundType":"CricketGround","groundCategory":"Academy","id":"84be8830-3528-4d9a-9442-acea30cb66f9","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-22T07:32:09.187","totalPrice":"5955","slotsCount":"1","slots":null,"orderDTiD":null,"groundSettings":null,"groundImages":null,"paymentMethod":"Cash","mainImage":null}]
+==============================================
+2026-01-21 12:38:17.568 +05:00 [INF] [CQRS]
+TraceId  : 0HNIONVRMDPEU:0000000D
+Request  : GetAllGroundBookingQuery
+Duration : 1908 ms
+2026-01-21 12:38:17.814 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (1987 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 12:38:17.974 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIONVRMDPEU:0000000D
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 2725 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-21 12:42:13.937 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOO1PQ7ORB:00000001
+Request  : AppUserLoginCommand
+Duration : 1434 ms
+2026-01-21 12:42:14.056 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1506 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 12:42:14.118 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOO1PQ7ORB:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1923 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 12:42:36.308 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOO1PQ7ORB:00000005
+Request  : GetAllGroundBookingQuery
+Duration : 1806 ms
+2026-01-21 12:42:36.361 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (1807 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 12:42:36.487 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOO1PQ7ORB:00000005
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 2100 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-21 12:42:39.075 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOO1PQ7ORB:00000007
+Request  : GetAllGroundBookingQuery
+Duration : 134 ms
+2026-01-21 12:42:39.076 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOO1PQ7ORB:00000007
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 143 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-21 12:42:58.957 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOO1PQ7ORB:00000009
+Request  : GetAllGroundBookingQuery
+Duration : 8660 ms
+2026-01-21 12:42:59.023 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (8660 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 12:42:59.024 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOO1PQ7ORB:00000009
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 8759 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-21 12:44:23.611 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOO1PQ7ORB:0000000B
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 500
+Duration : 2677 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Check",
+  "bookingDate": "2026-01-22T07:43:06.792Z",
+  "slots": [
+    "4AFCC2BC-A909-4177-9D68-9C9B1B22330C"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Ground Creation failed: The given key '4afcc2bc-a909-4177-9d68-9c9b1b22330c' was not present in the dictionary."}
+==============================================
+2026-01-21 13:17:31.040 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (1326): The user name or password is incorrect.
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
    at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
@@ -102,6 +487,7 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instanc
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+<<<<<<< HEAD
    at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in F:\Dev\DHA Projects\DHA Facilitation APIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
 ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:5,State:0,Class:20
@@ -116,12 +502,79 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 1424 ms
+=======
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:1326,State:0,Class:20
+2026-01-21 13:19:15.493 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:0000000F
+Request  : AppUserLoginCommand
+Duration : 932 ms
+2026-01-21 13:19:15.621 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1028 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 13:19:15.688 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:0000000F
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1454 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 13:20:27.957 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:00000013
+Request  : GroundReserveCommand
+Duration : 4528 ms
+2026-01-21 13:20:27.985 +05:00 [WRN] CMS Long Running Request: GroundReserveCommand (4530 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"GroundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","Description":"Nothing","BookingDate":"2026-01-22T08:19:37.1160000Z","Slots":["a6b3b59f-22b3-443b-a8f3-56f4f6a01e06"],"BuketId":"","PaymentMethod":"Cash","$type":"GroundReserveCommand"}
+2026-01-21 13:20:27.998 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:00000013
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 200
+Duration : 4741 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Nothing",
+  "bookingDate": "2026-01-22T08:19:37.116Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Ground Reserved successfully.","data":"GB-20260121-000002"}
+==============================================
+2026-01-21 13:20:39.159 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:00000015
+Request  : GetAllGroundBookingQuery
+Duration : 2966 ms
+2026-01-21 13:20:39.179 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (2966 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 13:20:39.218 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:00000015
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 3045 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 01:04:41.296 +05:00 [INF] [CQRS]
@@ -134,12 +587,28 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 71 ms
+=======
+[]
+==============================================
+2026-01-21 13:22:46.937 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:00000017
+Request  : GetAllGroundBookingQuery
+Duration : 122335 ms
+2026-01-21 13:22:46.957 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (122337 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 13:22:46.958 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:00000017
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 122358 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 01:05:56.623 +05:00 [INF] [CQRS]
@@ -153,12 +622,56 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 19298 ms
+=======
+[]
+==============================================
+2026-01-21 13:23:00.620 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:00000019
+Request  : GroundReserveCommand
+Duration : 2052 ms
+2026-01-21 13:23:00.664 +05:00 [WRN] CMS Long Running Request: GroundReserveCommand (2052 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"GroundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","Description":"Nothing","BookingDate":"2026-01-22T08:19:37.1160000Z","Slots":["a6b3b59f-22b3-443b-a8f3-56f4f6a01e06"],"BuketId":"","PaymentMethod":"Cash","$type":"GroundReserveCommand"}
+2026-01-21 13:23:00.666 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:00000019
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 200
+Duration : 2103 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "Nothing",
+  "bookingDate": "2026-01-22T08:19:37.116Z",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Ground Reserved successfully.","data":"GB-20260121-000003"}
+==============================================
+2026-01-21 13:23:10.864 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOOMFLC63R:0000001B
+Request  : GetAllGroundBookingQuery
+Duration : 2039 ms
+2026-01-21 13:23:10.898 +05:00 [WRN] CMS Long Running Request: GetAllGroundBookingQuery (2040 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllGroundBookingQuery"}
+2026-01-21 13:23:10.899 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOOMFLC63R:0000001B
+Method   : GET
+Path     : /api/groundbooking/getbookinglist
+Status   : 200
+Duration : 2086 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
 ==============================================
 2026-01-21 01:09:38.859 +05:00 [INF] [CQRS]
@@ -172,12 +685,114 @@ Method   : GET
 Path     : /api/casedata/40ff014b-ca4e-4075-8134-cc55471cb391/workflow
 Status   : 200
 Duration : 7254 ms
+=======
+[]
+==============================================
+2026-01-21 14:24:30.382 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 1315s ago, last-write: 20s ago, unanswered-write: 20s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 9 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.<GetResult>g__ThrowSocketException|10_0(SocketError e) in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 86
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-21 14:27:18.224 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (53): The network path was not found.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:53,State:0,Class:20
+2026-01-21 14:30:11.052 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOPTMRVF47:0000000B
+Request  : AppUserLoginCommand
+Duration : 1173 ms
+2026-01-21 14:30:11.174 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1254 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 14:30:11.234 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOPTMRVF47:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1751 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 14:43:03.188 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOQ3VADE9O:0000000B
+Request  : AppUserLoginCommand
+Duration : 1616 ms
+2026-01-21 14:43:03.382 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1694 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 14:43:03.441 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOQ3VADE9O:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 2247 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 14:45:25.700 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOQ3VADE9O:0000000F
+Request  : GetGroundQueryById
+Duration : 1014 ms
+2026-01-21 14:45:25.712 +05:00 [WRN] CMS Long Running Request: GetGroundQueryById (1015 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"Id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","GroundCategory":"Academy","$type":"GetGroundQueryById"}
+2026-01-21 14:45:25.781 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOQ3VADE9O:0000000F
+Method   : GET
+Path     : /api/groundbooking/getgrounddetail
+Status   : 200
+Duration : 1208 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-20T23:45:35.0565839","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[{"documentType":"application/pdf","fileName":"Noc Approved.pdf","downloadUrl":"https://gw.dhakarachi.org/CBMS/pms/cases/40ff014b-ca4e-4075-8134-cc55471cb391/result/375a6a9da05d4432851a3bafe675fcf2.pdf"}]}
 ==============================================
 2026-01-21 01:53:28.182 +05:00 [INF] [CQRS]
@@ -191,11 +806,52 @@ Method   : GET
 Path     : /api/casedata/B37CBFE1-979D-4336-98D9-797E43841D6D/workflow
 Status   : 200
 Duration : 1637 ms
+=======
+{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":null,"groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":null,"slotCount":"1","groundImages":[{"id":"00000000-0000-0000-0000-000000000000","groudId":"00000000-0000-0000-0000-000000000000","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front"}],"slots":[{"groundId":"00000000-0000-0000-0000-000000000000","id":"00000000-0000-0000-0000-000000000000","slotName":"Slot 1","displayName":"Morning Slot","code":null,"slotPrice":"6000","fromDate":"2026-03-21T21:00:00","fromDateOnly":"2026-03-21","fromTimeOnly":"21:00:00","toDate":"2026-04-21T23:00:00","toDateOnly":"2026-04-21","toTimeOnly":"21:00:00","action":"Available"}],"groundStandtardTimes":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"}],"groundStandtardTime":null}
+==============================================
+2026-01-21 14:49:42.403 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOQ92UR76T:00000003
+Request  : AppUserLoginCommand
+Duration : 1047 ms
+2026-01-21 14:49:42.530 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (1123 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CNIC":"4220199802729","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-21 14:49:42.588 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOQ92UR76T:00000003
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1618 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-21 14:50:21.473 +05:00 [INF] [CQRS]
+TraceId  : 0HNIOQ92UR76T:00000007
+Request  : GetGroundQueryById
+Duration : 1641 ms
+2026-01-21 14:50:21.634 +05:00 [WRN] CMS Long Running Request: GetGroundQueryById (1642 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"Id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","GroundCategory":"Academy","$type":"GetGroundQueryById"}
+2026-01-21 14:50:21.736 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIOQ92UR76T:00000007
+Method   : GET
+Path     : /api/groundbooking/getgrounddetail
+Status   : 200
+Duration : 1998 ms
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"InProgress","actionDate":"2026-01-21T01:32:54.5472757","remarks":"Case submitted successfully"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":true,"isRequired":false,"status":"Paid","payment":{"amount":10.00,"currency":"PKR","purpose":"Solar Panel for Under Construction Buildings"}},"resultDocuments":[]}
+=======
+{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":null,"groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":null,"slotCount":"1","groundImages":[{"id":"00000000-0000-0000-0000-000000000000","groudId":"00000000-0000-0000-0000-000000000000","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front"}],"slots":[{"groundId":"00000000-0000-0000-0000-000000000000","id":"00000000-0000-0000-0000-000000000000","slotName":"Slot 1","displayName":"Morning Slot","code":null,"slotPrice":"6000","fromDate":"2026-03-21T21:00:00","fromDateOnly":"2026-03-21","fromTimeOnly":"21:00:00","toDate":"2026-04-21T23:00:00","toDateOnly":"2026-04-21","toTimeOnly":"21:00:00","action":"Booked"}],"groundStandtardTimes":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"}],"groundStandtardTime":null}
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
 ==============================================

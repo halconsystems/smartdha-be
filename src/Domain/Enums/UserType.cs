@@ -11,7 +11,8 @@ public enum UserType
     NonMember = 2,
     Employee = 3,
     Driver=4,
-    MemStaff = 5
-
+    MemStaff = 5,
+    ShopDriver = 6,
+    ShopOwner = 7
 }
 

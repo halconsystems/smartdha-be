@@ -13,6 +13,8 @@ using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
 using DHAFacilitationAPIs.Application.Feature.Orders.Command;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Command;
+using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
 using DHAFacilitationAPIs.Application.Feature.Religion.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Queries;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Command;
@@ -35,5 +37,15 @@ public class LMSController : BaseApiController
     public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateOrderDiscountCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd, ct));
 
+    //[HttpPost("Create-Discount-Tax"), AllowAnonymous]
+    //public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateOrderDiscountCommand cmd, CancellationToken ct)
+    //   => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpGet("GetOrder-Dsicount-Tax"), AllowAnonymous]
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllOrderDTSetting(), ct);
+        return Ok(result);
+    }
 
 }

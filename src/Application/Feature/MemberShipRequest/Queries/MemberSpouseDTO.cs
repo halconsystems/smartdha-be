@@ -12,8 +12,6 @@ namespace DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
 
 public class MemberSpouseDTO
 {
-    public Guid MemberShipId { get; set; }
-    public MemberRequest? MemberRequest { get; set; }
 
     [Required]
     public string FullName { get; set; } = default!;

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DHAFacilitationAPIs.Domain.Common;
+using DHAFacilitationAPIs.Domain.Enums.GBMS;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
 
@@ -36,6 +37,7 @@ public class Room : BaseAuditableEntity
     // Quick global toggle (optional, see #2)
     public bool IsGloballyAvailable { get; set; } = true;
 
+    public GroundCategory? GroundCategory { get; set; }
     public ICollection<Services> RoomServices { get; set; } = new List<Services>();
     public ICollection<RoomAvailability> Availabilities { get; set; } = new List<RoomAvailability>();
 }

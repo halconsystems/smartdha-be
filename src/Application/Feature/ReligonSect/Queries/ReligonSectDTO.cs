@@ -8,6 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.ReligonSect.Queries;
 
 public class ReligonSectDTO
 {
+    public Guid Id { get; set; }
     public string? Name { get; set; }
     public string? DisplayName { get; set; }
     public string? Code { get; set; }
