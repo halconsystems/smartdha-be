@@ -124,6 +124,11 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Title = "Laudry Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("Femugation", new OpenApiInfo
+                {
+                    Title = "Femugation Module",
+                    Version = "v1"
+                });
                 o.SwaggerDoc("Ground", new OpenApiInfo
                 {
                     Title = "Ground Module",

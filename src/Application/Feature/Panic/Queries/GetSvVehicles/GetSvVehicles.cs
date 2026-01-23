@@ -28,7 +28,6 @@ public class GetSvVehiclesQueryHandler
     {
         var vehicles = await _context.SvVehicles
             .Include(v => v.SvPoint)
-            .Where(v => v.IsActive == true)
             .ToListAsync(ct);
 
         var result = new List<SvVehicleListDto>();

@@ -31,8 +31,8 @@ public class PanicHistoryDetailDto
     public UserType RequestedByUserType { get; set; }
 
     // DISPATCH INFO
-    public Guid DispatchId { get; set; }
-    public DateTime AssignedAt { get; set; }
+    public Guid? DispatchId { get; set; }
+    public DateTime? AssignedAt { get; set; }
     public DateTime? AcceptedAt { get; set; }
     public DateTime? OnRouteAt { get; set; }
     public DateTime? ArrivedAt { get; set; }
@@ -53,11 +53,11 @@ public class PanicHistoryDetailDto
     public string? DriverCnic { get; set; }
 
     // VEHICLE INFO
-    public Guid VehicleId { get; set; }
-    public string VehicleName { get; set; } = "";
-    public string RegistrationNo { get; set; } = "";
-    public string VehicleType { get; set; } = "";
-    public string VehicleStatus { get; set; } = "";
+    public Guid? VehicleId { get; set; }
+    public string? VehicleName { get; set; } = "";
+    public string? RegistrationNo { get; set; } = "";
+    public string? VehicleType { get; set; } = "";
+    public string? VehicleStatus { get; set; } = "";
     public string? MapIconKey { get; set; }
 
     // LIVE LOCATION OF VEHICLE (JSON override)

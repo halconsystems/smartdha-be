@@ -13,10 +13,12 @@ public record GetAllLaundryItemsQuery : IRequest<List<LaundryItemsDTO>>;
 public class GetAllLaundryItemsQueryHandler : IRequestHandler<GetAllLaundryItemsQuery, List<LaundryItemsDTO>>
 {
     private readonly ILaundrySystemDbContext _context;
+    private readonly IFileStorageService _fileStorageService;
 
-    public GetAllLaundryItemsQueryHandler(ILaundrySystemDbContext context)
+    public GetAllLaundryItemsQueryHandler(ILaundrySystemDbContext context, IFileStorageService fileStorageService)
     {
         _context = context;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<List<LaundryItemsDTO>> Handle(GetAllLaundryItemsQuery request, CancellationToken ct)
@@ -33,7 +35,8 @@ public class GetAllLaundryItemsQueryHandler : IRequestHandler<GetAllLaundryItems
             Code = x.Code,
             CategoryID = x.CategoryId.ToString(),
             ItemPrice = x.ItemPrice,
-            Image   = x.ItemImage
+            Image = x.ItemImage == null ? null : _fileStorageService.GetPublicUrl(x.ItemImage)
+
         }).ToList();
 
         return result;
