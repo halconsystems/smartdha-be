@@ -18,11 +18,13 @@ public record GetGroundQueryById(Guid Id,GroundCategory GroundCategory) : IReque
 public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, GroundDTO>
 {
     private readonly IOLMRSApplicationDbContext _context;
+    private readonly IFileStorageService _fileStorageService;
 
     public GetGroundQueryByIdHandler(
-         IOLMRSApplicationDbContext context)
+         IOLMRSApplicationDbContext context, IFileStorageService fileStorageService)
     {
         _context = context;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<GroundDTO> Handle(GetGroundQueryById request, CancellationToken cancellationToken)
@@ -64,6 +66,7 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
             SlotCount = GroundSlots.Count().ToString(),
             Slots = GroundSlots.Select(x => new GroundSlotsdto
             {
+                Id = x.Id,
                 SlotName = x.SlotName,
                 SlotPrice = x.SlotPrice,        
                 DisplayName = x.DisplayName,
@@ -76,14 +79,28 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
                 ToTimeOnly = x.FromTimeOnly,
                 Action = bookedSlots.FirstOrDefault(g => g.Equals(x.Id)) == null ? AvailabilityAction.Booked : AvailabilityAction.Available,
             }).ToList(),
-            GroundImages = groundImage.Select(x => new Command.GroundImages.Queries.GroundImagesDTO
+            GroundImages = groundImage?
+        .Select(img =>
+        {
+            var publicUrl = string.IsNullOrWhiteSpace(img.ImageURL)
+                ? null
+                : _fileStorageService.GetPublicUrl(img.ImageURL);
+
+            if (publicUrl == null)
+                publicUrl = string.Empty;
+
+            return new Command.GroundImages.Queries.GroundImagesDTO
             {
-                ImageExtension = x.ImageExtension,
-                ImageName = x.ImageName,
-                ImageURL = x.ImageURL,
-                Description = x.Description,
-                Category = x.Category,
-            }).ToList(),
+                Id = img.Id,
+                ImageExtension = img.ImageExtension,
+                ImageName = img.ImageName,
+                ImageURL = publicUrl, // ✅ safe
+                Description = img.Description,
+                Category = img.Category,
+            };
+        }).ToList()
+        ?? new List<Command.GroundImages.Queries.GroundImagesDTO>(),
+
             GroundStandtardTimes = GroundStandard
         };
 

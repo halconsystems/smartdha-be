@@ -10,9 +10,6 @@ using MediatR;
 
 namespace DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryItems;
 
-internal class AddLaundryItems
-{
-}
 public record CreateLaundryItemsDto(string Name, string DisplayName, string itemPrice);
 public record CreateLaundryItemsCommand(
     Guid CategoryId,

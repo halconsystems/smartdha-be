@@ -36,16 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="CBMS\" />
-    <Folder Include="wwwroot\" />
+    <Folder Include="CBMS\Ground\" />
+    <Folder Include="wwwroot\uploads\LaundryItems\" />
   </ItemGroup>
 
 </Project>

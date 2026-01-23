@@ -114,131 +114,139 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
 
     public async Task<SuccessResponse<string>> Handle(CreateMemberShipRequestCommand command, CancellationToken ct)
     {
-        var FatherfrontPath = string.Empty;
-        var FatherbackPath = string.Empty;
-        var FatherprofilePicture = string.Empty;
-        var motherfrontPath = string.Empty;
-        var motherbackPath = string.Empty;
-        var motherprofilePicture = string.Empty;
-        var frontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicFrontPicture, "cnic", ct);
-        var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicBackPicture, "cnic", ct);
-        var profilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.profilePicture, "cnic", ct);
-
-        if(command.FatherPicturePath != null && command.FatherCNICFrontImagePath != null && command.FatherCNICBackImagePath != null)
+        try
         {
-            FatherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICFrontImagePath, "cnic", ct);
-            FatherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICBackImagePath, "cnic", ct);
-            FatherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherPicturePath, "cnic", ct);
-        }
+            var FatherfrontPath = string.Empty;
+            var FatherbackPath = string.Empty;
+            var FatherprofilePicture = string.Empty;
+            var motherfrontPath = string.Empty;
+            var motherbackPath = string.Empty;
+            var motherprofilePicture = string.Empty;
+            var frontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicFrontPicture, "cnic", ct);
+            var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicBackPicture, "cnic", ct);
+            var profilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.profilePicture, "cnic", ct);
 
-        if (command.MotherPicturePath != null && command.MotherCNICFrontImagePath != null && command.MotherCNICBackImagePath != null)
-        {
-            motherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICFrontImagePath, "cnic", ct);
-            motherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICBackImagePath, "cnic", ct);
-            motherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherPicturePath, "cnic", ct);
-        }
-        //var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CNICBackImage, "cnic", ct);
-
-
-        var entity = new MemberRequest
-        {
-            MemberShipCategory = command.MemberShipCategoryId,
-            CNIC = command.Cnic,
-            LiveTime = command.LifeTime,
-            CnicExpiryDate = command.CnicExpiry,
-            Dob = command.DOB,
-            Name = command.Name,
-            Gender = command.Gender,
-            MaritalStatus = command.MaritalStatus,
-            NTNno = command.NTNno,
-            PassportNo = command.PassportNo,
-            PassportPlace = command.PassportPlace,
-            PassportExpiry = command.PassportExpiry,
-            ReligonSectId = command.ReligonSect,
-            OtherReligion = command.otherReligon,
-            Nationality = command.Nationality,
-            OtherNationality = command.otherNationality,
-            Qualification = command.Qualification,
-            Profession = command.Profession,
-            FatherName = command.FatherName,
-            FatherAlive = command.FatherAlive,
-            FatherCnic = command.FatherCnic,
-            FatherMobileNo = command.FatherMobileNo,
-            MotherName = command.MotherName,
-            MotherAlive = command.MotherAlive,
-            MotherCnic = command.MotherCnic,
-            MotherMobileNo = command.MotherMobileNo,
-            Email = command.Email,
-            TelephoneResidence = command.TelephoneResidence,
-            MobileNo1 = command.MobileNo1,
-            MobileNo2 = command.MobileNo2,
-            PresentAddress = command.PresentAddress,
-            PresentCity = command.PresentCity,
-            PresentCountry = command.PresentCountry,
-            PermenantAddress = command.PermenantAddress,
-            PermenantCity = command.PermenantCity,
-            PermenantCountry = command.PermenantCountry,
-            BestKnowledge = command.BestKnowledge,
-            Rservation = command.Rservation,
-            IsChild = command.IsChild,
-            
-
-            PicturePath = profilePicture,
-            CNICFrontImagePath = frontPath,
-            CNICBackImagePath = backPath,
-
-            FatherPicturePath = FatherprofilePicture,
-            FatherCNICFrontImagePath = FatherfrontPath,
-            FatherCNICBackImagePath = FatherbackPath,
-
-            MotherPicturePath = motherprofilePicture,
-            MotherCNICFrontImagePath = motherfrontPath,
-            MotherCNICBackImagePath = motherbackPath,
-        };
-
-        _context.MemberRequests.Add(entity);
-        await _context.SaveChangesAsync(ct);
-        if (command.MemberSpouses != null && command.MaritalStatus == MaritalStatus.Married)
-        {
-            var memberSpouse = command.MemberSpouses.Select(x => new MemberSpouse
+            if (command.FatherPicturePath != null && command.FatherCNICFrontImagePath != null && command.FatherCNICBackImagePath != null)
             {
-                MemberShipId = entity.Id,
-                FullName = x.FullName,
-                MobileNo = x.MobileNo,
-                Email = x.Email,
-                Nationality = x.Nationality,
-                otherNationality = x.otherNationality,
-                PicturePath =  _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
-                CnicFrontImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicFrontImage, "cnic", ct).ToString(),
-                CnicBackImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicBackImage, "cnic", ct).ToString(),
-                Cnic = x.Cnic,
-                CnicExpiry = x.CnicExpiry,
-            }).ToList();
+                FatherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICFrontImagePath, "cnic", ct);
+                FatherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICBackImagePath, "cnic", ct);
+                FatherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherPicturePath, "cnic", ct);
+            }
 
-            _context.MemberSpouses.AddRange(memberSpouse);
-            await _context.SaveChangesAsync(ct);
-        }
-
-        if(command.MemberChildrens != null && command.IsChild)
-        {
-            var memberChildrens = command.MemberChildrens.Select(x => new MemberChildren
+            if (command.MotherPicturePath != null && command.MotherCNICFrontImagePath != null && command.MotherCNICBackImagePath != null)
             {
-                MemberShipId = entity.Id,
-                FullName = x.FullName,
-                MobileNo = x.MobileNo,
-                Relation = x.Relation,
-                IsAdult = x.IsAdult,
-                CnicNo = x.CnicNo,
-                PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
-                CNICFrontImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICFrontImagePath, "cnic", ct).ToString(),
-                CNICBackImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICBackImagePath, "cnic", ct).ToString(),
-                CnicExpiryDate = x.CnicExpiryDate,
-            }).ToList();
-            _context.MemberChildrens.AddRange(memberChildrens);
+                motherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICFrontImagePath, "cnic", ct);
+                motherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICBackImagePath, "cnic", ct);
+                motherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherPicturePath, "cnic", ct);
+            }
+            //var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CNICBackImage, "cnic", ct);
+
+
+            var entity = new MemberRequest
+            {
+                MemberShipCategory = command.MemberShipCategoryId,
+                CNIC = command.Cnic,
+                LiveTime = command.LifeTime,
+                CnicExpiryDate = command.CnicExpiry,
+                Dob = command.DOB,
+                Name = command.Name,
+                Gender = command.Gender,
+                MaritalStatus = command.MaritalStatus,
+                NTNno = command.NTNno,
+                PassportNo = command.PassportNo,
+                PassportPlace = command.PassportPlace,
+                PassportExpiry = command.PassportExpiry,
+                ReligonSectId = command.ReligonSect,
+                OtherReligion = command.otherReligon,
+                Nationality = command.Nationality,
+                OtherNationality = command.otherNationality,
+                Qualification = command.Qualification,
+                Profession = command.Profession,
+                FatherName = command.FatherName,
+                FatherAlive = command.FatherAlive,
+                FatherCnic = command.FatherCnic,
+                FatherMobileNo = command.FatherMobileNo,
+                MotherName = command.MotherName,
+                MotherAlive = command.MotherAlive,
+                MotherCnic = command.MotherCnic,
+                MotherMobileNo = command.MotherMobileNo,
+                Email = command.Email,
+                TelephoneResidence = command.TelephoneResidence,
+                MobileNo1 = command.MobileNo1,
+                MobileNo2 = command.MobileNo2,
+                PresentAddress = command.PresentAddress,
+                PresentCity = command.PresentCity,
+                PresentCountry = command.PresentCountry,
+                PermenantAddress = command.PermenantAddress,
+                PermenantCity = command.PermenantCity,
+                PermenantCountry = command.PermenantCountry,
+                BestKnowledge = command.BestKnowledge,
+                Rservation = command.Rservation,
+                IsChild = command.IsChild,
+
+
+                PicturePath = profilePicture,
+                CNICFrontImagePath = frontPath,
+                CNICBackImagePath = backPath,
+
+                FatherPicturePath = FatherprofilePicture,
+                FatherCNICFrontImagePath = FatherfrontPath,
+                FatherCNICBackImagePath = FatherbackPath,
+
+                MotherPicturePath = motherprofilePicture,
+                MotherCNICFrontImagePath = motherfrontPath,
+                MotherCNICBackImagePath = motherbackPath,
+            };
+
+            _context.MemberRequests.Add(entity);
             await _context.SaveChangesAsync(ct);
+            if (command.MemberSpouses != null && command.MaritalStatus == MaritalStatus.Married)
+            {
+                var memberSpouse = command.MemberSpouses.Select(x => new MemberSpouse
+                {
+                    MemberShipId = entity.Id,
+                    FullName = x.FullName,
+                    MobileNo = x.MobileNo,
+                    Email = x.Email,
+                    Nationality = x.Nationality,
+                    otherNationality = x.otherNationality,
+                    PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
+                    CnicFrontImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicFrontImage, "cnic", ct).ToString(),
+                    CnicBackImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicBackImage, "cnic", ct).ToString(),
+                    Cnic = x.Cnic,
+                    CnicExpiry = x.CnicExpiry,
+                }).ToList();
 
+                _context.MemberSpouses.AddRange(memberSpouse);
+                await _context.SaveChangesAsync(ct);
+            }
+
+            if (command.MemberChildrens != null && command.IsChild)
+            {
+                var memberChildrens = command.MemberChildrens.Select(x => new MemberChildren
+                {
+                    MemberShipId = entity.Id,
+                    FullName = x.FullName,
+                    MobileNo = x.MobileNo,
+                    Relation = x.Relation,
+                    IsAdult = x.IsAdult,
+                    CnicNo = x.CnicNo,
+                    PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
+                    CNICFrontImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICFrontImagePath, "cnic", ct).ToString(),
+                    CNICBackImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICBackImagePath, "cnic", ct).ToString(),
+                    CnicExpiryDate = x.CnicExpiryDate,
+                }).ToList();
+                _context.MemberChildrens.AddRange(memberChildrens);
+                await _context.SaveChangesAsync(ct);
+
+            }
+
+            return Success.Created(entity.Id.ToString());
         }
+        catch (Exception ex)
+        {
 
-        return Success.Created(entity.Id.ToString());
+            throw new Exception(ex.Message);
+        }
     }
 }

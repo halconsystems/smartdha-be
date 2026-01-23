@@ -18,6 +18,9 @@ namespace MobileAPI.Controllers;
 [ApiExplorerSettings(GroupName = "club")]
 public class MembershipPurposesController : BaseApiController
 {
+    private readonly IMediator _mediator;
+    public MembershipPurposesController(IMediator med) => _mediator = med;
+
     [HttpGet("GetMembershipPurposes"), AllowAnonymous]
     public async Task<IActionResult> GetMembershipPurposes()
     {

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DHAFacilitationAPIs.Application.Feature.RoomBooking.Queries.SearchRooms;
 
 public record SearchRoomsQuery(
-    Guid ClubId,
+    Guid? ClubId,
     DateOnly CheckInDate,
     DateOnly CheckOutDate,
     RoomBookingType BookingType, // "self" or "guest"

@@ -39,3 +39,20 @@ public enum ShopVehicleStatus
     Busy = 2,
     Maintenance = 3
 }
+
+public enum FemugationVehicleType
+{
+    Motorcycle = 1,
+    Rikshaw = 2,
+    Car = 3,
+    Truck = 4,
+    Other = 99
+}
+
+public enum FMVehicleStatus
+{
+    Offline = 0,
+    Available = 1,
+    Busy = 2,
+    Maintenance = 3
+}

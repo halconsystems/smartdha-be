@@ -18,6 +18,7 @@ public enum Settings
     Shipping = 8,
     Hanger = 9,
     Academy = 10,
+    Size = 11
 }
 
 public enum ValueType

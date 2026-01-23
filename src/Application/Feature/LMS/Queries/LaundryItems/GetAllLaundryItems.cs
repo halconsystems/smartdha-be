@@ -33,6 +33,7 @@ public class GetAllLaundryItemsQueryHandler : IRequestHandler<GetAllLaundryItems
             Code = x.Code,
             CategoryID = x.CategoryId.ToString(),
             ItemPrice = x.ItemPrice,
+            Image   = x.ItemImage
         }).ToList();
 
         return result;

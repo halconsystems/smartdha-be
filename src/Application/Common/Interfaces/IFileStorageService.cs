@@ -44,7 +44,17 @@ public interface IFileStorageService
 
     Task<string> SaveFileMemeberrequestAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes = 10 * 1024 * 1024, string[]? allowedExtensions = null);
 
+    Task<(string Path, FMType MediaType)> FemugationSaveImageOrVideoAsync(
+     IFormFile file,
+     string folderName,
+     CancellationToken ct,
+     long maxImageBytes = 10 * 1024 * 1024,
+     long maxVideoBytes = 50 * 1024 * 1024
+ );
+
 }
+
+
 
 public enum MediaKind
 {

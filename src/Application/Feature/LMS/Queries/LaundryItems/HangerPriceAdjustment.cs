@@ -63,6 +63,7 @@ public class HangerPriceAdjustmentQueryHandler : IRequestHandler<HangerPriceAdju
                 Code = x.Code,
                 CategoryID = x.CategoryId.ToString(),
                 ItemPrice = x.ItemPrice,
+                Image = x.ItemImage
             }).ToList();
 
             return result;
