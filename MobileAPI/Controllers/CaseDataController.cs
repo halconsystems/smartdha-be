@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Command
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.SubmitCase_V1;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinitionByProcessId;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SaveCasePrerequisiteValue;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetMyCasesByCategory;
 using Microsoft.AspNetCore.Authorization;
@@ -66,19 +67,25 @@ public class CaseDataController : BaseApiController
         var cmd = new SubmitCase_V1Command(
             request.UserPropertyId,
             request.ProcessId,
-            request.ApplicantName,
-            request.ApplicantCnic,
-            request.ApplicantMobile,
             request.ApplicantRemarks,
             prereqs,
-            request.Files
+            request.Files,
+            request.FeeDefinitionId,
+            request.FeeOptionId,
+            request.BankRefNo ?? ""
         );
 
         return Ok(await _mediator.Send(cmd, ct));
     }
 
-
-
+    [HttpGet("by-process/{processId:guid}")]
+    public async Task<IActionResult> GetByProcess(
+        Guid processId,
+        CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new GetFeeDefinitionByProcessIdQuery(processId), ct));
+    }
 
     [HttpGet("hitory/{categoryId:guid}")]
     public async Task<IActionResult> GetMyCasesByCategory(

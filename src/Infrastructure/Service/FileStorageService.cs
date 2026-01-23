@@ -15,7 +15,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Service;
 
 public class FileStorageService : IFileStorageService
 {
-    private static readonly string[] DefaultAllowedExt = new[] { ".jpg", ".jpeg", ".png", ".webp", ".mp3", ".aac" };
+    private static readonly string[] DefaultAllowedExt = new[] { ".jpg", ".jpeg", ".png", ".webp", ".mp3", ".aac", ".pdf" };
     private readonly IWebHostEnvironment _env;   // <-- add this
     private readonly FileStorageOptions _opt;
     private readonly FileExtensionContentTypeProvider _mime = new();
@@ -509,6 +509,7 @@ public class FileStorageService : IFileStorageService
         return relPath;
     }
 
+<<<<<<< HEAD
     public async Task<(string Path, FMType MediaType)> FemugationSaveImageOrVideoAsync(
      IFormFile file,
      string folderName,
@@ -602,6 +603,88 @@ public class FileStorageService : IFileStorageService
 
         return (relUrl.Replace("//", "/"), mediaType);
     }
+=======
+    public async Task<string> SavePMSDocumentAsync(
+    IFormFile file,
+    string folderName,
+    CancellationToken ct,
+    long maxBytes,
+    string[]? allowedExtensions)
+    {
+        if (file == null || file.Length == 0)
+            throw new ArgumentException("Empty file.");
 
+        if (file.Length > maxBytes)
+            throw new InvalidOperationException(
+                $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+>>>>>>> 93d580d180dcb7fb45eb7dff6225ca6e150ad307
+
+        // ✅ Allowed extensions
+        var allowed = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".pdf" };
+
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!allowed.Contains(ext))
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+
+        // ✅ Allowed MIME types mapped to extensions
+        var allowedMimeTypes = new Dictionary<string, string[]>
+        {
+            [".jpg"] = new[] { "image/jpeg" },
+            [".jpeg"] = new[] { "image/jpeg" },
+            [".png"] = new[] { "image/png" },
+            [".pdf"] = new[] { "application/pdf" }
+        };
+
+        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        {
+            if (!allowedMimeTypes.TryGetValue(ext, out var validMimes) ||
+                !validMimes.Contains(mappedType, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"Invalid file type. Detected MIME: {mappedType}");
+            }
+        }
+
+        // ================= STORAGE =================
+
+        var baseDir = _env.ContentRootPath;
+        if (string.IsNullOrWhiteSpace(baseDir))
+            baseDir = AppContext.BaseDirectory;
+
+        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
+            ? "PMS"
+            : _opt.RequestPath.Trim('/', '\\');
+
+        var basePhysical = Path.Combine(baseDir, requestFolder);
+        Directory.CreateDirectory(basePhysical);
+
+        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
+        var absFolder = string.IsNullOrEmpty(relFolder)
+            ? basePhysical
+            : Path.Combine(basePhysical, relFolder);
+
+        Directory.CreateDirectory(absFolder);
+
+        var fileName = $"{Guid.NewGuid():N}{ext}";
+        var absPath = Path.Combine(absFolder, fileName);
+
+        await using (var stream = new FileStream(
+            absPath,
+            FileMode.CreateNew,
+            FileAccess.Write,
+            FileShare.None,
+            64 * 1024,
+            useAsync: true))
+        {
+            await file.CopyToAsync(stream, ct);
+        }
+
+        var relUrl =
+            $"/{requestFolder}/" +
+            $"{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}" +
+            $"{fileName}";
+
+        return relUrl.Replace("//", "/");
+    }
 
 }

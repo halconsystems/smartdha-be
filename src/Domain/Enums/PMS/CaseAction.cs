@@ -5,9 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Enums.PMS;
-public enum PaymentMethod
+public enum CaseAction
 {
-    Cash = 0,
-    Card = 1,
-    Online = 2
+    Received,
+    Assigned,
+    Claimed,
+    CompletedInternal,
+    ForwardExternal,
+    Returned,
+    Rejected,
+    Approved,
+    ForwardInternal
 }
+

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisite
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.CreateAndAttachPrerequisite;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.CreatePrerequisiteDefinition;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.DeletePrerequisiteDefinition;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SoftDeleteProcessPrerequisite;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.UpdatePrerequisiteDefinition;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetAllPrerequisites;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
@@ -56,6 +57,15 @@ public class PrerequisitesController : BaseApiController
          body.AllowedExtensions,
          body.Options
      ), ct));
+
+    [HttpDelete("ProcessPrerequisite/{id:guid}")]
+    public async Task<IActionResult> ProcessPrerequisite(
+       Guid id,
+       CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new SoftDeleteProcessPrerequisiteCommand(id), ct));
+    }
 
 
     [HttpDelete("definitions/{id:guid}")]

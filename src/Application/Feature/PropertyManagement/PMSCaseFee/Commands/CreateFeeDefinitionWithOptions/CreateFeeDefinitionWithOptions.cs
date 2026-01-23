@@ -41,9 +41,9 @@ public class CreateFeeDefinitionWithOptionsHandler
     {
         // 1️⃣ Ensure one FeeDefinition per process
         var exists = await _db.Set<FeeDefinition>()
-            .AnyAsync(x => x.ProcessId == r.ProcessId, ct);
+            .FirstOrDefaultAsync(x => x.ProcessId == r.ProcessId && x.IsActive==true && x.IsDeleted==false, ct);
 
-        if (exists)
+        if (exists !=null)
             return ApiResult<Guid>.Fail("Fee definition already exists for this process.");
 
         // 2️⃣ Validate FeeType rules

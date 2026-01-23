@@ -12,19 +12,15 @@ public class CaseStepHistory : BaseAuditableEntity
     public Guid CaseId { get; set; }
     public PropertyCase Case { get; set; } = default!;
 
-    public Guid StepId { get; set; }
+    public Guid StepId { get; set; }              // external step
     public ProcessStep Step { get; set; } = default!;
 
-    public StepAction Action { get; set; }
+    public string? FromUserId { get; set; }
+    public string? ToUserId { get; set; }
 
-    // Who performed action (simple: store string)
-    [MaxLength(150)]
-    public string? PerformedBy { get; set; }
+    public CaseAction Action { get; set; }     // Submitted, ForwardInternal, ForwardExternal, Reject
 
-    [MaxLength(500)]
     public string? Remarks { get; set; }
-
-    // Next step info (for debugging and reporting)
-    public Guid? NextStepId { get; set; }
-    public int? NextStepNo { get; set; }
+    public string? PerformedByUserId { get; set; }
 }
+

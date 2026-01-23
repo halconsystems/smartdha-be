@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
@@ -45,6 +46,7 @@ builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
 builder.Services.AddScoped<ISmartPayService, SmartPayService>();
+builder.Services.AddScoped<IPropertyProcedureRepository, PropertyProcedureRepository>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>

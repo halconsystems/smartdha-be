@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+2026-01-21 01:04:13.193 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (5): Access is denied.
+=======
 2026-01-21 12:22:36.434 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.OLMRSApplicationDbContext'.
 Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The INSERT statement conflicted with the FOREIGN KEY constraint "FK_GroundBookings_Grounds_GroundsId". The conflict occurred in database "CBMS", table "dbo.Grounds", column 'Id'.
@@ -56,6 +61,7 @@ Error Number:547,State:0,Class:16
 2026-01-21 13:17:31.040 +05:00 [ERR] An error occurred while initialising the database.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
  ---> System.ComponentModel.Win32Exception (1326): The user name or password is incorrect.
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
    at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
@@ -82,6 +88,11 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instanc
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
    at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+<<<<<<< HEAD
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in F:\Dev\DHA Projects\DHA Facilitation APIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:5,State:0,Class:20
+=======
    at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
 ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:1326,State:0,Class:20
@@ -127,3 +138,4 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instanc
    at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
 ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:53,State:0,Class:20
+>>>>>>> a35cbc7c18c1b859d3c9078a85c08de45e6cb803

@@ -11,7 +11,8 @@ namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirector
 public record UpdateDirectorateCommand(
     Guid Id,
     string Name,
-    string Code
+    string Code,
+    Guid ModuleId
 ) : IRequest<ApiResult<bool>>;
 public class UpdateDirectorateHandler
     : IRequestHandler<UpdateDirectorateCommand, ApiResult<bool>>
@@ -37,6 +38,7 @@ public class UpdateDirectorateHandler
 
         entity.Name = request.Name.Trim();
         entity.Code = request.Code.Trim().ToUpperInvariant();
+        entity.ModuleId = request.ModuleId;
 
         await _db.SaveChangesAsync(ct);
         return ApiResult<bool>.Ok(true, "Directorate updated.");

@@ -24,14 +24,15 @@ public class GetFeeOptionsHandler
         GetFeeOptionsQuery r, CancellationToken ct)
     {
         var list = await _db.Set<FeeOption>()
-            .Where(x => x.FeeDefinitionId == r.FeeDefinitionId)
+            .Where(x => x.FeeDefinitionId == r.FeeDefinitionId && x.IsDeleted == false)
             .OrderBy(x => x.SortOrder)
             .Select(x => new FeeOptionDto(
                 x.Id,
                 x.Code,
                 x.Name,
                 x.ProcessingDays,
-                x.Amount
+                x.Amount,
+                x.SortOrder
             ))
             .ToListAsync(ct);
 

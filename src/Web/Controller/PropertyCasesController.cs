@@ -22,9 +22,9 @@ public class PropertyCasesController : BaseApiController
 
     public record SubmitCaseCommandBody(string? ApplicantRemarks);
 
-    [HttpPost("{caseId:guid}/move")]
-    public async Task<IActionResult> Move(Guid caseId, [FromBody] MoveCaseBody body, CancellationToken ct)
-    => Ok(await _mediator.Send(new MoveCaseCommand(caseId, body.Action, body.Remarks), ct));
+    //[HttpPost("{caseId:guid}/move")]
+    //public async Task<IActionResult> Move(Guid caseId, [FromBody] MoveCaseBody body, CancellationToken ct)
+    //=> Ok(await _mediator.Send(new MoveCaseCommand(caseId, body.Action, body.Remarks), ct));
 
     public record MoveCaseBody(StepAction Action, string? Remarks);
 

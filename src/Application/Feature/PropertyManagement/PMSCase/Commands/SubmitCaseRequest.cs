@@ -23,4 +23,8 @@ public class SubmitCaseRequest
 
     // Documents (key = prerequisiteDefinitionId)
     public List<IFormFile>? Files { get; set; }
+    public Guid FeeDefinitionId { get; set; }
+    public Guid? FeeOptionId { get; set; }
+    public string BankRefNo { get; set;} = default!;
+
 }

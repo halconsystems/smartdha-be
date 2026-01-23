@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
+using DHAFacilitationAPIs.Domain.Enums.PMS;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -32,6 +33,9 @@ public interface IPMSApplicationDbContext
     DbSet<PrerequisiteOption> PrerequisiteOptions { get; }
     DbSet<FeeOption> FeeOptions { get; }
     DbSet<FeeCategory> FeeCategories { get; }
+    DbSet<CaseFeeReceipt> CaseFeeReceipts { get; }
+    DbSet<FeeSetting> FeeSettings { get; }
+    DbSet<CaseResultDocument> CaseResultDocuments { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

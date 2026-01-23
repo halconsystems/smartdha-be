@@ -76,6 +76,8 @@ public class GetProcessAllPrerequisitesHandler
             .Where(x => x.ProcessId == request.ProcessId)
             .OrderBy(x => x.RequiredByStepNo)
             .Select(x => new ProcessPrerequisiteDto(
+                x.Id,
+                x.ProcessId,
                 x.PrerequisiteDefinitionId,
                 x.PrerequisiteDefinition.Code,
                 x.PrerequisiteDefinition.Name,

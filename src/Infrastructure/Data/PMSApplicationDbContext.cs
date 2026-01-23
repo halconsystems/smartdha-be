@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
+using DHAFacilitationAPIs.Domain.Enums.PMS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -36,6 +37,9 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<PrerequisiteOption> PrerequisiteOptions => Set<PrerequisiteOption>();
     public DbSet<FeeOption> FeeOptions => Set<FeeOption>();
     public DbSet<FeeCategory> FeeCategories => Set<FeeCategory>();
+    public DbSet<CaseFeeReceipt> CaseFeeReceipts => Set<CaseFeeReceipt>();
+    public DbSet<FeeSetting> FeeSettings => Set<FeeSetting>();
+    public DbSet<CaseResultDocument> CaseResultDocuments => Set<CaseResultDocument>();
 
     /* =========================
        SaveChanges – Auditing

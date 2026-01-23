@@ -1,14 +1,22 @@
 ﻿using System.Text.Json;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.AddCaseDocument;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAdminCaseDetail;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAllCasesForAdmin;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinitionByProcessId;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseResultDocument.Commands.UploadCaseResultDocument;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SaveCasePrerequisiteValue;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ForwardExternal;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ForwardInternal;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.RejectCase;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ReturnCase;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static DHAFacilitationAPIs.Web.Controller.PropertyCasesController;
+
 
 namespace DHAFacilitationAPIs.Web.Controller;
 [ApiController]
@@ -81,9 +89,52 @@ public class CaseDataController : BaseApiController
             new GetAdminCaseDetailQuery(caseId), ct));
     }
 
+    [HttpGet("by-process/{processId:guid}")]
+    public async Task<IActionResult> GetByProcess(
+        Guid processId,
+        CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new GetFeeDefinitionByProcessIdQuery(processId), ct));
+    }
+
     [HttpGet("{caseId:guid}/workflow")]
     public async Task<IActionResult> GetWorkflow(Guid caseId, CancellationToken ct)
         => Ok(await _mediator.Send(new GetCaseWorkflowHierarchyQuery(caseId), ct));
 
-    
+    [HttpGet("modules/{moduleId:guid}/users")]
+    public Task<ApiResult<List<ModuleUserDropdownDto>>> GetModuleUsers(Guid moduleId)
+        => _mediator.Send(new GetModuleUsersQuery(moduleId));
+
+    [HttpPost("{caseId:guid}/forward-internal")]
+    public Task<ApiResult<bool>> ForwardInternal(Guid caseId, [FromBody] ForwardInternalDto dto)
+        => _mediator.Send(new ForwardInternalCommand(caseId, dto.ToUserId, dto.Remarks));
+
+    [HttpPost("{caseId:guid}/forward-external")]
+    public Task<ApiResult<bool>> ForwardExternal(Guid caseId, [FromBody] RemarksDto dto)
+        => _mediator.Send(new ForwardExternalCommand(caseId, dto.Remarks));
+
+    [HttpPost("{caseId:guid}/reject")]
+    public Task<ApiResult<bool>> Reject(Guid caseId, [FromBody] RemarksDto dto)
+        => _mediator.Send(new RejectCaseCommand(caseId, dto.Remarks!));
+
+    [HttpPost("{caseId:guid}/return")]
+    public Task<ApiResult<bool>> Return(Guid caseId, [FromBody] RemarksDto dto)
+        => _mediator.Send(new ReturnCaseCommand(caseId, dto.Remarks!));
+
+    [HttpPost("{caseId:guid}/result-document")]
+    public async Task<IActionResult> UploadResultDocument(
+      Guid caseId,
+      IFormFile file)
+    {
+        var result = await _mediator.Send(
+            new UploadCaseResultDocumentCommand(
+                caseId,
+                file));
+
+        return Ok(result);
+    }
+
 }
+public record ForwardInternalDto(string ToUserId, string? Remarks);
+public record RemarksDto(string Remarks);
