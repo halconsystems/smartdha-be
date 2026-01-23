@@ -35,7 +35,7 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
         var fromUserId = _current.UserId.ToString()!;
 
         var c = await _pmsDb.Set<PropertyCase>()
-            .FirstOrDefaultAsync(x => x.Id == r.CaseId, ct);
+            .FirstOrDefaultAsync(x => x.Id == r.CaseId && x.IsDeleted !=true, ct);
 
         if (c == null) return ApiResult<bool>.Fail("Case not found.");
         if (c.Status == CaseStatus.Rejected || c.Status == CaseStatus.Approved)
@@ -79,7 +79,7 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
                 FromUserId = fromUserId,
                 ToUserId = null,
                 Action = CaseAction.ForwardExternal,
-                Remarks = r.Remarks
+                Remarks = r.Remarks,
             });
 
             await _pmsDb.SaveChangesAsync(ct);
