@@ -509,7 +509,6 @@ public class FileStorageService : IFileStorageService
         return relPath;
     }
 
-<<<<<<< HEAD
     public async Task<(string Path, FMType MediaType)> FemugationSaveImageOrVideoAsync(
      IFormFile file,
      string folderName,
@@ -603,7 +602,7 @@ public class FileStorageService : IFileStorageService
 
         return (relUrl.Replace("//", "/"), mediaType);
     }
-=======
+
     public async Task<string> SavePMSDocumentAsync(
     IFormFile file,
     string folderName,
@@ -617,7 +616,6 @@ public class FileStorageService : IFileStorageService
         if (file.Length > maxBytes)
             throw new InvalidOperationException(
                 $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
->>>>>>> 93d580d180dcb7fb45eb7dff6225ca6e150ad307
 
         // ✅ Allowed extensions
         var allowed = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".pdf" };

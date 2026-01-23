@@ -132,3 +132,17 @@ Request:
 Response:
 [{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"0","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
 ==============================================
+2026-01-23 15:45:00.055 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQDHQ5C6SG:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 697 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
