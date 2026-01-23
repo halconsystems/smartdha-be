@@ -135,6 +135,11 @@ namespace MobileAPI.Infrastructure
                     Title = "Ground Booking Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("Femugation", new OpenApiInfo
+                {
+                    Title = "Femugation Module",
+                    Version = "v1"
+                });
 
                 o.SwaggerDoc("other", new OpenApiInfo
                 {

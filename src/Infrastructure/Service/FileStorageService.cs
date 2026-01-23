@@ -509,7 +509,99 @@ public class FileStorageService : IFileStorageService
         return relPath;
     }
 
+    public async Task<(string Path, FMType MediaType)> FemugationSaveImageOrVideoAsync(
+     IFormFile file,
+     string folderName,
+     CancellationToken ct,
+     long maxImageBytes = 10 * 1024 * 1024,   // 10 MB
+     long maxVideoBytes = 50 * 1024 * 1024    // 50 MB
+ )
+    {
+        if (file is null || file.Length == 0)
+            throw new ArgumentException("Empty file.");
 
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        var imageExts = new[] { ".jpg", ".jpeg", ".png" };
+        var videoExts = new[] { ".mp4" };
+
+        FMType mediaType;
+        long maxBytes;
+
+        if (imageExts.Contains(ext))
+        {
+            mediaType = FMType.Image;
+            maxBytes = maxImageBytes;
+        }
+        else if (videoExts.Contains(ext))
+        {
+            mediaType = FMType.Video;
+            maxBytes = maxVideoBytes;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        }
+
+        if (file.Length > maxBytes)
+            throw new InvalidOperationException(
+                $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+
+        // ✅ MIME validation
+        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        {
+            if (mediaType == FMType.Image &&
+                !mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Only image uploads allowed. Detected: {mappedType}");
+            }
+
+            if (mediaType == FMType.Video &&
+                !mappedType.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Only video uploads allowed. Detected: {mappedType}");
+            }
+        }
+
+        // ===== SAME STORAGE LOGIC (UNCHANGED) =====
+
+        var baseDir = _env.ContentRootPath;
+        if (string.IsNullOrWhiteSpace(baseDir))
+            baseDir = AppContext.BaseDirectory;
+
+        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
+            ? "CBMS"
+            : _opt.RequestPath.Trim('/', '\\');
+
+        var basePhysical = Path.Combine(baseDir, requestFolder);
+        Directory.CreateDirectory(basePhysical);
+
+        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
+        var absFolder = string.IsNullOrEmpty(relFolder)
+            ? basePhysical
+            : Path.Combine(basePhysical, relFolder);
+
+        Directory.CreateDirectory(absFolder);
+
+        var fileName = $"{Guid.NewGuid():N}{ext}";
+        var absPath = Path.Combine(absFolder, fileName);
+
+        await using (var stream = new FileStream(
+            absPath,
+            FileMode.CreateNew,
+            FileAccess.Write,
+            FileShare.None,
+            64 * 1024,
+            useAsync: true))
+        {
+            await file.CopyToAsync(stream, ct);
+        }
+
+        var relUrl =
+            $"/{requestFolder}/{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}{fileName}";
+
+        return (relUrl.Replace("//", "/"), mediaType);
+    }
 
 
 }

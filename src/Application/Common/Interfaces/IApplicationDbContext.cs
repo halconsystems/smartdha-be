@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.FMS;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -65,6 +66,14 @@ public interface IApplicationDbContext
     DbSet<MemberRequest> MemberRequests { get; }
     DbSet<MemberSpouse> MemberSpouses { get; }
     DbSet<MemberChildren> MemberChildrens { get; }
+    DbSet<FemPhase> FemPhases { get; }
+    DbSet<FemService> FemServices { get; }
+    DbSet<TankerSize> TankerSizes { get; }
+    DbSet<FemDTSetting> FemDTSettings { get; }
+    DbSet<FemPaymentIpnLogs> FemPaymentIpnLogs { get; }
+    DbSet<FemgutionShops> FemgutionShops { get; }
+    DbSet<Fumigation> Fumigations { get; }
+    DbSet<FumgationMedia> FumgationMedias { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

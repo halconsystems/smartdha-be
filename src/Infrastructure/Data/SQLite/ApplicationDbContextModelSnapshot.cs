@@ -987,6 +987,590 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("EmergencyTypes");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FemDTSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDiscount")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ValueType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FemDTSettings");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FemPaymentIpnLogs", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("AdditionalValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("BasketId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BillNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("DiscountedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ErrMsg")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsInternational")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IssuerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaskedPan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("MerchantAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MobileNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RawPayload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RdvMessageKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("RecurringTxn")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ResponseKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<decimal?>("TransactionAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransactionCurrency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ValidationHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FemPaymentIpnLogs");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FemPhase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FemPhases");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FemService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FemServices");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FemgutionShops", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float?>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("real");
+
+                    b.Property<float?>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("real");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("ShopPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FemgutionShops");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FumgationMedia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FemugationDispatchsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FemugationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MediaType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FemugationDispatchsId");
+
+                    b.ToTable("FumgationMedias");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.Fumigation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("AcknowledgedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("AmountToCollect")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("AssginedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("AssigndTo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("AssignedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BasketId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<decimal?>("CollectedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("DateOnly")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("DriverRemarksAudioPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FemPhaseID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FemServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FemStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FemTanker")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FemgutionShopsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StreetNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("TankerSizeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Taxes")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<TimeOnly>("TimeOnly")
+                        .HasColumnType("time");
+
+                    b.Property<decimal?>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FemPhaseID");
+
+                    b.HasIndex("FemServiceId");
+
+                    b.HasIndex("FemgutionShopsId");
+
+                    b.HasIndex("TankerSizeId");
+
+                    b.ToTable("Fumigations");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.TankerSize", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TankerSizes");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FirebaseApiLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1102,6 +1686,548 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasKey("Id");
 
                     b.ToTable("GoogleApiLogs");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ConfirmedOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrdersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid?>("ShopVehiclesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrdersId");
+
+                    b.HasIndex("ShopVehiclesId");
+
+                    b.ToTable("ConfirmedOrder");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.OrderDispatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("AcceptedAtAddress")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<double?>("AcceptedAtLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("AcceptedAtLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DeliverAssignedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeliverDriverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeliverShopVehiclesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DeliverVehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DeliveredAssignedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("DistanceFromOrderKm")
+                        .HasColumnType("float");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelivered")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPickup")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLocationUpdateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PickUpAssignedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("PickupAssignedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PickupDriverId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PickupShopVehiclesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PickupVehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SvVehicleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliverShopVehiclesId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.HasIndex("PickupShopVehiclesId");
+
+                    b.HasIndex("SvVehicleId");
+
+                    b.ToTable("OrderDispatch");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("AcceptDeliveredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("AcceptPickupAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("AmountToCollect")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("BasketId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("CollectedAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliverAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeliveredToRiderAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("DropLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DropLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("LaundryPackagingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("LaundryServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ParcelDeliveredParcelAddressAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ParcelPickedParcelFromAddressAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ParcelPickedParcelFromShopAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ParcelReadyAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PickUpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("PickupLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PickupLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("RiderArrivedOnShopAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RiderArrivedToPickDeliveryFromShopAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RiderArrivedToPickupAddressAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ShopsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UniqueFormID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("WashnPressProcessAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LaundryPackagingId");
+
+                    b.HasIndex("LaundryServiceId");
+
+                    b.HasIndex("ShopsId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DriverUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("LastLatitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("LastLocationAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("LastLongitude")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MapIconKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ShopsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopsId");
+
+                    b.ToTable("ShopVehicles");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.Shops", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float?>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("real");
+
+                    b.Property<float?>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("real");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("ShopPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shops");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LaundryPackaging", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LaundryPackaging");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LaundryService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LaundryService");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MemberChildren", b =>
@@ -1231,13 +2357,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("bit");
 
                     b.Property<string>("FatherCNICBackImagePath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FatherCNICFrontImagePath")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FatherCnic")
                         .HasColumnType("nvarchar(max)");
@@ -1250,9 +2373,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FatherPicturePath")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
@@ -1295,13 +2416,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("bit");
 
                     b.Property<string>("MotherCNICBackImagePath")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MotherCNICFrontImagePath")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MotherCnic")
                         .HasColumnType("nvarchar(max)");
@@ -1314,9 +2432,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MotherPicturePath")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NTNno")
                         .HasColumnType("nvarchar(max)");
@@ -1352,13 +2468,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PermenantCountry")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PicturePath")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PresentAddress")
                         .IsRequired()
@@ -1369,7 +2483,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PresentCountry")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Profession")
@@ -1958,6 +3071,691 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.HasIndex("VerificationId");
 
                     b.ToTable("NonMemberVerificationDocuments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseDocument", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long?>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("PrerequisiteDefinitionId");
+
+                    b.ToTable("CaseDocument");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<bool?>("ValueBool")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ValueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("ValueNumber")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ValueText")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("VerificationRef")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("VerifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrerequisiteDefinitionId");
+
+                    b.HasIndex("CaseId", "PrerequisiteDefinitionId")
+                        .IsUnique();
+
+                    b.ToTable("CasePrerequisiteValue");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("NextStepId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("NextStepNo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PerformedBy")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("StepId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("StepId");
+
+                    b.ToTable("CaseStepHistory");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Directorate");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("AllowedExtensions")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaxLength")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinLength")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrerequisiteDefinitionId", "Value")
+                        .IsUnique();
+
+                    b.ToTable("PrerequisiteOptions", (string)null);
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<Guid>("ProcessId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("RequiresPaymentBeforeNext")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequiresVoucher")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int?>("SlaHours")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StepNo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DirectorateId");
+
+                    b.HasIndex("ProcessId");
+
+                    b.ToTable("ProcessStep");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("ApplicantCnic")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ApplicantMobile")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("ApplicantName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ApplicantRemarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CaseNo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CurrentStepId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CurrentStepNo")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProcessId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserPropertyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseNo")
+                        .IsUnique();
+
+                    b.HasIndex("CurrentStepId");
+
+                    b.HasIndex("ProcessId");
+
+                    b.HasIndex("UserPropertyId");
+
+                    b.ToTable("PropertyCase");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceCategory");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instruction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeeAtSubmission")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeeRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInstructionAtStart")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsNadraVerificationRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVoucherPossible")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsfeeSubmit")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("ServiceProcess");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.UserProperty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerCnic")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phase")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PropertyNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Sector")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserProperty");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicActionLog", b =>
@@ -3990,6 +5788,116 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("Complaint");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.FumgationMedia", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.FMS.Fumigation", "FemugationDispatchs")
+                        .WithMany("Media")
+                        .HasForeignKey("FemugationDispatchsId");
+
+                    b.Navigation("FemugationDispatchs");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.Fumigation", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.FMS.FemPhase", "FemPhase")
+                        .WithMany()
+                        .HasForeignKey("FemPhaseID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.FMS.FemService", "FemService")
+                        .WithMany()
+                        .HasForeignKey("FemServiceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.FMS.FemgutionShops", "FemgutionShops")
+                        .WithMany()
+                        .HasForeignKey("FemgutionShopsId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.FMS.TankerSize", "TankerSize")
+                        .WithMany()
+                        .HasForeignKey("TankerSizeId");
+
+                    b.Navigation("FemPhase");
+
+                    b.Navigation("FemService");
+
+                    b.Navigation("FemgutionShops");
+
+                    b.Navigation("TankerSize");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ConfirmedOrder", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", "Orders")
+                        .WithMany()
+                        .HasForeignKey("OrdersId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", null)
+                        .WithMany("PanicDispatches")
+                        .HasForeignKey("ShopVehiclesId");
+
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.OrderDispatch", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", "DeliverShopVehicles")
+                        .WithMany()
+                        .HasForeignKey("DeliverShopVehiclesId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", "Orders")
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", "PickupShopVehicles")
+                        .WithMany()
+                        .HasForeignKey("PickupShopVehiclesId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvVehicle", null)
+                        .WithMany("OrderDispatches")
+                        .HasForeignKey("SvVehicleId");
+
+                    b.Navigation("DeliverShopVehicles");
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("PickupShopVehicles");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LaundryPackaging", "LaundryPackaging")
+                        .WithMany()
+                        .HasForeignKey("LaundryPackagingId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LaundryService", "LaundryService")
+                        .WithMany()
+                        .HasForeignKey("LaundryServiceId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Shops", "Shops")
+                        .WithMany()
+                        .HasForeignKey("ShopsId");
+
+                    b.Navigation("LaundryPackaging");
+
+                    b.Navigation("LaundryService");
+
+                    b.Navigation("Shops");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Shops", "Shops")
+                        .WithMany()
+                        .HasForeignKey("ShopsId");
+
+                    b.Navigation("Shops");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.MemberChildren", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.MemberRequest", "MemberRequest")
@@ -4056,6 +5964,129 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("Verification");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseDocument", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Case");
+
+                    b.Navigation("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", "Step")
+                        .WithMany()
+                        .HasForeignKey("StepId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("Step");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteOption", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", "Directorate")
+                        .WithMany()
+                        .HasForeignKey("DirectorateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", "Process")
+                        .WithMany()
+                        .HasForeignKey("ProcessId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Directorate");
+
+                    b.Navigation("Process");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", "CurrentStep")
+                        .WithMany()
+                        .HasForeignKey("CurrentStepId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", "Process")
+                        .WithMany()
+                        .HasForeignKey("ProcessId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.UserProperty", "UserProperty")
+                        .WithMany()
+                        .HasForeignKey("UserPropertyId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CurrentStep");
+
+                    b.Navigation("Process");
+
+                    b.Navigation("UserProperty");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicActionLog", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PanicRequest", "PanicRequest")
@@ -4076,7 +6107,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .IsRequired();
 
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.SvVehicle", "SvVehicle")
-                        .WithMany("PanicDispatches")
+                        .WithMany()
                         .HasForeignKey("SvVehicleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -4376,6 +6407,16 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("History");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.Fumigation", b =>
+                {
+                    b.Navigation("Media");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ShopVehicles", b =>
+                {
+                    b.Navigation("PanicDispatches");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Module", b =>
                 {
                     b.Navigation("SubModules");
@@ -4410,7 +6451,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.SvVehicle", b =>
                 {
-                    b.Navigation("PanicDispatches");
+                    b.Navigation("OrderDispatches");
                 });
 #pragma warning restore 612, 618
         }

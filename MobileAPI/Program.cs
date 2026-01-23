@@ -238,6 +238,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/panic/swagger.json", "Panic Module");
     c.SwaggerEndpoint("/swagger/Laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/GroundBooking/swagger.json", "Ground Booking Module");
+    c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
     c.SwaggerEndpoint("/swagger/other/swagger.json", "Other Module");
 });
 

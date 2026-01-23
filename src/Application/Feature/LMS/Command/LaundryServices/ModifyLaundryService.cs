@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryServices;
 
-public record ModifyLaundryServiceCommand(Guid Id, string Name, string DisplayName, Guid ReligonId) : IRequest<SuccessResponse<string>>;
+public record ModifyLaundryServiceCommand(Guid Id, string Name, string DisplayName, bool Active) : IRequest<SuccessResponse<string>>;
 public class ModifyLaundryServiceHandler
     : IRequestHandler<ModifyLaundryServiceCommand, SuccessResponse<string>>
 {
@@ -29,6 +29,7 @@ public class ModifyLaundryServiceHandler
         LaundryServices.Name = command.Name;
         LaundryServices.DisplayName = command.DisplayName;
         LaundryServices.Code = command.DisplayName?.Substring(0, command.DisplayName.Length / 2).ToUpper();
+        LaundryServices.IsActive = command.Active;
 
         await _context.SaveChangesAsync(ct);
         return Success.Update(LaundryServices.Id.ToString());

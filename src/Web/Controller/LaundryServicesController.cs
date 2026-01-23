@@ -1,4 +1,5 @@
-﻿using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryServices;
+﻿using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryPackaging;
+using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryServices;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryService;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
@@ -29,4 +30,15 @@ public class LaundryServicesController : BaseApiController
         var result = await _mediator.Send(new GetAllLaundryServicesQuery(), ct);
         return Ok(result);
     }
+
+    [HttpDelete("Delete-LaundryServices"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<string>>> DeleteRoom([FromQuery] DeleteLaundryServiceCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpPut("Active-Inactive-LaundryServices")]
+    public async Task<ActionResult<SuccessResponse<string>>> UpdateLaundryCategory(Guid id, bool Active, ActiveInActiveLaundryServiceCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd with { Id = id }, ct));
 }

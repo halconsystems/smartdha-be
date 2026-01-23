@@ -47,12 +47,12 @@ public class GroundController : BaseApiController
     public async Task<IActionResult> GetImageCategories(CancellationToken ct)
          => Ok(await _mediator.Send(new GetGroundImageCategoriesQuery(), ct));
 
-    [HttpPost("{roomId:guid}/images/add"), AllowAnonymous]
+    [HttpPost("{GroundId:guid}/images/add"), AllowAnonymous]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
     public async Task<IActionResult> AddRoomImages(
-    Guid roomId,
-    [FromForm] AddRoomImagesFlatForm form,
+    Guid GroundId,
+    [FromForm] AddGroundImageDTO form,
     CancellationToken ct)
     {
         if (!ModelState.IsValid) return ValidationProblem(ModelState);
@@ -68,7 +68,7 @@ public class GroundController : BaseApiController
         if (form.Categories.Count != 0 && form.Categories.Count != n)
             return BadRequest("Categories count must match Files count.");
 
-        var folder = $"Rooms/{roomId}";
+        var folder = $"Ground/{GroundId}";
         var uploaded = new List<GroundImagesRecord>();
 
         for (int i = 0; i < n; i++)
@@ -102,7 +102,7 @@ public class GroundController : BaseApiController
         }
 
         // Hand off to your command (enforces “only one Main” etc.)
-        var cmd = new AddGroundImagesCommand(roomId, uploaded);
+        var cmd = new AddGroundImagesCommand(GroundId, uploaded);
         var result = await _mediator.Send(cmd, ct);
         return Ok(result);
     }

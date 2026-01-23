@@ -17,5 +17,6 @@ public class LaundryItems : BaseAuditableEntity
     public string? ItemPrice { get; set; }
     public Guid CategoryId { get; set; }
     public LaundryCategory? LaundryCategory { get; set; }
+    public string? ItemImage { get; set; }
 
 }

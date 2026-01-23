@@ -32,4 +32,5 @@ public class GroundDTO
     public List<GroundSlotsdto>? Slots { get; set; }
     public List<GroundStandtardTime>? GroundStandtardTimes { get; set; }
     public GroundStandtardTime? GroundStandtardTime { get; set; }
+    public AvailabilityAction? Action { get; set; }
 }

@@ -13,3 +13,13 @@ public enum PanicDispatchStatus
     Completed = 5,  // Action completed
     Cancelled = 6
 }
+
+
+public enum FemugationDispatchStatus
+{
+    Assigned = 1,   // Control room assigned
+    Accepted = 2,   // Driver accepted
+    Arrived = 4,    // Reached location
+    Completed = 5,  // Action completed
+    Cancelled = 6
+}

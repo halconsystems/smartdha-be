@@ -11,3 +11,10 @@ public enum PanicDispatchMediaType
     Video = 2
 }
 
+
+public enum FMType
+{
+    Image = 1,
+    Video = 2
+}
+

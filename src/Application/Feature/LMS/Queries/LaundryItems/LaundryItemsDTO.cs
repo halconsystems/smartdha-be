@@ -14,4 +14,5 @@ public class LaundryItemsDTO
     public string? Code { get; set; }
     public string? CategoryID { get; set; }
     public string? ItemPrice { get; set; }
+    public string? Image { get; set; }
 }

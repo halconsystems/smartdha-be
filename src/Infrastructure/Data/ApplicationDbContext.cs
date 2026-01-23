@@ -5,6 +5,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.FMS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -80,6 +81,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<MemberRequest> MemberRequests => Set<MemberRequest>();
     public DbSet<MemberChildren> MemberChildrens => Set<MemberChildren>();
     public DbSet<MemberSpouse> MemberSpouses => Set<MemberSpouse>();
+    public DbSet<FemDTSetting> FemDTSettings => Set<FemDTSetting>();
+    public DbSet<FemPaymentIpnLogs> FemPaymentIpnLogs => Set<FemPaymentIpnLogs>();
+    public DbSet<FemPhase> FemPhases => Set<FemPhase>();
+    public DbSet<FemService> FemServices => Set<FemService>();
+    public DbSet<TankerSize> TankerSizes => Set<TankerSize>();
+    public DbSet<Fumigation> Fumigations => Set<Fumigation>();
+    public DbSet<FemgutionShops> FemgutionShops => Set<FemgutionShops>();
+    public DbSet<FumgationMedia> FumgationMedias => Set<FumgationMedia>();
 
 
 

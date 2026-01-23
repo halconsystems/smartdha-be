@@ -20,11 +20,13 @@ public record GetGroundQuery(GroundCategory GroundCategory) : IRequest<List<Grou
 public class GetGroundQueryHandler : IRequestHandler<GetGroundQuery, List<GroundDTO>>
 {
     private readonly IOLMRSApplicationDbContext _context;
+    private readonly IFileStorageService _fileStorageService;
 
     public GetGroundQueryHandler(
-         IOLMRSApplicationDbContext context)
+         IOLMRSApplicationDbContext context, IFileStorageService fileStorageService)
     {
         _context = context;
+        _fileStorageService = fileStorageService;
     }
 
     public async Task<List<GroundDTO>> Handle(GetGroundQuery request, CancellationToken cancellationToken)
@@ -41,22 +43,33 @@ public class GetGroundQueryHandler : IRequestHandler<GetGroundQuery, List<Ground
 
         var clubs = await _context.Clubs.Where(x => ground.Select(x => x.ClubId).Contains(x.Id)).ToListAsync();
 
-        var grounds = ground.Select(x => new GroundDTO
+        var grounds = ground.Select(x =>
         {
-            Id = x.Id,
-            GroundName = x.Name,
-            MainImageUrl = groundImage?.FirstOrDefault(y => y.GroundId == x.Id)?.ImageURL,
-            GroundDescription = x.Description,
-            GroundType = x.GroundType,
-            GroundCategory = x.GroundCategory,
-            Location = x.Location,
-            ContactNumber = x.ContactNumber,
-            AccountNo = x.AccountNo,
-            AccountNoAccronym = x.AccountNoAccronym,
-            SlotCount = groundSlots.Where(g => g.GroundId == x.Id).Count().ToString(),
-            GroundStandtardTime = groundGroundStandardTime.Where(s => s.GroundId == x.Id).FirstOrDefault() 
-            //ClubName = clubs != null ? clubs.FirstOrDefault(c => c.Id == x.ClubId).Name : ""
+            var imagePath = groundImage?
+                .FirstOrDefault(y => y.GroundId == x.Id)?
+                .ImageURL;
 
+            return new GroundDTO
+            {
+                Id = x.Id,
+                GroundName = x.Name,
+                MainImageUrl = imagePath == null
+                    ? null
+                    : _fileStorageService.GetPublicUrl(imagePath),
+
+                GroundDescription = x.Description,
+                GroundType = x.GroundType,
+                GroundCategory = x.GroundCategory,
+                Location = x.Location,
+                ContactNumber = x.ContactNumber,
+                AccountNo = x.AccountNo,
+                AccountNoAccronym = x.AccountNoAccronym,
+                SlotCount = groundSlots.Count(g => g.GroundId == x.Id).ToString(),
+                GroundStandtardTime = groundGroundStandardTime
+                                        .FirstOrDefault(s => s.GroundId == x.Id),
+                ClubId = clubs?.FirstOrDefault(c => c.Id == x.ClubId)?.Id,
+                ClubName = clubs?.FirstOrDefault(c => c.Id == x.ClubId)?.Name ?? ""
+            };
         }).ToList();
 
         return grounds;

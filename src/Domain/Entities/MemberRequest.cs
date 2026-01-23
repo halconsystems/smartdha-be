@@ -42,8 +42,7 @@ public class MemberRequest : BaseAuditableEntity
     public string? CNICBackImagePath { get; set; } = default!;
 
     [Required]
-    [MaxLength(500)]
-    public string? PicturePath { get; set; } // optional 
+    public string PicturePath { get; set; } = default!;
     public string? Qualification { get; set; }
     public Profession? Profession { get; set; }
 
@@ -53,15 +52,10 @@ public class MemberRequest : BaseAuditableEntity
 
     public string? FatherCnic { get; set; }
     public string? FatherMobileNo { get; set; }
-    [Required]
-    [MaxLength(500)]
-    public string FatherCNICFrontImagePath { get; set; } = default!;
+    public string? FatherCNICFrontImagePath { get; set; }
 
-    [MaxLength(500)]
     public string? FatherCNICBackImagePath { get; set; }
 
-    [Required]
-    [MaxLength(500)]
     public string? FatherPicturePath { get; set; } // optional 
 
     [Required]
@@ -70,15 +64,11 @@ public class MemberRequest : BaseAuditableEntity
 
     public string? MotherCnic { get; set; }
     public string? MotherMobileNo { get; set; }
-    [Required]
-    [MaxLength(500)]
-    public string MotherCNICFrontImagePath { get; set; } = default!;
+    
+    public string? MotherCNICFrontImagePath { get; set; }
 
-    [MaxLength(500)]
     public string? MotherCNICBackImagePath { get; set; }
 
-    [Required]
-    [MaxLength(500)]
     public string? MotherPicturePath { get; set; } // optional 
 
     public bool IsChild { get; set; }
@@ -93,13 +83,13 @@ public class MemberRequest : BaseAuditableEntity
     public string PresentAddress { get; set; } = default!;
     [Required]
     public string PresentCity { get; set; } = default!;
-    public string PresentCountry { get; set; } = default!;
+    public string? PresentCountry { get; set; }
 
     [Required]
     public string PermenantAddress { get; set; } = default!;
     [Required]
     public string PermenantCity { get; set; } = default!;
-    public string PermenantCountry { get; set; } = default!;
+    public string? PermenantCountry { get; set; }
 
     public bool BestKnowledge { get; set; }
     public bool Rservation { get; set; }

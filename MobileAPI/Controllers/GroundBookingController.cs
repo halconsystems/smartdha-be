@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
+using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.GroundReservations.Command;
 using DHAFacilitationAPIs.Application.Feature.GroundReservations.Queries;
 using DHAFacilitationAPIs.Application.Feature.Grounds.Command;
@@ -19,6 +20,7 @@ using DHAFacilitationAPIs.Domain.Enums.GBMS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MobileAPI.Authorization;
 
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
@@ -182,4 +184,10 @@ public class GroundBookingController : BaseApiController
         }
     }
 
+    [HttpGet("search-grounds")]
+    public async Task<IActionResult> SearchGround([FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] GroundCategory groundCategory, [FromQuery] TimeOnly CheckInTime, TimeOnly CheckOutTime)
+    {
+        var result = await _mediator.Send(new SearchGroundQuery(checkInDate, checkOutDate, groundCategory,CheckInTime,CheckOutTime));
+        return Ok(result);
+    }
 }
