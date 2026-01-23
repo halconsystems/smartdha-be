@@ -30,7 +30,7 @@ public class AdminCaseSummaryDto
 }
 
 
-public record GetAllCasesForAdminQuery()
+public record GetAllCasesForAdminQuery(Guid moduleId)
     : IRequest<ApiResult<List<AdminCaseSummaryDto>>>;
 public class GetAllCasesForAdminHandler
     : IRequestHandler<GetAllCasesForAdminQuery, ApiResult<List<AdminCaseSummaryDto>>>
@@ -49,8 +49,11 @@ public class GetAllCasesForAdminHandler
         CancellationToken ct)
     {
 
+
+
         var cases = await _db.Set<PropertyCase>().AsNoTracking()
-            .Where(x => x.IsDeleted != true && x.IsActive == true).
+            .Where(x => x.IsDeleted != true && x.IsActive == true &&
+            x.CurrentModuleId== request.moduleId).
             OrderByDescending(x => x.Created)
             .Select(x => new AdminCaseSummaryDto 
             { 

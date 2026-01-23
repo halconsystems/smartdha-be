@@ -76,9 +76,9 @@ public class CaseDataController : BaseApiController
     //public async Task<IActionResult> GetWorkflow()
     //   => Ok(await _mediator.Send(new GetMyCasesQuery()));
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllCases(CancellationToken ct)
-       => Ok(await _mediator.Send(new GetAllCasesForAdminQuery(), ct));
+    [HttpGet("Cases/{moduleId:guid}")]
+    public async Task<IActionResult> GetAllCases(Guid moduleId,CancellationToken ct)
+       => Ok(await _mediator.Send(new GetAllCasesForAdminQuery(moduleId), ct));
 
     [HttpGet("{caseId:guid}")]
     public async Task<IActionResult> GetCaseDetail(

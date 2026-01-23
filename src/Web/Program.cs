@@ -98,19 +98,29 @@ builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
 builder.Services.AddScoped<IOrderRealTime, OrderRealtimeWebAdapter>();
 builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("CorsPolicy", b => b
+//        .WithOrigins(
+//            "http://localhost:3000",
+//            "https://dfpwebapi.dhakarachi.org",
+//            "https://gw.dhakarachi.org",
+//            "http://172.16.10.123:3000",
+//            "https://dfp.dhakarachi.org",
+//            "http://192.168.5.121:3000"
+//        )
+//        .AllowAnyHeader()
+//        .AllowAnyMethod()
+//        .AllowCredentials()
+//    );
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", b => b
-        .WithOrigins(
-            "http://localhost:3000",
-            "https://dfpwebapi.dhakarachi.org",
-            "https://gw.dhakarachi.org",
-            "http://172.16.10.123:3000",
-            "https://dfp.dhakarachi.org"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials()
+    options.AddPolicy("CorsPolicy", b =>
+        b.SetIsOriginAllowed(_ => true) // allow any origin dynamically
+         .AllowAnyHeader()
+         .AllowAnyMethod()
+         .AllowCredentials()
     );
 });
 
