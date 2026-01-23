@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Entities;
 
+using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
+
 namespace DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateEmergencyType;
+
 public class CreateEmergencyTypeCommand : IRequest<Guid>
 {
     public int Code { get; set; }
@@ -27,6 +30,13 @@ public class CreateEmergencyTypeCommandHandler
 
     public async Task<Guid> Handle(CreateEmergencyTypeCommand request, CancellationToken ct)
     {
+        var existEmgergency = await _context.EmergencyTypes.
+            Where(x => x.Name == request.Name ||
+            x.Code == request.Code)
+            .FirstOrDefaultAsync(ct);
+
+        if (existEmgergency != null) throw new NotFoundException($"Emergency Type '{ request.Name}' OR '{request.Code}' already Exist");
+
         var entity = new EmergencyType
         {
             Code = request.Code,

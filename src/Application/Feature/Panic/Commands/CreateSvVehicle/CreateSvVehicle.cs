@@ -7,6 +7,8 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 
+using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
+
 namespace DHAFacilitationAPIs.Application.Feature.Panic.Commands.CreateSvVehicle;
 public record CreateSvVehicleCommand(
     string Name,
@@ -28,6 +30,12 @@ public class CreateSvVehicleCommandHandler
 
     public async Task<Guid> Handle(CreateSvVehicleCommand request, CancellationToken ct)
     {
+
+        var existVehicle = await _context.SvVehicles
+            .Where(x => x.RegistrationNo == request.RegistrationNo)
+            .FirstOrDefaultAsync();
+
+        if (existVehicle != null) throw new NotFoundException($"This Vehicle '{request.RegistrationNo}' already Exist");
         // Optional: verify point exists
         // Check only if a point was provided
         if (request.SvPointId.HasValue)
@@ -36,7 +44,7 @@ public class CreateSvVehicleCommandHandler
                 .AnyAsync(p => p.Id == request.SvPointId.Value && p.IsActive==true, ct);
 
             if (!pointExists)
-                throw new NotFoundException("SvPoint", request.SvPointId.Value.ToString());
+                throw new NotFoundException(request.SvPointId.Value.ToString());
         }
 
 

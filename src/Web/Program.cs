@@ -144,6 +144,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/panic/swagger.json", "Panic Module");
     c.SwaggerEndpoint("/swagger/laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/Ground/swagger.json", "Ground Module");
+    c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
 });
 
 //app.UseHealthChecks("/health");
