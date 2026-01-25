@@ -91,6 +91,8 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
         c.CurrentStepNo = nextStep.StepNo;
         c.CurrentAssignedUserId = null;   // reset internal assignment
         c.Status = CaseStatus.InProgress;
+        c.CurrentModuleId=nextStep.Directorate.ModuleId;
+        c.DirectorateId=nextStep.DirectorateId;
 
         // Add history of external forward
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory

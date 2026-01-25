@@ -602,6 +602,7 @@ public class FileStorageService : IFileStorageService
 
         return (relUrl.Replace("//", "/"), mediaType);
     }
+
     public async Task<string> SavePMSDocumentAsync(
     IFormFile file,
     string folderName,
