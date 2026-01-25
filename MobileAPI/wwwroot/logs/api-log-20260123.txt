@@ -146,3 +146,59 @@ Request:
 Response:
 [EMPTY]
 ==============================================
+2026-01-23 23:30:25.880 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQLLSS8D64:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 85 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-23 23:30:57.677 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQLM6BVOHJ:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 76 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-23 23:31:35.838 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQLMHNHBR2:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 64 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-23 23:31:56.287 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQLMNRPTGB:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 57 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================

@@ -68,9 +68,7 @@ public class GetCaseWorkflowHierarchyHandler
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<ApiResult<FinalWorkFlowWithFee>> Handle(
-        GetCaseWorkflowHierarchyQuery request,
-        CancellationToken ct)
+    public async Task<ApiResult<FinalWorkFlowWithFee>> Handle(GetCaseWorkflowHierarchyQuery request, CancellationToken ct)
     {
         // 1️⃣ Load case
         var c = await _db.Set<PropertyCase>()
@@ -196,9 +194,9 @@ public class GetCaseWorkflowHierarchyHandler
         }).ToList();
 
         var documents = await _db.Set<CaseResultDocument>()
-    .AsNoTracking()
-    .Where(x => x.CaseId == c.Id && x.IsFinal)
-    .ToListAsync(ct);
+        .AsNoTracking()
+        .Where(x => x.CaseId == c.Id && x.IsFinal)
+        .ToListAsync(ct);
 
         var documentDtos = documents.Select(d => new CaseResultDocumentDto
         {

@@ -155,13 +155,14 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/Ground/swagger.json", "Ground Module");
     c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
+    c.SwaggerEndpoint("/swagger/RealTime-SignalR/swagger.json", "RealTime SignalR");
 });
 
 //app.UseHealthChecks("/health");
 
 
 
-//app.MapFallbackToFile("index.html");
+app.MapFallbackToFile("index.html");
 
 //app.UseExceptionHandler(options => { });
 app.UseExceptionHandler(builder =>

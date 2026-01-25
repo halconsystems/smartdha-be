@@ -1,0 +1,565 @@
+2026-01-24 00:15:36.957 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEGT:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 401
+Duration : 7112 ms
+IP       : ::1
+
+Request:
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="userPropertyId"
+
+EC27D81F-B5B2-4833-81C0-A5D78112C703
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="processId"
+
+CD85BD94-AEB5-462F-86F4-E5208BE02FAE
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","valueText":"asdasdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","valueText":"asdsadas","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","valueText":"dad","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","valueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","valueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------133480728503949639495683
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------133480728503949639495683--
+
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid CNIC. Please verify and try again."}
+==============================================
+2026-01-24 00:16:55.861 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEGV:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 401
+Duration : 10 ms
+IP       : ::1
+
+Request:
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="userPropertyId"
+
+EC27D81F-B5B2-4833-81C0-A5D78112C703
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="processId"
+
+CD85BD94-AEB5-462F-86F4-E5208BE02FAE
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","valueText":"asdasdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","valueText":"asdsadas","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","valueText":"dad","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","valueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","valueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------642963678935081661163213
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------642963678935081661163213--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-24 00:17:23.565 +05:00 [INF] [CQRS]
+TraceId  : 0HNIQMDS3TEGR:0000000B
+Request  : AppUserLoginCommand
+Duration : 2810 ms
+2026-01-24 00:17:23.704 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (2812 milliseconds) b773f351-e9aa-47b9-b9be-1dc925dd5347 3220312345678 {"CNIC":"3220312345678","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-24 00:17:23.722 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEGR:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 2999 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-24 00:18:18.975 +05:00 [INF] [CQRS]
+TraceId  : 0HNIQMDS3TEGV:00000002
+Request  : SubmitCase_V1Command
+Duration : 37886 ms
+2026-01-24 00:18:19.029 +05:00 [WRN] CMS Long Running Request: SubmitCase_V1Command (37886 milliseconds) b773f351-e9aa-47b9-b9be-1dc925dd5347 3220312345678 {"UserPropertyId":"ec27d81f-b5b2-4833-81c0-a5d78112c703","ProcessId":"cd85bd94-aeb5-462f-86f4-e5208be02fae","ApplicantRemarks":"Solar panel installation request","PrerequisiteValues":[{"PrerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","ValueText":"asdasdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","ValueText":"asdsadas","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","ValueText":"dad","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","ValueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","ValueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","ValueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"}],"Files":null,"FeeDefinitionId":"00000000-0000-0000-0000-000000000000","FeeOptionId":null,"BankRefNo":"","$type":"SubmitCase_V1Command"}
+2026-01-24 00:18:19.034 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEGV:00000002
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 200
+Duration : 41885 ms
+IP       : ::1
+
+Request:
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="userPropertyId"
+
+EC27D81F-B5B2-4833-81C0-A5D78112C703
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="processId"
+
+CD85BD94-AEB5-462F-86F4-E5208BE02FAE
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","valueText":"asdasdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","valueText":"asdsadas","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","valueText":"dad","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","valueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","valueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------096509924585009699758999
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------096509924585009699758999--
+
+
+Response:
+{"success":false,"message":"Fee definition not found.","data":null}
+==============================================
+2026-01-24 00:20:08.551 +05:00 [INF] [CQRS]
+TraceId  : 0HNIQMDS3TEH1:00000001
+Request  : SubmitCase_V1Command
+Duration : 2344 ms
+2026-01-24 00:20:08.611 +05:00 [WRN] CMS Long Running Request: SubmitCase_V1Command (2345 milliseconds) b773f351-e9aa-47b9-b9be-1dc925dd5347 3220312345678 {"UserPropertyId":"ec27d81f-b5b2-4833-81c0-a5d78112c703","ProcessId":"cd85bd94-aeb5-462f-86f4-e5208be02fae","ApplicantRemarks":"Solar panel installation request","PrerequisiteValues":[{"PrerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","ValueText":"asdasdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","ValueText":"asdsadas","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","ValueText":"dad","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","ValueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","ValueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","ValueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"}],"Files":null,"FeeDefinitionId":"00000000-0000-0000-0000-000000000000","FeeOptionId":null,"BankRefNo":"","$type":"SubmitCase_V1Command"}
+2026-01-24 00:20:08.612 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEH1:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 200
+Duration : 80918 ms
+IP       : ::1
+
+Request:
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="userPropertyId"
+
+EC27D81F-B5B2-4833-81C0-A5D78112C703
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="processId"
+
+CD85BD94-AEB5-462F-86F4-E5208BE02FAE
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","valueText":"asdasdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","valueText":"asdsadas","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","valueText":"dad","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","valueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","valueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------554282822638210657616953
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------554282822638210657616953--
+
+
+Response:
+{"success":false,"message":"Fee definition not found.","data":null}
+==============================================
+2026-01-24 00:22:28.331 +05:00 [INF] [CQRS]
+TraceId  : 0HNIQMDS3TEH3:00000001
+Request  : SubmitCase_V1Command
+Duration : 55102 ms
+2026-01-24 00:22:28.398 +05:00 [WRN] CMS Long Running Request: SubmitCase_V1Command (55103 milliseconds) b773f351-e9aa-47b9-b9be-1dc925dd5347 3220312345678 {"UserPropertyId":"ec27d81f-b5b2-4833-81c0-a5d78112c703","ProcessId":"cd85bd94-aeb5-462f-86f4-e5208be02fae","ApplicantRemarks":"Solar panel installation request","PrerequisiteValues":[{"PrerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","ValueText":"asdasdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","ValueText":"asdasd","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","ValueText":"","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","ValueText":"asdsadas","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","ValueText":"dad","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","ValueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","ValueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"},{"PrerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","ValueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","ValueNumber":null,"ValueDate":null,"ValueBool":null,"$type":"PrerequisiteValueInput"}],"Files":null,"FeeDefinitionId":"00000000-0000-0000-0000-000000000000","FeeOptionId":null,"BankRefNo":"","$type":"SubmitCase_V1Command"}
+2026-01-24 00:22:28.399 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIQMDS3TEH3:00000001
+Method   : POST
+Path     : /api/casedata/submit_v1
+Status   : 200
+Duration : 55172 ms
+IP       : ::1
+
+Request:
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="userPropertyId"
+
+EC27D81F-B5B2-4833-81C0-A5D78112C703
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="processId"
+
+CD85BD94-AEB5-462F-86F4-E5208BE02FAE
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="applicantName"
+
+Test-1001
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="applicantCnic"
+
+3220312345678
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="applicantMobile"
+
+03001234567
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="applicantRemarks"
+
+Solar panel installation request
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="prerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"a7dc23e0-e9aa-4f6f-a397-dc22ce2a21ea","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f1127621-e595-4e35-b2bd-c28d417603ba","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ea0f2839-40e5-4ed1-8cd5-9ba7213b33f5","valueText":"asdasdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"ef7a55e4-341f-4440-9930-9c37aaee1fe7","valueText":"asdasd","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"a0d924e7-ea7d-4c41-80ff-7637cf7d56f7","valueText":"","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"d98e7432-1cdb-408a-9c2f-e30b3733f283","valueText":"asdsadas","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"e40c7081-3fc7-4c11-91fd-b0968e39c018","valueText":"dad","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","valueText":"b93a0cd9-a922-4c05-aec7-af5949d7eb55_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270fe","valueText":"f3b6f5f7-b0d3-4e4f-8e11-821ba3a270feCnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null},{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2_Cnic.pdf","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------457770559513630596669573
+Content-Disposition: form-data; name="files"; filename=""
+
+
+----------------------------457770559513630596669573--
+
+
+Response:
+{"success":false,"message":"Fee definition not found.","data":null}
+==============================================
+2026-01-24 20:08:57.642 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 16669 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:10:05.846 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000000D
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 39913 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:10:13.275 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000000F
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 2355 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:10:36.022 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:00000011
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 19764 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:11:06.469 +05:00 [INF] [CQRS]
+TraceId  : 0HNIRB9JOLC8S:00000013
+Request  : ForgetPasswordCommand
+Duration : 423 ms
+2026-01-24 20:11:06.480 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:00000013
+Method   : POST
+Path     : /api/auth/forget-password
+Status   : 200
+Duration : 455 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "newPassword": "P@ssword1",
+  "confirmNewPassword": "P@ssword1"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Your password was updated successfully. Please keep it safe.","data":null}
+==============================================
+2026-01-24 20:13:34.940 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:00000015
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 143115 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:13:38.533 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:00000017
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 1962 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:14:19.752 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:00000019
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 1800 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:14:36.477 +05:00 [INF] [CQRS]
+TraceId  : 0HNIRB9JOLC8S:0000001B
+Request  : ForgetPasswordCommand
+Duration : 168 ms
+2026-01-24 20:14:36.479 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000001B
+Method   : POST
+Path     : /api/auth/forget-password
+Status   : 200
+Duration : 172 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "newPassword": "P@ssword1",
+  "confirmNewPassword": "P@ssword1"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Your password was updated successfully. Please keep it safe.","data":null}
+==============================================
+2026-01-24 20:14:40.199 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000001D
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 500 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:15:37.095 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRB9JOLC8S:0000001F
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 413 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:21:11.670 +05:00 [INF] [CQRS]
+TraceId  : 0HNIRBGIB2QLK:00000001
+Request  : ForgetPasswordCommand
+Duration : 515 ms
+2026-01-24 20:21:11.712 +05:00 [WRN] CMS Long Running Request: ForgetPasswordCommand (558 milliseconds)   {"Cnic":"1310122123823","NewPassword":"P@ssword1","ConfirmNewPassword":"P@ssword1","$type":"ForgetPasswordCommand"}
+2026-01-24 20:21:11.736 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRBGIB2QLK:00000001
+Method   : POST
+Path     : /api/auth/forget-password
+Status   : 200
+Duration : 865 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "newPassword": "P@ssword1",
+  "confirmNewPassword": "P@ssword1"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Your password was updated successfully. Please keep it safe.","data":null}
+==============================================
+2026-01-24 20:21:31.697 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRBGIB2QLK:00000003
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 784 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:22:26.831 +05:00 [INF] [CQRS]
+TraceId  : 0HNIRBGIB2QLK:00000005
+Request  : AppUserLoginCommand
+Duration : 13346 ms
+2026-01-24 20:22:26.858 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (13347 milliseconds) b773f351-e9aa-47b9-b9be-1dc925dd5347 3220312345678 {"CNIC":"3220312345678","Password":"P@ssword1","$type":"AppUserLoginCommand"}
+2026-01-24 20:22:26.867 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRBGIB2QLK:00000005
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 13391 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-24 20:23:10.651 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRBGIB2QLK:00000007
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 34094 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-24 20:23:46.452 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIRBGIB2QLK:00000009
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 13855 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================

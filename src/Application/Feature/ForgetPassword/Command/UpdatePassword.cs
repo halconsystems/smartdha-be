@@ -32,7 +32,7 @@ public class ForgetPasswordCommandHandler :IRequestHandler<ForgetPasswordCommand
         var userDetails =  await _userManager.Users.FirstOrDefaultAsync(x => x.CNIC == command.Cnic,ct);
 
         if(userDetails == null)
-            throw new KeyNotFoundException("MemberShip not found.");
+            throw new KeyNotFoundException("User not found.");
             
 
         IdentityResult result;

@@ -20,32 +20,32 @@ public class CaseDataController : BaseApiController
     private readonly IMediator _mediator;
     public CaseDataController(IMediator mediator) => _mediator = mediator;
 
-    [HttpPost("submit")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Submit(
-    [FromForm] SubmitCaseRequest request,
-    CancellationToken ct)
-    {
-        var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
-    request.PrerequisiteValuesJson,
-    new JsonSerializerOptions
-    {
-        PropertyNameCaseInsensitive = true
-    });
+    //[HttpPost("submit")]
+    //[Consumes("multipart/form-data")]
+    //public async Task<IActionResult> Submit(
+    //[FromForm] SubmitCaseRequest request,
+    //CancellationToken ct)
+    //{
+    //    var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
+    //request.PrerequisiteValuesJson,
+    //new JsonSerializerOptions
+    //{
+    //    PropertyNameCaseInsensitive = true
+    //});
 
-        var cmd = new SubmitCaseCommand(
-            request.UserPropertyId,
-            request.ProcessId,
-            request.ApplicantName,
-            request.ApplicantCnic,
-            request.ApplicantMobile,
-            request.ApplicantRemarks,
-            prereqs!,
-            request.Files
-        );
+    //    var cmd = new SubmitCaseCommand(
+    //        request.UserPropertyId,
+    //        request.ProcessId,
+    //        request.ApplicantName,
+    //        request.ApplicantCnic,
+    //        request.ApplicantMobile,
+    //        request.ApplicantRemarks,
+    //        prereqs!,
+    //        request.Files
+    //    );
 
-        return Ok(await _mediator.Send(cmd, ct));
-    }
+    //    return Ok(await _mediator.Send(cmd, ct));
+    //}
 
 
     [HttpPost("submit_v1")]

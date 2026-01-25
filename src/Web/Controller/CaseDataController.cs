@@ -2,8 +2,10 @@
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.AddCaseDocument;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.RejectCaseWithRequirements;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAdminCaseDetail;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAllCasesForAdmin;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseDashboard;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
@@ -76,9 +78,21 @@ public class CaseDataController : BaseApiController
     //public async Task<IActionResult> GetWorkflow()
     //   => Ok(await _mediator.Send(new GetMyCasesQuery()));
 
-    [HttpGet("Cases/{moduleId:guid}")]
-    public async Task<IActionResult> GetAllCases(Guid moduleId,CancellationToken ct)
-       => Ok(await _mediator.Send(new GetAllCasesForAdminQuery(moduleId), ct));
+    [HttpGet("Dashboard")]
+    public async Task<ActionResult<ApiResult<CaseDashboardDto>>> GetCaseDashboard(
+        CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetCaseDashboardQuery(), ct);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllCases(CancellationToken ct)
+       => Ok(await _mediator.Send(new GetAllCasesForAdminQuery(), ct));
 
     [HttpGet("{caseId:guid}")]
     public async Task<IActionResult> GetCaseDetail(
@@ -115,8 +129,28 @@ public class CaseDataController : BaseApiController
         => _mediator.Send(new ForwardExternalCommand(caseId, dto.Remarks));
 
     [HttpPost("{caseId:guid}/reject")]
-    public Task<ApiResult<bool>> Reject(Guid caseId, [FromBody] RemarksDto dto)
-        => _mediator.Send(new RejectCaseCommand(caseId, dto.Remarks!));
+    public async Task<ActionResult<ApiResult<bool>>> RejectCase(
+        Guid caseId,
+        [FromBody] RejectCaseRequest request,
+        CancellationToken ct)
+    {
+        if (request == null)
+            return BadRequest(ApiResult<bool>.Fail("Invalid request."));
+
+        var command = new RejectCaseWithRequirementsCommand(
+            caseId,
+            request.Remarks,
+            request.Requirements
+        );
+
+        var result = await _mediator.Send(command, ct);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
 
     [HttpPost("{caseId:guid}/return")]
     public Task<ApiResult<bool>> Return(Guid caseId, [FromBody] RemarksDto dto)

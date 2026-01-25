@@ -32,28 +32,32 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
         if (!_current.IsAuthenticated)
             return ApiResult<bool>.Fail("Unauthorized.");
 
-        var fromUserId = _current.UserId.ToString()!;
+        var fromUserId = _current.UserId!.ToString();
 
         var c = await _pmsDb.Set<PropertyCase>()
             .FirstOrDefaultAsync(x => x.Id == r.CaseId && x.IsDeleted !=true, ct);
 
-        if (c == null) return ApiResult<bool>.Fail("Case not found.");
+        if (c == null)
+            return ApiResult<bool>.Fail("Case not found.");
+
         if (c.Status == CaseStatus.Rejected || c.Status == CaseStatus.Approved)
             return ApiResult<bool>.Fail("Case is closed.");
 
+        // 🔹 Load current step with Directorate
         var currentStep = await _pmsDb.Set<ProcessStep>()
+            .Include(x => x.Directorate)
             .FirstAsync(x => x.Id == c.CurrentStepId, ct);
 
-        // Permission: user must be in current directorate module
-        var moduleId = await GetDirectorateModuleId(currentStep.DirectorateId, ct);
-        if (!await UserInModule(fromUserId, moduleId, ct))
+        // 🔐 Permission check
+        if (!await UserInModule(fromUserId, currentStep.Directorate.ModuleId, ct))
             return ApiResult<bool>.Fail("You are not allowed to act on this directorate.");
 
-        // Ownership rule: only current assigned user can forward externally (or add admin bypass)
-        if (!string.IsNullOrEmpty(c.CurrentAssignedUserId) && c.CurrentAssignedUserId != fromUserId)
+        // 🔐 Ownership check
+        if (!string.IsNullOrEmpty(c.CurrentAssignedUserId) &&
+            c.CurrentAssignedUserId != fromUserId)
             return ApiResult<bool>.Fail("Case is assigned to another user.");
 
-        // Payment gate if required
+        // 💰 Payment gate
         if (currentStep.RequiresPaymentBeforeNext)
         {
             var hasPaid = await _pmsDb.Set<CasePayment>()
@@ -63,55 +67,87 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
                 return ApiResult<bool>.Fail("Payment required before moving forward.");
         }
 
-        // Find next external step
+        // 🔹 Find next step
         var nextStep = await _pmsDb.Set<ProcessStep>()
-            .FirstOrDefaultAsync(x => x.ProcessId == c.ProcessId && x.StepNo == currentStep.StepNo + 1, ct);
+            .Include(x => x.Directorate)
+            .FirstOrDefaultAsync(
+                x => x.ProcessId == c.ProcessId &&
+                     x.StepNo == currentStep.StepNo + 1,
+                ct);
 
+        // ======================================================
+        // 🔴 FINAL STEP (no next step)
+        // ======================================================
         if (nextStep == null)
         {
-            // No next step -> final approval
             c.Status = CaseStatus.Approved;
 
             _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
             {
                 CaseId = c.Id,
+
                 StepId = currentStep.Id,
-                FromUserId = fromUserId,
-                ToUserId = null,
+                StepNo = currentStep.StepNo,
+                StepName = currentStep.Name,
+
+                DirectorateId = currentStep.DirectorateId,
+                DirectorateName = currentStep.Directorate.Name,
+                ModuleId = currentStep.Directorate.ModuleId,
+
                 Action = CaseAction.ForwardExternal,
                 Remarks = r.Remarks,
+                FromUserId = fromUserId,
+                PerformedByUserId = fromUserId
             });
 
             await _pmsDb.SaveChangesAsync(ct);
             return ApiResult<bool>.Ok(true, "Case approved (final step).");
         }
 
-        // Move to next directorate step
+        // ======================================================
+        // 🟢 NORMAL EXTERNAL FORWARD
+        // ======================================================
+        var nextmoduleId = await GetDirectorateModuleId(nextStep.DirectorateId, ct);
+        // 🔹 Update case runtime state
         c.CurrentStepId = nextStep.Id;
         c.CurrentStepNo = nextStep.StepNo;
-        c.CurrentAssignedUserId = null;   // reset internal assignment
-        c.Status = CaseStatus.InProgress;
-        c.CurrentModuleId=nextStep.Directorate.ModuleId;
-        c.DirectorateId=nextStep.DirectorateId;
+        c.CurrentAssignedUserId = null;
+        c.Status = CaseStatus.Submitted;
+        c.CurrentModuleId = nextStep.Directorate.ModuleId;
+        c.DirectorateId = nextStep.DirectorateId;
 
-        // Add history of external forward
+        // 1️⃣ History: FORWARDED FROM current step
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
+
             StepId = currentStep.Id,
-            FromUserId = fromUserId,
-            ToUserId = null,
+            StepNo = currentStep.StepNo,
+            StepName = currentStep.Name,
+
+            DirectorateId = currentStep.DirectorateId,
+            DirectorateName = currentStep.Directorate.Name,
+            ModuleId = currentStep.Directorate.ModuleId,
+
             Action = CaseAction.ForwardExternal,
-            Remarks = r.Remarks
+            Remarks = r.Remarks,
+            FromUserId = fromUserId,
+            PerformedByUserId = fromUserId
         });
 
-        // Also optionally add "Received" record for next step (recommended)
+        // 2️⃣ History: RECEIVED BY next step
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
+
             StepId = nextStep.Id,
-            FromUserId = null,
-            ToUserId = null,
+            StepNo = nextStep.StepNo,
+            StepName = nextStep.Name,
+
+            DirectorateId = nextStep.DirectorateId,
+            DirectorateName = nextStep.Directorate.Name,
+            ModuleId = nextStep.Directorate.ModuleId,
+
             Action = CaseAction.Received,
             Remarks = "Received in next directorate."
         });
