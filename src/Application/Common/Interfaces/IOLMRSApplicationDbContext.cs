@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Entities.GBMS;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -41,6 +42,10 @@ public interface IOLMRSApplicationDbContext
     DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs { get; }
     DbSet<GroundBooking> GroundBookings { get; }
     DbSet<GroundBookingSlot> GroundBookingSlots { get; }
+    DbSet<ClubCategories> ClubCategories { get; }
+    DbSet<ClubServiceProcess> ClubProcess { get; }
+    DbSet<ClubImages> ClubImages { get; }
+    DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions { get; }
 
 
 

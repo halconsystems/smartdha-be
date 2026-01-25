@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Entities.GBMS;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +50,11 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<GroundBookingSlot> GroundBookingSlots => Set<GroundBookingSlot>();
     public DbSet<GroundImages> GroundImages => Set<GroundImages>();
     public DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs => Set<GroundPaymentIpnLogs>();
+    public DbSet<ClubCategories> ClubCategories => Set<ClubCategories>();
+    public DbSet<ClubServiceProcess> ClubProcess => Set<ClubServiceProcess>();
+    public DbSet<ClubImages> ClubImages => Set<ClubImages>();
+    public DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions => Set<ClubPrerequisiteDefinitions>();
+    public DbSet<ClubPrerequisiteOptions> ClubPrerequisiteOptions => Set<ClubPrerequisiteOptions>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class

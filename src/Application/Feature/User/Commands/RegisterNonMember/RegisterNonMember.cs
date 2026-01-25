@@ -19,9 +19,6 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public string CNIC { get; set; } = default!;
 
     [Required]
-    public string UserName { get; set; } = default!;
-
-    [Required]
     public string Name { get; set; } = default!;
     [Required]
     public string Email { get; set; } = default!;
@@ -148,8 +145,8 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
                 AppType = AppType.Mobile,
                 UserType = UserType.NonMember,
                 IsVerified = false,
-                //UserName = request.CNIC,
-                UserName = request.UserName,
+                UserName = request.CNIC,
+                //UserName = request.UserName,
                 Email = request.Email,
                 IsOtpRequired = true,
                 MEMPK = "-"
@@ -229,7 +226,7 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-            throw new DBOperationException(ex.ToString());
+            throw new DBOperationException(ex.Message.ToString());
         }
     }
 }

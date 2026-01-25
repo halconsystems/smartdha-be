@@ -112,6 +112,11 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Title = "Club Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("CBMS", new OpenApiInfo
+                {
+                    Title = "CBMS Module",
+                    Version = "v1"
+                });
 
                 o.SwaggerDoc("panic", new OpenApiInfo
                 {

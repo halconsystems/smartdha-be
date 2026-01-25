@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="CBMS\Ground\" />
     <Folder Include="CBMS\LaundryItems\" />
+    <Folder Include="CBMS\Club\" />
     <Folder Include="wwwroot\uploads\LaundryItems\" />
   </ItemGroup>
 

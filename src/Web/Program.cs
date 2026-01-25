@@ -151,6 +151,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/property/swagger.json", "Property Module");
     c.SwaggerEndpoint("/swagger/auth/swagger.json", "Auth Module");
     c.SwaggerEndpoint("/swagger/club/swagger.json", "Club Module");
+    c.SwaggerEndpoint("/swagger/CBMS/swagger.json", "CBMS Module");
     c.SwaggerEndpoint("/swagger/panic/swagger.json", "Panic Module");
     c.SwaggerEndpoint("/swagger/laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/Ground/swagger.json", "Ground Module");
