@@ -1,0 +1,84 @@
+2026-01-25 00:03:17.219 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 2776s ago, last-write: 1197s ago, unanswered-write: 1197s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 1193s ago, last-mbeat: 1193s ago, global: 1193s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-25 22:06:47.106 +05:00 [ERR] Failed executing DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ClubPrerequisiteOptions] (
+    [Ser] int NOT NULL IDENTITY,
+    [Id] uniqueidentifier NOT NULL,
+    [PrerequisiteDefinitionId] uniqueidentifier NOT NULL,
+    [Label] nvarchar(200) NOT NULL,
+    [Value] nvarchar(100) NOT NULL,
+    [SortOrder] int NOT NULL,
+    [IsDisabled] bit NOT NULL,
+    [Created] datetime2 NOT NULL,
+    [CreatedBy] nvarchar(max) NULL,
+    [LastModified] datetime2 NOT NULL,
+    [LastModifiedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NULL,
+    [IsActive] bit NULL,
+    CONSTRAINT [PK_ClubPrerequisiteOptions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ClubPrerequisiteOptions_PrerequisiteDefinition_PrerequisiteDefinitionId] FOREIGN KEY ([PrerequisiteDefinitionId]) REFERENCES [PrerequisiteDefinition] ([Id]) ON DELETE NO ACTION
+);
+2026-01-25 22:42:02.417 +05:00 [INF] [CQRS]
+TraceId  : 0HNIS73SPN85O:0000000B
+Request  : AppUserLoginCommand
+Duration : 247 ms
+2026-01-25 22:42:02.447 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIS73SPN85O:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 400 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Muhammad Moiz","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-25 22:42:37.531 +05:00 [INF] [CQRS]
+TraceId  : 0HNIS73SPN85O:0000000F
+Request  : GetAllClubQuery
+Duration : 445 ms
+2026-01-25 22:42:37.542 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIS73SPN85O:0000000F
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 200
+Duration : 487 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"0a12e4b3-2283-4899-b2c2-1489778c4dc6","name":"Sports Club","description":"Sports Club","imageUrl":null,"bannerIamges":[],"location":"DHA Phase-8","contactNumber":"051-1234567","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"6dceb87e-778c-4ac4-9f8c-1e6421481303","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karachi","contactNumber":"0324545","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"797efad9-ba01-4e1e-a2e4-2b918743b0ef","name":"DHA Beach View Club","description":"Beach‑side club in Phase\u202F6 with dining, event lawns and guest suites.","imageUrl":null,"bannerIamges":[],"location":"Beach View Club, Beach Avenue, near Darakhshan Villas, Phase\u202F6, DHA Karachi.","contactNumber":"(021)35852975","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"ef1f69a7-9511-479c-993e-59aa3a7ae2a5","name":"DHA Sunset Club","description":"Modern social‑sports club with dining, banquet hall, bakery and guest lodges.","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Sunset Club, Khayaban‑e‑Jami, Phase\u202FII (Ext), DHA Karachi – 75500.","contactNumber":"(021)35388123","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"3ce13dd3-09d7-44fb-8f01-8448b0090b05","name":"DHA Creek Club","description":"Scenic, large‑acreage club by the creek with sports, bakery, grooming and events","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Creek Club, Zulfiqar Street No.\u202F1, Phase\u202FVIII, DHA Karachi.","contactNumber":"(021)35841901","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":["Allied Facilities","Facilities","Food & Beverages"],"clubServicesDTOs":null},{"id":"9e9e43a3-55e2-4272-ad7e-a477466e7597","name":"DA CLUB","description":"Dining facilities comparable to any good five star hotels are available in the club.","imageUrl":null,"bannerIamges":[],"location":"S Central Ave, D.H.A. Phase 2 Phase 2 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35803073","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"0ff272d2-400f-49db-8a4e-cc59739ba47a","name":"DA Zamzama Club","description":"DA Zamzma Club Offers open space (Venue) for function like Marriage, Birthday Parties, Family Get Together, Eid Milan Parties, HI-Tea, Functions.","imageUrl":null,"bannerIamges":[],"location":"Stadium Lane-3, Khayaban-e-Shamsheer, DHA Phase 5 Stadium Commercial Area Defence V Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35840140","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"b4b7bd33-8e1c-41ab-9a77-d0b52fbd49a0","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karchi","contactNumber":"165421","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null},{"id":"a8806110-e45c-4c81-9b7a-e92738a202f9","name":"DHA Golf Club","description":"Sauna, Cigar Room, Golfers’ Terrace, Library, Conference/Board Rooms, Convention Centre, Function Hall, Festival Plaza that offers a venue for opening retail outlets","imageUrl":null,"bannerIamges":[],"location":"D.H.A. Phase 8 Zone B Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35845304","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"clubServicesDTOs":null}]}
+==============================================
+2026-01-25 22:43:39.255 +05:00 [INF] [CQRS]
+TraceId  : 0HNIS73SPN85O:00000011
+Request  : GetClubDetailById
+Duration : 91 ms
+2026-01-25 22:43:39.259 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIS73SPN85O:00000011
+Method   : GET
+Path     : /api/club/get-clubhistory
+Status   : 200
+Duration : 108 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":["Allied Facilities","Facilities","Food & Beverages"],"clubServicesDTOs":[{"id":"4157125c-f819-462d-99c3-a467b7d95432","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Gymanasium","code":"GM","description":"Fully equipped modern gym with personal trainers","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false},{"id":"abc657ed-5465-4f0f-9a8f-c03fb0b770d1","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Swimming Pool","code":"SP","description":"Olym,pic-size swimming pool with seperate areas for aduts and children","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false}]}
+==============================================
