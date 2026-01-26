@@ -82,11 +82,21 @@ public class GetAllClubQueryHandler
                 Location = c.Location,
 
                 highlights = clubsCategory != null
-                    ? clubsCategory
-                        .Where(x => x.ClubId == c.Id)
-                        .Select(x => x.Name)
-                        .ToList()
-                    : new List<string>(),
+                ? clubsCategory
+                    .Where(x => x.ClubId == c.Id)
+                    .Select(x => new HighlightDTO
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToList()
+                : new List<HighlightDTO>(),
+
+                //highlights = clubsCategory != null
+                //    ? clubsCategory
+                //        .Where(x => x.ClubId == c.Id)
+                //        .Select(x => x.Name)
+                //        .ToList()
+                //    : new List<string>(),
 
                 imageUrl = imagePath == null
                     ? null

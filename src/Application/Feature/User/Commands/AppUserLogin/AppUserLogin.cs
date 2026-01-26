@@ -18,6 +18,8 @@ public record AppUserLoginCommand : IRequest<SuccessResponse<MobileAuthenticatio
 {
     public string CNIC { get; set; } = default!;
     public string Password { get; set; } = default!;
+    public string FCMToken { get; set; } = default!;
+    public string DeviceId { get; set; } = default!;
 }
 public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessResponse<MobileAuthenticationDto>>
 {
@@ -26,18 +28,21 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
     private readonly IAuthenticationService _authenticationService;
     private readonly ISmsService _otpService;
     private readonly IApplicationDbContext _context;
+    private readonly IActivityLogger _activityLogger;
 
     public AppUserLoginHandler(UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IAuthenticationService authenticationService,
         ISmsService otpService,
-        IApplicationDbContext context)
+        IApplicationDbContext context,
+        IActivityLogger activityLogger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _authenticationService = authenticationService;
         _otpService = otpService;
         _context = context;
+        _activityLogger = activityLogger;
     }
     public async Task<SuccessResponse<MobileAuthenticationDto>> Handle(AppUserLoginCommand request, CancellationToken cancellationToken)
     {
@@ -45,23 +50,28 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
 
         if (user == null)
         {
+            await _activityLogger.LogAsync("LoginFailed", email: request.CNIC, description: "Invalid Email", appType: AppType.Mobile);
             throw new UnAuthorizedException("Invalid CNIC. Please verify and try again.");
 
         }
         else if (user.AppType != AppType.Mobile)
         {
+            await _activityLogger.LogAsync("InvalidApp", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User not authorized for this portal.", appType: AppType.Mobile);
             throw new UnAuthorizedException("You are not authorized to access this application.");
         }
         else if (user.IsActive == false)
         {
+            await _activityLogger.LogAsync("InactiveUserLogin", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "Inactive user tried to login", appType: AppType.Mobile);
             throw new UnAuthorizedException("Your account is inactive. Please contact the administrator for assistance.");
         }
         else if (user.IsDeleted == true)
         {
+            await _activityLogger.LogAsync("DeletedUserLogin", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User is deleted. Contact administrator.", appType: AppType.Mobile);
             throw new UnAuthorizedException("Your account has been deleted. Please contact the administrator for assistance.");
         }
         else if (user.PhoneNumberConfirmed == false)
         {
+            await _activityLogger.LogAsync("NotVerifiedNumber", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "Your mobile number is not verified.", appType: AppType.Mobile);
             throw new UnAuthorizedException("Your mobile number is not verified. Please verify to continue.");
         }
         else if(user.UserType==UserType.NonMember)
@@ -93,6 +103,7 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                         ResponseMessage = responseMessage
                     };
 
+                    await _activityLogger.LogAsync(responseMessage, userId: user.Id, email: user.Email, cnic: user.CNIC, description: responseMessage, appType: AppType.Mobile);
                     throw new UnAuthorizedException(responseMessage);
 
                     //return new SuccessResponse<MobileAuthenticationDto>(
@@ -109,6 +120,7 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
 
         if (!result.Succeeded)
         {
+            await _activityLogger.LogAsync("InvalidPassword", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "Invalid password.", appType: AppType.Mobile);
             throw new UnAuthorizedException("Invalid password. Please try again.");
 
         }
@@ -157,6 +169,7 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
                     isOtpRequired = true,
                     ResponseMessage = returnmsg
                 };
+                await _activityLogger.LogAsync("OTP Verification", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "OTP Verification Required", appType: AppType.Mobile);
 
                 return new SuccessResponse<MobileAuthenticationDto>(
                         finaldto,
@@ -181,6 +194,13 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
             isOtpRequired = false,
             ResponseMessage = "Login successful. You are now signed in without OTP verification.",
         };
+
+        if(!string.IsNullOrEmpty(request.DeviceId) && !string.IsNullOrEmpty(request.FCMToken))
+        {
+            await _activityLogger.DeviceAsync(UserId: Guid.Parse(user.Id), DeviceId: request.DeviceId, FCMToken: request.FCMToken, cancellationToken);
+        }
+
+        await _activityLogger.LogAsync("LoginSuccess", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User logged in successfully", appType: AppType.Mobile);
 
         return new SuccessResponse<MobileAuthenticationDto>(
             dto,

@@ -38,6 +38,7 @@ public class GetAllTankerQueryHandler : IRequestHandler<GetAllTankerQuery, List<
             DisplayName = x.DisplayName,
             Code = x.Code,
             Price = x.Price,
+            IsActive = x.IsActive
         }).ToList();
 
         return result;

@@ -56,6 +56,30 @@ public class ActivityLogger : IActivityLogger
             Console.WriteLine(ex.ToString());
         }
     }
+    public async Task DeviceAsync(
+         Guid UserId,
+        string? DeviceId = null,
+        string? FCMToken = null,
+        CancellationToken ct = default)
+    {
+
+        var log = new UserDevices
+        {
+            UserId = UserId,
+            DeviceId = DeviceId,
+            FCMToken = FCMToken,
+            LoginAt = DateTime.Now,
+        };
+        try
+        {
+            _context.UserDevices.Add(log);
+            await _context.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
+    }
 }
 
 

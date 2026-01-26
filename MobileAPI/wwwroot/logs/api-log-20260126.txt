@@ -1,0 +1,202 @@
+2026-01-26 11:37:27.375 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKLFHVHR2:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 88 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:37:32.570 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKLFHVHR2:00000003
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 1 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:37:53.346 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKLNAPH3L:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 53 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:39:11.302 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKMEIAALL:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 49 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:40:13.439 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKN127AJK:00000001
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 100 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:41:48.264 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKN127AJK:00000003
+Method   : GET
+Path     : /swagger/
+Status   : 404
+Duration : 2 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:42:05.877 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKN127AJK:00000005
+Method   : GET
+Path     : /swagger/index.html
+Status   : 404
+Duration : 5 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:42:21.573 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKN127AJK:00000007
+Method   : GET
+Path     : /swagger/property/swagger.jso
+Status   : 404
+Duration : 0 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:45:09.861 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKP6NJ2DK:00000015
+Method   : GET
+Path     : /api/club/get-clubhistory
+Status   : 401
+Duration : 85 ms
+IP       : 127.0.0.1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 11:45:35.109 +05:00 [INF] [CQRS]
+TraceId  : 0HNISKP6NJ2DK:00000017
+Request  : GetClubDetailById
+Duration : 1435 ms
+2026-01-26 11:45:35.263 +05:00 [WRN] CMS Long Running Request: GetClubDetailById (1439 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"ClubId":"9e3d8039-0dff-4e28-9069-859ef23323bc","$type":"GetClubDetailById"}
+2026-01-26 11:45:35.318 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKP6NJ2DK:00000017
+Method   : GET
+Path     : /api/club/get-clubhistory
+Status   : 200
+Duration : 1818 ms
+IP       : 127.0.0.1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":["Allied Facilities","Facilities","Food & Beverages"],"clubServicesDTOs":[{"id":"4157125c-f819-462d-99c3-a467b7d95432","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Gymanasium","code":"GM","description":"Fully equipped modern gym with personal trainers","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false},{"id":"abc657ed-5465-4f0f-9a8f-c03fb0b770d1","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Swimming Pool","code":"SP","description":"Olym,pic-size swimming pool with seperate areas for aduts and children","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false}]}
+==============================================
+2026-01-26 11:50:07.799 +05:00 [INF] [CQRS]
+TraceId  : 0HNISKS53J6V2:0000000B
+Request  : GetClubDetailById
+Duration : 1558 ms
+2026-01-26 11:50:08.027 +05:00 [WRN] CMS Long Running Request: GetClubDetailById (1614 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"ClubId":"9e3d8039-0dff-4e28-9069-859ef23323bc","$type":"GetClubDetailById"}
+2026-01-26 11:50:08.098 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISKS53J6V2:0000000B
+Method   : GET
+Path     : /api/club/get-clubhistory
+Status   : 200
+Duration : 2127 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[{"id":"b069d81d-ac7d-4717-bb88-0106cb6ff48f","name":"Allied Facilities"},{"id":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Facilities"},{"id":"f8f7a245-c33e-4bf3-a3c1-eadbe99f5e8f","name":"Food & Beverages"}],"clubServicesDTOs":[{"id":"4157125c-f819-462d-99c3-a467b7d95432","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Gymanasium","code":"GM","description":"Fully equipped modern gym with personal trainers","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false},{"id":"abc657ed-5465-4f0f-9a8f-c03fb0b770d1","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Swimming Pool","code":"SP","description":"Olym,pic-size swimming pool with seperate areas for aduts and children","isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false}]}
+==============================================
+2026-01-26 12:47:05.091 +05:00 [INF] [CQRS]
+TraceId  : 0HNISLS0BP3QT:0000000B
+Request  : GetAllTankerQuery
+Duration : 9081 ms
+2026-01-26 12:47:05.185 +05:00 [WRN] CMS Long Running Request: GetAllTankerQuery (9120 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllTankerQuery"}
+2026-01-26 12:47:05.202 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISLS0BP3QT:0000000B
+Method   : GET
+Path     : /api/femugation/get-size
+Status   : 200
+Duration : 9314 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-26 12:47:57.046 +05:00 [INF] [CQRS]
+TraceId  : 0HNISLS0BP3QT:0000000D
+Request  : GetAllTankerQuery
+Duration : 42327 ms
+2026-01-26 12:47:57.679 +05:00 [WRN] CMS Long Running Request: GetAllTankerQuery (42328 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"$type":"GetAllTankerQuery"}
+2026-01-26 12:47:57.681 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISLS0BP3QT:0000000D
+Method   : GET
+Path     : /api/femugation/get-size
+Status   : 200
+Duration : 42974 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================

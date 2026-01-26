@@ -91,9 +91,12 @@ public class GetClubDetailByIdHandler
             highlights = clubsCategory != null
                 ? clubsCategory
                     .Where(x => x.ClubId == request.ClubId)
-                    .Select(x => x.Name)
-                    .ToList()
-                : new List<string>(),
+                    .Select(x => new HighlightDTO
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }).ToList()
+                : new List<HighlightDTO>(),
 
             imageUrl = imagePath == null
                 ? null
@@ -105,25 +108,6 @@ public class GetClubDetailByIdHandler
 
             Description = clubs.Description,
             ContactNumber = clubs.ContactNumber,
-           ClubServicesDTOs = clubServices
-            .Where(s => clubCategoryIds.Contains(s.CategoryId))
-            .Select(g => new ClubServiceProcessDTO(
-                g.Id,
-                g.CategoryId,
-                g.Name,
-                g.Code,
-                g.Description,
-                g.IsFeeAtSubmission,
-                g.IsVoucherPossible,
-                g.IsFeeRequired,
-                g.IsfeeSubmit,
-                g.IsInstructionAtStart,
-                g.IsButton,
-                g.Instruction,
-                g.IsActive,
-                g.IsDeleted
-            ))
-            .ToList()
 
         };
 

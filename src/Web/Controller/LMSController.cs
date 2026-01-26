@@ -11,7 +11,10 @@ using DHAFacilitationAPIs.Application.Feature.MemberShip.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
+using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.Delivery;
+using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.PickUp;
 using DHAFacilitationAPIs.Application.Feature.Orders.Command;
+using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Command;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
@@ -36,6 +39,12 @@ public class LMSController : BaseApiController
     [HttpPost("Create-Discount-Tax"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateOrderDiscountCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd, ct));
+    [HttpPost("Order-Disptach"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(AssignOrderDispatchCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd, ct));
+    [HttpPost("Order-Process"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(OrdersProcessAtShopCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd, ct));
 
     //[HttpPost("Create-Discount-Tax"), AllowAnonymous]
     //public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(CreateOrderDiscountCommand cmd, CancellationToken ct)
@@ -45,6 +54,18 @@ public class LMSController : BaseApiController
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllOrderDTSetting(), ct);
+        return Ok(result);
+    }
+    [HttpGet("GetOrder-List"), AllowAnonymous]
+    public async Task<IActionResult> GetOrderList(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllOrderListQuery(), ct);
+        return Ok(result);
+    }
+    [HttpGet("GetOrderHistory"), AllowAnonymous]
+    public async Task<IActionResult> GetAll(Guid Id,CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetOrderHistoryIdQuery(Id), ct);
         return Ok(result);
     }
 

@@ -35,11 +35,11 @@ namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "CBMS")]
-public class CBMSController : BaseApiController
+public class clubsController : BaseApiController
 {
     private readonly IMediator _mediator;
     private readonly IFileStorageService _files;
-    public CBMSController(IMediator mediator,IFileStorageService fileStorage){
+    public clubsController(IMediator mediator,IFileStorageService fileStorage){
         _mediator = mediator;
         _files = fileStorage;
     }

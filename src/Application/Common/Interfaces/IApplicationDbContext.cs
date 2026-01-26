@@ -74,6 +74,7 @@ public interface IApplicationDbContext
     DbSet<FemgutionShops> FemgutionShops { get; }
     DbSet<Fumigation> Fumigations { get; }
     DbSet<FumgationMedia> FumgationMedias { get; }
+    DbSet<UserDevices> UserDevices { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

@@ -89,6 +89,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Fumigation> Fumigations => Set<Fumigation>();
     public DbSet<FemgutionShops> FemgutionShops => Set<FemgutionShops>();
     public DbSet<FumgationMedia> FumgationMedias => Set<FumgationMedia>();
+    public DbSet<UserDevices> UserDevices => Set<UserDevices>();
 
 
 

@@ -145,6 +145,8 @@ else
     app.UseHsts();
    
 }
+
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

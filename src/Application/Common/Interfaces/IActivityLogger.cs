@@ -16,6 +16,12 @@ public interface IActivityLogger
         string? description = null,
         AppType appType = AppType.Web,
         CancellationToken ct = default);
+
+    Task DeviceAsync(
+        Guid UserId,
+        string? DeviceId = null,
+        string? FCMToken = null,
+        CancellationToken ct = default);
 }
 
 
