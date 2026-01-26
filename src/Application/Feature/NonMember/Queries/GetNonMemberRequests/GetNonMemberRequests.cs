@@ -50,7 +50,19 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
                 p.Remarks,
                 p.Status,
                 p.ApprovedAt,
-                p.ApprovedBy
+                p.ApprovedBy,
+                p.HomeType,
+                p.LaneNo,
+                p.PlotNo,
+                p.Floors,
+                p.PhaseNo,
+                p.PropertyType,
+                p.ResidenceType,
+                p.ResidenceStatus,
+                p.TenantOwnerName,
+                p.TenantOwnerContact,
+                p.TenantOwnerAgreemenrStartDate,
+                p.TenantOwnerAgreemenrEndDate
             })
             .ToListAsync(cancellationToken);
 
@@ -98,39 +110,41 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
                 CNICBackImagePath = doc.CNICBackImagePath,
                 SupportingDocumentPath = doc.SupportingDocumentPath,
                 DocumentType = doc.DocumentType,
-                OriginalFileName = doc.OriginalFileName
+                OriginalFileName = doc.OriginalFileName,
+                ProfilePicture = doc.ProfilePicture,
+                UtilityBill = doc.UtilityBill,
             })
             .ToListAsync(cancellationToken);
 
         // 4) Purpose titles per user (active + not deleted)
-        var userPurposes = await (
-    from ump in _context.UserMembershipPurposes.AsNoTracking()
-    join mp in _context.MembershipPurposes.AsNoTracking()
-        on ump.PurposeId equals mp.Id
-    where userIds.Contains(ump.UserId)
-          && (ump.IsDeleted == false || ump.IsDeleted == null)
-          && (ump.IsActive == true)
-          && (mp.IsDeleted == false || mp.IsDeleted == null)
-          && (mp.IsActive == true)
-    select new
-    {
-        ump.UserId,
-        mp.Id,
-        mp.Title
-    }
-).ToListAsync(cancellationToken);
+//        var userPurposes = await (
+//    from ump in _context.UserMembershipPurposes.AsNoTracking()
+//    join mp in _context.MembershipPurposes.AsNoTracking()
+//        on ump.PurposeId equals mp.Id
+//    where userIds.Contains(ump.UserId)
+//          && (ump.IsDeleted == false || ump.IsDeleted == null)
+//          && (ump.IsActive == true)
+//          && (mp.IsDeleted == false || mp.IsDeleted == null)
+//          && (mp.IsActive == true)
+//    select new
+//    {
+//        ump.UserId,
+//        mp.Id,
+//        mp.Title
+//    }
+//).ToListAsync(cancellationToken);
 
         // 🔄 Group into Dictionary<string, List<PurposeDto>>
-        var purposesByUser = userPurposes
-            .GroupBy(x => x.UserId)
-            .ToDictionary(
-                g => g.Key,
-                g => g.Select(p => new PurposeDto
-                {
-                    Id = p.Id,
-                    Title = p.Title
-                }).ToList()
-            );
+        //var purposesByUser = userPurposes
+        //    .GroupBy(x => x.UserId)
+        //    .ToDictionary(
+        //        g => g.Key,
+        //        g => g.Select(p => new PurposeDto
+        //        {
+        //            Id = p.Id,
+        //            Title = p.Title
+        //        }).ToList()
+        //    );
 
 
         // 5) Build DTOs
@@ -138,9 +152,9 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
         {
             usersDict.TryGetValue(p.UserId, out var u);
             var docs = allDocs.Where(d => d.VerificationId == p.Id).ToList();
-            var purposes = purposesByUser.TryGetValue(p.UserId, out var userPurposes)
-                ? userPurposes
-                : new List<PurposeDto>();
+            //var purposes = purposesByUser.TryGetValue(p.UserId, out var userPurposes)
+            //    ? userPurposes
+            //    : new List<PurposeDto>();
 
             return new NonMemberRequestsDto
             {
@@ -154,7 +168,19 @@ public class NonMemberRequestQueryHandler : IRequestHandler<NonMemberRequestsQue
                 Status = p.Status,
                 ApprovedAt = p.ApprovedAt,
                 ApprovedBy = p.ApprovedBy,
-                Purposes = purposes,
+                HomeType = p.HomeType,
+                PropertyType = p.PropertyType,
+                ResidenceStatus = p.ResidenceStatus,
+                ResidenceTypes = p.ResidenceType,
+                Floors = p.Floors ?? string.Empty,
+                PhaseNo = p.PhaseNo,
+                PlotNo = p.PlotNo,
+                LaneNo = p.LaneNo,
+                TenantOwnerAgreemenrEndDate = p.TenantOwnerAgreemenrEndDate,
+                TenantOwnerAgreemenrStartDate = p. TenantOwnerAgreemenrStartDate,
+                TenantOwnerContact = p.TenantOwnerContact,
+                TenantOwnerName = p.TenantOwnerName,
+                //Purposes = purposes,
                 VerificationDocs = docs
             };
         }).ToList();

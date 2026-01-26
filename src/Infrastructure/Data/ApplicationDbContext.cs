@@ -48,6 +48,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<UserSubModuleAssignment> UserSubModuleAssignments => Set<UserSubModuleAssignment>();
     public DbSet<UserPermissionAssignment> UserPermissionAssignments => Set<UserPermissionAssignment>();
     public DbSet<UserClubAssignment> UserClubAssignments => Set<UserClubAssignment>();
+    public DbSet<ShopAssignment> UserShopAssignments => Set<ShopAssignment>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
     //Panic Button

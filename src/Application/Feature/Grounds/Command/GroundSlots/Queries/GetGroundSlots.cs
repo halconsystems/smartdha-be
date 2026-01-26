@@ -21,8 +21,7 @@ public record GroundAvailabilityDto(
     GroundType GroundType,
     GroundCategory GroundCategory,
     string GroundName,
-    DateTime FromDate,
-    DateTime ToDate,
+    DateOnly SlotDate,
     AvailabilityAction Action,
     string? Reason    
 );
@@ -34,7 +33,6 @@ public record GetGroundAvailabilitiesQuery(
     Guid? GroundId = null,
     Guid? ClubId = null,
     DateOnly? From = null,
-    DateOnly? To = null,
     AvailabilityAction? Action = null,
     int Page = 1,
     int PageSize = 50
@@ -71,17 +69,9 @@ public class GetGroundAvailabilitiesQueryHandler
             raQ = raQ.Where(x => x.Action == request.Action.Value);
 
         // Date overlap
-        if (request.From.HasValue && request.To.HasValue)
+        if (request.From.HasValue)
         {
-            raQ = raQ.Where(x => x.FromDateOnly <= request.From && x.ToDateOnly >= request.To);
-        }
-        else if (request.From.HasValue)
-        {
-            raQ = raQ.Where(x => x.ToDateOnly >= request.From);
-        }
-        else if (request.To.HasValue)
-        {
-            raQ = raQ.Where(x => x.FromDateOnly <= request.To);
+            raQ = raQ.Where(x => x.SlotDate <= request.From);
         }
 
         // ⚠️ Projection سے پہلے OrderBy کریں (raw scalar fields پر)
@@ -95,14 +85,13 @@ public class GetGroundAvailabilitiesQueryHandler
                 SlotPrice = ra.SlotPrice,
                 DisplayName = ra.DisplayName,
                 Code = ra.Code,
-                ra.FromDate,
-                ra.ToDate,
+                ra.SlotDate,
                 ra.Action,
                 ra.Reason,
                 GroundType = ground.GroundType,
                 GroundCategory = ground.GroundCategory
             })
-            .OrderByDescending(x => x.FromDate)
+            .OrderByDescending(x => x.SlotDate)
             .ThenBy(x => x.SlotPrice)
             .ToListAsync(ct);
 
@@ -116,8 +105,7 @@ public class GetGroundAvailabilitiesQueryHandler
             x.GroundType,
             x.GroundCategory,
             x.GroundName,
-            x.FromDate,
-            x.ToDate,
+            x.SlotDate,
             x.Action,
             x.Reason
         )).ToList();

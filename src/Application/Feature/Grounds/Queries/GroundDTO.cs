@@ -28,6 +28,8 @@ public class GroundDTO
     public string? AccountNoAccronym { get; set; }
     public string? MainImageUrl { get; set; }
     public string? SlotCount { get; set; }
+    public double? AvailableCount { get; set; }
+    public double? BookedCount { get; set; }
     public List<GroundImagesDTO>? GroundImages { get; set; }
     public List<GroundSlotsdto>? Slots { get; set; }
     public List<GroundStandtardTime>? GroundStandtardTimes { get; set; }

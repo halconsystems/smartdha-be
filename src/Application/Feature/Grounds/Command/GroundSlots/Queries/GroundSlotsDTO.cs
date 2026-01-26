@@ -14,11 +14,8 @@ public class GroundSlotsdto
     public string? DisplayName { get; set; }
     public string? Code { get; set; }
     public string? SlotPrice { get; set; }
-    public DateTime FromDate { get; set; }
-    public DateOnly FromDateOnly { get; set; }
+    public DateOnly SlotDate { get; set; }
     public TimeOnly FromTimeOnly { get; set; }
-    public DateTime ToDate { get; set; }
-    public DateOnly ToDateOnly { get; set; }
     public TimeOnly ToTimeOnly { get; set; }
     public AvailabilityAction Action { get; set; }
 }

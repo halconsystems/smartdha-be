@@ -1519,6 +1519,52 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("Fumigations");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.ShopAssignment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ShopId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(85)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserShopAssignments");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.TankerSize", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3083,6 +3129,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<Guid>("CaseId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CaseRejectRequirementId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ContentType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -3132,6 +3181,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("CaseId");
 
+                    b.HasIndex("CaseRejectRequirementId");
+
                     b.HasIndex("PrerequisiteDefinitionId");
 
                     b.ToTable("CaseDocument");
@@ -3145,6 +3196,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnOrder(2);
 
                     b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CaseRejectRequirementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
@@ -3200,12 +3254,71 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CaseRejectRequirementId");
+
                     b.HasIndex("PrerequisiteDefinitionId");
 
                     b.HasIndex("CaseId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
                     b.ToTable("CasePrerequisiteValue");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUploaded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid?>("UploadedDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("PrerequisiteDefinitionId");
+
+                    b.ToTable("CaseRejectRequirement");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
@@ -3227,6 +3340,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DirectorateName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FromUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -3241,6 +3361,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PerformedByUserId")
                         .HasColumnType("nvarchar(max)");
@@ -3257,6 +3380,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.Property<Guid>("StepId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StepName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StepNo")
+                        .HasColumnType("int");
 
                     b.Property<string>("ToUserId")
                         .HasColumnType("nvarchar(max)");
@@ -3416,6 +3546,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Property<Guid>("PrerequisiteDefinitionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("PrerequisiteDefinitionId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -3432,6 +3565,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PrerequisiteDefinitionId1");
 
                     b.HasIndex("PrerequisiteDefinitionId", "Value")
                         .IsUnique();
@@ -5911,6 +6046,17 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("TankerSize");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.FMS.ShopAssignment", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.LMS.ConfirmedOrder", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.LMS.Orders", "Orders")
@@ -6055,6 +6201,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", "CaseRejectRequirement")
+                        .WithMany()
+                        .HasForeignKey("CaseRejectRequirementId");
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
                         .WithMany()
                         .HasForeignKey("PrerequisiteDefinitionId")
@@ -6062,10 +6212,37 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.Navigation("Case");
 
+                    b.Navigation("CaseRejectRequirement");
+
                     b.Navigation("PrerequisiteDefinition");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", "CaseRejectRequirement")
+                        .WithMany()
+                        .HasForeignKey("CaseRejectRequirementId");
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("CaseRejectRequirement");
+
+                    b.Navigation("PrerequisiteDefinition");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
                         .WithMany()
@@ -6110,6 +6287,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasForeignKey("PrerequisiteDefinitionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", null)
+                        .WithMany("Options")
+                        .HasForeignKey("PrerequisiteDefinitionId1");
 
                     b.Navigation("PrerequisiteDefinition");
                 });
@@ -6513,6 +6694,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.Navigation("SubModules");
 
                     b.Navigation("UserAssignments");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
+                {
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PanicDispatch", b =>

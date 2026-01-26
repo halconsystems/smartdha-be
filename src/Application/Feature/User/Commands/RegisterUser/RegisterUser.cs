@@ -27,6 +27,7 @@ public class ModuleSelectionDto
     public Guid ModuleId { get; set; }
     public List<SubModuleSelectionDto> SubModules { get; set; } = new();
     public List<Guid>? AssignedClubIds { get; set; }
+    public List<Guid>? AssignedShopIds { get; set; }
 }
 
 public class SubModuleSelectionDto
@@ -147,6 +148,21 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                             {
                                 UserId = newUser.Id,
                                 ClubId = clubId
+                            });
+                        }
+                    }
+
+                    if (module.Value == "Shop")
+                    {
+                        if (moduleSel.AssignedShopIds == null || !moduleSel.AssignedShopIds.Any())
+                            throw new DBOperationException("At least one Shop must be assigned for ClubManagement module.");
+
+                        foreach (var shopId in moduleSel.AssignedShopIds)
+                        {
+                            _context.UserShopAssignments.Add(new Domain.Entities.FMS.ShopAssignment
+                            {
+                                UserId = newUser.Id,
+                                ShopId = shopId
                             });
                         }
                     }

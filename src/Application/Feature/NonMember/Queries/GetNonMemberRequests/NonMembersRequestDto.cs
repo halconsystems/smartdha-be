@@ -31,6 +31,19 @@ public class NonMemberRequestsDto
     public string PurposeTitlesDisplay => string.Join(", ", Purposes.Select(p => p.Title));
 
     public List<NonMemberVerificationDocsDto> VerificationDocs { get; set; } = new();
+
+    public HomeType HomeType { get; set; }
+    public string? LaneNo { get; set; }
+    public string? Floors { get; set; }
+    public string? PhaseNo { get; set; }
+    public string? PlotNo { get; set; }
+    public PropertyType PropertyType { get; set; }
+    public ResidenceTypes ResidenceTypes { get; set; }
+    public ResidenceStatus ResidenceStatus { get; set; }
+    public string? TenantOwnerName { get; set; }
+    public string? TenantOwnerContact { get; set; }
+    public DateTime? TenantOwnerAgreemenrStartDate { get; set; }
+    public DateTime? TenantOwnerAgreemenrEndDate { get; set; }
 }
 
 public class PurposeDto
@@ -55,5 +68,7 @@ public class NonMemberVerificationDocsDto
     public string? DocumentType { get; set; } // optional, e.g., "Utility Bill", "Rental Proof"
 
     public string? OriginalFileName { get; set; } // optional: store uploaded file name
+    public string? ProfilePicture {  get; set; }
+    public string? UtilityBill { get; set; }
 }
 

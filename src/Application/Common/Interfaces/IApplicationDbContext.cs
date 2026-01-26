@@ -33,6 +33,7 @@ public interface IApplicationDbContext
     DbSet<UserSubModuleAssignment> UserSubModuleAssignments { get; }
     DbSet<UserPermissionAssignment> UserPermissionAssignments { get; }
     DbSet<UserClubAssignment> UserClubAssignments { get; }
+    DbSet<ShopAssignment> UserShopAssignments { get; }
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<UserActivityLog> UserActivityLogs { get; }
     //Panic Button Module

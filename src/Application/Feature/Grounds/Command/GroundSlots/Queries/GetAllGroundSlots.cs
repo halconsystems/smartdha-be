@@ -53,11 +53,8 @@ public class GetGroundSlotsQueryHandler : IRequestHandler<GetGroundSlotsQuery, S
                 DisplayName = x.DisplayName,
                 Code = x.Code,
                 Action = bookedSlots.FirstOrDefault(g => g.Equals(x.Id)) ==  null ? AvailabilityAction.Booked : AvailabilityAction.Available,
-                FromDate = x.FromDate,
-                ToDate = x.ToDate,
-                FromDateOnly = x.FromDateOnly,
+                SlotDate = x.SlotDate,
                 FromTimeOnly = x.FromTimeOnly,
-                ToDateOnly = x.ToDateOnly,
                 ToTimeOnly = x.FromTimeOnly,
             })
             .ToListAsync(ct);

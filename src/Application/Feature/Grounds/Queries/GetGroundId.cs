@@ -51,6 +51,19 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
 
         var clubs = await _context.Clubs.Where(x => x.Id == ground.ClubId).FirstOrDefaultAsync();
 
+        var groundSlotIds = GroundSlots.Select(s => s.Id).ToHashSet();
+        var bookedSlotIds = bookedSlots
+            .Where(b => groundSlotIds.Contains(b.SlotId))
+            .Select(b => b.SlotId)
+            .Distinct()
+            .ToHashSet();
+
+        var totalSlots = groundSlotIds.Count;
+        var bookedCount = bookedSlotIds.Count;
+        var availableCount = totalSlots - bookedCount;
+
+
+
         var grounds = new GroundDTO
         {
             Id = ground.Id,
@@ -63,21 +76,21 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
             ClubName = clubs?.Name,
             AccountNo = ground.AccountNo,
             AccountNoAccronym = ground.AccountNoAccronym,
-            SlotCount = GroundSlots.Count().ToString(),
+            SlotCount = totalSlots.ToString(),
+            BookedCount = bookedCount,
+            AvailableCount = availableCount,
             Slots = GroundSlots.Select(x => new GroundSlotsdto
             {
+                GroundId = ground.Id,
                 Id = x.Id,
                 SlotName = x.SlotName,
                 SlotPrice = x.SlotPrice,        
                 DisplayName = x.DisplayName,
                 Code = x.Code,
-                FromDate = x.FromDate,
-                FromDateOnly = x.FromDateOnly,
-                ToDate = x.ToDate,
-                ToDateOnly = x.ToDateOnly,
+                SlotDate = x.SlotDate,
                 FromTimeOnly = x.FromTimeOnly,
-                ToTimeOnly = x.FromTimeOnly,
-                Action = bookedSlots.FirstOrDefault(g => g.Equals(x.Id)) == null ? AvailabilityAction.Booked : AvailabilityAction.Available,
+                ToTimeOnly = x.ToTimeOnly,
+                Action = bookedSlots.Any(g => g.SlotId == x.Id) ? AvailabilityAction.Booked : AvailabilityAction.Available,
             }).ToList(),
             GroundImages = groundImage?
         .Select(img =>
@@ -91,6 +104,7 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
 
             return new Command.GroundImages.Queries.GroundImagesDTO
             {
+                GroudId = ground.Id,
                 Id = img.Id,
                 ImageExtension = img.ImageExtension,
                 ImageName = img.ImageName,

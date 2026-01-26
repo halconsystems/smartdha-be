@@ -20,16 +20,12 @@ public class GroundSlots :BaseAuditableEntity
     public string SlotPrice { get; set; } = default!;
 
     [Required]
-    public DateTime FromDate { get; set; } // Full PKT DateTime
+    public DateOnly SlotDate { get; set; } // Full PKT DateTime
     [Required]
-    public DateOnly FromDateOnly { get; set; } // Just the date portion
+    public DateOnly SlotDateOnly { get; set; } // Just the date portion
     [Required]
     public TimeOnly FromTimeOnly { get; set; } // Just the time portion
 
-    [Required]
-    public DateTime ToDate { get; set; } // Full PKT DateTime
-    [Required]
-    public DateOnly ToDateOnly { get; set; } // Just the date portion
     [Required]
     public TimeOnly ToTimeOnly { get; set; } // Just the time portion
 
