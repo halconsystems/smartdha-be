@@ -9,6 +9,8 @@ namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Que
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
@@ -17,8 +19,9 @@ public class FinalWorkFlowWithFee
 {
     public List<CaseWorkflowStepDto> Steps { get; set; } = new();
     public PaymentStatusDto PaymentStatusDto { get; set; } = new();
-
     public List<CaseResultDocumentDto> ResultDocuments { get; set; } = new();
+    // ONLY when rejected
+    public CaseRejectionDto? RejectedPrerequisites { get; set; }
 }
 public class CaseResultDocumentDto
 {
@@ -26,8 +29,6 @@ public class CaseResultDocumentDto
     public string FileName { get; set; } = default!;
     public string DownloadUrl { get; set; } = default!;
 }
-
-
 public record CaseWorkflowStepDto
 (
     int StepNo,
@@ -49,6 +50,12 @@ public class PaymentInfoDto
     public decimal? Amount { get; set; }
     public string Currency { get; set; } = "PKR";
     public string Purpose { get; set; } = default!;
+}
+
+public class CaseRejectionDto
+{
+    public string Remarks { get; set; } = default!;
+    public List<RejectionProcessPrerequisiteDto> Requirements { get; set; } = new();
 }
 
 public record GetCaseWorkflowHierarchyQuery(Guid CaseId)
@@ -158,6 +165,80 @@ public class GetCaseWorkflowHierarchyHandler
         };
 
 
+        CaseRejectionDto? rejectionDto = null;
+
+        if (c.Status == CaseStatus.Rejected)
+        {
+            // 1️⃣ Latest rejection remarks
+            var rejectionHistory = await _db.Set<CaseStepHistory>()
+                .Where(x =>
+                    x.CaseId == c.Id &&
+                    x.Action == CaseAction.Rejected)
+                .OrderByDescending(x => x.Created)
+                .FirstOrDefaultAsync(ct);
+
+            // 2️⃣ Process prerequisites (definitions)
+            var processPrereqs = await _db.Set<ProcessPrerequisite>()
+                .Include(x => x.PrerequisiteDefinition)
+                    .ThenInclude(d => d.Options)
+                .Where(x => x.ProcessId == c.ProcessId && x.IsRequired)
+                .ToListAsync(ct);
+
+            // 3️⃣ Case rejection requirements (state)
+            var rejected = await _db.Set<CaseRejectRequirement>()
+                .Where(x => x.CaseId == c.Id)
+                .ToListAsync(ct);
+
+            // 4️⃣ Merge definition + case state
+            var requirements = processPrereqs
+                .Where(p => rejected.Any(r => r.PrerequisiteDefinitionId == p.PrerequisiteDefinitionId))
+                .Select(p =>
+                {
+                    var caseReq = rejected.First(r =>
+                        r.PrerequisiteDefinitionId == p.PrerequisiteDefinitionId);
+
+                    return new RejectionProcessPrerequisiteDto(
+                        p.Id,
+                        p.ProcessId,
+                        p.PrerequisiteDefinitionId,
+                        p.PrerequisiteDefinition.Code,
+                        p.PrerequisiteDefinition.Name,
+                        p.PrerequisiteDefinition.Type,
+
+                        p.IsRequired,
+                        p.RequiredByStepNo,
+
+                        p.PrerequisiteDefinition.MinLength,
+                        p.PrerequisiteDefinition.MaxLength,
+                        p.PrerequisiteDefinition.AllowedExtensions,
+
+                        p.PrerequisiteDefinition.Options
+                            .OrderBy(o => o.SortOrder)
+                            .Select(o => new PrerequisiteOptionDto(
+                                o.Id,
+                                o.Label,
+                                o.Value,
+                                o.SortOrder
+                            ))
+                            .ToList(),
+
+                        // Case-specific
+                        caseReq.IsUploaded,
+                        caseReq.Remarks,
+                        caseReq.UploadedDocumentId
+                    );
+                })
+                .ToList();
+
+            rejectionDto = new CaseRejectionDto
+            {
+                Remarks = rejectionHistory?.Remarks ?? "Additional information required.",
+                Requirements = requirements
+            };
+        }
+
+
+
 
         // 6️⃣ Build workflow hierarchy
         var workflowSteps = steps.Select(step =>
@@ -210,7 +291,9 @@ public class GetCaseWorkflowHierarchyHandler
         {
             Steps = workflowSteps,
             PaymentStatusDto = finalPaymentStatus,
-            ResultDocuments = documentDtos
+            ResultDocuments = documentDtos,
+
+            RejectedPrerequisites = rejectionDto   // 🔴 IMPORTANT
         });
     }
 }

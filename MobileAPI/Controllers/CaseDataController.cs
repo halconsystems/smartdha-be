@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.AddCaseDocument;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.ResubmitRejectedCase;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.SubmitCase_V1;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
@@ -101,4 +102,29 @@ public class CaseDataController : BaseApiController
     [HttpGet("{caseId:guid}/workflow")]
     public async Task<IActionResult> GetWorkflow(Guid caseId, CancellationToken ct)
         => Ok(await _mediator.Send(new GetCaseWorkflowHierarchyQuery(caseId), ct));
+
+
+    [HttpPost("{caseId:guid}/resubmit-rejected")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> ResubmitRejectedCase(
+    Guid caseId,
+    [FromForm] ResubmitRejectedCaseRequest request,
+    CancellationToken ct)
+    {
+        var prereqs = JsonSerializer.Deserialize<List<PrerequisiteValueInput>>(
+            request.PrerequisiteValuesJson,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        if (prereqs == null)
+            return BadRequest("Invalid prerequisiteValuesJson.");
+
+        var cmd = new ResubmitRejectedCaseCommand(
+            caseId,
+            prereqs,
+            request.Files
+        );
+
+        return Ok(await _mediator.Send(cmd, ct));
+    }
+
 }

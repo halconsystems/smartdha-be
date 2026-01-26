@@ -26,5 +26,9 @@ public class PrerequisiteDefinition : BaseAuditableEntity
     // If it is a file, you can restrict extensions (".pdf,.jpg")
     [MaxLength(200)]
     public string? AllowedExtensions { get; set; }
+
+    // REQUIRED FOR OPTIONS
+    public ICollection<PrerequisiteOption> Options { get; set; }
+        = new List<PrerequisiteOption>();
 }
 

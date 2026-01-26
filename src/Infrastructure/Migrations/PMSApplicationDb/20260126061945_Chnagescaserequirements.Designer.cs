@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 {
     [DbContext(typeof(PMSApplicationDbContext))]
-    partial class PMSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126061945_Chnagescaserequirements")]
+    partial class Chnagescaserequirements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -945,9 +948,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<Guid>("PrerequisiteDefinitionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PrerequisiteDefinitionId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -964,8 +964,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PrerequisiteDefinitionId1");
 
                     b.HasIndex("PrerequisiteDefinitionId", "Value")
                         .IsUnique();
@@ -1693,10 +1691,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", null)
-                        .WithMany("Options")
-                        .HasForeignKey("PrerequisiteDefinitionId1");
-
                     b.Navigation("PrerequisiteDefinition");
                 });
 
@@ -1781,11 +1775,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
-                {
-                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

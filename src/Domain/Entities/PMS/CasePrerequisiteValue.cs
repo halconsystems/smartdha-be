@@ -28,5 +28,7 @@ public class CasePrerequisiteValue : BaseAuditableEntity
 
     [MaxLength(500)]
     public string? VerificationRef { get; set; }
+    public Guid? CaseRejectRequirementId { get; set; }
+    public CaseRejectRequirement? CaseRejectRequirement { get; set; }
 }
 

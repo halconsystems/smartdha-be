@@ -10,21 +10,16 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.RejectCaseWithRequirements;
+
 public record RejectRequirementInput
 (
-    string Name,
-    string Code,
-    PrerequisiteType Type,
-    int? MinLength,
-    int? MaxLength,
-    string? AllowedExtensions,
+    Guid PrerequisiteDefinitionId,
     string? Remarks
 );
-
 public record RejectCaseWithRequirementsCommand
 (
     Guid CaseId,
-    string Remarks,                         // overall rejection remarks
+    string Remarks,
     List<RejectRequirementInput> Requirements
 ) : IRequest<ApiResult<bool>>;
 
@@ -86,21 +81,27 @@ public class RejectCaseWithRequirementsHandler
         c.Status = CaseStatus.Rejected;
         c.CurrentAssignedUserId = null;
 
-        // 🧱 Save CASE-SPECIFIC requirements
+        // 🧱 Save CASE-SPECIFIC missing prerequisites (NO DUPLICATION)
         foreach (var req in r.Requirements)
         {
+            // Validate prerequisite belongs to this process
+            var valid = await _pmsDb.Set<ProcessPrerequisite>()
+                .AnyAsync(x =>
+                    x.ProcessId == c.ProcessId &&
+                    x.PrerequisiteDefinitionId == req.PrerequisiteDefinitionId,
+                    ct);
+
+            if (!valid)
+                return ApiResult<bool>.Fail("Invalid prerequisite selected.");
+
             _pmsDb.Set<CaseRejectRequirement>().Add(new CaseRejectRequirement
             {
                 CaseId = c.Id,
-                Name = req.Name.Trim(),
-                Code = req.Code.Trim().ToUpperInvariant(),
-                Type = req.Type,
-                MinLength = req.MinLength,
-                MaxLength = req.MaxLength,
-                AllowedExtensions = req.AllowedExtensions,
+                PrerequisiteDefinitionId = req.PrerequisiteDefinitionId,
                 Remarks = req.Remarks
             });
         }
+
 
         // 🧾 History snapshot
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory

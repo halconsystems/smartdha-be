@@ -15,6 +15,7 @@ public enum CaseAction
     Returned,
     Rejected,
     Approved,
-    ForwardInternal
+    ForwardInternal,
+    Resubmitted
 }
 

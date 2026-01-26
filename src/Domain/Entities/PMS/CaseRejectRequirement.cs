@@ -12,26 +12,18 @@ public class CaseRejectRequirement : BaseAuditableEntity
     public Guid CaseId { get; set; }
     public PropertyCase Case { get; set; } = default!;
 
-    // What officer is asking for
-    [Required, MaxLength(150)]
-    public string Name { get; set; } = default!;        // e.g. "Site Plan"
+    // 🔗 LINK to definition (NO DUPLICATION)
+    public Guid PrerequisiteDefinitionId { get; set; }
+    public PrerequisiteDefinition PrerequisiteDefinition { get; set; } = default!;
 
-    [Required, MaxLength(50)]
-    public string Code { get; set; } = default!;        // e.g. SITE_PLAN
+    // Optional officer note (case-specific)
+    [MaxLength(500)]
+    public string? Remarks { get; set; }
 
-    public PrerequisiteType Type { get; set; }          // FileUpload, Text, etc.
-
-    // Validation (optional)
-    public int? MinLength { get; set; }
-    public int? MaxLength { get; set; }
-    public string? AllowedExtensions { get; set; }
-
-    // Applicant action tracking
+    // Applicant upload tracking
     public bool IsUploaded { get; set; } = false;
     public Guid? UploadedDocumentId { get; set; }
 
-    // Officer guidance
-    [MaxLength(500)]
-    public string? Remarks { get; set; }
 }
+
 
