@@ -16,23 +16,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 
-public record ProcessPrerequisiteDto
-(
-    Guid Id,
-    Guid ProcessId,
-    Guid PrerequisiteDefinitionId,
-    string Code,
-    string Name,
-    PrerequisiteType Type,
-
-    bool IsRequired,
-    int RequiredByStepNo,
-
-    int? MinLength,
-    int? MaxLength,
-    string? AllowedExtensions,
-    List<PrerequisiteOptionDto> Options
-);
 public record UserPropertyDto(
     Guid PropertyId,
     string PropertyNo,

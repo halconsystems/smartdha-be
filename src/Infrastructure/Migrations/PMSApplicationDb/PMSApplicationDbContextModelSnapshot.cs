@@ -297,6 +297,63 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.ToTable("CasePrerequisiteValues");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("CaseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUploaded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remarks")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid?>("UploadedDocumentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("PrerequisiteDefinitionId");
+
+                    b.ToTable("CaseRejectRequirements");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseResultDocument", b =>
                 {
                     b.Property<Guid>("Id")
@@ -384,6 +441,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DirectorateName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FromUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -398,6 +462,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ModuleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PerformedByUserId")
                         .HasColumnType("nvarchar(max)");
@@ -414,6 +481,13 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.Property<Guid>("StepId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StepName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StepNo")
+                        .HasColumnType("int");
 
                     b.Property<string>("ToUserId")
                         .HasColumnType("nvarchar(max)");
@@ -871,6 +945,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<Guid>("PrerequisiteDefinitionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("PrerequisiteDefinitionId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -887,6 +964,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PrerequisiteDefinitionId1");
 
                     b.HasIndex("PrerequisiteDefinitionId", "Value")
                         .IsUnique();
@@ -1501,6 +1580,25 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Navigation("PrerequisiteDefinition");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("PrerequisiteDefinition");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseResultDocument", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", "Case")
@@ -1595,6 +1693,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", null)
+                        .WithMany("Options")
+                        .HasForeignKey("PrerequisiteDefinitionId1");
+
                     b.Navigation("PrerequisiteDefinition");
                 });
 
@@ -1679,6 +1781,11 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
+                {
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

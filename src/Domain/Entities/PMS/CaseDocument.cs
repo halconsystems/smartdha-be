@@ -10,7 +10,6 @@ public class CaseDocument : BaseAuditableEntity
 {
     public Guid CaseId { get; set; }
     public PropertyCase Case { get; set; } = default!;
-
     // Optional link to a prerequisite (CNIC front, site plan)
     public Guid? PrerequisiteDefinitionId { get; set; }
     public PrerequisiteDefinition? PrerequisiteDefinition { get; set; }
@@ -25,5 +24,9 @@ public class CaseDocument : BaseAuditableEntity
     public string? ContentType { get; set; } // "application/pdf"
 
     public long? FileSize { get; set; }
+
+    // NEW: null = original submission, NOT NULL = rejection upload
+    public Guid? CaseRejectRequirementId { get; set; }
+    public CaseRejectRequirement? CaseRejectRequirement { get; set; }
 }
 

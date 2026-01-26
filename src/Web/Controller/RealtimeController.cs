@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace DHAFacilitationAPIs.Web.Controller;
 [ApiController]
 [Route("internal/realtime")]
-[ApiExplorerSettings(GroupName = "panic")]
+[ApiExplorerSettings(GroupName = "RealTime-SignalR")]
 public class RealtimeController : ControllerBase
 {
     private readonly IHubContext<PanicHub, IPanicHubClient> _hub;

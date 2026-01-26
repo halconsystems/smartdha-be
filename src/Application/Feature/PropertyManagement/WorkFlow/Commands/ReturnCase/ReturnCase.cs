@@ -10,15 +10,21 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ReturnCase;
-public record ReturnCaseCommand(Guid CaseId, string Remarks)
-    : IRequest<ApiResult<bool>>;
-public class ReturnCaseHandler : IRequestHandler<ReturnCaseCommand, ApiResult<bool>>
+public record ReturnCaseCommand(
+    Guid CaseId,
+    string Remarks
+) : IRequest<ApiResult<bool>>;
+public class ReturnCaseHandler
+    : IRequestHandler<ReturnCaseCommand, ApiResult<bool>>
 {
     private readonly IPMSApplicationDbContext _pmsDb;
     private readonly IApplicationDbContext _appDb;
     private readonly ICurrentUserService _current;
 
-    public ReturnCaseHandler(IPMSApplicationDbContext pmsDb, IApplicationDbContext appDb, ICurrentUserService current)
+    public ReturnCaseHandler(
+        IPMSApplicationDbContext pmsDb,
+        IApplicationDbContext appDb,
+        ICurrentUserService current)
     {
         _pmsDb = pmsDb;
         _appDb = appDb;
@@ -31,72 +37,82 @@ public class ReturnCaseHandler : IRequestHandler<ReturnCaseCommand, ApiResult<bo
             return ApiResult<bool>.Fail("Unauthorized.");
 
         if (string.IsNullOrWhiteSpace(r.Remarks))
-            return ApiResult<bool>.Fail("Remarks are required.");
+            return ApiResult<bool>.Fail("Remarks required.");
 
-        var userId = _current.UserId.ToString()!;
+        var userId = _current.UserId!.ToString();
 
         var c = await _pmsDb.Set<PropertyCase>()
-            .FirstOrDefaultAsync(x => x.Id == r.CaseId, ct);
+            .FirstOrDefaultAsync(x => x.Id == r.CaseId && x.IsDeleted !=true, ct);
 
-        if (c == null) return ApiResult<bool>.Fail("Case not found.");
-        if (c.Status == CaseStatus.Rejected || c.Status == CaseStatus.Approved)
+        if (c == null)
+            return ApiResult<bool>.Fail("Case not found.");
+
+        if (c.Status == CaseStatus.Approved || c.Status == CaseStatus.Rejected)
             return ApiResult<bool>.Fail("Case is closed.");
 
-        var currentStep = await _pmsDb.Set<ProcessStep>().FirstAsync(x => x.Id == c.CurrentStepId, ct);
+        var currentStep = await _pmsDb.Set<ProcessStep>()
+            .Include(x => x.Directorate)
+            .FirstAsync(x => x.Id == c.CurrentStepId, ct);
 
-        // permission
-        var moduleId = await GetDirectorateModuleId(currentStep.DirectorateId, ct);
-        if (!await UserInModule(userId, moduleId, ct))
-            return ApiResult<bool>.Fail("You are not allowed to act on this directorate.");
+        // Permission
+        if (!await UserInModule(userId, currentStep.Directorate.ModuleId, ct))
+            return ApiResult<bool>.Fail("Not allowed.");
 
-        // ownership optional
-        if (!string.IsNullOrEmpty(c.CurrentAssignedUserId) && c.CurrentAssignedUserId != userId)
-            return ApiResult<bool>.Fail("Case is assigned to another user.");
-
-        // find previous step (linear)
+        // Find previous step
         var prevStep = await _pmsDb.Set<ProcessStep>()
-            .FirstOrDefaultAsync(x => x.ProcessId == c.ProcessId && x.StepNo == currentStep.StepNo - 1, ct);
+            .Include(x => x.Directorate)
+            .FirstOrDefaultAsync(x =>
+                x.ProcessId == c.ProcessId &&
+                x.StepNo == currentStep.StepNo - 1,
+                ct);
 
         if (prevStep == null)
             return ApiResult<bool>.Fail("No previous step found.");
 
-        // move back externally
+        // Update case location
         c.CurrentStepId = prevStep.Id;
         c.CurrentStepNo = prevStep.StepNo;
         c.CurrentAssignedUserId = null;
         c.Status = CaseStatus.Returned;
+        c.CurrentModuleId = prevStep.Directorate.ModuleId;
+        c.DirectorateId = prevStep.DirectorateId;
 
-        // history
+        // History: returned from current step
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
+
             StepId = currentStep.Id,
-            FromUserId = userId,
+            StepNo = currentStep.StepNo,
+            StepName = currentStep.Name,
+            DirectorateId = currentStep.DirectorateId,
+            DirectorateName = currentStep.Directorate.Name,
+            ModuleId = currentStep.Directorate.ModuleId,
+
             Action = CaseAction.Returned,
-            Remarks = r.Remarks
+            Remarks = r.Remarks,
+            FromUserId = userId,
+            PerformedByUserId = userId
         });
 
-        // optionally: received at previous directorate
+        // History: received by previous step
         _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
+
             StepId = prevStep.Id,
+            StepNo = prevStep.StepNo,
+            StepName = prevStep.Name,
+            DirectorateId = prevStep.DirectorateId,
+            DirectorateName = prevStep.Directorate.Name,
+            ModuleId = prevStep.Directorate.ModuleId,
+
             Action = CaseAction.Received,
-            Remarks = "Returned to previous directorate."
+            Remarks = "Returned from next directorate."
         });
 
         await _pmsDb.SaveChangesAsync(ct);
-        return ApiResult<bool>.Ok(true, "Case returned to previous step.");
-    }
-
-    private async Task<Guid> GetDirectorateModuleId(Guid directorateId, CancellationToken ct)
-    {
-        var dir = await _pmsDb.Set<Directorate>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == directorateId, ct);
-
-        if (dir == null) throw new InvalidOperationException("Directorate not found.");
-        return dir.ModuleId;
+        return ApiResult<bool>.Ok(true, "Case returned to previous directorate.");
     }
 
     private async Task<bool> UserInModule(string userId, Guid moduleId, CancellationToken ct)
@@ -106,4 +122,5 @@ public class ReturnCaseHandler : IRequestHandler<ReturnCaseCommand, ApiResult<bo
             .AnyAsync(x => x.UserId == userId && x.ModuleId == moduleId, ct);
     }
 }
+
 

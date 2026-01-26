@@ -132,7 +132,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
             .Where(p => allowedPrerequisiteIds.Contains(p.PrerequisiteDefinitionId))
             .ToList();
 
-        // 4️⃣ Insert values
+        // 4️ Insert values
         foreach (var p in validValues)
         {
             _db.Set<CasePrerequisiteValue>().Add(new CasePrerequisiteValue
@@ -148,7 +148,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         await _db.SaveChangesAsync(ct);
 
         // =========================
-        // 3️⃣ SAVE FILES
+        // 3️ SAVE FILES
         // Filename format: {PrerequisiteDefinitionId}__filename.ext
         // =========================
         if (r.Files != null)
@@ -187,7 +187,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         await _db.SaveChangesAsync(ct);
 
         // =========================
-        // 4️⃣ VALIDATION
+        // 4️ VALIDATION
         // =========================
 
         var processPrereqs = await _db.Set<ProcessPrerequisite>()
@@ -223,7 +223,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
                 $"Missing required prerequisites: {missing.Count}");
 
         // =========================
-        // 4️⃣.1 OPTION VALIDATION
+        // 4️ OPTION VALIDATION
         // =========================
         foreach (var value in r.PrerequisiteValues)
         {
@@ -255,7 +255,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
             }
         }
         // 5 Resolve Fee
-        if (r.FeeDefinitionId != null)
+        if (r.FeeDefinitionId is { } id && id != Guid.Empty)
         {
             var feeDef = await _db.Set<FeeDefinition>()
                 .FirstOrDefaultAsync(x =>
@@ -376,7 +376,8 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         // 6 MOVE TO STEP-1
         // =========================
         var step1 = await _db.Set<ProcessStep>()
-       .FirstAsync(x => x.ProcessId == r.ProcessId && x.StepNo == 1, ct);
+        .Include(x => x.Directorate)
+        .FirstAsync(x => x.ProcessId == r.ProcessId && x.StepNo == 1, ct);
 
         c.Status = CaseStatus.Submitted;
         c.CurrentStepNo = 1;
@@ -385,7 +386,16 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         _db.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
-            StepId = step1.Id,                // external step entered
+
+            StepId = step1.Id,
+            StepNo = step1.StepNo,
+            StepName = step1.Name,
+
+            DirectorateId = step1.DirectorateId,
+            DirectorateName = step1.Directorate.Name,
+
+            ModuleId = step1.Directorate.ModuleId,
+
             Action = CaseAction.Received,
             Remarks = "Application received.",
             PerformedByUserId = userId

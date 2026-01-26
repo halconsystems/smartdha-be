@@ -139,6 +139,11 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Title = "Ground Module",
                     Version = "v1"
                 });
+                o.SwaggerDoc("RealTime-SignalR", new OpenApiInfo
+                {
+                    Title = "RealTime SignalR",
+                    Version = "v1"
+                });
 
                 // 🔹 FILTER APIs BY GROUP NAME
                 o.DocInclusionPredicate((docName, apiDesc) =>
