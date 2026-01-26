@@ -46,6 +46,9 @@ public interface IOLMRSApplicationDbContext
     DbSet<ClubServiceProcess> ClubProcess { get; }
     DbSet<ClubImages> ClubImages { get; }
     DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions { get; }
+    DbSet<ClubFeeDefinition> ClubFeeDefinition { get; }
+    DbSet<ClubFeeOption> ClubFeeOption { get; }
+    DbSet<ClubFeeCategory> ClubFeeCategory { get; }
 
 
 

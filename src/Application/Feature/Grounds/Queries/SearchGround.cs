@@ -13,10 +13,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Grounds.Queries;
 
 public record SearchGroundQuery(
     DateOnly CheckInDate,
-    DateOnly CheckOutDate,
-    GroundCategory GroundCategory, // "self" or "guest"
-    TimeOnly? CheckInTime = null,
-    TimeOnly? CheckOutTime = null
+    GroundCategory GroundCategory // "self" or "guest"
 ) : IRequest<List<GroundDTO>>;
 
 public class SearchGroundQueryHandler : IRequestHandler<SearchGroundQuery, List<GroundDTO>>
@@ -32,33 +29,18 @@ public class SearchGroundQueryHandler : IRequestHandler<SearchGroundQuery, List<
 
     public async Task<List<GroundDTO>> Handle(SearchGroundQuery request, CancellationToken ct)
     {
-        var startDate = request.CheckInDate;   // DateOnly
-        var endDate = request.CheckOutDate;  // DateOnly
-        TimeOnly checkIn;
-        TimeOnly checkOut;
-        GroundStandtardTime grounstandard = new GroundStandtardTime();
-        if (request.CheckInTime.HasValue && request.CheckOutTime.HasValue)
-        {
-            checkIn = request.CheckInTime.Value;
-            checkOut = request.CheckOutTime.Value;
-        }
 
         
 
         var GroundSlots = await _context.GroundSlots.AsNoTracking()
-                            .Where(std => std.IsDeleted == false && std.IsActive == true &&
-                            std.FromDateOnly == startDate  &&
-                            std.ToDateOnly == endDate &&
-                            std.FromTimeOnly == request.CheckInTime &&
-                            std.ToTimeOnly == request.CheckOutTime
-                            )
+                            .Where(std => std.IsDeleted == false && std.IsActive == true)
                             .ToListAsync(ct);
 
         var ground = await _context.Grounds.Where(x => x.GroundCategory == request.GroundCategory && GroundSlots.Select(x => x.GroundId).Contains(x.Id))
            .AsNoTracking()
            .ToListAsync();
 
-        var groundBooked = await _context.GroundBookings.Where(x => ground.Select(g => g.Id).Contains(x.GroundId))
+        var groundBooked = await _context.GroundBookings.Where(x => ground.Select(g => g.Id).Contains(x.GroundId) && x.BookingDateOnly == request.CheckInDate)
            .AsNoTracking()
            .ToListAsync();
 
@@ -69,6 +51,17 @@ public class SearchGroundQueryHandler : IRequestHandler<SearchGroundQuery, List<
         var groundGroundStandardTime = await _context.GroundStandtardTimes.Where(x => ground.Select(x => x.Id).Contains(x.GroundId)).ToListAsync();
 
         var clubs = await _context.Clubs.Where(x => ground.Select(x => x.ClubId).Contains(x.Id)).ToListAsync();
+
+        var groundSlotIds = GroundSlots.Select(s => s.Id).ToHashSet();
+        var bookedSlotIds = bookedSlots
+            .Where(b => groundSlotIds.Contains(b.SlotId))
+            .Select(b => b.SlotId)
+            .Distinct()
+            .ToHashSet();
+
+        var totalSlots = groundSlotIds.Count;
+        var bookedCount = bookedSlotIds.Count;
+        var availableCount = totalSlots - bookedCount;
 
         var grounds = ground.Select(x =>
         {
@@ -91,7 +84,9 @@ public class SearchGroundQueryHandler : IRequestHandler<SearchGroundQuery, List<
                 ContactNumber = x.ContactNumber,
                 AccountNo = x.AccountNo,
                 AccountNoAccronym = x.AccountNoAccronym,
-                SlotCount = GroundSlots.Count(g => g.GroundId == x.Id).ToString(),
+                SlotCount = totalSlots.ToString(),
+                BookedCount = bookedCount,
+                AvailableCount = availableCount,
                 GroundStandtardTime = groundGroundStandardTime
                                         .FirstOrDefault(s => s.GroundId == x.Id),
                 ClubId = clubs?.FirstOrDefault(c => c.Id == x.ClubId)?.Id,

@@ -46,7 +46,7 @@ public class LaundryItemsController : BaseApiController
         return Ok(result);
     }
 
-    [HttpPost("{roomId:guid}/images/add"), AllowAnonymous]
+    [HttpPost("Laundry/images/add"), AllowAnonymous]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
     public async Task<IActionResult> AddLaundryImage(
@@ -108,5 +108,5 @@ public class LaundryItemsController : BaseApiController
 
     [HttpPut("Active-Inactive-LaundryItems")]
     public async Task<ActionResult<SuccessResponse<string>>> UpdateLaundryCategory(Guid id,bool Active, ActiveInActiveLaundryItemsCommand cmd, CancellationToken ct)
-       => Ok(await _mediator.Send(cmd with { Id = id }, ct));
+       => Ok(await _mediator.Send(cmd, ct));
 }

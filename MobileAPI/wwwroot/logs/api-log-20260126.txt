@@ -250,3 +250,164 @@ Response:
 {"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"For Review","directorateName":"Central Control Cell","status":"Rejected","actionDate":"2026-01-26T11:59:13.4470255","remarks":"Reject form CCC"},{"stepNo":2,"stepName":"Final Deicision","directorateName":"Town Planning & Building Control","status":"NotStarted","actionDate":null,"remarks":null},{"stepNo":3,"stepName":"Fincial Approval","directorateName":"Finance","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"NotRequired","payment":null},"resultDocuments":[],"rejectedPrerequisites":{"remarks":"Reject form CCC","requirements":[{"id":"1be35b5b-ab7e-4f23-83b4-aba04a170007","processId":"cd85bd94-aeb5-462f-86f4-e5208be02fae","prerequisiteDefinitionId":"b93a0cd9-a922-4c05-aec7-af5949d7eb55","code":"COPY OF CNIC","name":"Copy of CNIC","type":"File","isRequired":true,"requiredByStepNo":8,"minLength":0,"maxLength":0,"allowedExtensions":".png,.jpg,.pdf","options":[],"isUploaded":false,"remarks":"Provide Copy of CNIC","uploadedDocumentId":null}]}}
 >>>>>>> 7c224317acfc7cfe0de4e9f217251e53f166c78e
 ==============================================
+2026-01-26 17:14:33.483 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISQHII588G:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 401
+Duration : 108 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 17:14:47.180 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISQHII588H:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 401
+Duration : 41 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 17:15:12.811 +05:00 [INF] [CQRS]
+TraceId  : 0HNISQHII588I:00000001
+Request  : SearchGroundQuery
+Duration : 632 ms
+2026-01-26 17:15:12.880 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (634 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-03-21","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 17:15:12.920 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISQHII588I:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 793 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"1","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-26 18:18:37.365 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRL7SP61E:0000000B
+Request  : SearchGroundQuery
+Duration : 2459 ms
+2026-01-26 18:18:37.635 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (2548 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-26","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 18:18:37.805 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRL7SP61E:0000000B
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 3380 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-26 18:19:39.788 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRL7SP61E:0000000D
+Request  : SearchGroundQuery
+Duration : 29722 ms
+2026-01-26 18:19:39.801 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (29723 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-26","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 18:19:39.802 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRL7SP61E:0000000D
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 29753 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-26 18:22:37.783 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRN7GT8JI:0000000B
+Request  : SearchGroundQuery
+Duration : 42349 ms
+2026-01-26 18:22:37.934 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (42403 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-21","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 18:22:38.082 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRN7GT8JI:0000000B
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 43084 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-26 18:27:48.299 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRQD1RFDJ:00000001
+Request  : GetGroundQueryById
+Duration : 6220 ms
+2026-01-26 18:27:48.552 +05:00 [WRN] CMS Long Running Request: GetGroundQueryById (6307 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"Id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","GroundCategory":"Academy","$type":"GetGroundQueryById"}
+2026-01-26 18:27:48.770 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRQD1RFDJ:00000001
+Method   : GET
+Path     : /api/groundbooking/getgrounddetail
+Status   : 200
+Duration : 7167 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":null,"groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":null,"slotCount":"3","availableCount":0,"bookedCount":3,"groundImages":[{"id":"b5442f34-e097-4dec-ae97-234a1a626803","groudId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","imageURL":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front"}],"slots":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","id":"a6b3b59f-22b3-443b-a8f3-56f4f6a01e06","slotName":"Slot 1","displayName":"Morning Slot","code":null,"slotPrice":"6000","slotDate":"2026-03-21","fromTimeOnly":"21:00:00","toTimeOnly":"23:00:00","action":"Booked"},{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","id":"ab6e100b-10bc-4b7e-9ab6-8d9cbaa29191","slotName":"Slot 2","displayName":"Evening Slot","code":"EVENIN","slotPrice":"5000","slotDate":"2026-01-26","fromTimeOnly":"21:00:00","toTimeOnly":"23:00:00","action":"Available"},{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","id":"397f1b11-dc40-4f14-9eae-fcc314c7dbfc","slotName":"Slot 3","displayName":"Night Slot","code":"NIGHT","slotPrice":"6000","slotDate":"2026-01-26","fromTimeOnly":"10:00:00","toTimeOnly":"12:00:00","action":"Available"}],"groundStandtardTimes":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"}],"groundStandtardTime":null,"action":null}
+==============================================
+2026-01-26 18:32:25.942 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRSV99D80:00000001
+Request  : SearchGroundQuery
+Duration : 8068 ms
+2026-01-26 18:32:26.184 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (8147 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-21","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 18:32:26.356 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRSV99D80:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 8941 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":2,"bookedCount":1,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-26 18:33:06.549 +05:00 [INF] [CQRS]
+TraceId  : 0HNISRSV99D81:00000001
+Request  : SearchGroundQuery
+Duration : 12334 ms
+2026-01-26 18:33:06.615 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (12335 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-03-21","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-26 18:33:06.616 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNISRSV99D81:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 12426 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":3,"bookedCount":0,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================

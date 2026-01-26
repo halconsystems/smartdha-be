@@ -22,6 +22,7 @@ public class GetOrderListByShopIdQueryHandler : IRequestHandler<GetOrderListBySh
     public async Task<List<OrderDTO>> Handle(GetOrderListByShopIdQuery request, CancellationToken ct)
     {
 
+
         var orders = _context.Orders.Where(x => x.ShopId == request.ShopiD)
             .Include(x => x.LaundryPackaging)
             .Include(x => x.LaundryService)

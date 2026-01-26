@@ -37,11 +37,8 @@ public class GetGroundSlotsQueryHandler : IRequestHandler<GetGroundSlotsQuery, S
                 DisplayName = x.DisplayName,
                 Code = x.Code,
                 Action = x.Action,
-                FromDate = x.FromDate,
-                ToDate = x.ToDate,
-                FromDateOnly = x.FromDateOnly,
+                SlotDate = x.SlotDate,
                 FromTimeOnly = x.FromTimeOnly,
-                ToDateOnly = x.ToDateOnly,
                 ToTimeOnly = x.FromTimeOnly,
             })
             .ToListAsync(ct);

@@ -28,5 +28,6 @@ public class GroundBooking :BaseAuditableEntity
     public PaymentMethod PaymentMethod { get; set; }
     public bool IsConfirm {  get; set; }
     public string BookingCode { get; set; } = default!;
-     
+
+    public DateOnly BookingDateOnly { get; set; }
 }

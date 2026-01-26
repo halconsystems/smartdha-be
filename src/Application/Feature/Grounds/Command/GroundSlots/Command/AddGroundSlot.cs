@@ -24,8 +24,9 @@ public class AddGroundSlotCommand : IRequest<SuccessResponse<Guid>>
     public string DisplayName { get; set; } = default!;
     [Required]
     public string SlotPrice { get; set; } = default!;
-    [Required] public DateOnly FromDate { get; set; }
-    [Required] public DateOnly ToDate { get; set; }
+    [Required] public DateOnly SlotDate { get; set; }
+    [Required] public TimeOnly FromTime { get; set; }
+    [Required] public TimeOnly ToTime { get; set; }
 
     [Required] public AvailabilityAction Action { get; set; }
     public string? Reason { get; set; }
@@ -46,26 +47,8 @@ public class AddGroundSlotCommandHandler
             && r.IsDeleted == false && r.IsActive == true, ct);
         if (ground == null) throw new KeyNotFoundException("Ground not found.");
 
-        // Get standard times for the club
-        var standardTimes = await _ctx.GroundStandtardTimes
-            .FirstOrDefaultAsync(s => s.GroundId == ground.Id && s.IsDeleted == false && s.IsActive == true, ct);
-        if (standardTimes == null) throw new InvalidOperationException("Standard booking times not configured for this club.");
-
-        // Combine DateOnly + TimeOnly -> DateTime in PKT (Asia/Karachi)
-        var pktTz = TimeZoneInfo.FindSystemTimeZoneById(
-#if WINDOWS
-            "Pakistan Standard Time"   // Windows ID
-#else
-            "Asia/Karachi"             // Linux/Container ID
-#endif
-        );
-
-        // Use DateOnly from request + TimeOnly from standard times
-        var fromLocal = request.FromDate.ToDateTime(standardTimes.CheckInTime, DateTimeKind.Unspecified);
-        var toLocal = request.ToDate.ToDateTime(standardTimes.CheckOutTime, DateTimeKind.Unspecified);
-
         // enforce that To >= From
-        if (toLocal < fromLocal)
+        if (request.FromTime > request.ToTime)
             throw new ArgumentException("To date/time must be greater than or equal to From date/time.");
 
         // If you want UTC storage for the full DateTimes:
@@ -74,18 +57,18 @@ public class AddGroundSlotCommandHandler
 
         // Check if overlaps with existing availabilities for the same room
         var hasOverlap = await _ctx.GroundSlots
-            .Where(a =>
-                a.GroundId == request.GroundId &&
-                a.IsDeleted != true &&
-                a.FromDate < toLocal &&
-                fromLocal < a.ToDate)
-            .FirstOrDefaultAsync(ct);
+     .AnyAsync(a =>
+         a.GroundId == request.GroundId &&
+         a.IsDeleted != true &&
+         a.FromTimeOnly < request.ToTime &&
+         a.ToTimeOnly > request.FromTime,
+         ct);
 
-        if (hasOverlap != null)
+
+        if (hasOverlap)
         {
             throw new InvalidOperationException(
-                $"This room already has an overlapping availability from " +
-                $"{hasOverlap.FromDate:dd-MM-yyyy HH:mm:ss} to {hasOverlap.ToDate:dd-MM-yyyy HH:mm:ss}."
+                $"This room already has an overlapping availability from "
             );
         }
 
@@ -98,14 +81,11 @@ public class AddGroundSlotCommandHandler
             GroundId = request.GroundId,
             Code = request.DisplayName.Substring(0, request.DisplayName.Length / 2).ToUpper(),
             // Combined (keep as local PKT; or use fromUtc/toUtc if you prefer UTC)
-            FromDate = fromLocal,
-            ToDate = toLocal,
+            SlotDate = request.SlotDate,
 
-            // Split fields for exact matching
-            FromDateOnly = request.FromDate,
-            FromTimeOnly = standardTimes.CheckInTime,
-            ToDateOnly = request.ToDate,
-            ToTimeOnly = standardTimes.CheckOutTime,
+
+            FromTimeOnly = request.FromTime,
+            ToTimeOnly = request.ToTime,
 
             Action = request.Action,
             Reason = request.Reason

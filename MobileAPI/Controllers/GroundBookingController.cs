@@ -185,9 +185,9 @@ public class GroundBookingController : BaseApiController
     }
 
     [HttpGet("search-grounds")]
-    public async Task<IActionResult> SearchGround([FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] GroundCategory groundCategory, [FromQuery] TimeOnly CheckInTime, TimeOnly CheckOutTime)
+    public async Task<IActionResult> SearchGround([FromQuery] DateOnly checkInDate, [FromQuery] GroundCategory groundCategory)
     {
-        var result = await _mediator.Send(new SearchGroundQuery(checkInDate, checkOutDate, groundCategory,CheckInTime,CheckOutTime));
+        var result = await _mediator.Send(new SearchGroundQuery(checkInDate, groundCategory));
         return Ok(result);
     }
 }

@@ -26,7 +26,6 @@ public class AddLaundryImagesCommandHandler
     {
         // 1) Room must exist
         var LaundryItems = await _ctx.LaundryItems
-            .AsNoTracking()
             .FirstOrDefaultAsync(r => r.Id == request.LaundryId && (r.IsDeleted == false || r.IsDeleted == null), ct);
 
         if (LaundryItems == null)
