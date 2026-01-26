@@ -14,4 +14,15 @@ public interface INotificationService
         string body,
         Dictionary<string, string>? data = null,
         CancellationToken cancellationToken = default);
+
+    Task<FirebaseResponse> SendFirebasePMSNotificationAsync(
+        string deviceToken,
+        string title,
+        string body,
+        CancellationToken cancellationToken = default);
+
+    Task<FirebaseResponse> SendFirebaseBroadCastNotificationAsync(
+        string title,
+        string body,
+        CancellationToken cancellationToken = default);
 }

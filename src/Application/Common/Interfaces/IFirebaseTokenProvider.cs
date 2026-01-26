@@ -8,4 +8,5 @@ namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface IFirebaseTokenProvider
 {
     Task<string> GetAccessTokenAsync(CancellationToken ct);
+    Task<string> GetAccessPMSTokenAsync(CancellationToken ct);
 }

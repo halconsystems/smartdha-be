@@ -159,6 +159,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/Ground/swagger.json", "Ground Module");
     c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
     c.SwaggerEndpoint("/swagger/RealTime-SignalR/swagger.json", "RealTime SignalR");
+    c.SwaggerEndpoint("/swagger/Non-Member/swagger.json", "Non Member");
 });
 
 //app.UseHealthChecks("/health");

@@ -33,4 +33,19 @@ public class FirebaseTokenProvider : IFirebaseTokenProvider
 
         return token;
     }
+    public async Task<string> GetAccessPMSTokenAsync(CancellationToken ct)
+    {
+        GoogleCredential credential;
+
+        using (var stream = new FileStream(_settings.DHAServiceAccountJsonPath, FileMode.Open, FileAccess.Read))
+        {
+            credential = GoogleCredential.FromStream(stream)
+                .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
+        }
+
+        var token = await credential.UnderlyingCredential
+            .GetAccessTokenForRequestAsync(cancellationToken: ct);
+
+        return token;
+    }
 }

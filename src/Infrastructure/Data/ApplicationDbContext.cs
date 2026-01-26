@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.FMS;
+using DHAFacilitationAPIs.Domain.Entities.PMS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<FemgutionShops> FemgutionShops => Set<FemgutionShops>();
     public DbSet<FumgationMedia> FumgationMedias => Set<FumgationMedia>();
     public DbSet<UserDevices> UserDevices => Set<UserDevices>();
+ 
 
 
 

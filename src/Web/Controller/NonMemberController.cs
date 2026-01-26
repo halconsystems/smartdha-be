@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DHAFacilitationAPIs.Web.Controller;
 [Route("api/[controller]")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "Non-Member")]
 public class NonMemberController : BaseApiController
 {
     private readonly IMediator _mediator;
