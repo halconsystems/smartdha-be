@@ -72,6 +72,27 @@ public class GetCaseDashboardHandler
         var weekStart = today.AddDays(-(int)today.DayOfWeek);
         var monthStart = new DateTime(today.Year, today.Month, 1);
 
+        var paymentData = await (
+             from c in _db.Set<PropertyCase>().AsNoTracking()
+             join f in _db.Set<CaseFeeReceipt>().AsNoTracking()
+                 on c.Id equals f.CaseId
+             join ps in _db.Set<ProcessStep>().AsNoTracking()
+                 on c.ProcessId equals ps.ProcessId
+             where
+                 c.IsActive == true &&
+                 c.IsDeleted != true &&
+                 myModuleIds.Contains(ps.Directorate.ModuleId)
+             select new
+             {
+                 f.PaymentStatus,
+                 f.TotalPayable,
+                 f.PaidAmount
+             }
+        ).ToListAsync(ct);
+
+        
+
+
         static CaseDashboardSummary BuildSummary(IEnumerable<dynamic> items)
         {
             var summary = new CaseDashboardSummary();
@@ -109,9 +130,41 @@ public class GetCaseDashboardHandler
             Overall = BuildSummary(data),
             Today = BuildSummary(data.Where(x => x.Created >= today)),
             ThisWeek = BuildSummary(data.Where(x => x.Created >= weekStart)),
-            ThisMonth = BuildSummary(data.Where(x => x.Created >= monthStart))
+            ThisMonth = BuildSummary(data.Where(x => x.Created >= monthStart)),
+            Payments = BuildPaymentSummary(paymentData)
         };
 
         return ApiResult<CaseDashboardDto>.Ok(dashboard);
     }
+
+    CasePaymentDashboardSummary BuildPaymentSummary(IEnumerable<dynamic> items)
+    {
+        var summary = new CasePaymentDashboardSummary();
+
+        foreach (var x in items)
+        {
+            summary.TotalCasesWithFee++;
+
+            summary.TotalPayable += x.TotalPayable ?? 0;
+            summary.TotalPaid += x.PaidAmount ?? 0;
+
+            switch (x.PaymentStatus)
+            {
+                case PaymentStatus.Paid:
+                    summary.Paid++;
+                    break;
+
+                case PaymentStatus.Pending:
+                    summary.Pending++;
+                    break;
+
+                case PaymentStatus.Failed:
+                    summary.Failed++;
+                    break;
+            }
+        }
+
+        return summary;
+    }
+
 }
