@@ -13,6 +13,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Grounds.Queries;
 
 public class GroundDTO
 {
+    public Guid? BookingId { get; set; }
     public Guid Id { get; set; }
     public Guid? ClubId { get; set; }
     public string? ClubName { get; set; } 
