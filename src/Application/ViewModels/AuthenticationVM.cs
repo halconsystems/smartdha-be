@@ -87,3 +87,18 @@ public class RegisterationDto
     public string ResponseMessage { get; set; } = default!;
     public string MobileNumber { get; set; } = default!;
 }
+
+public class ProfileDTO
+{
+    public string? Email { get; set; }
+    public string? RegistteredEmail { get; set; }
+    public string? Name { get; set; }
+    public string? Cnic { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string? MobileNumber { get; set; }
+    public string? RegistteredMobileNumber { get; set; }
+    public string? MemPk { get; set; }
+    public string? StaffNo { get; set; }
+    public bool? IsMember { get; set; }
+    public string? ProfileImage { get; set; }
+}

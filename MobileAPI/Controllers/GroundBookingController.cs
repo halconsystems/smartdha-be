@@ -91,9 +91,9 @@ public class GroundBookingController : BaseApiController
      => Ok(await _mediator.Send(cmd, ct));
 
     [HttpGet("GetGroundDetail"), AllowAnonymous]
-    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid groundID, [FromQuery] GroundCategory GroundCategory)
+    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid groundID, [FromQuery] GroundCategory GroundCategory, DateOnly bookingDate)
     {
-        var result = await _mediator.Send(new GetGroundQueryById(groundID, GroundCategory));
+        var result = await _mediator.Send(new GetGroundQueryById(groundID, GroundCategory, bookingDate));
         return Ok(result);
     }
 

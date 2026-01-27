@@ -41,9 +41,10 @@ public class GetAllProperyByCnicQueryHandler
 
         var p = new DynamicParameters();
         p.Add("@memCNIC", request.Cnic, DbType.String, size: 150);
+        p.Add("@msg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
 
 
-        var(_, steps) = await _sp.ExecuteWithListAsync<PropertyDetailDTO>(
+        var (_, steps) = await _sp.ExecuteWithListAsync<PropertyDetailDTO>(
             "USP_SelectPropertyByCNIC", p, ct);
 
         var result = steps.Select(x => new PropertyDetailDTO

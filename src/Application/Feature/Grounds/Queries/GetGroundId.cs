@@ -13,7 +13,7 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 namespace DHAFacilitationAPIs.Application.Feature.Grounds.Queries;
 
 
-public record GetGroundQueryById(Guid Id,GroundCategory GroundCategory) : IRequest<GroundDTO>;
+public record GetGroundQueryById(Guid Id,GroundCategory GroundCategory, DateOnly bookingDate) : IRequest<GroundDTO>;
 
 public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, GroundDTO>
 {
@@ -41,7 +41,7 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
         if(GroundSlots == null)
             throw new NotFoundException("Ground Slots not found.");
 
-        var groundBooked = await _context.GroundBookings.Where(x => x.GroundId == ground.Id)
+        var groundBooked = await _context.GroundBookings.Where(x => x.GroundId == ground.Id && x.BookingDateOnly == request.bookingDate)
            .AsNoTracking()
            .ToListAsync();
 

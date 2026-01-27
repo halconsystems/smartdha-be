@@ -19,7 +19,7 @@ public class GroundReserveCommand : IRequest<SuccessResponse<string>>
 {
     public Guid GroundId { get; set; }
     public string? Description { get; set; }
-    public DateTime BookingDate { get; set; }
+    public DateOnly BookingDate { get; set; }
     [Required]
     public List<Guid> Slots { get; set; } = default!;
     public string? BuketId { get; set; }
@@ -91,7 +91,7 @@ public class GroundReserveCommandHandler
 
             var todayDate = DateTime.Today.Date;
 
-            var groundBooked = await _context.GroundBookings.Where(x => x.GroundId == request.GroundId && x.BookingDate.Date == todayDate)
+            var groundBooked = await _context.GroundBookings.Where(x => x.GroundId == request.GroundId && x.BookingDateOnly == request.BookingDate)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -102,8 +102,8 @@ public class GroundReserveCommandHandler
                 .Except(bookedSlots.Select(x => x.SlotId))
                 .ToList();
 
-            if (bookedSlots != null)
-                throw new KeyNotFoundException($"Some Slots Are Already Booked of '{request.BookingDate}'. \n Booked Slots are '{bookedSlots}'");
+            if (availableSlots.Count() == 0)
+                throw new KeyNotFoundException($"Some Slots Are Already Booked of '{request.BookingDate}'");
 
             GroundPaymentIpnLogs? OnlinePaymentLogs = null;
             if (request.PaymentMethod == PaymentMethod.Online)
@@ -139,7 +139,7 @@ public class GroundReserveCommandHandler
             {
                 GroundId = request.GroundId,
                 BookingDescription = request.Description,
-                BookingDate = request.BookingDate,
+                BookingDate = request.BookingDate.ToDateTime(TimeOnly.MinValue),
                 TotalAmount = totalAmount.ToString(),
                 SubTotal = Convert.ToInt32(totalAmount + taxex - discount).ToString(),
                 PaymentMethod = request.PaymentMethod,
@@ -149,7 +149,8 @@ public class GroundReserveCommandHandler
                 CollectedAmount = request.PaymentMethod == PaymentMethod.Cash ? 0.ToString() : OnlinePaymentLogs?.TransactionAmount.ToString(),
                 IsConfirm = AmountToCollecot == 0 ? true : false,
                 BookingCode = $"GB-{today}-{sequence}",
-                UserId = UserID
+                UserId = UserID,
+                BookingDateOnly = request.BookingDate
             };
 
             _context.GroundBookings.Add(gorunds);
