@@ -66,6 +66,7 @@ public class GetGroundQueryByIdHandler : IRequestHandler<GetGroundQueryById, Gro
 
         var grounds = new GroundDTO
         {
+
             Id = ground.Id,
             GroundName = ground.Name,
             GroundDescription = ground.Description,

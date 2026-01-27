@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2026-01-28 00:57:03.609 +05:00 [INF] ================ HTTP REQUEST =================
 TraceId  : 0HNITROODL6ME:0000000B
 Method   : GET
@@ -302,12 +303,58 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 200
 Duration : 459 ms
+=======
+2026-01-28 00:45:34.778 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (53): The network path was not found.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:53,State:0,Class:20
+2026-01-28 00:50:51.088 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:00000001
+Request  : SearchGroundQuery
+Duration : 178486 ms
+2026-01-28 00:50:51.284 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (178550 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-28","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-28 00:50:51.407 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000001
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 179493 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase Phase 8 - Sector Phase 8 - Property DHA-P8-KHI-001 - Plot Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
 ==============================================
 2026-01-28 01:27:51.806 +05:00 [INF] [CQRS]
@@ -320,12 +367,98 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 500
 Duration : 1108 ms
+=======
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":1,"bookedCount":2,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-28 00:53:19.823 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:00000003
+Request  : SearchGroundQuery
+Duration : 20692 ms
+2026-01-28 00:53:19.838 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (20694 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-28","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-28 00:53:19.841 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000003
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 20728 ms
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":3,"bookedCount":0,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-28 00:55:09.591 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:00000005
+Request  : GroundReserveCommand
+Duration : 56379 ms
+2026-01-28 00:55:09.606 +05:00 [WRN] CMS Long Running Request: GroundReserveCommand (56380 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"GroundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","Description":"nothing","BookingDate":"2026-01-28","Slots":["a6b3b59f-22b3-443b-a8f3-56f4f6a01e06"],"BuketId":"","PaymentMethod":"Cash","$type":"GroundReserveCommand"}
+2026-01-28 00:55:09.620 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000005
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 200
+Duration : 56535 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "nothing",
+  "bookingDate": "2026-01-28",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Ground Reserved successfully.","data":"GB-20260127-000005"}
+==============================================
+2026-01-28 00:55:18.539 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000007
+Method   : POST
+Path     : /api/groundbooking/ground-reservation
+Status   : 500
+Duration : 4531 ms
+IP       : ::1
+
+Request:
+{
+  "groundId": "51A7A674-2A5C-4362-90E6-AD6E83EE59F7",
+  "description": "nothing",
+  "bookingDate": "2026-01-28",
+  "slots": [
+    "A6B3B59F-22B3-443B-A8F3-56F4F6A01E06"
+  ],
+  "buketId": "",
+  "paymentMethod": "Cash"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Ground Creation failed: Some Slots Are Already Booked of '28/01/2026'"}
+==============================================
+2026-01-28 00:55:39.187 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:00000009
+Request  : SearchGroundQuery
+Duration : 4625 ms
+2026-01-28 00:55:39.205 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (4626 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-28","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-28 00:55:39.206 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000009
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 4684 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+<<<<<<< HEAD
 {"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
 ==============================================
 2026-01-28 01:28:23.343 +05:00 [INF] [CQRS]
@@ -338,12 +471,61 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 500
 Duration : 1132 ms
+=======
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":2,"bookedCount":1,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-28 00:55:53.020 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:0000000B
+Request  : SearchGroundQuery
+Duration : 2359 ms
+2026-01-28 00:55:53.044 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (2361 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-27","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-28 00:55:53.045 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:0000000B
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 2390 ms
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":1,"bookedCount":2,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-28 00:56:07.569 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRJA7FBHL:0000000D
+Request  : SearchGroundQuery
+Duration : 5206 ms
+2026-01-28 00:56:07.589 +05:00 [WRN] CMS Long Running Request: SearchGroundQuery (5207 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CheckInDate":"2026-01-29","GroundCategory":"Academy","$type":"SearchGroundQuery"}
+2026-01-28 00:56:07.590 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:0000000D
+Method   : GET
+Path     : /api/groundbooking/search-grounds
+Status   : 200
+Duration : 5229 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":3,"bookedCount":0,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
+==============================================
+2026-01-28 01:01:07.003 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:0000000F
+Method   : GET
+Path     : /api/groundbooking/getbookingdetails
+Status   : 500
+Duration : 678 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+<<<<<<< HEAD
 {"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
 ==============================================
 2026-01-28 01:29:20.442 +05:00 [INF] [CQRS]
@@ -374,12 +556,23 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 500
 Duration : 1075 ms
+=======
+{"title":"Internal Server Error","status":500,"detail":"Booking not found."}
+==============================================
+2026-01-28 01:02:13.416 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRJA7FBHL:00000011
+Method   : GET
+Path     : /api/groundbooking/getbookingdetails
+Status   : 500
+Duration : 55481 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
 ==============================================
 2026-01-28 01:30:49.420 +05:00 [INF] [CQRS]
@@ -392,12 +585,23 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 200
 Duration : 29 ms
+=======
+{"title":"Internal Server Error","status":500,"detail":"Booking not found."}
+==============================================
+2026-01-28 01:04:44.262 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRSKJQGJB:00000001
+Method   : GET
+Path     : /api/groundbooking/getbookingdetails
+Status   : 500
+Duration : 5548 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
 ==============================================
 2026-01-28 01:30:50.645 +05:00 [INF] [CQRS]
@@ -410,12 +614,23 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 200
 Duration : 28 ms
+=======
+{"title":"Internal Server Error","status":500,"detail":"Booking not found."}
+==============================================
+2026-01-28 01:05:04.898 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRSKJQGJB:00000003
+Method   : GET
+Path     : /api/groundbooking/getbookingdetails
+Status   : 500
+Duration : 16400 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
 ==============================================
 2026-01-28 01:30:51.413 +05:00 [INF] [CQRS]
@@ -428,12 +643,28 @@ Method   : GET
 Path     : /api/smartpay/MyBillInquiry
 Status   : 200
 Duration : 12 ms
+=======
+{"title":"Internal Server Error","status":500,"detail":"Booking not found."}
+==============================================
+2026-01-28 01:05:28.273 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRSKJQGJB:00000005
+Request  : GetBookingHistoryQuery
+Duration : 7741 ms
+2026-01-28 01:05:28.325 +05:00 [WRN] CMS Long Running Request: GetBookingHistoryQuery (7743 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"BookingId":"a9e19b15-c503-48ab-9b69-f19180ef039d","$type":"GetBookingHistoryQuery"}
+2026-01-28 01:05:28.444 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRSKJQGJB:00000005
+Method   : GET
+Path     : /api/groundbooking/getbookingdetails
+Status   : 200
+Duration : 8136 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
 {"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
 ==============================================
 2026-01-28 01:30:51.907 +05:00 [INF] [CQRS]
@@ -633,4 +864,7 @@ Request:
 
 Response:
 {"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+=======
+{"bookingCode":"GB-20260127-000001","groundName":"Sports Club","bookingDescription":"Check","groundType":"CricketGround","groundCategory":"Academy","id":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-27T00:00:00","totalPrice":"4955","slotsCount":"1","slots":[{"bookingId":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundBooking":null,"slotId":"ab6e100b-10bc-4b7e-9ab6-8d9cbaa29191","groundSlots":null,"slotPrice":"5000","created":"2026-01-27T17:12:39.3336761","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-27T17:12:39.3336761","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":4,"id":"f770bbce-379d-4f23-a751-a0049bdbf353"}],"orderDTiD":null,"groundSettings":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","settingId":"d7324b19-966c-488e-a1fa-8bcd70825aab","setting":null,"dtCode":"MEM","isDiscount":true,"created":"2026-01-21T10:49:35.8800349","createdBy":null,"lastModified":"2026-01-21T10:49:35.8800349","lastModifiedBy":null,"isDeleted":false,"isActive":true,"ser":2,"id":"ea9bd624-f559-427a-891a-fdcafbafebeb"}],"groundImages":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front","created":"2026-01-21T11:49:07.5217118","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:49:07.5217118","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":1,"id":"b5442f34-e097-4dec-ae97-234a1a626803"}],"paymentMethod":"Cash","mainImage":null}
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 ==============================================

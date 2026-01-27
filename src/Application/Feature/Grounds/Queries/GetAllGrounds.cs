@@ -10,12 +10,13 @@ using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Application.Feature.Room.Queries.GetAllRooms;
+using DHAFacilitationAPIs.Domain.Entities.GBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 using DHAFacilitationAPIs.Domain.Enums.GBMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.Grounds.Queries;
 
-public record GetGroundQuery(GroundCategory GroundCategory) : IRequest<List<GroundDTO>>;
+public record GetGroundQuery(GroundCategory GroundCategory, DateOnly bookingdate) : IRequest<List<GroundDTO>>;
 
 public class GetGroundQueryHandler : IRequestHandler<GetGroundQuery, List<GroundDTO>>
 {
@@ -38,6 +39,12 @@ public class GetGroundQueryHandler : IRequestHandler<GetGroundQuery, List<Ground
         var groundImage = await _context.GroundImages.Where(x => ground.Select(x => x.Id).Contains(x.GroundId)).ToListAsync();
 
         var groundSlots = await _context.GroundSlots.Where(x => ground.Select(x => x.Id).Contains(x.GroundId)).ToListAsync();
+
+        var groundBooked = await _context.GroundBookings.Where(x => ground.Select(g => g.Id).Contains(x.GroundId) && x.BookingDateOnly == request.bookingdate)
+           .AsNoTracking()
+           .ToListAsync();
+
+        var bookedSlots = await _context.GroundBookingSlots.Where(x => groundBooked.Select(x => x.Id).Contains(x.BookingId) && groundSlots.Select(x => x.Id).Contains(x.SlotId)).ToListAsync();
 
         var groundGroundStandardTime = await _context.GroundStandtardTimes.Where(x => ground.Select(x => x.Id).Contains(x.GroundId)).ToListAsync();
 

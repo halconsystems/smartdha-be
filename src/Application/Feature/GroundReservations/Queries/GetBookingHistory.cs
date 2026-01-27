@@ -28,7 +28,7 @@ public class GetBookingHistoryQueryHandler : IRequestHandler<GetBookingHistoryQu
         if (string.IsNullOrWhiteSpace(userID))
             throw new UnauthorizedAccessException("User not authenticated.");
 
-        var booking = await _context.GroundBookings.Where(x => x.UserId == UserID && x.GroundId == request.BookingId)
+        var booking = await _context.GroundBookings.Where(x => x.UserId == UserID && x.Id == request.BookingId)
             .Include(x => x.Grounds)
             .AsNoTracking()
             .FirstOrDefaultAsync(ct);
