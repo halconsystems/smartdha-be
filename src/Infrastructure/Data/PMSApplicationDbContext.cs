@@ -41,6 +41,7 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<FeeSetting> FeeSettings => Set<FeeSetting>();
     public DbSet<CaseResultDocument> CaseResultDocuments => Set<CaseResultDocument>();
     public DbSet<CaseRejectRequirement> CaseRejectRequirements => Set<CaseRejectRequirement>();
+    public DbSet<MessageTemplate> MessageTemplates => Set<MessageTemplate>();
 
     /* =========================
        SaveChanges – Auditing

@@ -11,10 +11,6 @@ public class SubmitCaseRequest
     // Case
     public Guid UserPropertyId { get; set; }
     public Guid ProcessId { get; set; }
-
-    public string? ApplicantName { get; set; }
-    public string? ApplicantCnic { get; set; }
-    public string? ApplicantMobile { get; set; }
     public string? ApplicantRemarks { get; set; }
 
     // Prerequisite VALUES (JSON string)

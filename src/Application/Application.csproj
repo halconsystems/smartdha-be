@@ -62,6 +62,7 @@
     <Folder Include="Feature\OrderPaymentIpn\Queries\" />
     <Folder Include="Feature\PaymentIpn\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
+    <Folder Include="Feature\PropertyManagement\PMSNotification\Queries\" />
     <Folder Include="Feature\PropertyManagement\PMSVoucher\Queries\" />
     <Folder Include="Feature\PropertyManagement\PMSCaseResultDocument\Queries\" />
     <Folder Include="Feature\PropertyManagement\WorkFlow\Queries\" />

@@ -17,10 +17,12 @@ public class AddAnnouncementCommand : IRequest<SuccessResponse<string>>
 public class AddAnnouncementCommandHandler : IRequestHandler<AddAnnouncementCommand, SuccessResponse<string>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly INotificationService _notify;
 
-    public AddAnnouncementCommandHandler(IApplicationDbContext context)
+    public AddAnnouncementCommandHandler(IApplicationDbContext context, INotificationService notify)
     {
         _context = context;
+        _notify = notify;
     }
 
     public async Task<SuccessResponse<string>> Handle(AddAnnouncementCommand request, CancellationToken cancellationToken)
@@ -35,6 +37,11 @@ public class AddAnnouncementCommandHandler : IRequestHandler<AddAnnouncementComm
 
         await _context.Announcements.AddAsync(announcement, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
+
+        await _notify.SendFirebaseBroadCastNotificationAsync(
+               request.Title,
+               request.Description ?? "",
+               cancellationToken);
 
         return SuccessResponse<string>.FromMessage("Announcement created successfully.");
     }

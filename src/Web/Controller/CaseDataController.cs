@@ -11,11 +11,14 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinitionByProcessId;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseResultDocument.Commands.UploadCaseResultDocument;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSNotification.Commands;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSNotification.Commands.SendCaseMessage;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.SaveCasePrerequisiteValue;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ForwardExternal;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ForwardInternal;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.RejectCase;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ReturnCase;
+using DHAFacilitationAPIs.Domain.Enums.PMS;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -169,6 +172,27 @@ public class CaseDataController : BaseApiController
         return Ok(result);
     }
 
+    [HttpPost("cases/send-message")]
+    public async Task<IActionResult> SendCaseMessage(
+    [FromBody] SendCaseMessageRequest request,
+    CancellationToken ct)
+    {
+        var cmd = new SendCaseMessageCommand(
+            request.CaseId,
+            request.Channel,
+            request.TemplateId      // 👈 ONLY TEMPLATE SELECTION
+        );
+
+        return Ok(await _mediator.Send(cmd, ct));
+    }
+
+
 }
 public record ForwardInternalDto(string ToUserId, string? Remarks);
 public record RemarksDto(string Remarks);
+public class SendCaseMessageRequest
+{
+    public Guid CaseId { get; set; }
+    public MessageChannel Channel { get; set; } // Sms / Notification / Both
+    public Guid TemplateId { get; set; }
+}

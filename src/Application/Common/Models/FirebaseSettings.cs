@@ -9,5 +9,8 @@ public class FirebaseSettings
 {
     public string ProjectId { get; set; } = default!;
     public string ServiceAccountJsonPath { get; set; } = default!;
+
+    public string DHAProjectId { get; set; } = default!;
+    public string DHAServiceAccountJsonPath { get; set; } = default!;
 }
 

@@ -144,6 +144,11 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Title = "RealTime SignalR",
                     Version = "v1"
                 });
+                o.SwaggerDoc("Non-Member", new OpenApiInfo
+                {
+                    Title = "Non Member",
+                    Version = "v1"
+                });
 
                 // 🔹 FILTER APIs BY GROUP NAME
                 o.DocInclusionPredicate((docName, apiDesc) =>
