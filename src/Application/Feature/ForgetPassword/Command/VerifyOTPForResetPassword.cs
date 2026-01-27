@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -20,10 +21,15 @@ public class PasswordResetTokenDto
     public DateTime ExpiresAt { get; set; }
 }
 
-public record VerifyOtpForPasswordResetCommand(
-    string Cnic,
-    string OtpCode
-) : IRequest<SuccessResponse<PasswordResetTokenDto>>;
+//public record VerifyOtpForPasswordResetCommand(
+//    string OtpCode
+//) : IRequest<SuccessResponse<PasswordResetTokenDto>>;
+
+public record VerifyOtpForPasswordResetCommand : IRequest<SuccessResponse<PasswordResetTokenDto>>
+{
+    // public string CNIC { get; init; } = default!;
+    public string OtpCode { get; init; } = default!;
+}
 
 public class VerifyOtpForPasswordResetCommandHandler
     : IRequestHandler<VerifyOtpForPasswordResetCommand, SuccessResponse<PasswordResetTokenDto>>
@@ -49,7 +55,9 @@ public class VerifyOtpForPasswordResetCommandHandler
         VerifyOtpForPasswordResetCommand request,
         CancellationToken ct)
     {
-        var userDetails = await _userManager.Users.FirstOrDefaultAsync(x => x.CNIC == request.Cnic, ct);
+        string UsedId = _currentUserService.UserId.ToString();
+
+        var userDetails = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == UsedId, ct);
         if (userDetails == null)
             throw new KeyNotFoundException("User not found.");
 

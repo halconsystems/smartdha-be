@@ -99,12 +99,21 @@ public class AuthController : BaseApiController
         var result = await Mediator.Send(command);
         return Ok(result);
     }
-    [AllowAnonymous]
-    [HttpPost("Forget-Password")]
-    public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+    //[Authorize(Policy = "SetPasswordPolicy")]
+    //[HttpPost("Forget-Password")]
+    //public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
+    //{
+    //    var purpose = User.FindFirstValue("purpose");
+
+    //    if (purpose != "set_password")
+    //        return Forbid(); // extra defense in depth
+    //    return Ok(await Mediator.Send(request));
+    //}
+
+    //public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
+    //{
+    //    return Ok(await Mediator.Send(request));
+    //}
     [AllowAnonymous]
     [HttpPost("Send-OTP")]
     public async Task<IActionResult> SendOTP(OTPSendCommand request)

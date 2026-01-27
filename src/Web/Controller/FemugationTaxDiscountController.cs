@@ -34,7 +34,7 @@ public class FemugationTaxDiscountController : BaseApiController
     }
 
     [HttpPost("Create-Discount/Tax")]
-    public async Task<ActionResult<string>> CreatePhase(CreateFMShopsCommand cmd)
+    public async Task<ActionResult<string>> CreatePhase(AddFemigationDTCommand cmd)
     {
         var result = await _med.Send(cmd);
         return Ok(result);

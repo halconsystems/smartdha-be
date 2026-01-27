@@ -97,3 +97,166 @@ StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/Tim
    --- End of inner exception stack trace ---
 2026-01-27 14:22:07.316 +05:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
 ALTER TABLE [CaseDocument] ADD [DepartmentRemarks] nvarchar(max) NULL;
+2026-01-27 15:41:36.948 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITI26R0LEA:0000000B
+Method   : POST
+Path     : /api/auth/send-otp
+Status   : 401
+Duration : 146 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+[EMPTY]
+==============================================
+2026-01-27 15:43:32.685 +05:00 [INF] Start processing HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=860708%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:43:32.705 +05:00 [INF] Sending HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=860708%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:43:35.484 +05:00 [INF] Received HTTP response headers after 2777.034ms - 200
+2026-01-27 15:43:35.486 +05:00 [INF] End processing HTTP request after 2807.8531ms - 200
+2026-01-27 15:43:46.689 +05:00 [INF] [CQRS]
+TraceId  : 0HNITI2VHKHBJ:0000000B
+Request  : OTPSendCommand
+Duration : 69886 ms
+2026-01-27 15:43:46.691 +05:00 [WRN] CMS Long Running Request: OTPSendCommand (69890 milliseconds)   {"Cnic":"4220199802729","$type":"OTPSendCommand"}
+2026-01-27 15:43:46.705 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITI2VHKHBJ:0000000B
+Method   : POST
+Path     : /api/auth/send-otp
+Status   : 200
+Duration : 70146 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"An OTP has been sent to the mobile number registered with your membership 860708","data":null}
+==============================================
+2026-01-27 15:48:58.445 +05:00 [INF] Start processing HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=531003%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:48:58.483 +05:00 [INF] Sending HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=531003%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:49:01.379 +05:00 [INF] Received HTTP response headers after 2892.7461ms - 200
+2026-01-27 15:49:01.383 +05:00 [INF] End processing HTTP request after 2953.0668ms - 200
+2026-01-27 15:49:01.799 +05:00 [INF] [CQRS]
+TraceId  : 0HNITI6223DL4:00000001
+Request  : OTPSendCommand
+Duration : 5459 ms
+2026-01-27 15:49:01.800 +05:00 [WRN] CMS Long Running Request: OTPSendCommand (5463 milliseconds)   {"Cnic":"4220199802729","$type":"OTPSendCommand"}
+2026-01-27 15:49:01.814 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITI6223DL4:00000001
+Method   : POST
+Path     : /api/auth/send-otp
+Status   : 200
+Duration : 5734 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Request processed successfully.","data":{"accessToken":"***","responseMessage":"An OTP has been sent to the mobile number registered with your membership 531003"}}
+==============================================
+2026-01-27 15:51:36.128 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITI6223DL4:00000003
+Method   : POST
+Path     : /api/auth/verify-frogetpassword-otp
+Status   : 401
+Duration : 52 ms
+IP       : ::1
+
+Request:
+{
+  "otpCode": "531003"
+}
+
+Response:
+[EMPTY]
+==============================================
+2026-01-27 15:53:16.924 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITI6223DL4:00000005
+Method   : POST
+Path     : /api/auth/verify-frogetpassword-otp
+Status   : 401
+Duration : 2 ms
+IP       : ::1
+
+Request:
+{
+  "otpCode": "531003"
+}
+
+Response:
+[EMPTY]
+==============================================
+2026-01-27 15:57:32.408 +05:00 [INF] Start processing HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=980957%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:57:32.468 +05:00 [INF] Sending HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923242796067&textmessage=980957%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 15:57:35.192 +05:00 [INF] Received HTTP response headers after 2718.9569ms - 200
+2026-01-27 15:57:35.198 +05:00 [INF] End processing HTTP request after 2808.0132ms - 200
+2026-01-27 15:57:36.132 +05:00 [INF] [CQRS]
+TraceId  : 0HNITIB9MEKQ0:0000000B
+Request  : OTPSendCommand
+Duration : 5831 ms
+2026-01-27 15:57:36.137 +05:00 [WRN] CMS Long Running Request: OTPSendCommand (5841 milliseconds)   {"Cnic":"4220199802729","$type":"OTPSendCommand"}
+2026-01-27 15:57:36.170 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITIB9MEKQ0:0000000B
+Method   : POST
+Path     : /api/auth/send-otp
+Status   : 200
+Duration : 6228 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Request processed successfully.","data":{"accessToken":"***","responseMessage":"An OTP has been sent to the mobile number registered with your membership 980957"}}
+==============================================
+2026-01-27 15:59:43.487 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITIB9MEKQ0:0000000D
+Method   : POST
+Path     : /api/auth/verify-frogetpassword-otp
+Status   : 401
+Duration : 86 ms
+IP       : ::1
+
+Request:
+{
+  "otpCode": "980957"
+}
+
+Response:
+[EMPTY]
+==============================================
+2026-01-27 16:01:11.351 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITIB9MEKQ0:00000011
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 401
+Duration : 4 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-27 16:13:16.910 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 359s ago, last-write: 22s ago, unanswered-write: 22s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 17s ago, last-mbeat: 17s ago, global: 17s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.<GetResult>g__ThrowSocketException|10_0(SocketError e) in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 86
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---

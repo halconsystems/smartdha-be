@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
+
 public record MemberRegisterationCommand : IRequest<SuccessResponse<RegisterationDto>>
 {
     public string CNIC { get; set; } = default!;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Interface.Service;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -12,32 +13,41 @@ namespace DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
 
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
-public record OTPSendCommand(string Cnic) : IRequest<SuccessResponse<string>>;
 
-public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResponse<string>>
+public class OTPDto
+{
+    public string AccessToken { get; set; } = default!;
+    public string ResponseMessage { get; set; } = default!;
+}
+public record OTPSendCommand(string Cnic) : IRequest<SuccessResponse<OTPDto>>;
+
+public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResponse<OTPDto>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationDbContext _context;
     private readonly ISmsService _otpService;
     private readonly ICurrentUserService _currentUserService;
+    private readonly IAuthenticationService _authenticationService;
 
     public OTPSendCommandHandler(
         UserManager<ApplicationUser> userManager,
         IApplicationDbContext context,
         ISmsService otpService,
-        ICurrentUserService currentUserService)
+        ICurrentUserService currentUserService,
+        IAuthenticationService service)
     {
         _userManager = userManager;
         _context = context;
         _otpService = otpService;
         _currentUserService = currentUserService;
+        _authenticationService = service;
     }
 
-    public async Task<SuccessResponse<string>> Handle(OTPSendCommand request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<OTPDto>> Handle(OTPSendCommand request, CancellationToken cancellationToken)
     {
 
         var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == request.Cnic, cancellationToken);
+            .FirstOrDefaultAsync(u => u.CNIC == request.Cnic);
 
         if (existingUser == null)
             throw new NotFoundException("User with the provided CNIC does not exist.");
@@ -61,6 +71,9 @@ public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResp
         if (!result.Equals("SUCCESSFUL", StringComparison.OrdinalIgnoreCase))
             throw new Exception("Failed to send OTP. Please try again later.");
 
+        TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
+        string verifyToken = await _authenticationService.GenerateTemporaryToken(existingUser, "verify_otp", expiresIn);
+
         // Save OTP
         var userOtp = new UserOtp
         {
@@ -73,10 +86,18 @@ public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResp
             ExpiresAt = DateTime.Now.AddMinutes(2)
         };
 
+
         _context.UserOtps.Add(userOtp);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return SuccessResponse<string>.FromMessage(returnMessage);
+        OTPDto oTPDto = new OTPDto
+        {
+            AccessToken = verifyToken,
+            ResponseMessage = returnMessage
+
+        };
+
+        return new  SuccessResponse<OTPDto>(oTPDto);
     }
 }
 
