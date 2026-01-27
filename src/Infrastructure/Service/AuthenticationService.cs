@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Common.Settings;
@@ -253,6 +254,68 @@ public class AuthenticationService : IAuthenticationService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public ClaimsPrincipal ValidateTemporaryToken(
+    string token,
+    string expectedPurpose)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = _jwtSettings.Issuer,
+
+            ValidateAudience = true,
+            ValidAudience = _jwtSettings.Audience,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero // VERY IMPORTANT
+        };
+
+        try
+        {
+            var principal = tokenHandler.ValidateToken(
+                token,
+                validationParameters,
+                out SecurityToken validatedToken);
+
+            // Ensure JWT
+            if (validatedToken is not JwtSecurityToken jwt ||
+                !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token.");
+            }
+
+            // Ensure TEMP token
+            var tokenType = principal.FindFirst("token_type")?.Value;
+            if (tokenType != "temporary")
+                throw new UnauthorizedAccessException("Invalid token type.");
+
+            // Ensure correct purpose
+            var purpose = principal.FindFirst("purpose")?.Value;
+            if (purpose != expectedPurpose)
+                throw new UnauthorizedAccessException("Invalid token purpose.");
+
+            return principal;
+        }
+        catch (SecurityTokenExpiredException)
+        {
+            throw new UnauthorizedAccessException("Token has expired.");
+        }
+        catch (Exception)
+        {
+            throw new UnauthorizedAccessException("Invalid or tampered token.");
+        }
+    }
+
 
 
     #endregion

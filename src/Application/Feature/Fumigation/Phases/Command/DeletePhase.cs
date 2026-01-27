@@ -21,12 +21,17 @@ public class DeletePhaseCommandHandler
 
     public async Task<SuccessResponse<string>> Handle(DeleteFemPhaseCommand command, CancellationToken ct)
     {
+
+
         var rowsAffected = await _context.FemPhases
              .Where(x => x.Id == command.Id)
-             .ExecuteDeleteAsync(ct);
+             .FirstOrDefaultAsync(ct);
 
-        if (rowsAffected == 0)
+        if (rowsAffected == null)
             throw new KeyNotFoundException("phase not found.");
+
+        rowsAffected.IsDeleted = true;
+        rowsAffected.IsActive = false;
 
         return Success.Delete(command.Id.ToString());
     }

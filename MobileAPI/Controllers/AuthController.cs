@@ -130,4 +130,16 @@ public class AuthController : BaseApiController
 public class SubmitUserDeleteRequestDto
 {
     public string? Reason { get; set; }
+
+    [Authorize(Policy = "SetOTPPolicy")]
+    [HttpPost("Verify-FrogetPassword-OTP")]
+    public async Task<IActionResult> VerifyOTPFrogetPassword(VerifyOtpForPasswordResetCommand request)
+    {
+        var purpose = User.FindFirstValue("purpose");
+
+        if (purpose != "verify_otp")
+            return Forbid(); // extra defense in depth
+
+        return Ok(await Mediator.Send(request));
+    }
 }

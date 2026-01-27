@@ -12,9 +12,6 @@ namespace DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
 
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
-internal class OTPSend
-{
-}
 public record OTPSendCommand(string Cnic) : IRequest<SuccessResponse<string>>;
 
 public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResponse<string>>

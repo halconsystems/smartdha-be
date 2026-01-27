@@ -24,7 +24,7 @@ public class FemugationShopsController : BaseApiController
     public async Task<List<FMShopsDTO>> Phases()
     {
         var list = await _med.Send(new GetFMShopsQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-Shops-id")]

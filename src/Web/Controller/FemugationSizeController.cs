@@ -21,7 +21,7 @@ public class FemugationSizeController : BaseApiController
     public async Task<List<TankerDTO>> Phases()
     {
         var list = await _med.Send(new GetAllTankerQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-Size-id")]

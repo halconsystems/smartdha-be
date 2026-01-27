@@ -25,7 +25,7 @@ public class FemugationProcessController : BaseApiController
     public async Task<List<FemugationDTO>> FemlIST()
     {
         var list = await _med.Send(new GetAllFemugationListQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-FemugationHistory")]

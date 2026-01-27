@@ -24,10 +24,13 @@ public class DeleteFMShopsCommandHandler
     {
         var rowsAffected = await _context.FemgutionShops
              .Where(x => x.Id == command.Id)
-             .ExecuteDeleteAsync(ct);
+             .FirstOrDefaultAsync(ct);
 
-        if (rowsAffected == 0)
+        if (rowsAffected == null)
             throw new KeyNotFoundException("Shop not found.");
+
+        rowsAffected.IsDeleted = true;
+        rowsAffected.IsActive = false;
 
         return Success.Delete(command.Id.ToString());
     }

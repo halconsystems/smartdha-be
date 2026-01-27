@@ -47,7 +47,10 @@ public class GetAllFemugationListQueryHandler : IRequestHandler<GetAllFemugation
             SubTotal = x.SubTotal,
             ShopName = x.FemgutionShops?.Name,
             TankSize = x.TankerSize?.Name,
-            IsActive = x.IsActive
+            IsActive = x.IsActive,
+            Address = x.Address,
+            StreetNo = x.StreetNo,
+            PhoneNumber = x.PhoneNumber
         }).ToList();
 
         return result;

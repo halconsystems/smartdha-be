@@ -23,7 +23,7 @@ public class FemugationTaxDiscountController : BaseApiController
     public async Task<List<FemigationDTdTO>> Phases()
     {
         var list = await _med.Send(new GetAllFMDiscountQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-Discount/Tax-id")]
