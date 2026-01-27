@@ -27,7 +27,6 @@ public class PasswordResetTokenDto
 
 public record VerifyOtpForPasswordResetCommand : IRequest<SuccessResponse<PasswordResetTokenDto>>
 {
-    // public string CNIC { get; init; } = default!;
     public string OtpCode { get; init; } = default!;
 }
 
@@ -85,7 +84,7 @@ public class VerifyOtpForPasswordResetCommandHandler
         TimeSpan expiresIn = TimeSpan.FromMinutes(5);
         string resetToken = await _authenticationService.GenerateTemporaryToken(
             userDetails,
-            purpose: "reset_password",
+            purpose: "set_password",
             expiresIn
         );
 

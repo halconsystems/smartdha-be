@@ -78,8 +78,8 @@ public interface IApplicationDbContext
     DbSet<FumgationMedia> FumgationMedias { get; }
     DbSet<UserDevices> UserDevices { get; }
     DbSet<UserDeleteRequest> UserDeleteRequests { get; }
-
-    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+    DbSet<UserMemberProfile> UserMemberProfiles { get; }
+    DbSet <TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
 

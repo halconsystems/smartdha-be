@@ -260,3 +260,65 @@ StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/Tim
    at System.IO.Pipelines.Pipe.GetReadAsyncResult()
    at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
    --- End of inner exception stack trace ---
+2026-01-27 17:06:08.254 +05:00 [INF] Start processing HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923075709068&textmessage=849574%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 17:06:08.291 +05:00 [INF] Sending HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923075709068&textmessage=849574%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 17:06:09.860 +05:00 [INF] Received HTTP response headers after 1564.7591ms - 200
+2026-01-27 17:06:09.863 +05:00 [INF] End processing HTTP request after 1622.1046ms - 200
+2026-01-27 17:06:10.560 +05:00 [INF] [CQRS]
+TraceId  : 0HNITJHK776FD:0000000B
+Request  : OTPSendCommand
+Duration : 2523 ms
+2026-01-27 17:06:10.564 +05:00 [WRN] CMS Long Running Request: OTPSendCommand (2528 milliseconds)   {"Cnic":"3220384127171","$type":"OTPSendCommand"}
+2026-01-27 17:06:12.930 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000B
+Method   : POST
+Path     : /api/auth/reset-password
+Status   : 200
+Duration : 8503 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"status":200,"title":"OTP Verification Required","detail":"Authentication step completed.","data":{"name":"MUHAMMAD SULEMAN MADNI","isOtpRequired":true,"accessToken":"***","responseMessage":"An OTP has been sent to the mobile number registered with your membership 849574","mobileNumber":"***"}}
+==============================================
+2026-01-27 17:07:38.095 +05:00 [INF] [CQRS]
+TraceId  : 0HNITJHK776FD:0000000D
+Request  : VerifyOtpForPasswordResetCommand
+Duration : 32901 ms
+2026-01-27 17:07:38.135 +05:00 [WRN] CMS Long Running Request: VerifyOtpForPasswordResetCommand (32902 milliseconds) 67d5fada-4098-42f9-b791-26ed615b0864 3220384127171 {"OtpCode":"849574","$type":"VerifyOtpForPasswordResetCommand"}
+2026-01-27 17:07:38.144 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000D
+Method   : POST
+Path     : /api/auth/verify-frogetpassword-otp
+Status   : 200
+Duration : 44940 ms
+IP       : ::1
+
+Request:
+{
+  "otpCode": "849574"
+}
+
+Response:
+{"status":200,"title":"Proceed to reset password.","detail":"OTP verified successfully.","data":{"resetToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3ZDVmYWRhLTQwOTgtNDJmOS1iNzkxLTI2ZWQ2MTViMDg2NCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL21vYmlsZXBob25lIjoiOTIzMDc1NzA5MDY4IiwicHVycG9zZSI6InJlc2V0X3Bhc3N3b3JkIiwibmJmIjoxNzY5NTE1NjM3LCJleHAiOjE3Njk1MTU5MzcsImlzcyI6ImRoYWthcmFjaGkiLCJhdWQiOiJkaGFrYXJhY2hpbWVtYmVyIn0.-cN9ggYvQAKvpNrLVkbZOv8Hc33iOpQ4ZoHvltrXdDw","expiresAt":"2026-01-27T17:12:35.3149062+05:00"}}
+==============================================
+2026-01-27 17:09:35.461 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000F
+Method   : POST
+Path     : /api/auth/set-password
+Status   : 403
+Duration : 6 ms
+IP       : ::1
+
+Request:
+{
+  "password": "***"
+}
+
+Response:
+[EMPTY]
+==============================================
