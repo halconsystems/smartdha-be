@@ -45,7 +45,7 @@ public class ConsumerInquiryQueryHandler
                       Consumer_Number = "1001",
                       Consumer_Detail = "DHA Karachi - Phase 2",
                       Reference_Info = "SC-2025-0001",
-                      BillAmount="5000",
+                      BillAmount="10",
 
                   },
                   new SmartPayConsumerInquiryBill
@@ -54,7 +54,7 @@ public class ConsumerInquiryQueryHandler
                       Consumer_Number = "1002",
                       Consumer_Detail = "DHA Karachi - Phase 7",
                       Reference_Info = "MNT-2025-0042",
-                       BillAmount="12000",
+                       BillAmount="10",
                   },
                   new SmartPayConsumerInquiryBill
                   {
