@@ -77,6 +77,7 @@ public interface IApplicationDbContext
     DbSet<Fumigation> Fumigations { get; }
     DbSet<FumgationMedia> FumgationMedias { get; }
     DbSet<UserDevices> UserDevices { get; }
+    DbSet<UserDeleteRequest> UserDeleteRequests { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

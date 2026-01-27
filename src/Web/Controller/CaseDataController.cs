@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Command
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAdminCaseDetail;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAllCasesForAdmin;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseDashboard;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseMessageLogs;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
@@ -127,9 +128,34 @@ public class CaseDataController : BaseApiController
     public Task<ApiResult<bool>> ForwardInternal(Guid caseId, [FromBody] ForwardInternalDto dto)
         => _mediator.Send(new ForwardInternalCommand(caseId, dto.ToUserId, dto.Remarks));
 
+    //[HttpPost("{caseId:guid}/forward-external")]
+    //public Task<ApiResult<bool>> ForwardExternal(Guid caseId, [FromBody] RemarksDto dto)
+    //    => _mediator.Send(new ForwardExternalCommand(caseId, dto.Remarks));
+
     [HttpPost("{caseId:guid}/forward-external")]
-    public Task<ApiResult<bool>> ForwardExternal(Guid caseId, [FromBody] RemarksDto dto)
-        => _mediator.Send(new ForwardExternalCommand(caseId, dto.Remarks));
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> ForwardExternal(
+     Guid caseId,
+     [FromForm] ForwardExternalRequest request,
+     CancellationToken ct)
+    {
+        var documents = request.Files.Select((file, index) =>
+            new ForwardDepartmentDocumentInput
+            {
+                File = file,
+                Remarks = request.FileRemarks?.ElementAtOrDefault(index)
+            }).ToList();
+
+        var cmd = new ForwardExternalCommand(
+            caseId,
+            request.Remarks,
+            documents
+        );
+
+        return Ok(await _mediator.Send(cmd, ct));
+    }
+
+
 
     [HttpPost("{caseId:guid}/reject")]
     public async Task<ActionResult<ApiResult<bool>>> RejectCase(
@@ -172,6 +198,16 @@ public class CaseDataController : BaseApiController
         return Ok(result);
     }
 
+    [HttpGet("cases/{caseId:guid}/message-logs")]
+    public async Task<IActionResult> GetCaseMessageLogs(
+    Guid caseId,
+    CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new GetCaseMessageLogsQuery(caseId),
+            ct));
+    }
+
     [HttpPost("cases/send-message")]
     public async Task<IActionResult> SendCaseMessage(
     [FromBody] SendCaseMessageRequest request,
@@ -195,4 +231,14 @@ public class SendCaseMessageRequest
     public Guid CaseId { get; set; }
     public MessageChannel Channel { get; set; } // Sms / Notification / Both
     public Guid TemplateId { get; set; }
+}
+public class ForwardExternalRequest
+{
+    public string? Remarks { get; set; }
+
+    // files
+    public List<IFormFile> Files { get; set; } = new();
+
+    // per-file remarks (same index as Files)
+    public List<string>? FileRemarks { get; set; }
 }

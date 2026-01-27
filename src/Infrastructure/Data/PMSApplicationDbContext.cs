@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Common;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,8 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<CaseResultDocument> CaseResultDocuments => Set<CaseResultDocument>();
     public DbSet<CaseRejectRequirement> CaseRejectRequirements => Set<CaseRejectRequirement>();
     public DbSet<MessageTemplate> MessageTemplates => Set<MessageTemplate>();
+    public DbSet<CaseMessageLog> CaseMessageLogs => Set<CaseMessageLog>();
+
 
     /* =========================
        SaveChanges – Auditing

@@ -38,6 +38,12 @@ public class AdminCaseDocumentDto
     public long FileSize { get; set; }
 
     public DateTime UploadedAt { get; set; }
+    public string? DirectorateName { get; set; }
+    public string DirectorateRemarks { get; set; } = default!;
+
+    public bool IsRejectionDocument { get; set; }
+    public string? RejectionRemarks { get; set; }
+    public string? RejectionPrerequisiteName { get; set; }
 }
 public class AdminCaseDetailDto
 {
@@ -148,6 +154,31 @@ public class GetAdminCaseDetailHandler
                 ValueBool = pv.ValueBool
             }
         ).ToListAsync(ct);
+        var directorates = await _db.Set<Directorate>()
+    .AsNoTracking()
+    .Where(x => x.IsDeleted !=null && x.IsActive==true)
+    .Select(x => new
+    {
+        x.Id,
+        x.Name
+    })
+    .ToListAsync(ct);
+
+        var directorateLookup = directorates
+            .ToDictionary(x => x.Id, x => x.Name);
+
+        var rejectLookup = await _db.Set<CaseRejectRequirement>()
+    .AsNoTracking()
+    .Where(x => x.CaseId == request.CaseId)
+    .Select(x => new
+    {
+        x.Id,
+        x.Remarks,
+        PrerequisiteName = x.PrerequisiteDefinition.Name
+    })
+    .ToDictionaryAsync(x => x.Id, ct);
+
+
 
         // 2️⃣ Documents
         var docs = await _db.Set<CaseDocument>()
@@ -161,7 +192,28 @@ public class GetAdminCaseDetailHandler
                 FileUrl = _fileStorageService.GetPublicUrl(x.FileUrl,""),
                 ContentType = x.ContentType!,
                 FileSize = x.FileSize ?? 0,
-                UploadedAt = x.Created
+                UploadedAt = x.Created,
+                DirectorateName =
+                x.DirectorateId != null &&
+                directorateLookup.ContainsKey(x.DirectorateId.Value)
+                ? directorateLookup[x.DirectorateId.Value]
+                : null,
+                DirectorateRemarks = x.DepartmentRemarks ?? "",
+
+                // 🔴 REJECTION CONDITIONALS
+                IsRejectionDocument = x.CaseRejectRequirementId != null,
+
+                RejectionRemarks =
+            x.CaseRejectRequirementId != null &&
+            rejectLookup.ContainsKey(x.CaseRejectRequirementId.Value)
+                ? rejectLookup[x.CaseRejectRequirementId.Value].Remarks
+                : null,
+
+                RejectionPrerequisiteName =
+            x.CaseRejectRequirementId != null &&
+            rejectLookup.ContainsKey(x.CaseRejectRequirementId.Value)
+                ? rejectLookup[x.CaseRejectRequirementId.Value].PrerequisiteName
+                : null
             })
             .ToListAsync(ct);
 

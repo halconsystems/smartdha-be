@@ -28,5 +28,9 @@ public class CaseDocument : BaseAuditableEntity
     // NEW: null = original submission, NOT NULL = rejection upload
     public Guid? CaseRejectRequirementId { get; set; }
     public CaseRejectRequirement? CaseRejectRequirement { get; set; }
+
+    // NEW: Department forward documents
+    public Guid? DirectorateId { get; set; }           // who attached
+    public string? DepartmentRemarks { get; set; }     // why attached
 }
 

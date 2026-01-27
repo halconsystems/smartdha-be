@@ -1,0 +1,99 @@
+2026-01-27 00:06:15.446 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT1NMOP7KA:0000000B
+Request  : ForgetPasswordCommand
+Duration : 509 ms
+2026-01-27 00:06:15.485 +05:00 [WRN] CMS Long Running Request: ForgetPasswordCommand (546 milliseconds)   {"Cnic":"1310122123823","newPassword":"P@ssword1","ConfirmNewPassword":"P@ssword1","$type":"ForgetPasswordCommand"}
+2026-01-27 00:06:15.509 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT1NMOP7KA:0000000B
+Method   : POST
+Path     : /api/auth/forget-password
+Status   : 200
+Duration : 1620 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "newPassword": "P@ssword1",
+  "confirmNewPassword": "P@ssword1"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Your password was updated successfully. Please keep it safe.","data":null}
+==============================================
+2026-01-27 00:06:53.410 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT1NMOP7KA:0000000D
+Method   : POST
+Path     : /api/auth/login
+Status   : 500
+Duration : 277 ms
+IP       : ::1
+
+Request:
+{
+  cnic": "1310122123823",
+  "password": "***",
+  "fcmToken": "fF4ph66iQqqIwIt5MEf3lv:APA91bEBs_9RwkQhJv50GodrJdRhAm-8JJ5RAzc-v4LeiPopB7vYyMo8Vg1Zw0kFIKBe1GvuOg3pAftM4QJXV94g_d8LcRSWT-4Gc4rgVuaypWkZ0RH-17o",
+  "deviceId": "0f329b2d-b849-40e3-8ed6-1903724971d9"
+}
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Value cannot be null. (Parameter 'request')"}
+==============================================
+2026-01-27 00:07:03.061 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT1NMOP7KA:0000000F
+Request  : AppUserLoginCommand
+Duration : 647 ms
+2026-01-27 00:07:03.083 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (648 milliseconds) f99c611a-2da3-4fea-a45b-72319f453e78 1310122123823 {"CNIC":"1310122123823","Password":"P@ssword1","FCMToken":"fF4ph66iQqqIwIt5MEf3lv:APA91bEBs_9RwkQhJv50GodrJdRhAm-8JJ5RAzc-v4LeiPopB7vYyMo8Vg1Zw0kFIKBe1GvuOg3pAftM4QJXV94g_d8LcRSWT-4Gc4rgVuaypWkZ0RH-17o","DeviceId":"0f329b2d-b849-40e3-8ed6-1903724971d9","$type":"AppUserLoginCommand"}
+2026-01-27 00:07:03.089 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT1NMOP7KA:0000000F
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 690 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "fF4ph66iQqqIwIt5MEf3lv:APA91bEBs_9RwkQhJv50GodrJdRhAm-8JJ5RAzc-v4LeiPopB7vYyMo8Vg1Zw0kFIKBe1GvuOg3pAftM4QJXV94g_d8LcRSWT-4Gc4rgVuaypWkZ0RH-17o",
+  "deviceId": "0f329b2d-b849-40e3-8ed6-1903724971d9"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"AbdulMateen","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-27 00:16:07.210 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT1NMOP7KB:00000001
+Request  : ForgetPasswordCommand
+Duration : 255 ms
+2026-01-27 00:16:07.211 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT1NMOP7KB:00000001
+Method   : POST
+Path     : /api/auth/forget-password
+Status   : 200
+Duration : 259 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "newPassword": "P@ssword1",
+  "confirmNewPassword": "P@ssword1"
+}
+
+Response:
+{"status":200,"title":"Success","detail":"Your password was updated successfully. Please keep it safe.","data":null}
+==============================================
+2026-01-27 00:25:17.272 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 80s ago, last-write: 19s ago, unanswered-write: 19s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-27 14:22:07.316 +05:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [CaseDocument] ADD [DepartmentRemarks] nvarchar(max) NULL;

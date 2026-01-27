@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
@@ -7,6 +8,7 @@ using DHAFacilitationAPIs.Application.Feature.User.Commands.RefreshToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterNonMember;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.ResendOtp;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.SetPassword;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.SubmitUserDeleteRequest;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllNonMemberPurposes;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.VerifyOtp;
 using Microsoft.AspNetCore.Authorization;
@@ -109,4 +111,23 @@ public class AuthController : BaseApiController
     {
         return Ok(await Mediator.Send(request));
     }
+
+    [Authorize]
+    [HttpPost("users/delete-request")]
+    public async Task<IActionResult> SubmitDeleteRequest(
+    [FromBody] SubmitUserDeleteRequestDto dto,
+    CancellationToken ct)
+    {
+        ApiResult<Guid> result =
+            await Mediator.Send(
+                new SubmitUserDeleteRequestCommand(dto.Reason),
+                ct);
+
+        return Ok(result);
+    }
+
+}
+public class SubmitUserDeleteRequestDto
+{
+    public string? Reason { get; set; }
 }

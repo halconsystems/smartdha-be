@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 {
     [DbContext(typeof(PMSApplicationDbContext))]
-    partial class PMSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126183711_Tablecreatedcaselogs")]
+    partial class Tablecreatedcaselogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +97,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("CaseDocuments", (string)null);
+                    b.ToTable("CaseDocuments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseFee", b =>
@@ -163,7 +166,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeSlabId");
 
-                    b.ToTable("CaseFees", (string)null);
+                    b.ToTable("CaseFees");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseMessageLog", b =>
@@ -240,7 +243,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("TemplateId");
 
-                    b.ToTable("CaseMessageLogs", (string)null);
+                    b.ToTable("CaseMessageLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePayment", b =>
@@ -311,7 +314,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("CasePayments", (string)null);
+                    b.ToTable("CasePayments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
@@ -387,7 +390,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("CaseId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
-                    b.ToTable("CasePrerequisiteValues", (string)null);
+                    b.ToTable("CasePrerequisiteValues");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
@@ -444,7 +447,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("CaseRejectRequirements", (string)null);
+                    b.ToTable("CaseRejectRequirements");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseResultDocument", b =>
@@ -512,7 +515,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("CaseId");
 
-                    b.ToTable("CaseResultDocuments", (string)null);
+                    b.ToTable("CaseResultDocuments");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
@@ -591,7 +594,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("StepId");
 
-                    b.ToTable("CaseStepHistories", (string)null);
+                    b.ToTable("CaseStepHistories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseVoucher", b =>
@@ -655,7 +658,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("GeneratedAtStepId");
 
-                    b.ToTable("CaseVouchers", (string)null);
+                    b.ToTable("CaseVouchers");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", b =>
@@ -708,7 +711,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Directorates", (string)null);
+                    b.ToTable("Directorates");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeCategory", b =>
@@ -755,7 +758,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("FeeCategories", (string)null);
+                    b.ToTable("FeeCategories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeDefinition", b =>
@@ -819,7 +822,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("ProcessId");
 
-                    b.ToTable("FeeDefinitions", (string)null);
+                    b.ToTable("FeeDefinitions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeOption", b =>
@@ -885,7 +888,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeDefinitionId");
 
-                    b.ToTable("FeeOptions", (string)null);
+                    b.ToTable("FeeOptions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.FeeSlab", b =>
@@ -936,7 +939,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("FeeDefinitionId", "FromArea", "ToArea");
 
-                    b.ToTable("FeeSlabs", (string)null);
+                    b.ToTable("FeeSlabs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.MessageTemplate", b =>
@@ -997,7 +1000,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("MessageTemplates", (string)null);
+                    b.ToTable("MessageTemplates");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
@@ -1060,7 +1063,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("PrerequisiteDefinitions", (string)null);
+                    b.ToTable("PrerequisiteDefinitions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteOption", b =>
@@ -1178,7 +1181,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("ProcessId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
-                    b.ToTable("ProcessPrerequisites", (string)null);
+                    b.ToTable("ProcessPrerequisites");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", b =>
@@ -1243,7 +1246,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("ProcessId", "StepNo")
                         .IsUnique();
 
-                    b.ToTable("ProcessSteps", (string)null);
+                    b.ToTable("ProcessSteps");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", b =>
@@ -1336,7 +1339,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasIndex("UserPropertyId");
 
-                    b.ToTable("PropertyCases", (string)null);
+                    b.ToTable("PropertyCases");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceCategory", b =>
@@ -1386,7 +1389,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("ServiceCategories", (string)null);
+                    b.ToTable("ServiceCategories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", b =>
@@ -1460,7 +1463,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.HasIndex("CategoryId", "Code")
                         .IsUnique();
 
-                    b.ToTable("ServiceProcesses", (string)null);
+                    b.ToTable("ServiceProcesses");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.UserProperty", b =>
@@ -1536,7 +1539,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Properties", (string)null);
+                    b.ToTable("Properties");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Enums.PMS.CaseFeeReceipt", b =>
@@ -1606,7 +1609,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("CaseFeeReceipts", (string)null);
+                    b.ToTable("CaseFeeReceipts");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Enums.PMS.FeeSetting", b =>
@@ -1654,7 +1657,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("FeeSettings", (string)null);
+                    b.ToTable("FeeSettings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseDocument", b =>

@@ -38,6 +38,9 @@ public interface IPMSApplicationDbContext
     DbSet<CaseResultDocument> CaseResultDocuments { get; }
     DbSet<CaseRejectRequirement> CaseRejectRequirements { get; }
     DbSet<MessageTemplate> MessageTemplates { get; }
+    DbSet<CaseMessageLog> CaseMessageLogs { get; }
+
+
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

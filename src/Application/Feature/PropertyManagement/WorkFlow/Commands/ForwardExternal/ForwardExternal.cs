@@ -8,23 +8,33 @@ using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.WorkFlow.Commands.ForwardExternal;
+
+public class ForwardDepartmentDocumentInput
+{
+    public string? Remarks { get; set; }
+    public IFormFile File { get; set; } = default!;
+}
 public record ForwardExternalCommand(
     Guid CaseId,
-    string? Remarks
+    string? Remarks,
+    List<ForwardDepartmentDocumentInput>? Documents
 ) : IRequest<ApiResult<bool>>;
 public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, ApiResult<bool>>
 {
     private readonly IPMSApplicationDbContext _pmsDb;
     private readonly IApplicationDbContext _appDb;
     private readonly ICurrentUserService _current;
+    private readonly IFileStorageService _fileStorage;
 
-    public ForwardExternalHandler(IPMSApplicationDbContext pmsDb, IApplicationDbContext appDb, ICurrentUserService current)
+    public ForwardExternalHandler(IPMSApplicationDbContext pmsDb, IApplicationDbContext appDb, ICurrentUserService current,IFileStorageService fileStorageService)
     {
         _pmsDb = pmsDb;
         _appDb = appDb;
         _current = current;
+        _fileStorage = fileStorageService;
     }
 
     public async Task<ApiResult<bool>> Handle(ForwardExternalCommand r, CancellationToken ct)
@@ -135,8 +145,41 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
             PerformedByUserId = fromUserId
         });
 
-        // 2️⃣ History: RECEIVED BY next step
-        _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
+        if (r.Documents != null && r.Documents.Any())
+        {
+            foreach (var doc in r.Documents)
+            {
+                if (doc.File == null || doc.File.Length == 0)
+                    continue;
+
+                var path = await _fileStorage.SavePMSDocumentAsync(
+                    doc.File,
+                    $"pms/cases/{c.Id}/forward",
+                    ct,
+                    maxBytes: 10 * 1024 * 1024,
+                    allowedExtensions: new[] { ".pdf", ".jpg", ".jpeg", ".png" }
+                );
+
+                _pmsDb.Set<CaseDocument>().Add(new CaseDocument
+                {
+                    CaseId = c.Id,
+
+                    FileName = doc.File.FileName,
+                    FileUrl = path,
+                    ContentType = doc.File.ContentType,
+                    FileSize = doc.File.Length,
+
+                    DirectorateId = currentStep.DirectorateId,
+                    DepartmentRemarks = doc.Remarks,
+
+                    CreatedBy = fromUserId,
+
+                });
+            }
+        }
+
+            // 2️⃣ History: RECEIVED BY next step
+            _pmsDb.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
 
@@ -153,6 +196,8 @@ public class ForwardExternalHandler : IRequestHandler<ForwardExternalCommand, Ap
         });
 
         await _pmsDb.SaveChangesAsync(ct);
+
+
         return ApiResult<bool>.Ok(true, "Forwarded to next directorate.");
     }
 

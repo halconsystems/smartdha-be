@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -25,24 +26,31 @@ public class SendCaseMessageHandler
     private readonly IApplicationDbContext _appDb;
     private readonly ISmsService _sms;
     private readonly INotificationService _notify;
+    private readonly ICurrentUserService _currentUserService;
 
 
     public SendCaseMessageHandler(
         IPMSApplicationDbContext pmsDb,
         IApplicationDbContext appDb,
         ISmsService sms,
-        INotificationService notify)
+        INotificationService notify,
+        ICurrentUserService currentUserService)
     {
         _pmsDb = pmsDb;
         _appDb = appDb;
         _sms = sms;
         _notify = notify;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ApiResult<bool>> Handle(
         SendCaseMessageCommand r,
         CancellationToken ct)
     {
+        var currentUserId = _currentUserService.UserId.ToString();
+        if (string.IsNullOrEmpty(currentUserId))
+            throw new UnAuthorizedException("Invalid user context.");
+
         // 1️⃣ Load case
         var c = await _pmsDb.Set<PropertyCase>()
             .Include(x => x.Process)
@@ -55,7 +63,7 @@ public class SendCaseMessageHandler
         if (!string.IsNullOrWhiteSpace(c.CreatedBy) &&
             Guid.TryParse(c.CreatedBy, out var createdByUserId))
         {
-            getToken = await _pmsDb.Set<UserDevices>()
+            getToken = await _appDb.Set<UserDevices>()
                 .FirstOrDefaultAsync(x => x.UserId == createdByUserId, ct);
         }
 
@@ -72,7 +80,7 @@ public class SendCaseMessageHandler
             return ApiResult<bool>.Fail("Applicant user not found.");
 
         // 3️⃣ Load template (MODULE-SAFE)
-        var template = await _appDb.Set<MessageTemplate>()
+        var template = await _pmsDb.Set<MessageTemplate>()
             .FirstOrDefaultAsync(x =>
                 x.Id == r.TemplateId &&
                 x.ModuleId == c.CurrentModuleId &&
@@ -103,33 +111,102 @@ public class SendCaseMessageHandler
 
         var mobile = user.RegisteredMobileNo;
 
-        // 5️⃣ SEND SMS
-        if ((r.Channel == MessageChannel.Sms || r.Channel == MessageChannel.Both)
-            && template.AllowSms)
+        bool smsSent = false;
+        bool notificationSent = false;
+        string? failure = null;
+
+        try
         {
-            if (string.IsNullOrWhiteSpace(mobile))
-                return ApiResult<bool>.Fail("User mobile number not found.");
+            // 📩 SMS
+            if ((r.Channel == MessageChannel.Sms || r.Channel == MessageChannel.Both)
+                && template.AllowSms)
+            {
+                if (string.IsNullOrWhiteSpace(mobile))
+                    throw new Exception("User mobile number not found.");
 
-            if (message.Length > template.SmsMaxLength)
-                return ApiResult<bool>.Fail(
-                    $"SMS exceeds {template.SmsMaxLength} characters.");
+                if (message.Length > template.SmsMaxLength)
+                    throw new Exception($"SMS exceeds {template.SmsMaxLength} characters.");
 
-            await _sms.SendSmsAsync(mobile, message, ct);
+                await _sms.SendSmsAsync(mobile, message, ct);
+                smsSent = true;
+            }
+
+            // 🔔 Notification
+            if ((r.Channel == MessageChannel.Notification || r.Channel == MessageChannel.Both)
+                && template.AllowNotification)
+            {
+                await _notify.SendFirebasePMSNotificationAsync(
+                    getToken.FCMToken,
+                    title,
+                    message,
+                    ct);
+
+                notificationSent = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            failure = ex.Message;
         }
 
-        // 6️⃣ SEND NOTIFICATION
-        if ((r.Channel == MessageChannel.Notification || r.Channel == MessageChannel.Both)
-            && template.AllowNotification)
+        // 🧾 LOG (ALWAYS)
+        _pmsDb.Set<CaseMessageLog>().Add(new CaseMessageLog
         {
-            await _notify.SendFirebasePMSNotificationAsync(
-                getToken.FCMToken,
-                title,
-                message,
-                ct);
-        }
+            CaseId = c.Id,
+            TemplateId = template.Id,
 
-        return ApiResult<bool>.Ok(true, "Message sent successfully.");
+            SentByUserId = currentUserId, // or _current.UserId if admin-triggered
+            RecipientUserId = user.Id,
+            RecipientMobile = mobile,
+
+            Channel = r.Channel,
+
+            SmsSent = smsSent,
+            SmsText = smsSent ? message : null,
+
+            NotificationSent = notificationSent,
+            NotificationTitle = notificationSent ? title : null,
+            NotificationBody = notificationSent ? message : null,
+
+            FailureReason = failure
+        });
+
+        await _pmsDb.SaveChangesAsync(ct);
+
+        if (!smsSent && !notificationSent)
+            return ApiResult<bool>.Fail(failure ?? "Message not sent.");
+
+        return ApiResult<bool>.Ok(true, "Message processed successfully.");
     }
+
+
+    //    // 5️⃣ SEND SMS
+    //    if ((r.Channel == MessageChannel.Sms || r.Channel == MessageChannel.Both)
+    //        && template.AllowSms)
+    //    {
+    //        if (string.IsNullOrWhiteSpace(mobile))
+    //            return ApiResult<bool>.Fail("User mobile number not found.");
+
+    //        if (message.Length > template.SmsMaxLength)
+    //            return ApiResult<bool>.Fail(
+    //                $"SMS exceeds {template.SmsMaxLength} characters.");
+
+    //        await _sms.SendSmsAsync(mobile, message, ct);
+    //    }
+
+    //    // 6️⃣ SEND NOTIFICATION
+    //    if ((r.Channel == MessageChannel.Notification || r.Channel == MessageChannel.Both)
+    //        && template.AllowNotification)
+    //    {
+    //        await _notify.SendFirebasePMSNotificationAsync(
+    //            getToken.FCMToken,
+    //            title,
+    //            message,
+    //            ct);
+    //    }
+
+    //    return ApiResult<bool>.Ok(true, "Message sent successfully.");
+    //}
 }
 
 
