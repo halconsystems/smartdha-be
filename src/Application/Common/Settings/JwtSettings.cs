@@ -13,4 +13,5 @@ public class JwtSettings
     public string Issuer { get; set; } = default!;
     public string Audience { get; set; } = default!;
     public double DurationInMinutes { get; set; }
+    public string Secret { get; set; } = default!;
 }

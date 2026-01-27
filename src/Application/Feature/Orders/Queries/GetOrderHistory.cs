@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
+using DHAFacilitationAPIs.Domain.Entities.LMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 
@@ -16,29 +17,52 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
     private readonly ILaundrySystemDbContext _context;
 
     private readonly ICurrentUserService _currentUser;
+    private readonly IApplicationDbContext _applicationDb;
 
-    public GetOrderHistoryIdQueryHandler(ILaundrySystemDbContext context, ICurrentUserService currentUser)
+    public GetOrderHistoryIdQueryHandler(ILaundrySystemDbContext context, ICurrentUserService currentUser, IApplicationDbContext applicationDb)
     {
         _context = context;
         _currentUser = currentUser;
+        _applicationDb = applicationDb;
     }
 
     public async Task<OrderHistoryDTO> Handle(GetOrderHistoryIdQuery request, CancellationToken ct)
     {
+        Domain.Entities.LMS.Orders? orders = new Domain.Entities.LMS.Orders();
         var userID = _currentUser.UserId.ToString();
         if (string.IsNullOrWhiteSpace(userID))
             throw new UnauthorizedAccessException("User not authenticated.");
 
+        var roles = await _applicationDb.AppUserRoles
+                   .Include(ur => ur.Role)
+                   .Where(ur => ur.UserId == userID)
+                   .Select(ur => ur.Role.Name)
+                   .ToListAsync(ct);
 
-        var orders = await _context.Orders
-            .Where(x => x.Id == request.OrderId && x.UserId == userID)
+        bool isSuperAdmin = roles.Contains("Shop Owner") || roles.Contains("SuperAdministrator");
+
+        if (isSuperAdmin)
+        {
+
+            orders = await _context.Orders
+            .Where(x => x.Id == request.OrderId)
             .Include(x => x.LaundryPackaging)
             .Include(x => x.LaundryService)
             .Include(x => x.Shops)
-            .AsNoTracking()
             .FirstOrDefaultAsync(ct);
+        }
+        else
+        {
+            orders = await _context.Orders.Where(x => x.UserId == userID)
+            .Where(x => x.Id == request.OrderId)
+            .Include(x => x.LaundryPackaging)
+            .Include(x => x.LaundryService)
+            .Include(x => x.Shops)
+            .FirstOrDefaultAsync(ct);
+        }
 
-        if(orders == null)
+
+        if (orders == null)
             throw new UnauthorizedAccessException("Order Not Found.");
 
         var ordersumarries = await _context.OrderSummaries.Where(x => x.OrderId == orders.Id)
@@ -60,7 +84,7 @@ public class GetOrderHistoryIdQueryHandler : IRequestHandler<GetOrderHistoryIdQu
         
         var OrderDispatch = await _context.OrderDispatches.Where(x => x.OrdersId == orders.Id).AsNoTracking().FirstOrDefaultAsync();
 
-        var OrderDT = await _context.OrderDTSettings.Where(x => x.DTCode != "HAN").AsNoTracking().ToListAsync();
+        var OrderDT = await _context.OrderDTSettings.Where(x => x.Name != Domain.Enums.Settings.Hanger).AsNoTracking().ToListAsync();
 
         if (DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");

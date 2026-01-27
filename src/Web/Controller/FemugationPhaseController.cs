@@ -23,7 +23,7 @@ public class FemugationPhaseController : BaseApiController
     public async Task<List<PhaseDTO>> Phases()
     {
         var list = await _med.Send(new GetPhasesQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-Phase-id")]

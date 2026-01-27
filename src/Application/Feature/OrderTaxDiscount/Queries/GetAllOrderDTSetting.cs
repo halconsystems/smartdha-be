@@ -28,7 +28,7 @@ public class GetAllOrderDTSettingHandler : IRequestHandler<GetAllOrderDTSetting,
     public async Task<List<OrderDTSettingDTO>> Handle(GetAllOrderDTSetting request, CancellationToken ct)
     {
         var drivers = await _context.OrderDTSettings
-            .Where(x => x.DTCode != "HAN")
+            .Where(x => x.Name != Settings.Hanger)
             .AsNoTracking()
             .Select(x => new OrderDTSettingDTO
             {

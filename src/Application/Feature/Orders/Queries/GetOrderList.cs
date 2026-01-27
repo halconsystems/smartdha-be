@@ -40,7 +40,8 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             .Select(ur => ur.Role.Name)
             .ToListAsync(ct);
 
-        bool isSuperAdmin = roles.Contains("Shop Owner");
+        bool isSuperAdmin = roles.Contains("Shop Owner") || roles.Contains("SuperAdministrator");
+
         if (isSuperAdmin)
         {
             orders = await _context.Orders
@@ -60,7 +61,7 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
                 .ToListAsync(ct);
         }
 
-
+        var OrderShop = await _context.Shops.Where(x => orders.Select(x => x.ShopId).Contains(x.Id)).AsNoTracking().ToListAsync(ct);
 
         ordersumarries = await _context.OrderSummaries.Where(x => orders.Select(x => x.Id).Contains(x.OrderId)).AsNoTracking().ToListAsync(ct);
 
@@ -82,10 +83,12 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             PackageName = x.LaundryPackaging?.DisplayName,
             OrderDate = x.Created,
             TotalPrice = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.Total.ToString(),
-            ItemCount = ordersumarries.Sum(x => Convert.ToDecimal(x.ItemCount)).ToString(),
+            ItemCount = ordersumarries
+                .Sum(x => decimal.TryParse(x.ItemCount, out var val) ? val : 0)
+                .ToString(),
             PaymentMethod = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.PaymentMethod,
             OrderStatus = x.OrderStatus,
-            ShopName = x.Shops?.DisplayName,
+            ShopName = OrderShop?.FirstOrDefault(s => s.Id == x.ShopId)?.DisplayName,
             OrderType = x.OrderType,
             OrderUniqueId = x.UniqueFormID
         }).ToList();

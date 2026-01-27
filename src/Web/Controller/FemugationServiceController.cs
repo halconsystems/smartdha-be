@@ -22,7 +22,7 @@ public class FemugationServiceController : BaseApiController
     public async Task<List<ServiceDTO>> Phases()
     {
         var list = await _med.Send(new GetAllServicesQuery());
-        return list.Where(x => x.IsActive == true).ToList();
+        return list.ToList();
     }
 
     [HttpGet("Get-Service-id")]

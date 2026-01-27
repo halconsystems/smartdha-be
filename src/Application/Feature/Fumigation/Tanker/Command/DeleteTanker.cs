@@ -24,10 +24,13 @@ public class DeleteTankerCommandHandler
     {
         var rowsAffected = await _context.TankerSizes
              .Where(x => x.Id == command.Id)
-             .ExecuteDeleteAsync(ct);
+             .FirstOrDefaultAsync(ct);
 
-        if (rowsAffected == 0)
+        if (rowsAffected == null)
             throw new KeyNotFoundException("Size not found.");
+
+        rowsAffected.IsDeleted = true;
+        rowsAffected.IsActive = false;
 
         return Success.Delete(command.Id.ToString());
     }

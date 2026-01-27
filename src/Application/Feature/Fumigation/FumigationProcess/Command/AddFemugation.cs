@@ -131,6 +131,7 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
                 Taxes = taxex,
                 Discount = discount,
                 Total = totalAmount,
+                PaymentMethod = command.PaymentMethod
             };
 
             _context.Fumigations.Add(entity);

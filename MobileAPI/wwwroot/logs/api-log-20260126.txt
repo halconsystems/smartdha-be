@@ -411,3 +411,234 @@ Request:
 Response:
 [{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":3,"bookedCount":0,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
 ==============================================
+2026-01-26 22:57:49.041 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0H58CPT3:0000000B
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 401
+Duration : 208 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-26 22:58:14.584 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0H58CPT3:0000000D
+Request  : HangerPriceAdjustmentQuery
+Duration : 1035 ms
+2026-01-26 22:58:14.802 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (1041 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 22:58:14.896 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0H58CPT3:0000000D
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 1644 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":"/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/060c4766f97c415a851b61619dd31505.png"},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":null}]
+==============================================
+2026-01-26 22:59:12.188 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0H58CPT3:0000000F
+Request  : HangerPriceAdjustmentQuery
+Duration : 30663 ms
+2026-01-26 22:59:12.209 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (30664 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 22:59:12.213 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0H58CPT3:0000000F
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 30705 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":"/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/060c4766f97c415a851b61619dd31505.png"},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":null}]
+==============================================
+2026-01-26 23:02:09.866 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0JILTOKV:0000000B
+Request  : GetLaundryItemByIdQuery
+Duration : 750 ms
+2026-01-26 23:02:10.051 +05:00 [WRN] CMS Long Running Request: GetLaundryItemByIdQuery (804 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"CategoryId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"GetLaundryItemByIdQuery"}
+2026-01-26 23:02:10.118 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0JILTOKV:0000000B
+Method   : GET
+Path     : /api/laundry/get-laundryitems-byid
+Status   : 200
+Duration : 1462 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-26 23:02:33.765 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0JILTOKV:0000000D
+Request  : GetLaundryItemByIdQuery
+Duration : 276 ms
+2026-01-26 23:02:33.774 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0JILTOKV:0000000D
+Method   : GET
+Path     : /api/laundry/get-laundryitems-byid
+Status   : 200
+Duration : 299 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/060c4766f97c415a851b61619dd31505.png"},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":null}]
+==============================================
+2026-01-26 23:02:54.945 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0JILTOKV:0000000F
+Request  : HangerPriceAdjustmentQuery
+Duration : 2870 ms
+2026-01-26 23:02:55.063 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (2871 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 23:02:55.065 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0JILTOKV:0000000F
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 3027 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"00000000-0000-0000-0000-000000000000","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"120","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"120","image":null},{"id":"00000000-0000-0000-0000-000000000000","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null}]
+==============================================
+2026-01-26 23:10:32.324 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0ODNB98O:00000001
+Request  : HangerPriceAdjustmentQuery
+Duration : 2980 ms
+2026-01-26 23:10:32.457 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (3029 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 23:10:32.498 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0ODNB98O:00000001
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 3435 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null}]
+==============================================
+2026-01-26 23:15:55.981 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0RBCGKL9:0000000D
+Request  : HangerPriceAdjustmentQuery
+Duration : 3139 ms
+2026-01-26 23:15:56.120 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (3176 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 23:15:56.170 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0RBCGKL9:0000000D
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 3582 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null}]
+==============================================
+2026-01-26 23:16:24.569 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0RBCGKL9:0000000F
+Request  : GetAllLaundryItemsQuery
+Duration : 22 ms
+2026-01-26 23:16:24.571 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0RBCGKL9:0000000F
+Method   : GET
+Path     : /api/laundry/get-laundryitems
+Status   : 200
+Duration : 33 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/060c4766f97c415a851b61619dd31505.png"},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"120","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"120","image":null}]
+==============================================
+2026-01-26 23:18:44.855 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0T27VLJN:00000001
+Request  : HangerPriceAdjustmentQuery
+Duration : 8655 ms
+2026-01-26 23:18:44.977 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (8687 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","$type":"HangerPriceAdjustmentQuery"}
+2026-01-26 23:18:45.018 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0T27VLJN:00000001
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 9080 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/060c4766f97c415a851b61619dd31505.png"},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null},{"id":"41ce93d5-53d2-4bb6-8788-eaac1d29fea4","name":"Shalwar Cotton Plain","displayName":"Shalwar Cotton Plain","code":"SHALWAR CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":null}]
+==============================================
+2026-01-26 23:20:38.776 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0T27VLJO:00000001
+Request  : GetAllLaundryServicesQuery
+Duration : 273 ms
+2026-01-26 23:20:38.780 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0T27VLJO:00000001
+Method   : GET
+Path     : /api/laundry/get-laundryservices
+Status   : 200
+Duration : 285 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"d924e55a-cc00-408b-a230-b9589d65473e","name":"WashnPress","displayName":"WashnPress","code":"TEST B"},{"id":"f65d3914-6641-4e83-b5b4-e7e81e91f186","name":"PressOnly","displayName":"Press Only","code":"PRESS"}]
+==============================================
+2026-01-26 23:21:00.415 +05:00 [INF] [CQRS]
+TraceId  : 0HNIT0T27VLJO:00000003
+Request  : GetAllLaundryPackagingQuery
+Duration : 17 ms
+2026-01-26 23:21:00.418 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIT0T27VLJO:00000003
+Method   : GET
+Path     : /api/laundry/get-laundrypackaging
+Status   : 200
+Duration : 29 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"49f736ac-1aae-4be3-ba57-925cc3eb1c15","name":"Hanger +20","displayName":"Hanger +20","code":"HANGE"},{"id":"13ae07e3-4e5e-4b1c-942c-ba4a7c87e8c2","name":"Fold & Packet","displayName":"Fold & Packet","code":"FOLD &"}]
+==============================================
+2026-01-26 23:31:37.889 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: InternalFailure (ReadSocketError/ConnectionAborted, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 69s ago, last-write: 9s ago, unanswered-write: 9s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> Pipelines.Sockets.Unofficial.ConnectionAbortedException: The connection was aborted
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-26 23:33:07.116 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: InternalFailure (ReadSocketError/ConnectionAborted, last-recv: 421) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 78s ago, last-write: 19s ago, unanswered-write: 19s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> Pipelines.Sockets.Unofficial.ConnectionAbortedException: The connection was aborted
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---

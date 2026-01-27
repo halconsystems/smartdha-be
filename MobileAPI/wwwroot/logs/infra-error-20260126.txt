@@ -1,0 +1,12 @@
+2026-01-26 23:31:37.889 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: InternalFailure (ReadSocketError/ConnectionAborted, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 69s ago, last-write: 9s ago, unanswered-write: 9s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> Pipelines.Sockets.Unofficial.ConnectionAbortedException: The connection was aborted
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-26 23:33:07.116 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: InternalFailure (ReadSocketError/ConnectionAborted, last-recv: 421) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 78s ago, last-write: 19s ago, unanswered-write: 19s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> Pipelines.Sockets.Unofficial.ConnectionAbortedException: The connection was aborted
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
