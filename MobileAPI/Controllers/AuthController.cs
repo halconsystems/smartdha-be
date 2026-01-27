@@ -10,6 +10,7 @@ using DHAFacilitationAPIs.Application.Feature.PMS.Commands.AddCaseAttachment;
 using DHAFacilitationAPIs.Application.Feature.Profile.Queries;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.LiveMemberRegisteration;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RefreshToken;
@@ -90,6 +91,7 @@ public class AuthController : BaseApiController
     [AllowAnonymous]
     [EnableRateLimiting("AnonymousLimiter")]
     [HttpPost("Register")]
+   // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
     public async Task<IActionResult> RegisterUser(MemberRegisterationCommand request)
     {
         return Ok(await Mediator.Send(request));
