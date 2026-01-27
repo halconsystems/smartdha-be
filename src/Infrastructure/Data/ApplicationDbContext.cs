@@ -94,6 +94,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<UserDevices> UserDevices => Set<UserDevices>();
     public DbSet<UserDeleteRequest> UserDeleteRequests => Set<UserDeleteRequest>();
     public DbSet<UserImages> UserImages => Set<UserImages>();
+    public DbSet<UserMemberProfile> UserMemberProfiles => Set<UserMemberProfile>();
 
 
 

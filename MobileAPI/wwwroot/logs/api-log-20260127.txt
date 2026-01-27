@@ -1746,6 +1746,83 @@ AW=9�f�f!~p�x)0��4v���U��U\�j'�ig�02\_{e�{\��
 gێ�#��Cstwzڣj6�yQ��Vr^^��ǀ�a�R���[6�=���VX�捬�����l%���!� e�����o��l�q%+��pƙ��s�m�d�^�}�8�˟��:��K~��l>�Xeb�z�ٹ� ��s��C��# �hm}"�z  ٹIDAT:�?�n��yI~�z��Gg b�u���ؐ�V�̈́O������oY�������FA���8Ԩ�����k)��B2B�,[˿�&��y';��v��Ʌ+��HӦf���p��0�O������v�A�5�eٿK���_��CE�Z�)Aa�\B"�dp�W���g[K��^�puo��t�N����h�����++[Lb�hd����l�O���]��m��&��Ћoy��g= B!��3�3����Uݔ[Od]�a�D��Z�i�[t�.\�䇜�9Ua��؍�}�����3	�`(�\B1��O�Q܂�=�'��S;�M@]�@��VuI/W�e��R#n�3TPQXR$��M u�����|��  ��6OyX}~�$��Y�X��'��# >��W��J���ǎ�y�;��2�����6ël_<�-t�H1 
 VC��VwR(��Y�q�l�J��y���#��l�f0Y�;Y�mӸ1<R�Ho�D "g�~�e>܇�������W����GU�dd2��Y)���[��@X���fVz(h� ����±�����y��L�8mx�����M�����5�s�c �9�3����������;?��˜�%��?�|O�kČ�=�	�E���^.�juIլ���Y�ӯ��x� ���m��P�B,�L���&�PP���W��v�;�� ��;y� @R^-C� �*6�8�b������?^;��E9�pr�O�UV�:kuOR�p���4bY�"!pׯ(��d.�@�uȝ�m���������v����Z���h�1Nrg��jf�v�ZL.EI�p|#!kr��	
 
+<<<<<<< HEAD
+Response:
+[EMPTY]
+==============================================
+2026-01-27 16:13:16.910 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 359s ago, last-write: 22s ago, unanswered-write: 22s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 17s ago, last-mbeat: 17s ago, global: 17s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.<GetResult>g__ThrowSocketException|10_0(SocketError e) in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 86
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-27 17:06:08.254 +05:00 [INF] Start processing HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923075709068&textmessage=849574%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 17:06:08.291 +05:00 [INF] Sending HTTP request GET https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+923075709068&textmessage=849574%20is%20your%20OTP%20to%20DHA%20Karachi%20mobile%20application.%20Do%20not%20share%20it%20with%20anyone.
+2026-01-27 17:06:09.860 +05:00 [INF] Received HTTP response headers after 1564.7591ms - 200
+2026-01-27 17:06:09.863 +05:00 [INF] End processing HTTP request after 1622.1046ms - 200
+2026-01-27 17:06:10.560 +05:00 [INF] [CQRS]
+TraceId  : 0HNITJHK776FD:0000000B
+Request  : OTPSendCommand
+Duration : 2523 ms
+2026-01-27 17:06:10.564 +05:00 [WRN] CMS Long Running Request: OTPSendCommand (2528 milliseconds)   {"Cnic":"3220384127171","$type":"OTPSendCommand"}
+2026-01-27 17:06:12.930 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000B
+Method   : POST
+Path     : /api/auth/reset-password
+Status   : 200
+Duration : 8503 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"status":200,"title":"OTP Verification Required","detail":"Authentication step completed.","data":{"name":"MUHAMMAD SULEMAN MADNI","isOtpRequired":true,"accessToken":"***","responseMessage":"An OTP has been sent to the mobile number registered with your membership 849574","mobileNumber":"***"}}
+==============================================
+2026-01-27 17:07:38.095 +05:00 [INF] [CQRS]
+TraceId  : 0HNITJHK776FD:0000000D
+Request  : VerifyOtpForPasswordResetCommand
+Duration : 32901 ms
+2026-01-27 17:07:38.135 +05:00 [WRN] CMS Long Running Request: VerifyOtpForPasswordResetCommand (32902 milliseconds) 67d5fada-4098-42f9-b791-26ed615b0864 3220384127171 {"OtpCode":"849574","$type":"VerifyOtpForPasswordResetCommand"}
+2026-01-27 17:07:38.144 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000D
+Method   : POST
+Path     : /api/auth/verify-frogetpassword-otp
+Status   : 200
+Duration : 44940 ms
+IP       : ::1
+
+Request:
+{
+  "otpCode": "849574"
+}
+
+Response:
+{"status":200,"title":"Proceed to reset password.","detail":"OTP verified successfully.","data":{"resetToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjY3ZDVmYWRhLTQwOTgtNDJmOS1iNzkxLTI2ZWQ2MTViMDg2NCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL21vYmlsZXBob25lIjoiOTIzMDc1NzA5MDY4IiwicHVycG9zZSI6InJlc2V0X3Bhc3N3b3JkIiwibmJmIjoxNzY5NTE1NjM3LCJleHAiOjE3Njk1MTU5MzcsImlzcyI6ImRoYWthcmFjaGkiLCJhdWQiOiJkaGFrYXJhY2hpbWVtYmVyIn0.-cN9ggYvQAKvpNrLVkbZOv8Hc33iOpQ4ZoHvltrXdDw","expiresAt":"2026-01-27T17:12:35.3149062+05:00"}}
+==============================================
+2026-01-27 17:09:35.461 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITJHK776FD:0000000F
+Method   : POST
+Path     : /api/auth/set-password
+Status   : 403
+Duration : 6 ms
+IP       : ::1
+
+Request:
+{
+  "password": "***"
+}
+
+Response:
+[EMPTY]
+==============================================
+=======
 D�~����V�S���S�rV�f�n���:���-EDsL�^i�˙O:zA�	���WO��{�����F�86�"�hG赫��g^Q����a�zw! ���P�Y����H߀� ��a���2�8��ř�Y�{&�H�S� ���Pu�Vl���v�1[V`�6%��ĝm�e�-W�7sg�wE��=�K�ЇN,|;��bh(�PJ��rQ[��&1q;i.f�'���fk�C�/x��.f�3x"Xdbo'w�
 ����Zr��3rW�̷����h�6T@<����8(s��eo���V7�M��Eq�]n;�0�9��X������؏�[_��]�g�ܾ9M���NL�&#Qba|'��B��T��H�7e?�Q��yh�sq��}'��C,d�=93�AU�s��$b����ח��x��	q�c����4vͰE�4�l�*�t(�T��nf�S3��� 8�I�~���x�f��X��=T�E�Y��ZD���g�=6�>z�`���b�|�Ap���Ld�N����g�$�̀�֬7�'���֮^J53O��`�n�����O���il(�RL��O�w^t�c�y�\���
 ��{��(���M(�rR^��@�^{;hGz��hw�3r��l$�Dp�#v����MH���(�Z.�z��a �}:����Ω�/�s���mB|=��b�̔IA�n0�6`1�+�R�v�^v�����t(�8�	CC���ȫ������s��&ec��=������BG�D�F�e&N�F�;�}0�Y���z�w�~@��-�G�\s�,$���ծe��Q�
@@ -1985,3 +2062,4 @@ Main
 Response:
 {"status":200,"title":"Success","detail":"Images added.","data":"ee18de9e-60c4-4dca-bac4-49f21432d148"}
 ==============================================
+>>>>>>> d35f12ea0318da43997e8ea7e37975face622c2c

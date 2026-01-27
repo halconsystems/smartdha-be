@@ -135,8 +135,8 @@ public class AuthController : BaseApiController
     //    return Ok(await Mediator.Send(request));
     //}
     [AllowAnonymous]
-    [HttpPost("Send-OTP")]
-    public async Task<IActionResult> SendOTP(OTPSendCommand request)
+    [HttpPost("Reset-Password")]
+    public async Task<IActionResult> ResetPassword(OTPSendCommand request)
     {
         return Ok(await Mediator.Send(request));
     }
