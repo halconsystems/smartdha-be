@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
-public record AppUserLoginCommand : IRequest<SuccessResponse<MobileAuthenticationDto>>
+public record   AppUserLoginCommand : IRequest<SuccessResponse<MobileAuthenticationDto>>
 {
     public string CNIC { get; set; } = default!;
     public string Password { get; set; } = default!;
@@ -46,6 +46,7 @@ public class AppUserLoginHandler : IRequestHandler<AppUserLoginCommand, SuccessR
     }
     public async Task<SuccessResponse<MobileAuthenticationDto>> Handle(AppUserLoginCommand request, CancellationToken cancellationToken)
     {
+
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CNIC == request.CNIC);
 
         if (user == null)

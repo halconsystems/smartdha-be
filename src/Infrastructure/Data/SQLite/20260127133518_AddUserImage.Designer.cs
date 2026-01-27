@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127133518_AddUserImage")]
+    partial class AddUserImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5543,88 +5546,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                     b.ToTable("UserLoginAudits");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMemberProfile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("AllReplot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CellNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DOB")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemPk")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NIC")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<string>("StaffNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(85)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserMemberProfiles");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMembershipPurpose", b =>
                 {
                     b.Property<Guid>("Id")
@@ -6705,17 +6626,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserLoginAudit", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserMemberProfile", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
