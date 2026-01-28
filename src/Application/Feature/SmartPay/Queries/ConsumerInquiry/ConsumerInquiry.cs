@@ -19,6 +19,7 @@ public class ConsumerInquiryQueryHandler
     private readonly IPMSApplicationDbContext _db;
     private readonly ICurrentUserService _current;
 
+
     public ConsumerInquiryQueryHandler(IPMSApplicationDbContext db, ICurrentUserService current)
     {
        // _smartPayService = smartPayService;

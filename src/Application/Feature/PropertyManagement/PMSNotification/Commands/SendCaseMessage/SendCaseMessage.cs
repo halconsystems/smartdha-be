@@ -64,7 +64,9 @@ public class SendCaseMessageHandler
             Guid.TryParse(c.CreatedBy, out var createdByUserId))
         {
             getToken = await _appDb.Set<UserDevices>()
-                .FirstOrDefaultAsync(x => x.UserId == createdByUserId, ct);
+                 .Where(x => x.UserId == createdByUserId && x.IsActive == true && x.IsDeleted != true)
+                 .OrderByDescending(x => x.Created)
+                 .FirstOrDefaultAsync(ct);
         }
 
         if (getToken == null)

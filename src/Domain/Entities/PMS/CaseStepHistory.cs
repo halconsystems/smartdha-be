@@ -19,6 +19,7 @@ public class CaseStepHistory : BaseAuditableEntity
 
     // 🔹 Directorate snapshot
     public Guid DirectorateId { get; set; }
+    public Directorate Directorate { get; set; } = default!;
     public string DirectorateName { get; set; } = default!;
 
     // 🔹 Module snapshot

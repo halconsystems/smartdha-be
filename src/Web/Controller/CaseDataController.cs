@@ -8,6 +8,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseDashboard;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseMessageLogs;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetFeeDefinitionByCaseId;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.GenerateCaseBill;
@@ -116,6 +117,16 @@ public class CaseDataController : BaseApiController
         return Ok(await _mediator.Send(
             new GetFeeDefinitionByProcessIdQuery(processId), ct));
     }
+
+    [HttpGet("by-case/{caseId:guid}")]
+    public async Task<IActionResult> GetFeeByCase(
+    Guid caseId,
+    CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(
+            new GetFeeDefinitionByCaseIdQuery(caseId), ct));
+    }
+
 
     [HttpGet("{caseId:guid}/workflow")]
     public async Task<IActionResult> GetWorkflow(Guid caseId, CancellationToken ct)
@@ -257,7 +268,6 @@ public class ForwardExternalRequest
     // per-file remarks (same index as Files)
     public List<string>? FileRemarks { get; set; }
 }
-
 public record GenerateBillRequest(
        Guid FeeDefinitionId,
        Guid? FeeOptionId

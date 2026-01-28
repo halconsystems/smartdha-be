@@ -198,6 +198,8 @@ public static class DependencyInjection
         services.AddScoped<IFirebaseTokenProvider, FirebaseTokenProvider>();
 
         services.AddSingleton<IVehicleLocationStore, VehicleLocationStore>();
+        services.AddScoped<IRoleService, RoleService>();
+
 
 
         return services;

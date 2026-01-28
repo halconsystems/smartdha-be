@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.GenerateCaseBill;
 public record GenerateCaseBillCommand(
@@ -18,10 +22,18 @@ public class GenerateCaseBillHandler
     : IRequestHandler<GenerateCaseBillCommand, ApiResult<Guid>>
 {
     private readonly IPMSApplicationDbContext _db;
+    private readonly ISmsService _sms;
+    private readonly INotificationService _notify;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IApplicationDbContext _appDb;
 
-    public GenerateCaseBillHandler(IPMSApplicationDbContext db)
+    public GenerateCaseBillHandler(IPMSApplicationDbContext db, ISmsService sms, INotificationService notify, UserManager<ApplicationUser> userManager, IApplicationDbContext appDb)
     {
         _db = db;
+        _sms = sms;
+        _notify = notify;
+        _userManager = userManager;
+        _appDb = appDb;
     }
 
     public async Task<ApiResult<Guid>> Handle(
@@ -163,6 +175,32 @@ public class GenerateCaseBillHandler
 
         _db.Set<CaseFeeReceipt>().Add(bill);
         await _db.SaveChangesAsync(ct);
+
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == c.CreatedBy);
+        if (user != null)
+        {
+            UserDevices? getToken = null;
+
+            if (!string.IsNullOrWhiteSpace(c.CreatedBy) &&
+                Guid.TryParse(c.CreatedBy, out var createdByUserId))
+            {
+                getToken = await _appDb.Set<UserDevices>()
+                .Where(x => x.UserId == createdByUserId && x.IsActive ==true && x.IsDeleted !=true)
+                .OrderByDescending(x => x.Created)
+                .FirstOrDefaultAsync(ct);
+            }
+
+            if (getToken == null)
+                return ApiResult<Guid>.Fail("User not found.");
+            if (getToken.FCMToken == null)
+                return ApiResult<Guid>.Fail("User Token found.");
+
+            var message = $"Dear {user.Name}, a new bill of amount {totalPayable:C} has been generated for your case (ID: {c.Id}). Please proceed to payment in mobile application.";
+            await _notify.SendFirebasePMSNotificationAsync(getToken.FCMToken, "New Bill Generated", message, ct);
+
+            if(user.RegisteredMobileNo !=null)
+                await _sms.SendSmsAsync(user.RegisteredMobileNo, message, ct);
+        }
 
         return ApiResult<Guid>.Ok(bill.Id, "Bill generated successfully.");
     }

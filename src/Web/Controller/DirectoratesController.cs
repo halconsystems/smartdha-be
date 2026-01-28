@@ -2,6 +2,7 @@
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.DeleteDirectorate;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.UpdateDirectorate;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Queries.GetDirectorates;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Queries.GetRolesByModuleDerived;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,15 @@ public class DirectoratesController : BaseApiController
     [HttpPost]
     public async Task<IActionResult> Create(CreateDirectorateCommand cmd, CancellationToken ct)
         => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpGet("modules/{moduleId:guid}/roles")]
+    public async Task<IActionResult> GetRolesByModule(Guid moduleId)
+    {
+        var result = await _mediator.Send(
+            new GetRolesByModuleDerivedQuery(moduleId));
+
+        return Ok(result);
+    }
 
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken ct)
@@ -37,6 +47,8 @@ public class DirectoratesController : BaseApiController
         Guid id,
         CancellationToken ct)
         => Ok(await _mediator.Send(new DeleteDirectorateCommand(id), ct));
+
+    
 }
 public record UpdateDirectorateCommandBody(
     string Name,
