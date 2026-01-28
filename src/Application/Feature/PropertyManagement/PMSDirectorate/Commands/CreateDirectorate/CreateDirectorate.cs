@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.CreateDirectorate;
-public record CreateDirectorateCommand(string Name, string Code,Guid ModuleId) : IRequest<ApiResult<Guid>>;
+public record CreateDirectorateCommand(string Name, string Code,Guid ModuleId,Guid RoleId) : IRequest<ApiResult<Guid>>;
 
 public class CreateDirectorateHandler : IRequestHandler<CreateDirectorateCommand, ApiResult<Guid>>
 {
@@ -26,7 +26,8 @@ public class CreateDirectorateHandler : IRequestHandler<CreateDirectorateCommand
         {
             Name = request.Name.Trim(),
             Code = request.Code.Trim().ToUpperInvariant(),
-            ModuleId = request.ModuleId
+            ModuleId = request.ModuleId,
+            RoleId = request.RoleId
         };
 
         _db.Set<Directorate>().Add(entity);

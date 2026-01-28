@@ -16,4 +16,5 @@ public class Directorate : BaseAuditableEntity
     [Required, MaxLength(20)]
     public string Code { get; set; } = default!;
     public Guid ModuleId { get; set; } = default!;
+    public Guid RoleId { get; set; } = default!;
     }

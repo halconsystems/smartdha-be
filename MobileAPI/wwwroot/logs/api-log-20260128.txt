@@ -868,3 +868,21 @@ Response:
 {"bookingCode":"GB-20260127-000001","groundName":"Sports Club","bookingDescription":"Check","groundType":"CricketGround","groundCategory":"Academy","id":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-27T00:00:00","totalPrice":"4955","slotsCount":"1","slots":[{"bookingId":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundBooking":null,"slotId":"ab6e100b-10bc-4b7e-9ab6-8d9cbaa29191","groundSlots":null,"slotPrice":"5000","created":"2026-01-27T17:12:39.3336761","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-27T17:12:39.3336761","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":4,"id":"f770bbce-379d-4f23-a751-a0049bdbf353"}],"orderDTiD":null,"groundSettings":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","settingId":"d7324b19-966c-488e-a1fa-8bcd70825aab","setting":null,"dtCode":"MEM","isDiscount":true,"created":"2026-01-21T10:49:35.8800349","createdBy":null,"lastModified":"2026-01-21T10:49:35.8800349","lastModifiedBy":null,"isDeleted":false,"isActive":true,"ser":2,"id":"ea9bd624-f559-427a-891a-fdcafbafebeb"}],"groundImages":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front","created":"2026-01-21T11:49:07.5217118","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:49:07.5217118","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":1,"id":"b5442f34-e097-4dec-ae97-234a1a626803"}],"paymentMethod":"Cash","mainImage":null}
 >>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 ==============================================
+2026-01-28 01:34:42.761 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSDTEK5TH:00000001
+Request  : ConsumerInquiryQuery
+Duration : 452 ms
+2026-01-28 01:34:42.800 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSDTEK5TH:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 716 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================

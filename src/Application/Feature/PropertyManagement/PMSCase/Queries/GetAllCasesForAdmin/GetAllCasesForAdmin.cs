@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetAllCasesForAdmin;
 
@@ -78,6 +80,12 @@ public class GetAllCasesForAdminHandler
         if (!myModuleIds.Any())
             return ApiResult<List<AdminCaseSummaryDto>>.Ok(new());
 
+
+        var userRoleIds = await _applicationDbContext.AppUserRoles
+    .Where(ur => ur.UserId == userId)
+    .Select(ur => ur.RoleId)
+    .ToListAsync(ct);
+
         var raw = await (
         from c in _db.Set<PropertyCase>().AsNoTracking()
         join ps in _db.Set<ProcessStep>().AsNoTracking()
@@ -85,8 +93,9 @@ public class GetAllCasesForAdminHandler
         where
         c.IsActive ==true &&
         c.IsDeleted !=true &&
-        myModuleIds.Contains(ps.Directorate.ModuleId)
-         orderby c.Created descending
+        myModuleIds.Contains(ps.Directorate.ModuleId) &&
+        userRoleIds.Contains(ps.Directorate.RoleId)   // ✅ KEY FIX
+        orderby c.Created descending
          select new
          {
              CaseId = c.Id,
@@ -110,6 +119,10 @@ public class GetAllCasesForAdminHandler
              AssignedUserId = c.CurrentAssignedUserId,
              CaseDirectorate= c.Directorate!.Name,
          }).ToListAsync(ct);
+
+
+
+
 
         var assignedUserIds = raw
         .Where(x => x.AssignedUserId != null)

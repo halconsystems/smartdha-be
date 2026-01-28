@@ -26,7 +26,7 @@ public class GetFeeCategoriesHandler
     {
         var list = await _db.Set<FeeCategory>()
             .OrderBy(x => x.Code)
-            .Select(x => new IdNameDto(x.Id, x.Name, x.Code, ""))
+            .Select(x => new IdNameDto(x.Id, x.Name, x.Code, "", ""))
             .ToListAsync(ct);
 
         return ApiResult<List<IdNameDto>>.Ok(list);
