@@ -25,6 +25,7 @@ using DHAFacilitationAPIs.Application.Feature.ReligonSect.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static DHAFacilitationAPIs.Application.Feature.Orders.Queries.OrderDashBoardDTO;
 
 namespace DHAFacilitationAPIs.Web.Controller;
 
@@ -68,5 +69,8 @@ public class LMSController : BaseApiController
         var result = await _mediator.Send(new GetOrderHistoryIdQuery(Id), ct);
         return Ok(result);
     }
+    [HttpGet("Dashboard")]
+    public Task<OrderDashboardSummaryDto> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
+        => _mediator.Send(new GetOrderDashboardSummaryQuery(from, to));
 
 }

@@ -35,6 +35,7 @@ public class OrderDTO
     public DateTime? OrderDate { get; set; }
     public PaymentMethod? PaymentMethod { get; set; }
     public OrderStatus? OrderStatus {  get; set; }
+    public OrderDispatchStatus? OrderDispatchStatus {  get; set; }
     public string? ShopName { get; set; }
 
 }

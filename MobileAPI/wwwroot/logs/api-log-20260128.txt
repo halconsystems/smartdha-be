@@ -251,3 +251,31 @@ Request:
 Response:
 {"bookingCode":"GB-20260127-000001","groundName":"Sports Club","bookingDescription":"Check","groundType":"CricketGround","groundCategory":"Academy","id":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-27T00:00:00","totalPrice":"4955","slotsCount":"1","slots":[{"bookingId":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundBooking":null,"slotId":"ab6e100b-10bc-4b7e-9ab6-8d9cbaa29191","groundSlots":null,"slotPrice":"5000","created":"2026-01-27T17:12:39.3336761","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-27T17:12:39.3336761","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":4,"id":"f770bbce-379d-4f23-a751-a0049bdbf353"}],"orderDTiD":null,"groundSettings":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","settingId":"d7324b19-966c-488e-a1fa-8bcd70825aab","setting":null,"dtCode":"MEM","isDiscount":true,"created":"2026-01-21T10:49:35.8800349","createdBy":null,"lastModified":"2026-01-21T10:49:35.8800349","lastModifiedBy":null,"isDeleted":false,"isActive":true,"ser":2,"id":"ea9bd624-f559-427a-891a-fdcafbafebeb"}],"groundImages":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front","created":"2026-01-21T11:49:07.5217118","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:49:07.5217118","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":1,"id":"b5442f34-e097-4dec-ae97-234a1a626803"}],"paymentMethod":"Cash","mainImage":null}
 ==============================================
+2026-01-28 16:43:45.356 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUC9BTR20H:0000000B
+Request  : HangerPriceAdjustmentQuery
+Duration : 23087 ms
+2026-01-28 16:43:45.559 +05:00 [WRN] CMS Long Running Request: HangerPriceAdjustmentQuery (23111 milliseconds) a02644dd-a143-4d47-8e5e-704c1658c31f 4220199802729 {"PackageId":"a1769f24-74bc-4cbe-8d05-52082971244d","$type":"HangerPriceAdjustmentQuery"}
+2026-01-28 16:43:45.581 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUC9BTR20H:0000000B
+Method   : GET
+Path     : /api/laundry/get-laundryitemsafterhangerprice
+Status   : 200
+Duration : 23621 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"2027347a-14a3-45f2-9bc4-1c3856e60260","name":"Qameez Cotton Plain","displayName":"Qameez Cotton Plain","code":"QAMEEZ CO","categoryID":"dc216cec-a275-49e3-af93-b754e88baae2","itemPrice":"140","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/2027347a-14a3-45f2-9bc4-1c3856e60260/0e84235a9a944821b31d30ff4fff0012.jpg"},{"id":"3bf9b331-ed28-448d-8c1f-416f2dc8e94d","name":"Kurta Plain (Cotton - Blended)","displayName":"Kurta Plain (Cotton - Blended)","code":"KURTA PLAIN (CO","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/3bf9b331-ed28-448d-8c1f-416f2dc8e94d/fcd5db18216c45a8928140579c20030e.jpg"},{"id":"b882be45-7c2e-4ab8-bf75-7e62b53c384a","name":"Pillow Cover (Cotton- Blended Plain)","displayName":"Pillow Cover (Cotton- Blended Plain)","code":"PILLOW COVER (COTT","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/b882be45-7c2e-4ab8-bf75-7e62b53c384a/37a367f98b3e45448c9e95b5658d5659.jpg"},{"id":"422f110c-186f-4408-8995-8d08dad5c109","name":"Shirt Plain (cotton-blended)","displayName":"Shirt Plain (cotton-blended)","code":"SHIRT PLAIN (C","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":"https://gw.dhakarachi.org/CBMS/LaundryItems/422f110c-186f-4408-8995-8d08dad5c109/06fcd46b28374d03a0a4b8c6645630b2.jpg"},{"id":"f838ee1e-492b-4cf6-81c6-b044e52800f8","name":"T Shirt Non Branded","displayName":"T Shirt Non Branded","code":"T SHIRT N","categoryID":"900057ce-dffe-48a6-8ff7-d85d0270aac4","itemPrice":"140","image":null},{"id":"678c7855-630d-4fab-997d-b78f7c091f06","name":"Bed Sheet Single (Cotton - Blended Plain)","displayName":"Bed Sheet Single (Cotton - Blended Plain)","code":"BED SHEET SINGLE (CO","categoryID":"b33a0c03-4ed3-47b6-9753-ea22e76b4302","itemPrice":"100","image":null}]
+==============================================
+2026-01-28 17:04:40.733 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 415s ago, last-write: 20s ago, unanswered-write: 20s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---

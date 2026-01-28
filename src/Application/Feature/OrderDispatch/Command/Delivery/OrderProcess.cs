@@ -33,12 +33,10 @@ public class OrdersProcessAtShopCommandHandler
 
     public async Task<Guid> Handle(OrdersProcessAtShopCommand request, CancellationToken ct)
     {
-        await using var transaction = await _laundrySystemDb.Database.BeginTransactionAsync(ct);
         try
         {
             // Get Panic
             var order = await _laundrySystemDb.Orders
-                .Include(x => x.OrderType)
                 .FirstOrDefaultAsync(p => p.Id == request.OrderId, ct)
                 ?? throw new NotFoundException(nameof(Domain.Entities.LMS.Orders), request.OrderId.ToString());
 
@@ -50,8 +48,8 @@ public class OrdersProcessAtShopCommandHandler
             // Fetch dispatch
             dispatch = await _laundrySystemDb.OrderDispatches
                 .Include(d => d.Orders)
-                .FirstOrDefaultAsync(d => d.OrdersId == request.OrderId, ct)
-                ?? throw new NotFoundException("Dispatch not found", request.OrderId.ToString());
+                .FirstOrDefaultAsync(d => d.OrdersId == request.OrderId && (d.Status == OrderDispatchStatus.DeliveredToShop || d.Status == OrderDispatchStatus.WashnPressProcess), ct)
+                ?? throw new NotFoundException("Dispatch not Reached On Shop Yet", request.OrderId.ToString());
 
             if (request.WashProcess)    
             {
@@ -61,7 +59,7 @@ public class OrdersProcessAtShopCommandHandler
                 dispatch.Status = OrderDispatchStatus.WashnPressProcess;
 
             }
-            else
+            else if(dispatch.Status == OrderDispatchStatus.WashnPressProcess)
             {
                 order.ParcelReadyAt = DateTime.Now;
                 order.OrderStatus = OrderStatus.InProgress;
