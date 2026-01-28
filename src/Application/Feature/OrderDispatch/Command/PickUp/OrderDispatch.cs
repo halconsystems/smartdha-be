@@ -123,7 +123,7 @@ public class AssignOrderDispatchCommandHandler
             }
 
             // Mark vehicle busy
-            vehicle.Status = ShopVehicleStatus.Busy;
+            //vehicle.Status = ShopVehicleStatus.Busy;
 
             await _laundrySystemDb.SaveChangesAsync(ct);
             return dispatch.Id;

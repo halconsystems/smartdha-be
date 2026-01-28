@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
+using Microsoft.AspNetCore.Components;
 
 namespace DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 
@@ -72,6 +73,11 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
         if(DeliveryDetails == null)
             throw new KeyNotFoundException("Delivery Not Found.");
 
+        var dispatch = await _context.OrderDispatches
+           .Include(d => d.Orders)
+           .Include(d => d.PickupShopVehicles)
+           .FirstOrDefaultAsync(d => orders.Select(x => x.Id).Contains(d.OrdersId), ct);
+
         //var confirmedOrder = await _context.ConfirmedOrders.Where(x => orders.Select(x => x.Id).Contains(x.OrderId))
         //    .AsNoTracking().FirstOrDefaultAsync(ct);
 
@@ -90,7 +96,9 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             OrderStatus = x.OrderStatus,
             ShopName = OrderShop?.FirstOrDefault(s => s.Id == x.ShopId)?.DisplayName,
             OrderType = x.OrderType,
-            OrderUniqueId = x.UniqueFormID
+            OrderUniqueId = x.UniqueFormID,
+            OrderDispatchStatus = dispatch?.Status
+
         }).ToList();
 
         return result;

@@ -76,7 +76,7 @@ public class ReachedPickupOrderDispatchHandler
             dispatch = await _laundry.OrderDispatches
             .Include(d => d.Orders)
             .Include(d => d.PickupShopVehicles)
-            .FirstOrDefaultAsync(d => d.Id == request.DispatchId, ct)
+            .FirstOrDefaultAsync(d => d.Id == request.DispatchId && d.Status == OrderDispatchStatus.Acknowledged, ct)
             ?? throw new NotFoundException("Dispatch not found");
         }
         else
@@ -84,7 +84,7 @@ public class ReachedPickupOrderDispatchHandler
             dispatch = await _laundry.OrderDispatches
             .Include(d => d.Orders!)
             .Include(d => d.DeliverShopVehicles)
-            .FirstOrDefaultAsync(d => d.Id == request.DispatchId, ct)
+            .FirstOrDefaultAsync(d => d.Id == request.DispatchId && d.Status == OrderDispatchStatus.ParcelReady, ct)
             ?? throw new NotFoundException("Dispatch not found");
         }
         if (dispatch == null)
@@ -126,57 +126,57 @@ public class ReachedPickupOrderDispatchHandler
                     throw new UnauthorizedAccessException("You are not assigned to this vehicle.");
 
 
-                VehicleLocationDto? location = null;
-                if (dispatch.PickupVehicleId.HasValue)
-                {
-                    location = await _fileService.GetLocationAsync(dispatch.PickupVehicleId.Value);
-                }
+                //VehicleLocationDto? location = null;
+                //if (dispatch.PickupVehicleId.HasValue)
+                //{
+                //    location = await _fileService.GetLocationAsync(dispatch.PickupVehicleId.Value);
+                //}
 
 
-                if (location != null)
-                {
-                    dispatch.AcceptedAtLatitude = location.Latitude;
-                    dispatch.AcceptedAtLongitude = location.Longitude;
-                    dispatch.LastLocationUpdateAt = location.LastLocationUpdateAt;
-                    dispatch.AcceptedAtAddress = await _geocodingService.GetAddressFromLatLngAsync(location.Latitude, location.Longitude, ct);
+                //if (location != null)
+                //{
+                //    dispatch.AcceptedAtLatitude = location.Latitude;
+                //    dispatch.AcceptedAtLongitude = location.Longitude;
+                //    dispatch.LastLocationUpdateAt = location.LastLocationUpdateAt;
+                //    dispatch.AcceptedAtAddress = await _geocodingService.GetAddressFromLatLngAsync(location.Latitude, location.Longitude, ct);
 
-                    // 📏 Calculate distance (panic → vehicle)
-                    dispatch.DistanceFromOrderKm =
-                        GeoDistanceHelper.CalculateKm(
-                            dispatch.Orders.PickupLatitude,
-                            dispatch.Orders.PickupLongitude,
-                            location.Latitude,
-                            location.Longitude
-                        );
-                }
+                //    // 📏 Calculate distance (panic → vehicle)
+                //    dispatch.DistanceFromOrderKm =
+                //        GeoDistanceHelper.CalculateKm(
+                //            dispatch.Orders.PickupLatitude,
+                //            dispatch.Orders.PickupLongitude,
+                //            location.Latitude,
+                //            location.Longitude
+                //        );
+                //}
                 if (request.Accept)
                 {
                     // Update dispatch status
                     dispatch.Status = OrderDispatchStatus.RiderOnTheWay;
 
                     // Optional: update vehicle status (if required)
-                    vehicleDetails.Status = ShopVehicleStatus.Busy;
+                    //vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else if (request.ReachedToPickup)
                 {
                     dispatch.Status = OrderDispatchStatus.RiderArrivedToAddress;
 
                     // Optional: update vehicle status (if required)
-                    vehicleDetails.Status = ShopVehicleStatus.Busy;
+                    //vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else if (request.PickUpParcel)
                 {
                     dispatch.Status = OrderDispatchStatus.ParcelPickedParcelFromAddress;
 
                     // Optional: update vehicle status (if required)
-                    vehicleDetails.Status = ShopVehicleStatus.Busy;
+                    //vehicleDetails.Status = ShopVehicleStatus.Busy;
                 }
                 else if(request.Delivered)
                 {
                     dispatch.Status = OrderDispatchStatus.DeliveredToShop;
 
                     // Optional: update vehicle status (if required)
-                    vehicleDetails.Status = ShopVehicleStatus.Available;
+                    //vehicleDetails.Status = ShopVehicleStatus.Available;
                 }
             }
             else
@@ -210,30 +210,30 @@ public class ReachedPickupOrderDispatchHandler
                 if (dispatch.Status != OrderDispatchStatus.AssignedToRider)
                     throw new InvalidOperationException("Dispatch cannot be accepted at this stage.");
 
-                VehicleLocationDto? location = null;
-                if (dispatch.DeliverVehicleId.HasValue)
-                {
-                    location = await _fileService.GetLocationAsync(dispatch.DeliverVehicleId.Value);
-                }
+                //VehicleLocationDto? location = null;
+                //if (dispatch.DeliverVehicleId.HasValue)
+                //{
+                //    location = await _fileService.GetLocationAsync(dispatch.DeliverVehicleId.Value);
+                //}
 
 
 
-                if (location != null)
-                {
-                    dispatch.AcceptedAtLatitude = location.Latitude;
-                    dispatch.AcceptedAtLongitude = location.Longitude;
-                    dispatch.LastLocationUpdateAt = location.LastLocationUpdateAt;
-                    dispatch.AcceptedAtAddress = await _geocodingService.GetAddressFromLatLngAsync(location.Latitude, location.Longitude, ct);
+                //if (location != null)
+                //{
+                //    dispatch.AcceptedAtLatitude = location.Latitude;
+                //    dispatch.AcceptedAtLongitude = location.Longitude;
+                //    dispatch.LastLocationUpdateAt = location.LastLocationUpdateAt;
+                //    dispatch.AcceptedAtAddress = await _geocodingService.GetAddressFromLatLngAsync(location.Latitude, location.Longitude, ct);
 
-                    // 📏 Calculate distance (panic → vehicle)
-                    dispatch.DistanceFromOrderKm =
-                        GeoDistanceHelper.CalculateKm(
-                            dispatch.Orders.PickupLatitude,
-                            dispatch.Orders.PickupLongitude,
-                            location.Latitude,
-                            location.Longitude
-                        );
-                }
+                //    // 📏 Calculate distance (panic → vehicle)
+                //    dispatch.DistanceFromOrderKm =
+                //        GeoDistanceHelper.CalculateKm(
+                //            dispatch.Orders.PickupLatitude,
+                //            dispatch.Orders.PickupLongitude,
+                //            location.Latitude,
+                //            location.Longitude
+                //        );
+                //}
                 if (request.Accept)
                 {
                     // Update dispatch status
@@ -275,31 +275,28 @@ public class ReachedPickupOrderDispatchHandler
         return dispatch.Id.ToString();
     }
 
-    public static class GeoDistanceHelper
-    {
-        private const double EarthRadiusKm = 6371;
+    //public static class GeoDistanceHelper
+    //{
+    //    private const double EarthRadiusKm = 6371;
 
-        public static double CalculateKm(double lat1, double lon1, double lat2, double lon2)
-        {
-            double dLat = ToRad(lat2 - lat1);
-            double dLon = ToRad(lon2 - lon1);
+    //    public static double CalculateKm(double lat1, double lon1, double lat2, double lon2)
+    //    {
+    //        double dLat = ToRad(lat2 - lat1);
+    //        double dLon = ToRad(lon2 - lon1);
 
-            lat1 = ToRad(lat1);
-            lat2 = ToRad(lat2);
+    //        lat1 = ToRad(lat1);
+    //        lat2 = ToRad(lat2);
 
-            double a =
-                Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                Math.Cos(lat1) * Math.Cos(lat2) *
-                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+    //        double a =
+    //            Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+    //            Math.Cos(lat1) * Math.Cos(lat2) *
+    //            Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return EarthRadiusKm * c;
-        }
+    //        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+    //        return EarthRadiusKm * c;
+    //    }
 
-        private static double ToRad(double deg) => deg * (Math.PI / 180);
-    }
-
-
+    //    private static double ToRad(double deg) => deg * (Math.PI / 180);
 }
 
 
