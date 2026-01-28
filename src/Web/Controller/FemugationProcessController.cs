@@ -1,7 +1,11 @@
-﻿using DHAFacilitationAPIs.Application.Feature.Fumigation.FumigationProcess.Command;
+﻿using DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationDashboard.Queries;
+using DHAFacilitationAPIs.Application.Feature.Fumigation.FumigationProcess.Command;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FumigationProcess.Queries;
+using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.CompletePanicDispatch;
 using Microsoft.AspNetCore.Mvc;
+using static DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationDashboard.Queries.FemugationDashBoardDTO;
+using static DHAFacilitationAPIs.Application.Feature.Orders.Queries.OrderDashBoardDTO;
 
 namespace DHAFacilitationAPIs.Web.Controller;
 
@@ -34,4 +38,9 @@ public class FemugationProcessController : BaseApiController
         var result = await _med.Send(new FemugationHistoryQuery(Id));
         return Ok(result);
     }
+
+    [HttpGet("Dashboard")]
+    public Task<FemugationDashboardSummaryDto> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
+        => _med.Send(new GetFemugationDashboardSummaryQuery(from, to));
+
 }
