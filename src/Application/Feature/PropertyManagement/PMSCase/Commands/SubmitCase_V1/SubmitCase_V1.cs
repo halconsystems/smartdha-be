@@ -92,7 +92,9 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
 
         Guid getModuleId = getDirect.ModuleId;
 
-        var caseNo = $"PMS-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
+        var random = Random.Shared.Next(100, 999);
+        var caseNo = $"PMS-{DateTime.Now:yyMMdd}-{random}";
+        //var caseNo = $"PMS-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
         var c = new PropertyCase
         {
             UserPropertyId = r.UserPropertyId,

@@ -182,7 +182,7 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
         }
         var random = new Random();
         var userOtp = random.Next(100000, 999999); // generates a 6-digit number
-        if (!string.IsNullOrWhiteSpace(cellno) && cellno.Length == 11 && cellno.StartsWith("0") && cellno.All(char.IsDigit))
+        if (!string.IsNullOrWhiteSpace(cellno) && cellno.Length == 12 && !cellno.StartsWith("0") && cellno.All(char.IsDigit))
         {
             var newUser = new ApplicationUser
             {

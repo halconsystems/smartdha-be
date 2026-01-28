@@ -1,3 +1,309 @@
+<<<<<<< HEAD
+2026-01-28 00:57:03.609 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6ME:0000000B
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 6276 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Unauthorized."}
+==============================================
+2026-01-28 00:59:58.877 +05:00 [INF] [CQRS]
+TraceId  : 0HNITROODL6MG:00000001
+Request  : ConsumerInquiryQuery
+Duration : 161519 ms
+2026-01-28 00:59:59.226 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6MG:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 161973 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:01:42.420 +05:00 [INF] [CQRS]
+TraceId  : 0HNITROODL6MI:00000001
+Request  : ConsumerInquiryQuery
+Duration : 98952 ms
+2026-01-28 01:01:42.638 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6MI:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 99186 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:01:53.895 +05:00 [INF] [CQRS]
+TraceId  : 0HNITROODL6MK:00000001
+Request  : ConsumerInquiryQuery
+Duration : 8228 ms
+2026-01-28 01:01:54.102 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6MK:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 8435 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:02:50.162 +05:00 [INF] [CQRS]
+TraceId  : 0HNITROODL6MK:00000002
+Request  : ConsumerInquiryQuery
+Duration : 50143 ms
+2026-01-28 01:02:50.351 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6MK:00000002
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 50333 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:04:43.840 +05:00 [INF] [CQRS]
+TraceId  : 0HNITROODL6MM:00000001
+Request  : ConsumerInquiryQuery
+Duration : 53432 ms
+2026-01-28 01:04:44.042 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITROODL6MM:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 56605 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:06:37.000 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRU3E457Q:00000001
+Request  : ConsumerInquiryQuery
+Duration : 11723 ms
+2026-01-28 01:06:37.321 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRU3E457Q:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 16863 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:08:03.979 +05:00 [INF] [CQRS]
+TraceId  : 0HNITRV2GP23M:00000001
+Request  : ConsumerInquiryQuery
+Duration : 892 ms
+2026-01-28 01:08:04.319 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRV2GP23M:00000001
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 3781 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:09:12.446 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITRVFEOA9L:0000000B
+Method   : GET
+Path     : /api/smartpay/consumerinquiry/03075709068
+Status   : 500
+Duration : 3562 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Unauthorized."}
+==============================================
+2026-01-28 01:12:58.390 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS1P7O65A:00000001
+Method   : GET
+Path     : /api/smartpay/MyConsumerInquiry
+Status   : 404
+Duration : 176 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-28 01:13:23.464 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS1P7O65A:00000002
+Request  : ConsumerInquiryQuery
+Duration : 8528 ms
+2026-01-28 01:13:23.756 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS1P7O65A:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 8841 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:14:54.448 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS2RTO0EB:00000001
+Request  : ConsumerInquiryQuery
+Duration : 2910 ms
+2026-01-28 01:14:54.773 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS2RTO0EB:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 3457 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:15:36.925 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS37LUJKQ:00000001
+Request  : ConsumerInquiryQuery
+Duration : 7135 ms
+2026-01-28 01:15:37.241 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS37LUJKQ:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 7549 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:16:34.432 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS3PS8KEP:00000001
+Request  : ConsumerInquiryQuery
+Duration : 3427 ms
+2026-01-28 01:16:34.724 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS3PS8KEP:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 3938 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:20:57.933 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS67NJK36:00000001
+Request  : ConsumerInquiryQuery
+Duration : 5447 ms
+2026-01-28 01:20:58.267 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS67NJK36:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 6001 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:22:54.521 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS67NJK36:00000002
+Request  : ConsumerInquiryQuery
+Duration : 100874 ms
+2026-01-28 01:22:54.752 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS67NJK36:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 101110 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:24:31.305 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS88L99TP:00000001
+Request  : ConsumerInquiryQuery
+Duration : 482 ms
+2026-01-28 01:24:31.643 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS88L99TP:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 1031 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:26:42.062 +05:00 [INF] [CQRS]
+TraceId  : 0HNITS9G0K7FO:00000001
+Request  : ConsumerInquiryQuery
+Duration : 270 ms
+2026-01-28 01:26:42.091 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITS9G0K7FO:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 459 ms
+=======
 2026-01-28 00:45:34.778 +05:00 [ERR] An error occurred while initialising the database.
 Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
  ---> System.ComponentModel.Win32Exception (53): The network path was not found.
@@ -41,12 +347,27 @@ Method   : GET
 Path     : /api/groundbooking/search-grounds
 Status   : 200
 Duration : 179493 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase Phase 8 - Sector Phase 8 - Property DHA-P8-KHI-001 - Plot Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:27:51.806 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSA485NG1:00000001
+Request  : ConsumerInquiryQuery
+Duration : 522 ms
+2026-01-28 01:27:52.174 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSA485NG1:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 1108 ms
+=======
 [{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":1,"bookedCount":2,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
 ==============================================
 2026-01-28 00:53:19.823 +05:00 [INF] [CQRS]
@@ -130,12 +451,27 @@ Method   : GET
 Path     : /api/groundbooking/search-grounds
 Status   : 200
 Duration : 4684 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:28:23.343 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSADSAC8E:00000001
+Request  : ConsumerInquiryQuery
+Duration : 528 ms
+2026-01-28 01:28:23.691 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSADSAC8E:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 1132 ms
+=======
 [{"id":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","clubId":null,"clubName":"","groundCategory":"Academy","groundType":"CricketGround","groundName":"Sports Club","groundDescription":"Sports Club","location":"DHA Karachi","contactNumber":"03242796067","accountNo":"0651498412","accountNoAccronym":"2244","mainImageUrl":"https://gw.dhakarachi.org/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","slotCount":"3","availableCount":2,"bookedCount":1,"groundImages":null,"slots":null,"groundStandtardTimes":null,"groundStandtardTime":{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","grounds":null,"checkInTime":"21:00:00","checkOutTime":"23:00:00","created":"2026-01-21T11:29:12.872981","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:29:12.872981","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":4,"id":"ede4cbfa-4bcd-4323-b771-c9a9b4efdb83"},"action":"Booked"}]
 ==============================================
 2026-01-28 00:55:53.020 +05:00 [INF] [CQRS]
@@ -182,12 +518,45 @@ Method   : GET
 Path     : /api/groundbooking/getbookingdetails
 Status   : 500
 Duration : 678 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:29:20.442 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSAV49RNR:00000001
+Request  : ConsumerInquiryQuery
+Duration : 359 ms
+2026-01-28 01:29:20.480 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSAV49RNR:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 562 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:43.539 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000001
+Request  : ConsumerInquiryQuery
+Duration : 520 ms
+2026-01-28 01:30:43.875 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 500
+Duration : 1075 ms
+=======
 {"title":"Internal Server Error","status":500,"detail":"Booking not found."}
 ==============================================
 2026-01-28 01:02:13.416 +05:00 [INF] ================ HTTP REQUEST =================
@@ -196,12 +565,27 @@ Method   : GET
 Path     : /api/groundbooking/getbookingdetails
 Status   : 500
 Duration : 55481 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 01:30:49.420 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000002
+Request  : ConsumerInquiryQuery
+Duration : 13 ms
+2026-01-28 01:30:49.431 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 29 ms
+=======
 {"title":"Internal Server Error","status":500,"detail":"Booking not found."}
 ==============================================
 2026-01-28 01:04:44.262 +05:00 [INF] ================ HTTP REQUEST =================
@@ -210,12 +594,27 @@ Method   : GET
 Path     : /api/groundbooking/getbookingdetails
 Status   : 500
 Duration : 5548 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:50.645 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000003
+Request  : ConsumerInquiryQuery
+Duration : 11 ms
+2026-01-28 01:30:50.647 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000003
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 28 ms
+=======
 {"title":"Internal Server Error","status":500,"detail":"Booking not found."}
 ==============================================
 2026-01-28 01:05:04.898 +05:00 [INF] ================ HTTP REQUEST =================
@@ -224,12 +623,27 @@ Method   : GET
 Path     : /api/groundbooking/getbookingdetails
 Status   : 500
 Duration : 16400 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:51.413 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000004
+Request  : ConsumerInquiryQuery
+Duration : 10 ms
+2026-01-28 01:30:51.414 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000004
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 12 ms
+=======
 {"title":"Internal Server Error","status":500,"detail":"Booking not found."}
 ==============================================
 2026-01-28 01:05:28.273 +05:00 [INF] [CQRS]
@@ -243,13 +657,216 @@ Method   : GET
 Path     : /api/groundbooking/getbookingdetails
 Status   : 200
 Duration : 8136 ms
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 IP       : ::1
 
 Request:
 [NOT READ]
 
 Response:
+<<<<<<< HEAD
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:51.907 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000005
+Request  : ConsumerInquiryQuery
+Duration : 11 ms
+2026-01-28 01:30:51.907 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000005
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 13 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:52.263 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000006
+Request  : ConsumerInquiryQuery
+Duration : 10 ms
+2026-01-28 01:30:52.263 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000006
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 12 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:53.080 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000007
+Request  : ConsumerInquiryQuery
+Duration : 11 ms
+2026-01-28 01:30:53.081 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000007
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 13 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:30:55.215 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSBNNN7J8:00000008
+Request  : ConsumerInquiryQuery
+Duration : 11 ms
+2026-01-28 01:30:55.217 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSBNNN7J8:00000008
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 13 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:32:33.884 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSCOR6LRE:00000001
+Request  : ConsumerInquiryQuery
+Duration : 297 ms
+2026-01-28 01:32:33.921 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSCOR6LRE:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 462 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:32:34.860 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSCOR6LRE:00000002
+Request  : ConsumerInquiryQuery
+Duration : 58 ms
+2026-01-28 01:32:34.862 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSCOR6LRE:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 65 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:32:35.929 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSCOR6LRE:00000003
+Request  : ConsumerInquiryQuery
+Duration : 14 ms
+2026-01-28 01:32:35.930 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSCOR6LRE:00000003
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 28 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:32:59.067 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSD0DALUR:00000001
+Request  : ConsumerInquiryQuery
+Duration : 265 ms
+2026-01-28 01:32:59.097 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSD0DALUR:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 418 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:33:00.077 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSD0DALUR:00000002
+Request  : ConsumerInquiryQuery
+Duration : 68 ms
+2026-01-28 01:33:00.079 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSD0DALUR:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 80 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:33:27.709 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSD8TR2BD:00000001
+Request  : ConsumerInquiryQuery
+Duration : 295 ms
+2026-01-28 01:33:27.734 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSD8TR2BD:00000001
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 524 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+==============================================
+2026-01-28 01:33:33.450 +05:00 [INF] [CQRS]
+TraceId  : 0HNITSD8TR2BD:00000002
+Request  : ConsumerInquiryQuery
+Duration : 59 ms
+2026-01-28 01:33:33.452 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITSD8TR2BD:00000002
+Method   : GET
+Path     : /api/smartpay/MyBillInquiry
+Status   : 200
+Duration : 66 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"responseCode":"00","responseMsg":"SUCCESS","bills":[{"institution":"Solar Panel for Under Construction Buildings","consumer_Number":"PMS-20260124212752485","consumer_Detail":"Phase 8 - DHA-P8-KHI-001 - Plot-123 - Area 500","reference_Info":"BILL-20260121013254","billAmount":"10"}]}
+=======
 {"bookingCode":"GB-20260127-000001","groundName":"Sports Club","bookingDescription":"Check","groundType":"CricketGround","groundCategory":"Academy","id":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","bookingDate":"2026-01-27T00:00:00","totalPrice":"4955","slotsCount":"1","slots":[{"bookingId":"a9e19b15-c503-48ab-9b69-f19180ef039d","groundBooking":null,"slotId":"ab6e100b-10bc-4b7e-9ab6-8d9cbaa29191","groundSlots":null,"slotPrice":"5000","created":"2026-01-27T17:12:39.3336761","createdBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","lastModified":"2026-01-27T17:12:39.3336761","lastModifiedBy":"a02644dd-a143-4d47-8e5e-704c1658c31f","isDeleted":false,"isActive":true,"ser":4,"id":"f770bbce-379d-4f23-a751-a0049bdbf353"}],"orderDTiD":null,"groundSettings":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","settingId":"d7324b19-966c-488e-a1fa-8bcd70825aab","setting":null,"dtCode":"MEM","isDiscount":true,"created":"2026-01-21T10:49:35.8800349","createdBy":null,"lastModified":"2026-01-21T10:49:35.8800349","lastModifiedBy":null,"isDeleted":false,"isActive":true,"ser":2,"id":"ea9bd624-f559-427a-891a-fdcafbafebeb"}],"groundImages":[{"groundId":"51a7a674-2a5c-4362-90e6-ad6e83ee59f7","imageURL":"/CBMS/Rooms/51a7a674-2a5c-4362-90e6-ad6e83ee59f7/95d98fa5bcae4d06a3c3a53de3d6cb35.png","imageExtension":".png","imageName":"Main File","description":"Check","category":"Front","created":"2026-01-21T11:49:07.5217118","createdBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","lastModified":"2026-01-21T11:49:07.5217118","lastModifiedBy":"3e820b19-3639-49ca-8d03-fb28b11981c9","isDeleted":false,"isActive":true,"ser":1,"id":"b5442f34-e097-4dec-ae97-234a1a626803"}],"paymentMethod":"Cash","mainImage":null}
+>>>>>>> e2978432553a11c26bbddc4b7b3aeeb835a9df84
 ==============================================
 2026-01-28 16:43:45.356 +05:00 [INF] [CQRS]
 TraceId  : 0HNIUC9BTR20H:0000000B

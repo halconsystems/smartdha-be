@@ -10,6 +10,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetCaseWorkflowHierarchy;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyCasesHistory;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Queries.GetMyModuleUsers;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.GenerateCaseBill;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Queries.GetFeeDefinitionByProcessId;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseResultDocument.Commands.UploadCaseResultDocument;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSNotification.Commands;
@@ -223,6 +224,20 @@ public class CaseDataController : BaseApiController
     }
 
 
+    [HttpPost("{caseId:guid}/generate-bill")]
+    public async Task<IActionResult> GenerateBill(
+    Guid caseId,
+    [FromBody] GenerateBillRequest request,
+    CancellationToken ct)
+    {
+        var cmd = new GenerateCaseBillCommand(
+            caseId,
+            request.FeeDefinitionId,
+            request.FeeOptionId
+        );
+
+        return Ok(await _mediator.Send(cmd, ct));
+    }
 }
 public record ForwardInternalDto(string ToUserId, string? Remarks);
 public record RemarksDto(string Remarks);
@@ -242,3 +257,8 @@ public class ForwardExternalRequest
     // per-file remarks (same index as Files)
     public List<string>? FileRemarks { get; set; }
 }
+
+public record GenerateBillRequest(
+       Guid FeeDefinitionId,
+       Guid? FeeOptionId
+   );

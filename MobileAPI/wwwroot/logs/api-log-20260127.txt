@@ -2063,3 +2063,19 @@ Response:
 {"status":200,"title":"Success","detail":"Images added.","data":"ee18de9e-60c4-4dca-bac4-49f21432d148"}
 ==============================================
 >>>>>>> d35f12ea0318da43997e8ea7e37975face622c2c
+2026-01-27 23:21:21.233 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNITQ2JCM6I9:0000000B
+Method   : POST
+Path     : /api/auth/register
+Status   : 404
+Duration : 1458 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***"
+}
+
+Response:
+{"title":"Not Found","status":404,"detail":"Invalid CNIC or Mobile No"}
+==============================================

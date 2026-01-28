@@ -47,7 +47,6 @@ public class SmartPayController : BaseApiController
     //    var result = await _mediator.Send(query);
     //    return Ok(result);
     //}
-
     [HttpGet("MyBillInquiry"),AllowAnonymous]
     //[ModuleAuthorize(Modules.MyBills)]
     public async Task<IActionResult> MyConsumerInquiry()
