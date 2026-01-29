@@ -169,6 +169,7 @@ public class AuthController : BaseApiController
         return Ok(result);
     }
 
+    [Authorize]
     [HttpGet("GetProfileDetail")]
     public async Task<IActionResult> GetRoomDetails()
     {
@@ -176,6 +177,7 @@ public class AuthController : BaseApiController
         return Ok(result);
     }
 
+    [Authorize]
     [HttpPost("User/Profileimages/add")]
     [Consumes("multipart/form-data")]
     [RequestSizeLimit(50_000_000)]

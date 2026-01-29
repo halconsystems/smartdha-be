@@ -58,14 +58,11 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
                 var _rand = new Random();
                 var generateotp = _rand.Next(100000, 999999); // generates a 6-digit number
 
-                string returnmsg = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.{generateotp}";
+                string returnmsg = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.";
                 string sentmsg = $"{generateotp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.";
 
-                //string result = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
-               
-                
-                string result = "SUCCESSFUL";
-                
+                string result = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
+             
                 if (result == "SUCCESSFUL")
                 {
                     var usernewOtp = new UserOtp
@@ -203,6 +200,7 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
                 IsVerified = true,
                 IsOtpRequired = true,
                 MEMPK = mempk//"DHAM-97563"
+
             };
             await _userManager.CreateAsync(newUser);
 
@@ -230,10 +228,8 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
 
             // Send OTP to MobileNo
             string sentmsg = $"{userOtp} is your OTP for DHA Karachi Mobile App. Do not share it.";
-
-            //var result = await _otpService.SendSmsAsync(cellno, sentmsg, cancellationToken);
-            
-            string result= "SUCCESSFUL";
+            string returnMessage = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.";
+            var result = await _otpService.SendSmsAsync(cellno, sentmsg, cancellationToken);
             if (result == "SUCCESSFUL")
             {
                 var usernewOtp = new UserOtp
@@ -258,16 +254,15 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
                     isOtpRequired = true,
                     AccessToken = verifyToken,
                     MobileNumber = MaskMobile(cellno),
-                    ResponseMessage = message
+                    ResponseMessage = returnMessage
 
                 };
 
                 return new SuccessResponse<RegisterationDto>(
                 _registerationdto,
-                message
+                returnMessage
                 );
 
-                //return SuccessResponse<string>.FromMessage(message);
             }
             else
             {

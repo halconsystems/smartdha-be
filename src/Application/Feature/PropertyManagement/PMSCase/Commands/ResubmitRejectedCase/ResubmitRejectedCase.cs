@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -77,7 +78,7 @@ public class ResubmitRejectedCaseHandler
         {
             if (!rejectedReqMap.ContainsKey(value.PrerequisiteDefinitionId))
                 continue;
-
+            
             _db.Set<CasePrerequisiteValue>().Add(new CasePrerequisiteValue
             {
                 CaseId = c.Id,
@@ -90,8 +91,14 @@ public class ResubmitRejectedCaseHandler
                     rejectedReqMap[value.PrerequisiteDefinitionId].Id
             });
         }
-
-        await _db.SaveChangesAsync(ct);
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());   
+        }
 
         // =========================
         // 4️⃣ Save FILE uploads (rejected only)
@@ -142,27 +149,51 @@ public class ResubmitRejectedCaseHandler
         // =========================
         // 5️⃣ Validate all rejected items uploaded
         // =========================
-        if (rejectedReqs.Any(x => !x.IsUploaded))
-            return ApiResult<bool>.Fail("Please upload all required documents.");
+        //if (rejectedReqs.Any(x => !x.IsUploaded))
+        //    return ApiResult<bool>.Fail("Please upload all required documents.");
 
         // =========================
         // 6️⃣ Clear rejection & resubmit
         // =========================
         c.Status = CaseStatus.Submitted;
-        c.CurrentAssignedUserId = null;
+
+        var directorate = await _db.Set<Directorate>()
+        .Where(d => d.Id == c.DirectorateId)
+        .Select(d => new { d.Name, d.ModuleId })
+        .FirstOrDefaultAsync(ct);
+        
+        if (directorate == null)
+            return ApiResult<bool>.Fail("No Module found.");
+
+        var step1 = await _db.Set<ProcessStep>()
+        .Include(x => x.Directorate)
+        .FirstAsync(x => x.ProcessId == c.ProcessId, ct);
 
         _db.Set<CaseStepHistory>().Add(new CaseStepHistory
         {
             CaseId = c.Id,
             StepId = c.CurrentStepId!.Value,
             StepNo = c.CurrentStepNo,
+            StepName=c.CurrentStep?.Name ?? "",
+
+            DirectorateId = c.DirectorateId,
+            DirectorateName = directorate.Name,
+
+            ModuleId = directorate.ModuleId,
+
             Action = CaseAction.Resubmitted,
             Remarks = "Applicant resubmitted missing documents.",
             PerformedByUserId = userId
         });
-
-        await _db.SaveChangesAsync(ct);
-        await trx.CommitAsync(ct);
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+            await trx.CommitAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine( ex.ToString() );
+        }
 
         return ApiResult<bool>.Ok(true, "Case resubmitted successfully.");
     }
