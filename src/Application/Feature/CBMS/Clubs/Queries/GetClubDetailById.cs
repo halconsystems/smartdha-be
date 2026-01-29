@@ -91,6 +91,14 @@ public class GetClubDetailByIdHandler
             highlights = clubsCategory != null
                 ? clubsCategory
                     .Where(x => x.ClubId == request.ClubId)
+                    .Select(x => x.Name)
+                    .ToList()
+                : new List<string>(),
+
+
+            Categories = clubsCategory != null
+                ? clubsCategory
+                    .Where(x => x.ClubId == request.ClubId)
                     .Select(x => new HighlightDTO
                     {
                         Id = x.Id,

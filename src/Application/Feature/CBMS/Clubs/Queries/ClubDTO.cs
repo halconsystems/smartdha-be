@@ -23,7 +23,8 @@ public class ClubDTO
     [MaxLength(4)] public string? AccountNoAccronym { get; set; }
     public ClubType ClubType { get; set; } = ClubType.GuestRoom;
 
-    public List<HighlightDTO>? highlights { get; set; }
+    public List<string>? highlights { get; set; }
+    public List<HighlightDTO>? Categories { get; set; }
 
     public List<ClubServiceProcessDTO>? ClubServicesDTOs { get; set; }
 }

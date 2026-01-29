@@ -76,7 +76,7 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
         var dispatch = await _context.OrderDispatches
            .Include(d => d.Orders)
            .Include(d => d.PickupShopVehicles)
-           .FirstOrDefaultAsync(d => orders.Select(x => x.Id).Contains(d.OrdersId), ct);
+           .Where(d => orders.Select(x => x.Id).Contains(d.OrdersId)).ToListAsync();
 
         //var confirmedOrder = await _context.ConfirmedOrders.Where(x => orders.Select(x => x.Id).Contains(x.OrderId))
         //    .AsNoTracking().FirstOrDefaultAsync(ct);
@@ -97,7 +97,7 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             ShopName = OrderShop?.FirstOrDefault(s => s.Id == x.ShopId)?.DisplayName,
             OrderType = x.OrderType,
             OrderUniqueId = x.UniqueFormID,
-            OrderDispatchStatus = dispatch?.Status
+            OrderDispatchStatus = dispatch?.FirstOrDefault(d => d.OrdersId == x.Id)?.Status
 
         }).ToList();
 

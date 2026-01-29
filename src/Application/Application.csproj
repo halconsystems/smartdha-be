@@ -55,6 +55,7 @@
     <Folder Include="Feature\CBMS\ClubFeeOption\Queries\" />
     <Folder Include="Feature\CBMS\ClubImages\Queries\" />
     <Folder Include="Feature\CBMS\Clubs\Command\" />
+    <Folder Include="Feature\CBMS\FeeDefinationWithOption\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
     <Folder Include="Feature\DiscountSetting\Queries\" />
     <Folder Include="Feature\ForgetPassword\Queries\" />

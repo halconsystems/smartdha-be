@@ -84,12 +84,9 @@ public class GetAllClubQueryHandler
                 highlights = clubsCategory != null
                 ? clubsCategory
                     .Where(x => x.ClubId == c.Id)
-                    .Select(x => new HighlightDTO
-                    {
-                        Id = x.Id,
-                        Name = x.Name
-                    }).ToList()
-                : new List<HighlightDTO>(),
+                    .Select(x => x.Name)
+                    .ToList()
+                : new List<string>(),
 
                 //highlights = clubsCategory != null
                 //    ? clubsCategory
@@ -108,7 +105,17 @@ public class GetAllClubQueryHandler
                         .Select(path => _fileStorageService.GetPublicUrl(path))
                         .ToList(),
                 Description = c.Description,
-                ContactNumber = c.ContactNumber
+                ContactNumber = c.ContactNumber,
+                Categories = clubsCategory != null
+                ? clubsCategory
+                .Where(x => x.ClubId == c.Id)
+                .Select(x => new HighlightDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }).ToList()
+                : new List<HighlightDTO>()
+
             };
         }).ToList();
 
