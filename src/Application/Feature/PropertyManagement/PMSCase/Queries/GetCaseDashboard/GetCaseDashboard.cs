@@ -48,6 +48,11 @@ public class GetCaseDashboardHandler
         if (!myModuleIds.Any())
             return ApiResult<CaseDashboardDto>.Ok(new CaseDashboardDto());
 
+        var userRoleIds = await _appDb.AppUserRoles
+            .Where(ur => ur.UserId == userId)
+            .Select(ur => ur.RoleId)
+            .ToListAsync(ct);
+
         // 🔹 Base query (only visible cases)
         var baseQuery =
             from c in _db.Set<PropertyCase>().AsNoTracking()
@@ -56,7 +61,8 @@ public class GetCaseDashboardHandler
             where
                 c.IsActive==true &&
                 c.IsDeleted !=true &&
-                myModuleIds.Contains(ps.Directorate.ModuleId)
+                myModuleIds.Contains(ps.Directorate.ModuleId) &&
+                userRoleIds.Contains(ps.Directorate.RoleId)   // ✅ KEY FIX
             select new
             {
                 c.Status,
@@ -89,9 +95,6 @@ public class GetCaseDashboardHandler
                  f.PaidAmount
              }
         ).ToListAsync(ct);
-
-        
-
 
         static CaseDashboardSummary BuildSummary(IEnumerable<dynamic> items)
         {

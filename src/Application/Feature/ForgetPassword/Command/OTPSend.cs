@@ -90,7 +90,7 @@ public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResp
         // Generate OTP
         var otp = new Random().Next(100000, 999999);
         string sentMessage = $"{otp} is your OTP to DHA Karachi mobile application. Do not share it with anyone.";
-        string returnMessage = $"An OTP has been sent to the mobile number registered with your membership {otp}";
+        string returnMessage = $"An OTP has been sent to the mobile number registered with your membership/staff/club-membership";
 
         // Send SMS
         string result = await _otpService.SendSmsAsync(normalizedMobile, sentMessage, cancellationToken);
@@ -119,7 +119,7 @@ public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResp
         var finaldto = new MobileAuthenticationDto
         {
             MobileNumber = MaskMobile(user.RegisteredMobileNo?.ToString()) ?? string.Empty,
-            Name = user.Name,
+            Name = "",
             AccessToken = verifyToken,
             isOtpRequired = true,
             ResponseMessage = returnMessage
@@ -131,15 +131,6 @@ public class OTPSendCommandHandler : IRequestHandler<OTPSendCommand, SuccessResp
              "Authentication step completed.",
              "OTP Verification Required"
             );
-
-        //OTPDto oTPDto = new OTPDto
-        //{
-        //    AccessToken = verifyToken,
-        //    ResponseMessage = returnMessage
-
-        //};
-
-        //return new  SuccessResponse<OTPDto>(oTPDto);
     }
 
     public static string MaskMobile(string? normalizedMobile)

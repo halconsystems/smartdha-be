@@ -914,3 +914,393 @@ StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/Tim
    at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
    --- End of inner exception stack trace ---
 >>>>>>> 3f2c39ff7491cc2c885227ab3457e595127be77c
+2026-01-28 19:24:01.543 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6L:00000009
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 401
+Duration : 950 ms
+IP       : ::1
+
+Request:
+------WebKitFormBoundary7tgsuMm25EWKADcz
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+
+------WebKitFormBoundary7tgsuMm25EWKADcz--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-28 19:24:31.536 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUF1OL7J6N:00000001
+Request  : ResubmitRejectedCaseCommand
+Duration : 10987 ms
+2026-01-28 19:24:32.022 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6N:00000001
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 500
+Duration : 11730 ms
+IP       : ::1
+
+Request:
+----------------------------605324103053923590106747
+Content-Disposition: form-data; name="CaseId"
+
+4acda2a9-07ba-4852-bf59-724fafb2ea82
+----------------------------605324103053923590106747
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+ [{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2__scaled_b4aa07cd-266b-4715-bc25-754c75a981b77242749017702268469.jpg","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------605324103053923590106747--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 19:24:59.403 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUF1OL7J6N:00000002
+Request  : ResubmitRejectedCaseCommand
+Duration : 9472 ms
+2026-01-28 19:24:59.577 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6N:00000002
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 500
+Duration : 9658 ms
+IP       : ::1
+
+Request:
+----------------------------863799989931183947799841
+Content-Disposition: form-data; name="CaseId"
+
+4acda2a9-07ba-4852-bf59-724fafb2ea82
+----------------------------863799989931183947799841
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+ [{"prerequisiteDefinitionId":"eacb7ece-7265-4d5b-be1e-692823e482d2","valueText":"eacb7ece-7265-4d5b-be1e-692823e482d2__scaled_b4aa07cd-266b-4715-bc25-754c75a981b77242749017702268469.jpg","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------863799989931183947799841--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 19:27:11.075 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6P:00000001
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 500
+Duration : 96 ms
+IP       : ::1
+
+Request:
+----------------------------981844706910905843881314
+Content-Disposition: form-data; name="CaseId"
+
+c85792c3-cee3-4e4b-8966-dbc449ae2974
+----------------------------981844706910905843881314
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+PrerequisiteValuesJson: [{"prerequisiteDefinitionId":"ef0e1856-b8c1-4f70-a005-009a92dd4cd8","valueText":"asdsa","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------981844706910905843881314--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"'P' is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0."}
+==============================================
+2026-01-28 19:27:38.192 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUF1OL7J6P:00000002
+Request  : ResubmitRejectedCaseCommand
+Duration : 14126 ms
+2026-01-28 19:27:38.424 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6P:00000002
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 500
+Duration : 14377 ms
+IP       : ::1
+
+Request:
+----------------------------707495507413778100957935
+Content-Disposition: form-data; name="CaseId"
+
+c85792c3-cee3-4e4b-8966-dbc449ae2974
+----------------------------707495507413778100957935
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"ef0e1856-b8c1-4f70-a005-009a92dd4cd8","valueText":"asdsa","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------707495507413778100957935
+Content-Disposition: form-data; name="File"; filename=""
+
+
+----------------------------707495507413778100957935--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 19:28:56.100 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUF1OL7J6P:00000003
+Request  : ResubmitRejectedCaseCommand
+Duration : 61243 ms
+2026-01-28 19:28:56.343 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6P:00000003
+Method   : POST
+Path     : /api/casedata/4acda2a9-07ba-4852-bf59-724fafb2ea82/resubmit-rejected
+Status   : 500
+Duration : 61488 ms
+IP       : ::1
+
+Request:
+----------------------------120322574254219357493090
+Content-Disposition: form-data; name="CaseId"
+
+c85792c3-cee3-4e4b-8966-dbc449ae2974
+----------------------------120322574254219357493090
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"ef0e1856-b8c1-4f70-a005-009a92dd4cd8","valueText":"asdsa","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------120322574254219357493090
+Content-Disposition: form-data; name="File"; filename=""
+
+
+----------------------------120322574254219357493090--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 19:29:12.106 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6R:00000001
+Method   : POST
+Path     : /api/casedata/4c85792c3-cee3-4e4b-8966-dbc449ae2974/resubmit-rejected
+Status   : 404
+Duration : 0 ms
+IP       : ::1
+
+Request:
+----------------------------221782642826775868652529
+Content-Disposition: form-data; name="CaseId"
+
+c85792c3-cee3-4e4b-8966-dbc449ae2974
+----------------------------221782642826775868652529
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"ef0e1856-b8c1-4f70-a005-009a92dd4cd8","valueText":"asdsa","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------221782642826775868652529
+Content-Disposition: form-data; name="File"; filename=""
+
+
+----------------------------221782642826775868652529--
+
+
+Response:
+[EMPTY]
+==============================================
+2026-01-28 19:29:39.636 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.CasePrerequisiteValues' with unique index 'IX_CasePrerequisiteValues_CaseId_PrerequisiteDefinitionId'. The duplicate key value is (c85792c3-cee3-4e4b-8966-dbc449ae2974, ef0e1856-b8c1-4f70-a005-009a92dd4cd8).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:fb68a2a3-020f-42c3-bf7d-9dcc98dcbf10
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.CasePrerequisiteValues' with unique index 'IX_CasePrerequisiteValues_CaseId_PrerequisiteDefinitionId'. The duplicate key value is (c85792c3-cee3-4e4b-8966-dbc449ae2974, ef0e1856-b8c1-4f70-a005-009a92dd4cd8).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:fb68a2a3-020f-42c3-bf7d-9dcc98dcbf10
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-28 19:29:40.080 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUF1OL7J6R:00000002
+Method   : POST
+Path     : /api/casedata/c85792c3-cee3-4e4b-8966-dbc449ae2974/resubmit-rejected
+Status   : 500
+Duration : 12914 ms
+IP       : ::1
+
+Request:
+----------------------------178022121601136091085068
+Content-Disposition: form-data; name="CaseId"
+
+c85792c3-cee3-4e4b-8966-dbc449ae2974
+----------------------------178022121601136091085068
+Content-Disposition: form-data; name="PrerequisiteValuesJson"
+
+[{"prerequisiteDefinitionId":"ef0e1856-b8c1-4f70-a005-009a92dd4cd8","valueText":"asdsa","valueNumber":null,"valueDate":null,"valueBool":null}]
+----------------------------178022121601136091085068
+Content-Disposition: form-data; name="File"; filename=""
+
+
+----------------------------178022121601136091085068--
+
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"An error occurred while saving the entity changes. See the inner exception for details."}
+==============================================
+2026-01-28 19:31:06.260 +05:00 [ERR] An exception occurred in the database while saving changes for context type 'DHAFacilitationAPIs.Infrastructure.Data.PMSApplicationDbContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.CasePrerequisiteValues' with unique index 'IX_CasePrerequisiteValues_CaseId_PrerequisiteDefinitionId'. The duplicate key value is (c85792c3-cee3-4e4b-8966-dbc449ae2974, ef0e1856-b8c1-4f70-a005-009a92dd4cd8).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:5bc8a28e-8162-49d9-9d02-00db34f2d9ac
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Cannot insert duplicate key row in object 'dbo.CasePrerequisiteValues' with unique index 'IX_CasePrerequisiteValues_CaseId_PrerequisiteDefinitionId'. The duplicate key value is (c85792c3-cee3-4e4b-8966-dbc449ae2974, ef0e1856-b8c1-4f70-a005-009a92dd4cd8).
+   at Microsoft.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at Microsoft.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at Microsoft.Data.SqlClient.SqlDataReader.ReadAsyncExecute(Task task, Object state)
+   at Microsoft.Data.SqlClient.SqlDataReader.InvokeAsyncCall[T](SqlDataReaderBaseAsyncCallContext`1 context)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+ClientConnectionId:5bc8a28e-8162-49d9-9d02-00db34f2d9ac
+Error Number:2601,State:1,Class:14
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeResultSetAsync(Int32 startCommandIndex, RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.AffectedCountModificationCommandBatch.ConsumeAsync(RelationalDataReader reader, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2026-01-28 20:49:11.513 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUGIGEH5K0:00000009
+Method   : GET
+Path     : /api/casedata/4E100857-445A-4B83-B362-2F084661A0F7/workflow
+Status   : 401
+Duration : 220 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-28 20:50:16.901 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUGIGEH5K2:00000001
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 34614 ms
+2026-01-28 20:50:17.304 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUGIGEH5K2:00000001
+Method   : GET
+Path     : /api/casedata/4E100857-445A-4B83-B362-2F084661A0F7/workflow
+Status   : 500
+Duration : 35171 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 20:50:45.592 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUGIGEH5K2:00000002
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 5757 ms
+2026-01-28 20:50:45.845 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUGIGEH5K2:00000002
+Method   : GET
+Path     : /api/casedata/4E100857-445A-4B83-B362-2F084661A0F7/workflow
+Status   : 500
+Duration : 6021 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Sequence contains no elements."}
+==============================================
+2026-01-28 20:50:49.613 +05:00 [INF] [CQRS]
+TraceId  : 0HNIUGIGEH5K2:00000003
+Request  : GetCaseWorkflowHierarchyQuery
+Duration : 101 ms
+2026-01-28 20:50:49.666 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIUGIGEH5K2:00000003
+Method   : GET
+Path     : /api/casedata/4E100857-445A-4B83-B362-2F084661A0F7/workflow
+Status   : 200
+Duration : 172 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"steps":[{"stepNo":1,"stepName":"CCC","directorateName":"CCC","status":"Rejected","actionDate":"2026-01-28T19:53:35.8346106","remarks":"rekject"},{"stepNo":2,"stepName":"TP&BC","directorateName":"TP&BC","status":"NotStarted","actionDate":null,"remarks":null},{"stepNo":3,"stepName":"NOC SEC","directorateName":"NOC SEC","status":"NotStarted","actionDate":null,"remarks":null},{"stepNo":4,"stepName":"SDO","directorateName":"SDO","status":"NotStarted","actionDate":null,"remarks":null}],"paymentStatusDto":{"isPayment":false,"isRequired":false,"status":"NotRequired","payment":null},"resultDocuments":[],"rejectedPrerequisites":{"remarks":"rekject","requirements":[]}}
+==============================================

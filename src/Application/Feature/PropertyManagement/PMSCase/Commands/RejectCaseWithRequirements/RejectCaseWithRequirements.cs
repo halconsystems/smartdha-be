@@ -85,14 +85,14 @@ public class RejectCaseWithRequirementsHandler
         foreach (var req in r.Requirements)
         {
             // Validate prerequisite belongs to this process
-            var valid = await _pmsDb.Set<ProcessPrerequisite>()
-                .AnyAsync(x =>
-                    x.ProcessId == c.ProcessId &&
-                    x.PrerequisiteDefinitionId == req.PrerequisiteDefinitionId,
-                    ct);
+            //var valid = await _pmsDb.Set<ProcessPrerequisite>()
+            //    .AnyAsync(x =>
+            //        x.ProcessId == c.ProcessId &&
+            //        x.PrerequisiteDefinitionId == req.PrerequisiteDefinitionId,
+            //        ct);
 
-            if (!valid)
-                return ApiResult<bool>.Fail("Invalid prerequisite selected.");
+            //if (!valid)
+            //    return ApiResult<bool>.Fail("Invalid prerequisite selected.");
 
             _pmsDb.Set<CaseRejectRequirement>().Add(new CaseRejectRequirement
             {

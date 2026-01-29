@@ -177,62 +177,55 @@ public class GetCaseWorkflowHierarchyHandler
                 .OrderByDescending(x => x.Created)
                 .FirstOrDefaultAsync(ct);
 
-            // 2️⃣ Process prerequisites (definitions)
-            var processPrereqs = await _db.Set<ProcessPrerequisite>()
+            // 2️⃣ Rejected requirements (SOURCE OF TRUTH)
+            var rejected = await _db.Set<CaseRejectRequirement>()
                 .Include(x => x.PrerequisiteDefinition)
                     .ThenInclude(d => d.Options)
-                .Where(x => x.ProcessId == c.ProcessId && x.IsRequired)
-                .ToListAsync(ct);
-
-            // 3️⃣ Case rejection requirements (state)
-            var rejected = await _db.Set<CaseRejectRequirement>()
                 .Where(x => x.CaseId == c.Id)
                 .ToListAsync(ct);
 
-            // 4️⃣ Merge definition + case state
-            var requirements = processPrereqs
-                .Where(p => rejected.Any(r => r.PrerequisiteDefinitionId == p.PrerequisiteDefinitionId))
-                .Select(p =>
-                {
-                    var caseReq = rejected.First(r =>
-                        r.PrerequisiteDefinitionId == p.PrerequisiteDefinitionId);
+            // 3️⃣ Map directly → SAME DTO
+            var requirements = rejected.Select(r =>
+            {
+                var def = r.PrerequisiteDefinition;
 
-                    return new RejectionProcessPrerequisiteDto(
-                        p.Id,
-                        p.ProcessId,
-                        p.PrerequisiteDefinitionId,
-                        p.PrerequisiteDefinition.Code,
-                        p.PrerequisiteDefinition.Name,
-                        p.PrerequisiteDefinition.Type,
+                return new RejectionProcessPrerequisiteDto(
+                    Id: new Guid(),        // ✅ not process based
+                    ProcessId: c.ProcessId,             // ✅ FROM CASE
+                    PrerequisiteDefinitionId: def.Id,
 
-                        p.IsRequired,
-                        p.RequiredByStepNo,
+                    Code: def.Code,
+                    Name: def.Name,
+                    Type: def.Type,
 
-                        p.PrerequisiteDefinition.MinLength,
-                        p.PrerequisiteDefinition.MaxLength,
-                        p.PrerequisiteDefinition.AllowedExtensions,
+                    IsRequired: true,                   // ✅ rejected docs are mandatory
+                    RequiredByStepNo: 0,                // ✅ no workflow step
 
-                        p.PrerequisiteDefinition.Options
-                            .OrderBy(o => o.SortOrder)
-                            .Select(o => new PrerequisiteOptionDto(
-                                o.Id,
-                                o.Label,
-                                o.Value,
-                                o.SortOrder
-                            ))
-                            .ToList(),
+                    MinLength: def.MinLength,
+                    MaxLength: def.MaxLength,
+                    AllowedExtensions: def.AllowedExtensions,
 
-                        // Case-specific
-                        caseReq.IsUploaded,
-                        caseReq.Remarks,
-                        caseReq.UploadedDocumentId
-                    );
-                })
-                .ToList();
+                    Options: def.Options
+                        .OrderBy(o => o.SortOrder)
+                        .Select(o => new PrerequisiteOptionDto(
+                            o.Id,
+                            o.Label,
+                            o.Value,
+                            o.SortOrder
+                        ))
+                        .ToList(),
+
+                    // case-specific state
+                    IsUploaded: r.IsUploaded,
+                    Remarks: r.Remarks,
+                    UploadedDocumentId: r.UploadedDocumentId
+                );
+            }).ToList();
 
             rejectionDto = new CaseRejectionDto
             {
-                Remarks = rejectionHistory?.Remarks ?? "Additional information required.",
+                Remarks = rejectionHistory?.Remarks
+                    ?? "Additional information required.",
                 Requirements = requirements
             };
         }

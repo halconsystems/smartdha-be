@@ -18,31 +18,19 @@ public record GetProfileDetailsQuery : IRequest<ProfileDTO>;
 public class GetProfileDetailsHandler : IRequestHandler<GetProfileDetailsQuery, ProfileDTO>
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IAuthenticationService _authenticationService;
-    private readonly ISmsService _otpService;
     private readonly IApplicationDbContext _context;
-    private readonly IActivityLogger _activityLogger;
     private readonly ICurrentUserService _currentUser;
     private readonly IFileStorageService _fileStorageService;
 
     public GetProfileDetailsHandler(UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IAuthenticationService authenticationService,
-        ISmsService otpService,
         IApplicationDbContext context,
-        IActivityLogger activityLogger,
         ICurrentUserService currentUser,
         IFileStorageService fileStorage
         )
 
     {
         _userManager = userManager;
-        _signInManager = signInManager;
-        _authenticationService = authenticationService;
-        _otpService = otpService;
         _context = context;
-        _activityLogger = activityLogger;
         _currentUser = currentUser;
         _fileStorageService = fileStorage;
     }
@@ -62,23 +50,26 @@ public class GetProfileDetailsHandler : IRequestHandler<GetProfileDetailsQuery, 
         var publicUrl = string.IsNullOrWhiteSpace(userimage?.ImageURL)
                 ? string.Empty
                 : _fileStorageService.GetPublicUrl(userimage.ImageURL) ?? string.Empty;
+        var getMemberProfiles = await _context.UserMemberProfiles.Where(x=>x.UserId == currentUserId).FirstOrDefaultAsync(cancellationToken);
+      
         var result = new ProfileDTO
         {
-
             Name = user.Name,
             Email = user.Email,
             Cnic = user.CNIC,
-            MemPk = user.MEMPK,
+            MemPk = getMemberProfiles?.MemPk,
             PhoneNumber = user.PhoneNumber,
             RegistteredMobileNumber = user.RegisteredMobileNo,
-            RegistteredEmail = user.RegisteredEmail,
+            RegistteredEmail = getMemberProfiles?.Email,
             IsMember =
-                string.IsNullOrWhiteSpace(user.MEMPK) || user.MEMPK == "-"
+                string.IsNullOrWhiteSpace(getMemberProfiles?.MemPk) || user.MEMPK == "-"
                     ? false
                     : true,
-            //StaffNo = user.StaffNo
+            StaffNo = getMemberProfiles?.StaffNo,
+            IsStaff= string.IsNullOrWhiteSpace(getMemberProfiles?.StaffNo) || user.MEMPK == "-"
+                    ? false
+                    : true,
             ProfileImage = publicUrl
-
         };
         return result;
     }

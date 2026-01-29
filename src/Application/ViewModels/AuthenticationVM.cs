@@ -100,5 +100,7 @@ public class ProfileDTO
     public string? MemPk { get; set; }
     public string? StaffNo { get; set; }
     public bool? IsMember { get; set; }
+    public bool? IsClubMember { get; set; }
+    public bool? IsStaff {  get; set; }
     public string? ProfileImage { get; set; }
 }
