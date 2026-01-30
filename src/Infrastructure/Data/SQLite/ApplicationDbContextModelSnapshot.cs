@@ -3053,12 +3053,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnOrder(2);
 
                     b.Property<string>("CNICBackImagePath")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("CNICFrontImagePath")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -3089,7 +3087,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("ProfilePicture")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -3105,7 +3102,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("UtilityBill")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -3401,6 +3397,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
 
                     b.HasIndex("CaseId");
 
+                    b.HasIndex("DirectorateId");
+
                     b.HasIndex("StepId");
 
                     b.ToTable("CaseStepHistory");
@@ -3443,6 +3441,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
@@ -6457,6 +6458,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", "Directorate")
+                        .WithMany()
+                        .HasForeignKey("DirectorateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", "Step")
                         .WithMany()
                         .HasForeignKey("StepId")
@@ -6464,6 +6471,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Data.SQLite
                         .IsRequired();
 
                     b.Navigation("Case");
+
+                    b.Navigation("Directorate");
 
                     b.Navigation("Step");
                 });

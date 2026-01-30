@@ -51,17 +51,13 @@ public class RegisterNonMemberCommand : IRequest<SuccessResponse<string>>
     public DateTime? TenantOwnerAgreemenrEndDate { get; set; }
 
 
-    [Required]
-    public IFormFile CNICFrontImage { get; set; } = default!;
+    public IFormFile? CNICFrontImage { get; set; }
 
-    [Required]
-    public IFormFile CNICBackImage { get; set; } = default!;
+    public IFormFile? CNICBackImage { get; set; } 
 
-    [Required]
-    public IFormFile ProfilePicture { get; set; } = default!;
+    public IFormFile? ProfilePicture { get; set; }
 
-    [Required]
-    public IFormFile UtilityBill { get; set; } = default!;
+    public IFormFile? UtilityBill { get; set; } 
 
     public IFormFile? SupportingDocument { get; set; }
 
@@ -190,16 +186,30 @@ public class RegisterNonMemberCommandHandler : IRequestHandler<RegisterNonMember
 
             //    await _context.UserMembershipPurposes.AddRangeAsync(purposeLinks, cancellationToken);
             //}
-
-            // Save documents
-            var frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
-            var backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
-            var profilePicture = await _fileStorage.SaveFileNonMemeberAsync(request.ProfilePicture, "cnic", cancellationToken);
-            var utilityBill = await _fileStorage.SaveFileNonMemeberAsync(request.UtilityBill, "cnic", cancellationToken);
+            string? frontPath = null;
+            string? backPath = null;
+            string? profilePicture = null;
+            string? utilityBill = null;
+            if (request.CNICFrontImage != null)
+            {
+                frontPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICFrontImage, "cnic", cancellationToken);
+            }
+            else if(request.CNICBackImage != null)
+            {
+                backPath = await _fileStorage.SaveFileNonMemeberAsync(request.CNICBackImage, "cnic", cancellationToken);
+            }
+            else if(request.ProfilePicture != null)
+            {
+                profilePicture = await _fileStorage.SaveFileNonMemeberAsync(request.ProfilePicture, "cnic", cancellationToken);
+            }
+            else if(request.UtilityBill != null)
+            {
+                backPath = await _fileStorage.SaveFileNonMemeberAsync(request.UtilityBill, "cnic", cancellationToken);
+            }
             string? supportPath = null;
             if (request.SupportingDocument != null)
             {
-                supportPath = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
+                utilityBill = await _fileStorage.SaveFileNonMemeberAsync(request.SupportingDocument, "documents", cancellationToken);
             }
 
             var document = new NonMemberVerificationDocument

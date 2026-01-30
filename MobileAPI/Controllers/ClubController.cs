@@ -39,4 +39,13 @@ public class ClubController : BaseApiController
         return Ok(await Mediator.Send(
             new GetClubServiceProcessByCatQuery(categoryId), ct));
     }
+
+    [HttpGet("Club-service{processId:guid}")]
+    public async Task<IActionResult> GetServiceById(
+      Guid processId,
+      CancellationToken ct)
+    {
+        return Ok(await Mediator.Send(
+            new GetClubServiceProvessByIdQuery(processId), ct));
+    }
 }

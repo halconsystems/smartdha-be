@@ -49,6 +49,7 @@ public interface IOLMRSApplicationDbContext
     DbSet<ClubFeeDefinition> ClubFeeDefinition { get; }
     DbSet<ClubFeeOption> ClubFeeOption { get; }
     DbSet<ClubFeeCategory> ClubFeeCategory { get; }
+    DbSet<ClubServiceImages> ClubServiceImages { get; }
 
 
 

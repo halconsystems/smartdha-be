@@ -59,9 +59,9 @@ public class NonMemberVerificationDocsDto
     public Guid VerificationId { get; set; }
     public NonMemberVerification Verification { get; set; } = default!;
 
-    public string CNICFrontImagePath { get; set; } = default!;
+    public string? CNICFrontImagePath { get; set; } = default!;
 
-    public string CNICBackImagePath { get; set; } = default!;
+    public string? CNICBackImagePath { get; set; } = default!;
 
     public string? SupportingDocumentPath { get; set; } // optional 
 

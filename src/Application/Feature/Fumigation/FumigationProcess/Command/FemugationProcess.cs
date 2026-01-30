@@ -51,12 +51,25 @@ public class FemugationProcessCommandHandler
 
         Domain.Entities.FMS.Fumigation? FumigationDispatch = null;
 
-        FumigationDispatch = await _context.Fumigations
+        if (request.ResolvedAt)
+        {
+            FumigationDispatch = await _context.Fumigations
+               .Where(x => x.Id == request.FemugationId 
+               && x.FemStatus != FemStatus.InProgress && x.FemStatus != FemStatus.Cancelled)
+               .OrderByDescending(x => x.AssginedAt)
+               .FirstOrDefaultAsync(ct);
+
+        }
+        else
+        {
+            FumigationDispatch = await _context.Fumigations
                .Where(x => x.Id == request.FemugationId &&
                x.AssigndTo != null &&
                x.FemStatus != FemStatus.Resolved && x.FemStatus != FemStatus.Cancelled)
                .OrderByDescending(x => x.AssginedAt)
                .FirstOrDefaultAsync(ct);
+
+        }
 
         if (FumigationDispatch != null)
         {

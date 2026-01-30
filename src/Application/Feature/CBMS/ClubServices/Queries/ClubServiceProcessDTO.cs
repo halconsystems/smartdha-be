@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 
@@ -14,7 +16,14 @@ public record ClubServiceProcessDTO(
     string Name,
     string Code,
     string? Description,
-
+    string? ImageURL,
+    string? Price,
+    FoodType? FoodType,
+    bool? IsAvailable,
+    bool? IsPriceVisible,
+    bool? Action,
+    string? ActionName,
+    string? ActionType,
     bool IsFeeAtSubmission,
     bool IsVoucherPossible,
     bool IsFeeRequired,

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Command;
 using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,30 +30,42 @@ public class GetClubServiceProvessByIdQueryHandler
         CancellationToken ct)
     {
         var process = await _db.Set<ClubServiceProcess>()
-            .Where(x =>
-                x.Id == r.ProcessId)
-            .Select(x => new ClubServiceProcessDTO(
-                x.Id,
-                x.CategoryId,
-                x.Name,
-                x.Code,
-                x.Description,
-                x.IsFeeAtSubmission,
-                x.IsVoucherPossible,
-                x.IsFeeRequired,
-                x.IsfeeSubmit,
-                x.IsInstructionAtStart,
-                x.IsButton,
-                x.Instruction,
-                x.IsActive,
-                x.IsDeleted
-            ))
-            .FirstOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(x =>
+                x.Id == r.ProcessId, ct);
+        if(process == null) return ApiResult<ClubServiceProcessDTO>.Fail("process not found.");
 
-        if (process == null)
-            return ApiResult<ClubServiceProcessDTO>.Fail("Process not found.");
+        var clubserviceImage = await _db.Set<Domain.Entities.CBMS.ClubServiceImages>()
+             .FirstOrDefaultAsync(x => x.ServiceId == process.Id && x.Category == Domain.Enums.ImageCategory.Main, ct);
 
-        return ApiResult<ClubServiceProcessDTO>.Ok(process);
+
+
+        var result = new ClubServiceProcessDTO(
+                process.Id,
+                process.CategoryId,
+                process.Name,
+                process.Code,
+                process.Description,
+                clubserviceImage?.ImageURL,
+                process.Price,
+                process.FoodType,
+                process.IsAvailable,
+                process.IsPriceVisible,
+                process.Action,
+                process.ActionName,
+                process.ActionType,
+                process.IsFeeAtSubmission,
+                process.IsVoucherPossible,
+                process.IsFeeRequired,
+                process.IsfeeSubmit,
+                process.IsInstructionAtStart,
+                process.IsButton,
+                process.Instruction,
+                process.IsActive,
+                process.IsDeleted
+            );
+
+
+        return ApiResult<ClubServiceProcessDTO>.Ok(result);
     }
 }
 

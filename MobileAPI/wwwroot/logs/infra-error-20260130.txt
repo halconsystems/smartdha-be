@@ -1,7 +1,23 @@
+<<<<<<< HEAD
+2026-01-30 01:26:38.808 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 1552s ago, last-write: 19s ago, unanswered-write: 19s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.<GetResult>g__ThrowSocketException|10_0(SocketError e) in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 86
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-30 11:17:54.327 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (53): The network path was not found.
+=======
 2026-01-30 12:01:09.228 +05:00 [ERR] An error occurred while initialising the database.
 System.InvalidOperationException: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call.
  ---> Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
  ---> System.ComponentModel.Win32Exception (64): The specified network name is no longer available.
+>>>>>>> efd6376abac4c49c4cf291208a50cd41a5cc5e54
    at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
    at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
@@ -26,6 +42,51 @@ System.InvalidOperationException: An exception has been raised that is likely du
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
 --- End of stack trace from previous location ---
    at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+<<<<<<< HEAD
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:53,State:0,Class:20
+2026-01-30 11:24:09.266 +05:00 [ERR] Failed executing DbCommand (29ms) [Parameters=[@__Select_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Category], [c].[Created], [c].[CreatedBy], [c].[Description], [c].[ImageExtension], [c].[ImageName], [c].[ImageURL], [c].[IsActive], [c].[IsDeleted], [c].[LastModified], [c].[LastModifiedBy], [c].[Ser], [c].[ServiceId]
+FROM [ClubServiceImages] AS [c]
+WHERE [c].[ServiceId] IN (
+    SELECT [s].[value]
+    FROM OPENJSON(@__Select_0) WITH ([value] uniqueidentifier '$') AS [s]
+) AND [c].[Category] = 0
+2026-01-30 11:24:09.389 +05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'DHAFacilitationAPIs.Infrastructure.Data.OLMRSApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ClubServiceImages'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:a4cfe3ef-2322-43ef-81a3-d2366e24439e
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ClubServiceImages'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:a4cfe3ef-2322-43ef-81a3-d2366e24439e
+Error Number:208,State:1,Class:16
+=======
 ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:64,State:0,Class:20
    --- End of inner exception stack trace ---
@@ -43,3 +104,4 @@ StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/Tim
    at System.IO.Pipelines.Pipe.GetReadAsyncResult()
    at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
    --- End of inner exception stack trace ---
+>>>>>>> efd6376abac4c49c4cf291208a50cd41a5cc5e54

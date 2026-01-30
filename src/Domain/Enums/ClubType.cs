@@ -8,5 +8,6 @@ namespace DHAFacilitationAPIs.Domain.Enums;
 public enum ClubType
 {
     GuestRoom = 1,
-    Ground = 2
+    Ground = 2,
+    Club = 3
 }

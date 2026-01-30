@@ -483,12 +483,131 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("ClubPrerequisiteOptions");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubProcessPrerequisite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrerequisiteDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProcessId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RequiredByStepNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PrerequisiteDefinitionId");
+
+                    b.HasIndex("ProcessId");
+
+                    b.ToTable("ClubProcessPrerequisite");
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceImages", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClubServiceImages");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
+
+                    b.Property<bool?>("Action")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ActionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActionType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -507,10 +626,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("FoodType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Instruction")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsAvailable")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsButton")
@@ -526,6 +654,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsInstructionAtStart")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsPriceVisible")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVoucherPossible")
@@ -544,6 +675,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Price")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
@@ -1355,6 +1489,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DepartmentRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DirectorateId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -1608,6 +1748,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("CaseId");
 
+                    b.HasIndex("DirectorateId");
+
                     b.HasIndex("StepId");
 
                     b.ToTable("CaseStepHistory");
@@ -1650,6 +1792,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
@@ -3266,6 +3411,25 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Navigation("PrerequisiteDefinition");
                 });
 
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubProcessPrerequisite", b =>
+                {
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubPrerequisiteDefinitions", "PrerequisiteDefinition")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", "Process")
+                        .WithMany()
+                        .HasForeignKey("ProcessId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("PrerequisiteDefinition");
+
+                    b.Navigation("Process");
+                });
+
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubCategories", "Category")
@@ -3426,6 +3590,12 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", "Directorate")
+                        .WithMany()
+                        .HasForeignKey("DirectorateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.PMS.ProcessStep", "Step")
                         .WithMany()
                         .HasForeignKey("StepId")
@@ -3433,6 +3603,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Case");
+
+                    b.Navigation("Directorate");
 
                     b.Navigation("Step");
                 });
