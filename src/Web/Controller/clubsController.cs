@@ -1,6 +1,8 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Command;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
+using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
+using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.CreateFacility;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
@@ -172,6 +174,27 @@ public class clubsController : BaseApiController
         CancellationToken ct)
         => Ok(await _mediator.Send(
             new DeleteClubCategoryCommand(id), ct));
+
+    [HttpPost("CreateFacility")]
+    public async Task<IActionResult> CreateFacility(
+        [FromBody] CreateFacilityCommand command,
+        CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpPost("AddFacilityToClub")]
+    public async Task<IActionResult> AddFacilityToClub(
+        Guid clubId,
+        [FromBody] AddFacilityToClubCommand body,
+        CancellationToken ct)
+    {
+        var command = body with { ClubId = clubId };
+
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
 
 
     //[HttpPost("Create-Club-Service")]

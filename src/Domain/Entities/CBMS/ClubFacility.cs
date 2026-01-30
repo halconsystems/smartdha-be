@@ -17,9 +17,8 @@ public class ClubFacility : BaseAuditableEntity
     public bool IsAvailable { get; set; } = true;
     public bool IsPriceVisible { get; set; } = true;
 
-    // UI / Action behavior
     public bool HasAction { get; set; }
-    public string? ActionName { get; set; }   // Book / Order / Reserve
-    public string? ActionType { get; set; }   // API / URL / Modal
+    public string? ActionName { get; set; }
+    public string? ActionType { get; set; }
 }
 

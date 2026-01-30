@@ -28,7 +28,10 @@ public class GetClubCategoriesQueryHandler
             .Select(x => new CategoryDTO
             {
                 Id = x.Facility.ClubCategory.Id,
-                Name = x.Facility.ClubCategory.DisplayName
+                Name = x.Facility.ClubCategory.DisplayName,
+                Description= x.Facility.ClubCategory.Description ?? "",
+                DisplayName= x.Facility.ClubCategory.DisplayName,
+                Code= x.Facility.ClubCategory.Code
             })
             .Distinct()
             .ToListAsync(ct);
