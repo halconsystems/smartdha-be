@@ -10,14 +10,14 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 public record ClubCategoriesDTO(Guid Id,string Name, string Code,string Description, string DisplayName, bool? IsActive, bool? IsDeleted);
-public record GetClubCategoriesQuery() : IRequest<ApiResult<List<ClubCategoriesDTO>>>;
+public record GetClubWiseCategories() : IRequest<ApiResult<List<ClubCategoriesDTO>>>;
 
-public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubCategoriesQuery, ApiResult<List<ClubCategoriesDTO>>>
+public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubWiseCategories, ApiResult<List<ClubCategoriesDTO>>>
 {
     private readonly IOLMRSApplicationDbContext _db;
     public GetClubCategoriesQueryHandler(IOLMRSApplicationDbContext db) => _db = db;
 
-    public async Task<ApiResult<List<ClubCategoriesDTO>>> Handle(GetClubCategoriesQuery request, CancellationToken ct)
+    public async Task<ApiResult<List<ClubCategoriesDTO>>> Handle(GetClubWiseCategories request, CancellationToken ct)
     {
         var list = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
              .Where(x => x.IsActive == true && x.IsDeleted == false)
