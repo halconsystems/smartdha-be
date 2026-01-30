@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -12,7 +13,7 @@ public record SaveCasePrerequisiteValueCommand(
     Guid CaseId,
     Guid PrerequisiteDefinitionId,
     string? ValueText,
-    decimal? ValueNumber,
+    int? ValueNumber,
     DateTime? ValueDate,
     bool? ValueBool
 ) : IRequest<ApiResult<bool>>;

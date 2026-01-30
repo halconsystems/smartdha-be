@@ -69,18 +69,18 @@ public class ConsumerInquiryQueryHandler
                ProcessName = proc.Name,
 
                // Property address parts
-               p.PropertyNo,
+               p.SubDivision,
                p.Phase,
-               p.Sector,
+               p.StreetName,
                p.PlotNo,
-               p.Area
+               p.ActualSize
            }
        ).ToListAsync(ct);
 
        
         var result = rows.Select(x =>
         {
-            var consumerDetail = BuildConsumerDetail(x.Phase, x.Sector, x.PropertyNo, x.PlotNo, x.Area);
+            var consumerDetail = BuildConsumerDetail(x.SubDivision, x.Phase, x.StreetName, x.PlotNo, x.ActualSize);
             // Reference priority:
             // VoucherNo -> OneBillId -> "BILL-{yyyyMMddHHmmss}"
             var reference = !string.IsNullOrWhiteSpace(x.VoucherNo)

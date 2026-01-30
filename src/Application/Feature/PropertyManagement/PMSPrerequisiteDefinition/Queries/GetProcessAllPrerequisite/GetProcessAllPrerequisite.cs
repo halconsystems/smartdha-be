@@ -64,8 +64,8 @@ public class GetProcessAllPrerequisitesHandler
             .Where(x => x.CreatedBy == _currentUser.Id)
             .Select(x => new UserPropertyDto(
                 x.Id,
-                x.PropertyNo,
-                x.Sector,
+                x.PlotNo ?? "",
+                x.SubDivision,
                 x.Phase
             ))
             .ToListAsync(ct);

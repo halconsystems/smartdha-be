@@ -195,7 +195,14 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
                 PhoneNumberConfirmed = true,
                 TwoFactorEnabled = false,
                 AppType = AppType.Mobile,
-                UserType = !string.IsNullOrEmpty(memno) ? UserType.Member : !string.IsNullOrEmpty(staffno) ? UserType.Employee : UserType.NonMember,
+                UserType =
+                     !string.IsNullOrEmpty(memno) && !string.IsNullOrEmpty(staffno)
+                         ? UserType.StaffAndMember
+                         : !string.IsNullOrEmpty(memno)
+                             ? UserType.Member
+                             : !string.IsNullOrEmpty(staffno)
+                                 ? UserType.Employee
+                                 : UserType.NonMember,
                 RegisteredMobileNo = cellno,
                 IsVerified = true,
                 IsOtpRequired = true,

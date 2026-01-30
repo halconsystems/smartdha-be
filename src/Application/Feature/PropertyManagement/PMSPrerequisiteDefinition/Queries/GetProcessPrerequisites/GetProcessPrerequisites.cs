@@ -141,8 +141,8 @@ public class GetProcessPrerequisitesHandler
             .OrderByDescending(x=> x.Created)
             .Select(x => new UserPropertyDto(
                 x.Id,
-                x.PropertyNo,
-                x.Sector,
+                x.PlotNo ?? "",
+                x.SubDivision,
                 x.Phase
             ))
             .ToListAsync(ct);

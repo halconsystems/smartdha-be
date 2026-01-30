@@ -13,6 +13,7 @@ public enum UserType
     Driver=4,
     MemStaff = 5,
     ShopDriver = 6,
-    ShopOwner = 7
+    ShopOwner = 7,
+    StaffAndMember = 8
 }
 

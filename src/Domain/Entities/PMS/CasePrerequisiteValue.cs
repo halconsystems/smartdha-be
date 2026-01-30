@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ public class CasePrerequisiteValue : BaseAuditableEntity
     [MaxLength(2000)]
     public string? ValueText { get; set; }
 
-    public decimal? ValueNumber { get; set; }
+    public int? ValueNumber { get; set; }
     public DateTime? ValueDate { get; set; }
     public bool? ValueBool { get; set; }
 
