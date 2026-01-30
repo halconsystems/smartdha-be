@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -45,34 +44,48 @@ public class GetAllClubQueryHandler
     {
 
         var clubs = await _ctx.Clubs
-            .AsNoTracking()
-            .ToListAsync(ct);
+        .AsNoTracking()
+        .ToListAsync(ct);
 
-        if(clubs == null)
+        if (!clubs.Any())
             return ApiResult<List<ClubDTO>>.Fail("Club not found.");
 
-        var clubsCategory = await _ctx.ClubCategories
-            .Where(x => clubs.Select(c => c.Id).Contains(x.ClubId))
-            .AsNoTracking()
-            .ToListAsync(ct);
+        var clubIds = clubs.Select(c => c.Id).ToList();
 
 
         var clubImages = _ctx.ClubImages.Where(x => clubs.Select(c => c.Id).Contains(x.ClubId))
             .AsNoTracking()
             .ToList();
 
+        var clubCategories = await _ctx.ClubFacilities
+        .AsNoTracking()
+        .Where(x => clubIds.Contains(x.ClubId) && x.IsAvailable)
+        .Select(x => new
+        {
+            x.ClubId,
+            CategoryId = x.Facility.ClubCategory.Id,
+            CategoryName = x.Facility.ClubCategory.DisplayName
+        })
+        .Distinct()
+        .ToListAsync(ct);
+
+
 
 
         var result = clubs.Select(c =>
         {
-            var imagePath = clubImages?
+            var imagePath = clubImages
                 .FirstOrDefault(x => x.ClubId == c.Id && x.Category == ImageCategory.Main)
                 ?.ImageURL;
 
-            var bannerPaths = clubImages?
+            var bannerPaths = clubImages
                 .Where(x => x.ClubId == c.Id && x.Category != ImageCategory.Main)
                 .Select(x => x.ImageURL)
                 .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList();
+
+            var categories = clubCategories
+                .Where(x => x.ClubId == c.Id)
                 .ToList();
 
             return new ClubDTO
@@ -80,44 +93,32 @@ public class GetAllClubQueryHandler
                 Id = c.Id,
                 Name = c.Name,
                 Location = c.Location,
+                Description = c.Description,
+                ContactNumber = c.ContactNumber,
 
-                highlights = clubsCategory != null
-                ? clubsCategory
-                    .Where(x => x.ClubId == c.Id)
-                    .Select(x => x.Name)
-                    .ToList()
-                : new List<string>(),
+                // 🔥 HIGHLIGHTS = CATEGORY NAMES
+                highlights = categories
+                    .Select(x => x.CategoryName)
+                    .ToList(),
 
-                //highlights = clubsCategory != null
-                //    ? clubsCategory
-                //        .Where(x => x.ClubId == c.Id)
-                //        .Select(x => x.Name)
-                //        .ToList()
-                //    : new List<string>(),
+                Categories = categories
+                    .Select(x => new HighlightDTO
+                    {
+                        Id = x.CategoryId,
+                        Name = x.CategoryName
+                    })
+                    .ToList(),
 
                 imageUrl = imagePath == null
                     ? null
                     : _fileStorageService.GetPublicUrl(imagePath),
 
-                bannerIamges = bannerPaths == null
-                    ? new List<string>()
-                    : bannerPaths
-                        .Select(path => _fileStorageService.GetPublicUrl(path))
-                        .ToList(),
-                Description = c.Description,
-                ContactNumber = c.ContactNumber,
-                Categories = clubsCategory != null
-                ? clubsCategory
-                .Where(x => x.ClubId == c.Id)
-                .Select(x => new HighlightDTO
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList()
-                : new List<HighlightDTO>()
-
+                bannerIamges = bannerPaths
+                    .Select(path => _fileStorageService.GetPublicUrl(path))
+                    .ToList()
             };
         }).ToList();
+
 
 
         return ApiResult<List<ClubDTO>>.Ok(result);

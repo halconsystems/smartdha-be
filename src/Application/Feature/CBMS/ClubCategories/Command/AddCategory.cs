@@ -10,7 +10,7 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Command;
 
-public record CreateClubCategoryCommand(Guid ClubId, string Name, string Code) : IRequest<ApiResult<Guid>>;
+public record CreateClubCategoryCommand(string Name, string Code,string DisplayName,string Description) : IRequest<ApiResult<Guid>>;
 
 public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCategoryCommand, ApiResult<Guid>>
 {
@@ -19,19 +19,20 @@ public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCatego
 
     public async Task<ApiResult<Guid>> Handle(CreateClubCategoryCommand request, CancellationToken ct)
     {
-        var exists = await _db.Set<Domain.Entities.CBMS.ClubCategories>()
-            .AnyAsync(x => x.Code == request.Code && x.ClubId == request.ClubId, ct);
+        var exists = await _db.Set<ClubCategory>()
+            .AnyAsync(x => x.Code == request.Code, ct);
 
         if (exists) return ApiResult<Guid>.Fail("Club Category code already exists.");
 
-        var entity = new Domain.Entities.CBMS.ClubCategories
+        var entity = new ClubCategory
         {
-            ClubId = request.ClubId,
             Name = request.Name.Trim(),
-            Code = request.Code.Trim().ToUpperInvariant()
+            Code = request.Code.Trim().ToUpperInvariant(),
+            DisplayName= request.DisplayName.Trim(),
+            Description = request.Description.Trim()
         };
 
-        _db.Set<Domain.Entities.CBMS.ClubCategories>().Add(entity);
+        _db.Set<ClubCategory>().Add(entity);
         await _db.SaveChangesAsync(ct);
 
         return ApiResult<Guid>.Ok(entity.Id, "Club Category created.");

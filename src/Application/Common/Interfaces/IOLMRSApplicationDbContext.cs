@@ -42,14 +42,14 @@ public interface IOLMRSApplicationDbContext
     DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs { get; }
     DbSet<GroundBooking> GroundBookings { get; }
     DbSet<GroundBookingSlot> GroundBookingSlots { get; }
-    DbSet<ClubCategories> ClubCategories { get; }
-    DbSet<ClubServiceProcess> ClubProcess { get; }
+    DbSet<ClubCategory> ClubCategories { get; }
     DbSet<ClubImages> ClubImages { get; }
     DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions { get; }
     DbSet<ClubFeeDefinition> ClubFeeDefinition { get; }
     DbSet<ClubFeeOption> ClubFeeOption { get; }
     DbSet<ClubFeeCategory> ClubFeeCategory { get; }
-    DbSet<ClubServiceImages> ClubServiceImages { get; }
+    DbSet<Facility> Facilities { get; }
+    DbSet<ClubFacility> ClubFacilities { get; }
 
 
 

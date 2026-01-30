@@ -1,6 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
-using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetComplaintDropdowns;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaints;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ namespace MobileAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "other")]
+[ApiExplorerSettings(GroupName = "club")]
 public class ClubController : BaseApiController
 {
     private readonly IMediator _med;
@@ -31,21 +30,21 @@ public class ClubController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("by-category/{categoryId:guid}")]
-    public async Task<IActionResult> GetByCategory(
-        Guid categoryId,
-        CancellationToken ct)
-    {
-        return Ok(await Mediator.Send(
-            new GetClubServiceProcessByCatQuery(categoryId), ct));
-    }
+    //[HttpGet("by-category/{categoryId:guid}")]
+    //public async Task<IActionResult> GetByCategory(
+    //    Guid categoryId,
+    //    CancellationToken ct)
+    //{
+    //    return Ok(await Mediator.Send(
+    //        new GetClubServiceProcessByCatQuery(categoryId), ct));
+    //}
 
-    [HttpGet("Club-service{processId:guid}")]
-    public async Task<IActionResult> GetServiceById(
-      Guid processId,
-      CancellationToken ct)
-    {
-        return Ok(await Mediator.Send(
-            new GetClubServiceProvessByIdQuery(processId), ct));
-    }
+    //[HttpGet("Club-service{processId:guid}")]
+    //public async Task<IActionResult> GetServiceById(
+    //  Guid processId,
+    //  CancellationToken ct)
+    //{
+    //    return Ok(await Mediator.Send(
+    //        new GetClubServiceProvessByIdQuery(processId), ct));
+    //}
 }

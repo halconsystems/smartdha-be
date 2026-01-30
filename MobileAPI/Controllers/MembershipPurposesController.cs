@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "club")]
+[ApiExplorerSettings(GroupName = "other")]
 public class MembershipPurposesController : BaseApiController
 {
     private readonly IMediator _mediator;

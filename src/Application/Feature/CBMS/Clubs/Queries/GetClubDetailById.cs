@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
@@ -40,85 +39,69 @@ public class GetClubDetailByIdHandler
 
     public async Task<ApiResult<ClubDTO>> Handle(GetClubDetailById request, CancellationToken ct)
     {
+        var club = await _ctx.Clubs
+        .AsNoTracking()
+        .FirstOrDefaultAsync(x => x.Id == request.ClubId, ct);
 
-        var clubs = await _ctx.Clubs
-            .FirstOrDefaultAsync(x => x.Id == request.ClubId, ct);
-
-        if (clubs == null)
+        if (club == null)
             return ApiResult<ClubDTO>.Fail("Club not found.");
 
-        var clubsCategory = await _ctx.ClubCategories
-            .Where(x => x.ClubId == clubs.Id)
-            .AsNoTracking()
-            .ToListAsync(ct);
+        var clubCategories = await _ctx.ClubFacilities
+         .AsNoTracking()
+         .Where(x => x.ClubId == request.ClubId && x.IsAvailable)
+         .Select(x => new
+         {
+             CategoryId = x.Facility.ClubCategory.Id,
+             CategoryName = x.Facility.ClubCategory.DisplayName
+         })
+         .Distinct()
+         .ToListAsync(ct);
 
-        if(clubsCategory == null)
-            return ApiResult<ClubDTO>.Fail("Club Category not found.");
-
-        var clubServices = await _ctx.ClubProcess
-            .Where(x => clubsCategory.Select(c => c.Id).Contains(x.CategoryId))
-            .AsNoTracking()
-            .ToListAsync(ct);
-
-        var clubImages = _ctx.ClubImages.Where(x => x.ClubId == clubs.Id)
-            .AsNoTracking()
-            .ToList();
+        var clubImages = await _ctx.ClubImages
+        .AsNoTracking()
+        .Where(x => x.ClubId == request.ClubId)
+        .ToListAsync(ct);
 
 
-        var imagePath = clubImages?
-     .FirstOrDefault(x => x.ClubId == request.ClubId && x.Category == ImageCategory.Main)
-     ?.ImageURL;
+        var imagePath = clubImages
+    .FirstOrDefault(x => x.Category == ImageCategory.Main)
+    ?.ImageURL;
 
-        var bannerPaths = clubImages?
-            .Where(x => x.ClubId == request.ClubId && x.Category != ImageCategory.Main)
+        var bannerPaths = clubImages
+            .Where(x => x.Category != ImageCategory.Main)
             .Select(x => x.ImageURL)
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToList();
 
-        var clubCategoryIds = clubsCategory?
-            .Where(c => c.ClubId == clubs.Id)
-            .Select(c => c.Id)
-            .ToHashSet()
-            ?? new HashSet<Guid>();
-
-
         var result = new ClubDTO
         {
-            Id = request.ClubId,
-            Name = clubs.Name,
-            Location = clubs.Location,
+            Id = club.Id,
+            Name = club.Name,
+            Location = club.Location,
+            Description = club.Description,
+            ContactNumber = club.ContactNumber,
 
-            highlights = clubsCategory != null
-                ? clubsCategory
-                    .Where(x => x.ClubId == request.ClubId)
-                    .Select(x => x.Name)
-                    .ToList()
-                : new List<string>(),
+            // 🔥 HIGHLIGHTS = CATEGORY NAMES
+            highlights = clubCategories
+                .Select(x => x.CategoryName)
+                .ToList(),
 
-
-            Categories = clubsCategory != null
-                ? clubsCategory
-                    .Where(x => x.ClubId == request.ClubId)
-                    .Select(x => new HighlightDTO
-                    {
-                        Id = x.Id,
-                        Name = x.Name
-                    }).ToList()
-                : new List<HighlightDTO>(),
+            Categories = clubCategories
+                .Select(x => new HighlightDTO
+                {
+                    Id = x.CategoryId,
+                    Name = x.CategoryName
+                })
+                .ToList(),
 
             imageUrl = imagePath == null
                 ? null
                 : _fileStorageService.GetPublicUrl(imagePath),
 
-            bannerIamges = bannerPaths?
+            bannerIamges = bannerPaths
                 .Select(path => _fileStorageService.GetPublicUrl(path))
-                .ToList() ?? new List<string>(),
-
-            Description = clubs.Description,
-            ContactNumber = clubs.ContactNumber,
-
+                .ToList()
         };
-
 
 
         return ApiResult<ClubDTO>.Ok(result);
