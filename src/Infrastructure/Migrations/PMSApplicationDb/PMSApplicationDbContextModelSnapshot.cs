@@ -442,8 +442,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<DateTime?>("ValueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("ValueNumber")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("ValueNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("ValueText")
                         .HasMaxLength(2000)
@@ -1553,8 +1553,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("Area")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ActualSize")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("AllResidentialPlot")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ApplicationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Category")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CellNo")
                         .HasMaxLength(20)
@@ -1565,6 +1576,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Extension")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
@@ -1578,12 +1593,20 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MemberName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<string>("MemberNo")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("MemberPk")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NominalArea")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OwnerCnic")
                         .HasMaxLength(20)
@@ -1594,21 +1617,19 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PlotNo")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PropertyNo")
-                        .IsRequired()
+                    b.Property<string>("PlotNoAlt")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PropertyPk")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sector")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("PropertyType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Ser")
                         .ValueGeneratedOnAdd()
@@ -1616,6 +1637,18 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PMSApplicationDb
                         .HasColumnOrder(1);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("StreetCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StreetName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("SubDivision")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

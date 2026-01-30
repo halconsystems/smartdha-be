@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -23,7 +24,7 @@ public class AdminCasePrerequisiteDto
     public int RequiredByStepNo { get; set; }
 
     public string? ValueText { get; set; }
-    public decimal? ValueNumber { get; set; }
+    public BigInteger? ValueNumber { get; set; }
     public DateTime? ValueDate { get; set; }
     public bool? ValueBool { get; set; }
 }
@@ -95,11 +96,35 @@ public class GetAdminCaseDetailHandler
                 CategoryName = x.Process.Category.Name,
                 Property = new AdminCasePropertyDto
                 {
-                    PropertyId = x.UserProperty.Id,
-                    PropertyNo = x.UserProperty.PropertyNo,
-                    PlotNo = x.UserProperty.PropertyNo,
-                    Sector = x.UserProperty.Sector,
-                    Area = x.UserProperty.Area
+                    PropertyId = x.Id,
+
+                    PlotNo = x.UserProperty.PlotNo ?? "",
+                    PlotNoAlt = x.UserProperty.PlotNoAlt,
+
+                    StreetName = x.UserProperty.StreetName,
+                    SubDivision = x.UserProperty.SubDivision,
+
+                    PropertyType = x.UserProperty.PropertyType,
+                    Phase = x.UserProperty.Phase,
+                    Extension = x.UserProperty.Extension,
+
+                    NominalArea = x.UserProperty.NominalArea,
+                    Area = x.UserProperty.ActualSize,
+
+                    StreetCode = x.UserProperty.StreetCode,
+
+                    PropertyPk = x.UserProperty.PropertyPk,
+                    MemberPk = x.UserProperty.MemberPk,
+                    MemberNo = x.UserProperty.MemberNo,
+
+                    Category = x.UserProperty.Category,
+                    MemberName = x.UserProperty.MemberName,
+                    ApplicationDate = x.UserProperty.ApplicationDate,
+
+                    OwnerCnic = x.UserProperty.OwnerCnic,
+                    CellNo = x.UserProperty.CellNo,
+
+                    AllResidentialPlot = x.UserProperty.AllResidentialPlot
                 },
                 x.ProcessId,
                 x.ApplicantCnic,

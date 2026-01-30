@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ public class PrerequisiteValueInput
 {
     public Guid PrerequisiteDefinitionId { get; set; }
     public string? ValueText { get; set; }
-    public decimal? ValueNumber { get; set; }
+    public int? ValueNumber { get; set; }
     public DateTime? ValueDate { get; set; }
     public bool? ValueBool { get; set; }
 }

@@ -14,6 +14,8 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisite
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 public class FinalWorkFlowWithFee
 {
@@ -36,7 +38,8 @@ public record CaseWorkflowStepDto
     string DirectorateName,
     WorkflowStepStatus Status,
     DateTime? ActionDate,
-    string? Remarks
+    string? Remarks,
+    string? ActionBy
 );
 public class PaymentStatusDto
 {
@@ -67,12 +70,14 @@ public class GetCaseWorkflowHierarchyHandler
     private readonly IPMSApplicationDbContext _db;
     private readonly IFileStorageService _fileStorageService;
     private readonly IApplicationDbContext _applicationDbContext;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GetCaseWorkflowHierarchyHandler(IPMSApplicationDbContext db, IFileStorageService fileStorageService, IApplicationDbContext applicationDbContext)
+    public GetCaseWorkflowHierarchyHandler(IPMSApplicationDbContext db, IFileStorageService fileStorageService, IApplicationDbContext applicationDbContext,UserManager<ApplicationUser> userManager)
     {
         _db = db;
         _fileStorageService = fileStorageService;
         _applicationDbContext = applicationDbContext;
+        _userManager = userManager;
     }
 
     public async Task<ApiResult<FinalWorkFlowWithFee>> Handle(GetCaseWorkflowHierarchyQuery request, CancellationToken ct)
@@ -229,6 +234,14 @@ public class GetCaseWorkflowHierarchyHandler
                 Requirements = requirements
             };
         }
+        var userIds = history
+    .GroupBy(h => h.StepId)
+    .Select(g => g
+        .OrderByDescending(x => x.Created)
+        .FirstOrDefault()?.CreatedBy)
+    .Where(id => id != null)
+    .Distinct()
+    .ToList();
 
 
 
@@ -263,7 +276,8 @@ public class GetCaseWorkflowHierarchyHandler
                 step.Directorate.Name,
                 status,
                 historyForStep?.Created,
-                historyForStep?.Remarks
+                historyForStep?.Remarks,
+                ResolveUserName(historyForStep?.CreatedBy)
             );
         }).ToList();
 
@@ -289,5 +303,17 @@ public class GetCaseWorkflowHierarchyHandler
             RejectedPrerequisites = rejectionDto   // 🔴 IMPORTANT
         });
     }
+
+    string? ResolveUserName(string? userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+            return null;
+
+        return _userManager.Users
+            .Where(u => u.Id == userId)
+            .Select(u => u.Name ?? u.Name)
+            .FirstOrDefault();
+    }
+
 }
 

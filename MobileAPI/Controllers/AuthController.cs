@@ -37,13 +37,6 @@ namespace MobileAPI.Controllers;
 [ApiExplorerSettings(GroupName = "auth")]
 public class AuthController : BaseApiController
 {
-
-    private readonly IFileStorageService _files;
-
-    public AuthController(IFileStorageService files)
-    {
-        _files = files;
-    }
     [AllowAnonymous]
     [EnableRateLimiting("AnonymousLimiter")]
     [HttpPost("Login")]
@@ -185,46 +178,13 @@ public class AuthController : BaseApiController
          [FromForm] AddUserImagesFlatForm form,
          CancellationToken ct)
     {
-        if (!ModelState.IsValid)
-            return ValidationProblem(ModelState);
-
-        if (form.Files == null)
-            return BadRequest("No images uploaded.");
-
-        var folder = $"UserProfile/{form.ImageNames}";
-
-        var file = form.Files;
-
-        var filePath = await _files.SaveFileAsync(
-                file,
-                folder,
-                ct,
-                maxBytes: 10 * 1024 * 1024,
-                allowedExtensions: new[] { ".jpg", ".jpeg", ".png", ".pdf" }
-            );
-
-        var ext = Path.GetExtension(filePath);
-
-        // Pick metadata by index (or defaults)
-        var name = form.ImageNames;
-        var desc = form.Descriptions;
-        var cat = form.Categories;
-
-        var uploaded = new AddProfileImageDTO(
-        ImageURL: filePath,
-        ImageExtension: ext,
-        ImageName: name,
-        Description: desc,
-        Category: ImageCategory.Main
-        );
-
-
-        // ✅ Send only file path to CQRS
         var cmd = new AddUserImagesCommand(
-            uploaded
-        );
+        File: form.Files,
+        ImageName: form.ImageNames,
+        Description: form.Descriptions,
+        Category: form.Categories
+    );
 
-        //lastResult = await Mediator.Send(cmd, ct);
         var result = await Mediator.Send(cmd, ct);
         return Ok(result);
 

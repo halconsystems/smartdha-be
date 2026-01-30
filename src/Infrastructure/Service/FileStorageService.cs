@@ -352,8 +352,6 @@ public class FileStorageService : IFileStorageService
 
         return fullUrl;
     }
-
-
     public async Task<(string Path, PanicDispatchMediaType MediaType)> SaveImageOrVideoAsync(
      IFormFile file,
      string folderName,
