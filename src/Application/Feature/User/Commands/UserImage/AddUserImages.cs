@@ -14,7 +14,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Commands.UserImage;
 
-
 public record AddUserImagesCommand(
     IFormFile File,
     string? ImageName,
