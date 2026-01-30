@@ -25,7 +25,7 @@ public class DeleteClubCategoryCommandHandler
         DeleteClubCategoryCommand request,
         CancellationToken ct)
     {
-        var entity = await _db.Set<Domain.Entities.CBMS.ClubCategories>()
+        var entity = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
             .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
 
         if (entity == null)

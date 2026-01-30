@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 
@@ -21,12 +20,9 @@ public class ClubDTO
     public string? ContactNumber { get; set; }
     public string? AccountNo { get; set; }
     [MaxLength(4)] public string? AccountNoAccronym { get; set; }
-    public ClubType ClubType { get; set; } = ClubType.GuestRoom;
-
+    public ClubType ClubType { get; set; } = ClubType.Club;
     public List<string>? highlights { get; set; }
     public List<HighlightDTO>? Categories { get; set; }
-
-    public List<ClubServiceProcessDTO>? ClubServicesDTOs { get; set; }
 }
 public class HighlightDTO
 {

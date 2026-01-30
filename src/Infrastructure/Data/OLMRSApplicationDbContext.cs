@@ -50,16 +50,16 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<GroundBookingSlot> GroundBookingSlots => Set<GroundBookingSlot>();
     public DbSet<GroundImages> GroundImages => Set<GroundImages>();
     public DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs => Set<GroundPaymentIpnLogs>();
-    public DbSet<ClubCategories> ClubCategories => Set<ClubCategories>();
-    public DbSet<ClubServiceProcess> ClubProcess => Set<ClubServiceProcess>();
+    public DbSet<ClubCategory> ClubCategories => Set<ClubCategory>();
     public DbSet<ClubImages> ClubImages => Set<ClubImages>();
     public DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions => Set<ClubPrerequisiteDefinitions>();
     public DbSet<ClubPrerequisiteOptions> ClubPrerequisiteOptions => Set<ClubPrerequisiteOptions>();
     public DbSet<ClubFeeDefinition> ClubFeeDefinition => Set<ClubFeeDefinition>();
     public DbSet<ClubFeeCategory> ClubFeeCategory => Set<ClubFeeCategory>();
     public DbSet<ClubFeeOption> ClubFeeOption => Set<ClubFeeOption>();
-    public DbSet<ClubServiceImages> ClubServiceImages => Set<ClubServiceImages>();
     public DbSet<ClubProcessPrerequisite> ClubProcessPrerequisite => Set<ClubProcessPrerequisite>();
+    public DbSet<Facility> Facilities => Set<Facility>();
+    public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class

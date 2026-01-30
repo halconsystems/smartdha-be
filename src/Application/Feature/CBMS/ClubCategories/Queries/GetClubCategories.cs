@@ -9,7 +9,7 @@ using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
-public record ClubCategoriesDTO(Guid Id,Guid ClubId, string Name, string Code, bool? IsActive, bool? IsDeleted);
+public record ClubCategoriesDTO(Guid Id,string Name, string Code,string Description, string DisplayName, bool? IsActive, bool? IsDeleted);
 public record GetClubCategoriesQuery() : IRequest<ApiResult<List<ClubCategoriesDTO>>>;
 
 public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubCategoriesQuery, ApiResult<List<ClubCategoriesDTO>>>
@@ -19,10 +19,10 @@ public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubCategoriesQu
 
     public async Task<ApiResult<List<ClubCategoriesDTO>>> Handle(GetClubCategoriesQuery request, CancellationToken ct)
     {
-        var list = await _db.Set<Domain.Entities.CBMS.ClubCategories>()
+        var list = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
              .Where(x => x.IsActive == true && x.IsDeleted == false)
             .OrderBy(x => x.Name)
-            .Select(x => new ClubCategoriesDTO(x.Id,x.ClubId, x.Name, x.Code, x.IsActive,x.IsDeleted))
+            .Select(x => new ClubCategoriesDTO(x.Id,x.Name, x.Code,x.Description ?? "",x.DisplayName, x.IsActive,x.IsDeleted))
             .ToListAsync(ct);
 
         return ApiResult<List<ClubCategoriesDTO>>.Ok(list);
