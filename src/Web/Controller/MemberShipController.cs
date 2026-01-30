@@ -2,6 +2,8 @@
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
+using DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Queries.GetAllMembershipPurposes;
+using DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
 using DHAFacilitationAPIs.Application.Feature.Religion.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Queries;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Command;
@@ -91,6 +93,20 @@ public class MemberShipController : BaseApiController
     public async Task<ActionResult<MemberShipDTO>> GetAllReligonSectById(Guid ReligonId,CancellationToken ct)
     {
         var result = await _mediator.Send(new GetReligonSectByIdQuery(ReligonId), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("get-MemberShipRequestLisr"), AllowAnonymous]
+    public async Task<ActionResult<MemberShipDTO>> GetAllMemberShipsRequest(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllMembershipPurposesQuery(), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("get-MemberShipRequestById"), AllowAnonymous]
+    public async Task<ActionResult<MemberShipDTO>> GetMemberShipRequestByIdId(Guid MemberShipId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetMemberShipHistoryQuery(MemberShipId), ct);
         return Ok(result);
     }
 }

@@ -94,5 +94,6 @@ public class MemberRequest : BaseAuditableEntity
     public bool BestKnowledge { get; set; }
     public bool Rservation { get; set; }
 
+
 }
 

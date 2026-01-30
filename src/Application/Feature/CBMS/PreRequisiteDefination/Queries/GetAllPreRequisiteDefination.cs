@@ -58,7 +58,7 @@ public class GetAllPreRequisiteDefinationQueryHandler
                 x.Type == PrerequisiteType.MultiSelect ||
                 x.Type == PrerequisiteType.CheckboxGroup ||
                 x.Type == PrerequisiteType.RadioGroup
-                    ? _db.Set<PrerequisiteOption>()
+                    ? _db.Set<ClubPrerequisiteOptions>()
                         .Where(o => o.PrerequisiteDefinitionId == x.Id && o.IsDeleted == false)
                         .OrderBy(o => o.SortOrder)
                         .Select(o => new PrerequisiteOptionDto(

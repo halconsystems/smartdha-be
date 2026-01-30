@@ -8,9 +8,8 @@ using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllNonMemberPurpos
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Queries.GetAllMembershipPurposes;
-public class GetAllMembershipPurposesQuery : IRequest<SuccessResponse<List<MembershipPurposeDto>>>
-{
-}
+public record GetAllMembershipPurposesQuery() : IRequest<SuccessResponse<List<MembershipPurposeDto>>>;
+
 public class GetAllMembershipPurposesQueryHandler : IRequestHandler<GetAllMembershipPurposesQuery, SuccessResponse<List<MembershipPurposeDto>>>
 {
     private readonly IApplicationDbContext _context;
