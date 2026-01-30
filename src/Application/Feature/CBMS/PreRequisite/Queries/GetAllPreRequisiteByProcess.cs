@@ -80,7 +80,7 @@ public class GetProcessAllPrerequisitesHandler
         var properties = await _db.Set<Club>()
             .Where(x => x.IsActive == true && x.IsDeleted == false)
             .AsNoTracking()
-            .Where(x => x.CreatedBy == _currentUser.Id)
+            //.Where(x => x.CreatedBy == _currentUser.Id)
             .Select(x => new UserClubDto(
                 x.Id,
                 x.Name,

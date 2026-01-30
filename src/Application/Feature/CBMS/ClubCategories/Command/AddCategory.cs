@@ -20,7 +20,7 @@ public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCatego
     public async Task<ApiResult<Guid>> Handle(CreateClubCategoryCommand request, CancellationToken ct)
     {
         var exists = await _db.Set<Domain.Entities.CBMS.ClubCategories>()
-            .AnyAsync(x => x.Code == request.Code, ct);
+            .AnyAsync(x => x.Code == request.Code && x.ClubId == request.ClubId, ct);
 
         if (exists) return ApiResult<Guid>.Fail("Club Category code already exists.");
 

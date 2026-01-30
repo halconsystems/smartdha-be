@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260129075605_UpdateClubServicePorcess")]
+    partial class UpdateClubServicePorcess
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -483,116 +486,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("ClubPrerequisiteOptions");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubProcessPrerequisite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRequired")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("PrerequisiteDefinitionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProcessId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("RequiredByStepNo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PrerequisiteDefinitionId");
-
-                    b.HasIndex("ProcessId");
-
-                    b.ToTable("ClubProcessPrerequisite");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceImages", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClubServiceImages");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", b =>
                 {
                     b.Property<Guid>("Id")
@@ -600,7 +493,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-                    b.Property<bool?>("Action")
+                    b.Property<bool>("Action")
                         .HasColumnType("bit");
 
                     b.Property<string>("ActionName")
@@ -638,7 +531,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsAvailable")
+                    b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsButton")
@@ -656,7 +549,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<bool>("IsInstructionAtStart")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsPriceVisible")
+                    b.Property<bool>("IsPriceVisible")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVoucherPossible")
@@ -3409,25 +3302,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("PrerequisiteDefinition");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubProcessPrerequisite", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubPrerequisiteDefinitions", "PrerequisiteDefinition")
-                        .WithMany()
-                        .HasForeignKey("PrerequisiteDefinitionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", "Process")
-                        .WithMany()
-                        .HasForeignKey("ProcessId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("PrerequisiteDefinition");
-
-                    b.Navigation("Process");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", b =>

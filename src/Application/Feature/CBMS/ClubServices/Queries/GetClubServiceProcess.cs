@@ -23,13 +23,31 @@ public class GetClubServiceProcessQueryHandler : IRequestHandler<GetClubServiceP
     {
 
         var processes = await _db.Set<ClubServiceProcess>()
-            .OrderBy(x => x.Name)
-            .Select(x => new ClubServiceProcessDTO(
-                x.Id,
+            .OrderBy(x => x.Name).ToListAsync(ct);
+
+        var clubserviceImage = await _db.Set<Domain.Entities.CBMS.ClubServiceImages>()
+             .Where(x => processes.Select(c => c.Id).Contains(x.ServiceId) && x.Category == Domain.Enums.ImageCategory.Main).ToListAsync(ct);
+
+        var result = processes.Select(x =>
+        {
+            var imagePath = clubserviceImage?
+                .FirstOrDefault(y => y.ServiceId == x.Id)?
+                .ImageURL;
+
+            return new ClubServiceProcessDTO(
+                 x.Id,
                 x.CategoryId,
                 x.Name,
                 x.Code,
                 x.Description,
+                imagePath,
+                x.Price,
+                x.FoodType,
+                x.IsAvailable,
+                x.IsPriceVisible,
+                x.Action,
+                x.ActionName,
+                x.ActionType,
                 x.IsFeeAtSubmission,
                 x.IsVoucherPossible,
                 x.IsFeeRequired,
@@ -37,12 +55,14 @@ public class GetClubServiceProcessQueryHandler : IRequestHandler<GetClubServiceP
                 x.IsInstructionAtStart,
                 x.IsButton,
                 x.Instruction,
+
                 x.IsActive,
                 x.IsDeleted
-            ))
-            .ToListAsync(ct);
+            );
+        }).ToList();
 
-        return ApiResult<List<ClubServiceProcessDTO>>.Ok(processes);
+
+        return ApiResult<List<ClubServiceProcessDTO>>.Ok(result);
     }
 }
 

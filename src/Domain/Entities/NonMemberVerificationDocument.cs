@@ -15,21 +15,17 @@ public class NonMemberVerificationDocument : BaseAuditableEntity
     public Guid VerificationId { get; set; }
     public NonMemberVerification Verification { get; set; } = default!;
 
-    [Required]
     [MaxLength(500)]
-    public string CNICFrontImagePath { get; set; } = default!;
+    public string? CNICFrontImagePath { get; set; }
 
-    [Required]
     [MaxLength(500)]
-    public string CNICBackImagePath { get; set; } = default!;
+    public string? CNICBackImagePath { get; set; }
 
-    [Required]
     [MaxLength(500)]
-    public string ProfilePicture { get; set; } = default!;
+    public string? ProfilePicture { get; set; } 
 
-    [Required]
     [MaxLength(500)]
-    public string UtilityBill { get; set; } = default!;
+    public string? UtilityBill { get; set; }
 
     [MaxLength(500)]
     public string? SupportingDocumentPath { get; set; } // optional 

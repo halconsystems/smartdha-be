@@ -58,6 +58,8 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<ClubFeeDefinition> ClubFeeDefinition => Set<ClubFeeDefinition>();
     public DbSet<ClubFeeCategory> ClubFeeCategory => Set<ClubFeeCategory>();
     public DbSet<ClubFeeOption> ClubFeeOption => Set<ClubFeeOption>();
+    public DbSet<ClubServiceImages> ClubServiceImages => Set<ClubServiceImages>();
+    public DbSet<ClubProcessPrerequisite> ClubProcessPrerequisite => Set<ClubProcessPrerequisite>();
 
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class

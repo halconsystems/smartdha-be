@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -45,6 +46,7 @@ public interface IOLHApplicationDbContext
     DbSet<OLH_Payment> Payments { get; }
     DbSet<OLH_Refund> Refunds { get; }
     DbSet<OLH_BowserRequestNextStatus> BowserRequestsNextStatus { get; }
+    
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

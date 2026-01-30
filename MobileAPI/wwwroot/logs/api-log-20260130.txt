@@ -1,0 +1,457 @@
+2026-01-30 00:47:56.660 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVDSTFF1BS:00000001
+Request  : AppUserLoginCommand
+Duration : 5818 ms
+2026-01-30 00:47:56.815 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (5898 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"CNIC":"3220312345678","Password":"P@ssword1","FCMToken":"string","DeviceId":"string","$type":"AppUserLoginCommand"}
+2026-01-30 00:47:56.877 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1BS:00000001
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 6498 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-30 00:48:14.940 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1BT:00000001
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 401
+Duration : 24 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-30 00:48:23.657 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1BU:00000001
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 401
+Duration : 53 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-30 00:48:33.818 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1BV:00000001
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 401
+Duration : 3 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-30 00:48:34.467 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1BV:00000003
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 401
+Duration : 1 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-30 00:48:55.933 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVDSTFF1C0:00000001
+Request  : GetProfileDetailsQuery
+Duration : 322 ms
+2026-01-30 00:48:55.957 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C0:00000001
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 200
+Duration : 433 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"email":"muhammad.suleman@dhakarachi.org","registteredEmail":null,"name":"Haider Ali","cnic":"***","phoneNumber":null,"mobileNumber":null,"registteredMobileNumber":"923075709068","memPk":null,"staffNo":null,"isMember":false,"isClubMember":null,"isStaff":false,"profileImage":"https://gw.dhakarachi.org/wwwroot/UserProfile/8b43345f4de0467491afc3aa4c8f0ceb.jpg"}
+==============================================
+2026-01-30 00:50:27.842 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVDSTFF1C1:00000001
+Request  : GetProfileDetailsQuery
+Duration : 29135 ms
+2026-01-30 00:50:27.878 +05:00 [WRN] CMS Long Running Request: GetProfileDetailsQuery (29135 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetProfileDetailsQuery"}
+2026-01-30 00:50:27.879 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:00000001
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 200
+Duration : 29178 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"email":"muhammad.suleman@dhakarachi.org","registteredEmail":null,"name":"Haider Ali","cnic":"***","phoneNumber":null,"mobileNumber":null,"registteredMobileNumber":"923075709068","memPk":null,"staffNo":null,"isMember":false,"isClubMember":null,"isStaff":false,"profileImage":"https://gw.dhakarachi.org/wwwroot/UserProfile/8b43345f4de0467491afc3aa4c8f0ceb.jpg"}
+==============================================
+2026-01-30 00:53:06.045 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVDSTFF1C1:00000003
+Request  : GetProfileDetailsQuery
+Duration : 147792 ms
+2026-01-30 00:53:06.062 +05:00 [WRN] CMS Long Running Request: GetProfileDetailsQuery (147794 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetProfileDetailsQuery"}
+2026-01-30 00:53:06.063 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:00000003
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 200
+Duration : 147829 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"email":"muhammad.suleman@dhakarachi.org","registteredEmail":null,"name":"Haider Ali","cnic":"***","phoneNumber":null,"mobileNumber":null,"registteredMobileNumber":"923075709068","memPk":null,"staffNo":null,"isMember":false,"isClubMember":null,"isStaff":false,"profileImage":"https://gw.dhakarachi.org/wwwroot/UserProfile/8b43345f4de0467491afc3aa4c8f0ceb.jpg"}
+==============================================
+2026-01-30 00:53:13.887 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:00000005
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 876 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-30 00:53:19.116 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:00000007
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 643 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-30 00:54:32.005 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:00000009
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 13910 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-30 00:54:49.948 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:0000000B
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 9287 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-30 00:55:27.752 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVDSTFF1C1:0000000D
+Method   : POST
+Path     : /api/auth/login
+Status   : 401
+Duration : 14927 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"title":"Unauthorized","status":401,"detail":"Invalid password. Please try again."}
+==============================================
+2026-01-30 00:57:18.363 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVE23I3TUH:00000003
+Request  : AppUserLoginCommand
+Duration : 687 ms
+2026-01-30 00:57:18.430 +05:00 [WRN] CMS Long Running Request: AppUserLoginCommand (722 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"CNIC":"3220312345678","Password":"P@ssword1","FCMToken":"string","DeviceId":"string","$type":"AppUserLoginCommand"}
+2026-01-30 00:57:18.453 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVE23I3TUH:00000003
+Method   : POST
+Path     : /api/auth/login
+Status   : 200
+Duration : 1019 ms
+IP       : ::1
+
+Request:
+{
+  "cnic": "***",
+  "password": "***",
+  "fcmToken": "string",
+  "deviceId": "string"
+}
+
+Response:
+{"status":200,"title":"Login successful!","detail":"Authentication step completed.","data":{"name":"Haider Ali","isOtpRequired":false,"accessToken":"***","responseMessage":"Login successful. You are now signed in without OTP verification.","mobileNumber":"***"}}
+==============================================
+2026-01-30 00:57:55.527 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVE23I3TUH:00000005
+Request  : GetProfileDetailsQuery
+Duration : 12163 ms
+2026-01-30 00:57:55.550 +05:00 [WRN] CMS Long Running Request: GetProfileDetailsQuery (12164 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetProfileDetailsQuery"}
+2026-01-30 00:57:55.565 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVE23I3TUH:00000005
+Method   : GET
+Path     : /api/auth/getprofiledetail
+Status   : 200
+Duration : 12259 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"email":"muhammad.suleman@dhakarachi.org","registteredEmail":"","name":"Haider Ali","cnic":"***","phoneNumber":null,"mobileNumber":null,"registteredMobileNumber":"923075709068","memPk":"","staffNo":"9712-0","isMember":false,"isClubMember":null,"isStaff":true,"profileImage":"https://gw.dhakarachi.org/wwwroot/UserProfile/8b43345f4de0467491afc3aa4c8f0ceb.jpg"}
+==============================================
+2026-01-30 01:26:38.808 +05:00 [ERR] Connection to Redis failed.
+StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/TimedOut, last-recv: 20) on 172.16.10.123:6379/Subscription, Idle/Faulted, last: PING, origin: ReadFromPipe, outstanding: 1, last-read: 1552s ago, last-write: 19s ago, unanswered-write: 19s ago, keep-alive: 60s, state: ConnectedEstablished, mgr: 8 of 10 available, in: 0, in-pipe: 0, out-pipe: 0, last-heartbeat: 0s ago, last-mbeat: 0s ago, global: 0s ago, v: 2.7.27.49176
+ ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+   at Pipelines.Sockets.Unofficial.Internal.Throw.Socket(Int32 errorCode) in /_/src/Pipelines.Sockets.Unofficial/Internal/Throw.cs:line 59
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.<GetResult>g__ThrowSocketException|10_0(SocketError e) in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 86
+   at Pipelines.Sockets.Unofficial.SocketAwaitableEventArgs.GetResult() in /_/src/Pipelines.Sockets.Unofficial/SocketAwaitableEventArgs.cs:line 79
+   at Pipelines.Sockets.Unofficial.SocketConnection.DoReceiveAsync() in /_/src/Pipelines.Sockets.Unofficial/SocketConnection.Receive.cs:line 64
+   at System.IO.Pipelines.Pipe.GetReadAsyncResult()
+   at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
+   --- End of inner exception stack trace ---
+2026-01-30 11:17:54.327 +05:00 [ERR] An error occurred while initialising the database.
+Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+ ---> System.ComponentModel.Win32Exception (53): The network path was not found.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.Connect(ServerInfo serverInfo, SqlInternalConnectionTds connHandler, TimeoutTimer timeout, SqlConnectionString connectionOptions, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, DbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, Object poolGroupProviderInfo, DbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(DbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.ProviderBase.DbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerDatabaseCreator.<>c__DisplayClass20_0.<<ExistsAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.HistoryRepository.ExistsAsync(CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.MigrateAsync(String targetMigration, CancellationToken cancellationToken)
+   at DHAFacilitationAPIs.Infrastructure.Data.ApplicationDbContextInitialiser.InitialiseAsync() in C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Infrastructure\Data\ApplicationDbContextInitialiser.cs:line 48
+ClientConnectionId:00000000-0000-0000-0000-000000000000
+Error Number:53,State:0,Class:20
+2026-01-30 11:22:33.166 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVOV2SDB8M:0000000D
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 401
+Duration : 189 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[EMPTY]
+==============================================
+2026-01-30 11:22:55.469 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVOV2SDB8N:00000001
+Request  : GetAllClubQuery
+Duration : 1401 ms
+2026-01-30 11:22:55.574 +05:00 [WRN] CMS Long Running Request: GetAllClubQuery (1405 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetAllClubQuery"}
+2026-01-30 11:22:55.661 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVOV2SDB8N:00000001
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 200
+Duration : 1680 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"0a12e4b3-2283-4899-b2c2-1489778c4dc6","name":"Sports Club","description":"Sports Club","imageUrl":null,"bannerIamges":[],"location":"DHA Phase-8","contactNumber":"051-1234567","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"6dceb87e-778c-4ac4-9f8c-1e6421481303","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karachi","contactNumber":"0324545","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"797efad9-ba01-4e1e-a2e4-2b918743b0ef","name":"DHA Beach View Club","description":"Beach‑side club in Phase\u202F6 with dining, event lawns and guest suites.","imageUrl":null,"bannerIamges":[],"location":"Beach View Club, Beach Avenue, near Darakhshan Villas, Phase\u202F6, DHA Karachi.","contactNumber":"(021)35852975","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"ef1f69a7-9511-479c-993e-59aa3a7ae2a5","name":"DHA Sunset Club","description":"Modern social‑sports club with dining, banquet hall, bakery and guest lodges.","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Sunset Club, Khayaban‑e‑Jami, Phase\u202FII (Ext), DHA Karachi – 75500.","contactNumber":"(021)35388123","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"3ce13dd3-09d7-44fb-8f01-8448b0090b05","name":"DHA Creek Club","description":"Scenic, large‑acreage club by the creek with sports, bakery, grooming and events","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Creek Club, Zulfiqar Street No.\u202F1, Phase\u202FVIII, DHA Karachi.","contactNumber":"(021)35841901","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":["Allied Facilities","Facilities","Food & Beverages"],"categories":[{"id":"b069d81d-ac7d-4717-bb88-0106cb6ff48f","name":"Allied Facilities"},{"id":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Facilities"},{"id":"f8f7a245-c33e-4bf3-a3c1-eadbe99f5e8f","name":"Food & Beverages"}],"clubServicesDTOs":null},{"id":"9e9e43a3-55e2-4272-ad7e-a477466e7597","name":"DA CLUB","description":"Dining facilities comparable to any good five star hotels are available in the club.","imageUrl":null,"bannerIamges":[],"location":"S Central Ave, D.H.A. Phase 2 Phase 2 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35803073","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"0ff272d2-400f-49db-8a4e-cc59739ba47a","name":"DA Zamzama Club","description":"DA Zamzma Club Offers open space (Venue) for function like Marriage, Birthday Parties, Family Get Together, Eid Milan Parties, HI-Tea, Functions.","imageUrl":null,"bannerIamges":[],"location":"Stadium Lane-3, Khayaban-e-Shamsheer, DHA Phase 5 Stadium Commercial Area Defence V Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35840140","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"b4b7bd33-8e1c-41ab-9a77-d0b52fbd49a0","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karchi","contactNumber":"165421","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"a8806110-e45c-4c81-9b7a-e92738a202f9","name":"DHA Golf Club","description":"Sauna, Cigar Room, Golfers’ Terrace, Library, Conference/Board Rooms, Convention Centre, Function Hall, Festival Plaza that offers a venue for opening retail outlets","imageUrl":null,"bannerIamges":[],"location":"D.H.A. Phase 8 Zone B Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35845304","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null}]}
+==============================================
+2026-01-30 11:24:09.266 +05:00 [ERR] Failed executing DbCommand (29ms) [Parameters=[@__Select_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Category], [c].[Created], [c].[CreatedBy], [c].[Description], [c].[ImageExtension], [c].[ImageName], [c].[ImageURL], [c].[IsActive], [c].[IsDeleted], [c].[LastModified], [c].[LastModifiedBy], [c].[Ser], [c].[ServiceId]
+FROM [ClubServiceImages] AS [c]
+WHERE [c].[ServiceId] IN (
+    SELECT [s].[value]
+    FROM OPENJSON(@__Select_0) WITH ([value] uniqueidentifier '$') AS [s]
+) AND [c].[Category] = 0
+2026-01-30 11:24:09.389 +05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'DHAFacilitationAPIs.Infrastructure.Data.OLMRSApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ClubServiceImages'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:a4cfe3ef-2322-43ef-81a3-d2366e24439e
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'ClubServiceImages'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__195_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:a4cfe3ef-2322-43ef-81a3-d2366e24439e
+Error Number:208,State:1,Class:16
+2026-01-30 11:24:09.830 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVOV2SDB8O:00000001
+Method   : GET
+Path     : /api/club/by-category/fd044893-6ef0-4930-ac34-04b053b05ea3
+Status   : 500
+Duration : 24320 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"title":"Internal Server Error","status":500,"detail":"Invalid object name 'ClubServiceImages'."}
+==============================================
+2026-01-30 11:27:51.868 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVP2ERJU8D:00000001
+Request  : GetAllClubQuery
+Duration : 1296 ms
+2026-01-30 11:27:52.034 +05:00 [WRN] CMS Long Running Request: GetAllClubQuery (1336 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetAllClubQuery"}
+2026-01-30 11:27:52.101 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVP2ERJU8D:00000001
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 200
+Duration : 1789 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"0a12e4b3-2283-4899-b2c2-1489778c4dc6","name":"Sports Club","description":"Sports Club","imageUrl":null,"bannerIamges":[],"location":"DHA Phase-8","contactNumber":"051-1234567","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"6dceb87e-778c-4ac4-9f8c-1e6421481303","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karachi","contactNumber":"0324545","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"797efad9-ba01-4e1e-a2e4-2b918743b0ef","name":"DHA Beach View Club","description":"Beach‑side club in Phase\u202F6 with dining, event lawns and guest suites.","imageUrl":null,"bannerIamges":[],"location":"Beach View Club, Beach Avenue, near Darakhshan Villas, Phase\u202F6, DHA Karachi.","contactNumber":"(021)35852975","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"ef1f69a7-9511-479c-993e-59aa3a7ae2a5","name":"DHA Sunset Club","description":"Modern social‑sports club with dining, banquet hall, bakery and guest lodges.","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Sunset Club, Khayaban‑e‑Jami, Phase\u202FII (Ext), DHA Karachi – 75500.","contactNumber":"(021)35388123","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"3ce13dd3-09d7-44fb-8f01-8448b0090b05","name":"DHA Creek Club","description":"Scenic, large‑acreage club by the creek with sports, bakery, grooming and events","imageUrl":null,"bannerIamges":[],"location":"Defence Authority Creek Club, Zulfiqar Street No.\u202F1, Phase\u202FVIII, DHA Karachi.","contactNumber":"(021)35841901","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"9e3d8039-0dff-4e28-9069-859ef23323bc","name":"DHA Marina Club","description":"DAMC has following two open air area for which Members/ customer can book their birthday parties or wedding ceremonies.","imageUrl":null,"bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/9e3d8039-0dff-4e28-9069-859ef23323bc/b24923fc2c0546418763463bb1a46ac1.png"],"location":"44/2 Zulfiqar Street 1, DHA Karachi Phase VIII Zone A Zone A Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35841891","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":["Allied Facilities","Facilities","Food & Beverages"],"categories":[{"id":"b069d81d-ac7d-4717-bb88-0106cb6ff48f","name":"Allied Facilities"},{"id":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Facilities"},{"id":"f8f7a245-c33e-4bf3-a3c1-eadbe99f5e8f","name":"Food & Beverages"}],"clubServicesDTOs":null},{"id":"9e9e43a3-55e2-4272-ad7e-a477466e7597","name":"DA CLUB","description":"Dining facilities comparable to any good five star hotels are available in the club.","imageUrl":null,"bannerIamges":[],"location":"S Central Ave, D.H.A. Phase 2 Phase 2 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35803073","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"0ff272d2-400f-49db-8a4e-cc59739ba47a","name":"DA Zamzama Club","description":"DA Zamzma Club Offers open space (Venue) for function like Marriage, Birthday Parties, Family Get Together, Eid Milan Parties, HI-Tea, Functions.","imageUrl":null,"bannerIamges":[],"location":"Stadium Lane-3, Khayaban-e-Shamsheer, DHA Phase 5 Stadium Commercial Area Defence V Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35840140","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"b4b7bd33-8e1c-41ab-9a77-d0b52fbd49a0","name":"Test","description":"Testing","imageUrl":null,"bannerIamges":[],"location":"Karchi","contactNumber":"165421","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null},{"id":"a8806110-e45c-4c81-9b7a-e92738a202f9","name":"DHA Golf Club","description":"Sauna, Cigar Room, Golfers’ Terrace, Library, Conference/Board Rooms, Convention Centre, Function Hall, Festival Plaza that offers a venue for opening retail outlets","imageUrl":null,"bannerIamges":[],"location":"D.H.A. Phase 8 Zone B Phase 8 Defence Housing Authority, Karachi, 75500","contactNumber":"(021) 35845304","accountNo":null,"accountNoAccronym":null,"clubType":"GuestRoom","highlights":[],"categories":[],"clubServicesDTOs":null}]}
+==============================================
+2026-01-30 11:28:17.623 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVP2ERJU8E:00000001
+Request  : GetClubServiceProcessByCatQuery
+Duration : 2444 ms
+2026-01-30 11:28:17.734 +05:00 [WRN] CMS Long Running Request: GetClubServiceProcessByCatQuery (2444 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"CategoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","$type":"GetClubServiceProcessByCatQuery"}
+2026-01-30 11:28:17.755 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVP2ERJU8E:00000001
+Method   : GET
+Path     : /api/club/by-category/fd044893-6ef0-4930-ac34-04b053b05ea3
+Status   : 200
+Duration : 2601 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"4157125c-f819-462d-99c3-a467b7d95432","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Gymanasium","code":"GM","description":"Fully equipped modern gym with personal trainers","imageURL":null,"price":null,"foodType":null,"isAvailable":false,"isPriceVisible":false,"action":false,"actionName":null,"actionType":null,"isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false},{"id":"abc657ed-5465-4f0f-9a8f-c03fb0b770d1","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Swimming Pool","code":"SP","description":"Olym,pic-size swimming pool with seperate areas for aduts and children","imageURL":null,"price":null,"foodType":null,"isAvailable":false,"isPriceVisible":false,"action":false,"actionName":null,"actionType":null,"isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false}]}
+==============================================
+2026-01-30 11:30:03.702 +05:00 [INF] [CQRS]
+TraceId  : 0HNIVP2ERJU8F:00000001
+Request  : GetClubServiceProvessByIdQuery
+Duration : 41 ms
+2026-01-30 11:30:03.704 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNIVP2ERJU8F:00000001
+Method   : GET
+Path     : /api/club/club-serviceabc657ed-5465-4f0f-9a8f-c03fb0b770d1
+Status   : 200
+Duration : 50 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":{"id":"abc657ed-5465-4f0f-9a8f-c03fb0b770d1","categoryId":"fd044893-6ef0-4930-ac34-04b053b05ea3","name":"Swimming Pool","code":"SP","description":"Olym,pic-size swimming pool with seperate areas for aduts and children","imageURL":null,"price":null,"foodType":null,"isAvailable":false,"isPriceVisible":false,"action":false,"actionName":null,"actionType":null,"isFeeAtSubmission":true,"isVoucherPossible":true,"isFeeRequired":true,"isfeeSubmit":true,"isInstructionAtStart":true,"isButton":false,"instruction":"Nothing","isActive":true,"isDelete":false}}
+==============================================

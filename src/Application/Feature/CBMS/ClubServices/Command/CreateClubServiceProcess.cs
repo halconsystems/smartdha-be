@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
+using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Command;
 
@@ -15,6 +16,14 @@ public record CreateClubServiceProcessCommand(
     string Name,
     string Code,
     string? Description,
+    string? ImageURL,
+    FoodType? FoodType,
+    string? Price,
+    bool? IsAvailable,
+    bool? IsPriceVisible,
+    bool? Action,
+    string? ActionName,
+    string? ActionType,
     bool IsFeeAtSubmission,
     bool IsVoucherPossible,
     bool IsFeeRequired,
@@ -45,6 +54,13 @@ public class CreateClubServiceProcessCommandHandler : IRequestHandler<CreateClub
             Name = r.Name.Trim(),
             Code = r.Code.Trim().ToUpperInvariant(),
             Description = r.Description,
+            FoodType = r.FoodType,
+            Price = r.Price,
+            IsAvailable = r.IsAvailable,
+            IsPriceVisible = r.IsAvailable,
+            Action = r.Action,
+            ActionName = r.ActionName,
+            ActionType = r.ActionType,
             IsFeeAtSubmission = r.IsFeeAtSubmission,
             IsVoucherPossible = r.IsVoucherPossible,
             IsFeeRequired = r.IsFeeRequired,
