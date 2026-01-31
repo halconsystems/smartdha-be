@@ -11,6 +11,6 @@ public enum BookingMode
     SlotBased = 2,     // Padel, Tennis
     Hourly = 3,        // Grounds, Halls
     NightBased = 4,    // Guest Rooms
-    BookingMode= 5      //Guest Rooms/Banquet
+    Restricted = 5      //Guest Rooms/Banquet
 }
 

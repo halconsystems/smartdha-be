@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
 {
     [DbContext(typeof(CBMSApplicationDbContext))]
-    partial class CBMSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131225759_Addtableavailaberule")]
+    partial class Addtableavailaberule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -475,66 +478,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.ToTable("ClubImages");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.Discount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("MinOrderAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly?>("ValidFrom")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly?>("ValidTo")
-                        .HasColumnType("date");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Discounts");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilitiesImage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -900,53 +843,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.ToTable("FacilityUnitBookingConfigs");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitDiscount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("DiscountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FacilityUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("FacilityUnitId");
-
-                    b.ToTable("FacilityUnitDiscounts");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitImage", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1057,104 +953,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.HasIndex("FacilityUnitId");
 
                     b.ToTable("FacilityUnitServices");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitTax", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("FacilityUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<Guid>("TaxId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacilityUnitId");
-
-                    b.HasIndex("TaxId");
-
-                    b.ToTable("FacilityUnitTax");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.Tax", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Taxes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Club", b =>
@@ -1367,25 +1165,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.Navigation("FacilityUnit");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitDiscount", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnit", "FacilityUnit")
-                        .WithMany()
-                        .HasForeignKey("FacilityUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("FacilityUnit");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitImage", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnit", "FacilityUnit")
@@ -1414,25 +1193,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.Navigation("FacilityService");
 
                     b.Navigation("FacilityUnit");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitTax", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnit", "FacilityUnit")
-                        .WithMany()
-                        .HasForeignKey("FacilityUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FacilityUnit");
-
-                    b.Navigation("Tax");
                 });
 #pragma warning restore 612, 618
         }
