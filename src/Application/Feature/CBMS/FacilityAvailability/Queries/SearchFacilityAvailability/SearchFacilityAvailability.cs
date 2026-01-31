@@ -61,17 +61,24 @@ public class SearchFacilityAvailabilityHandler
                 if (config.BookingMode == BookingMode.SlotBased)
                 {
                     // 🟢 PADEL COURT LOGIC
-                    if (!config.OpeningTime.HasValue || !config.ClosingTime.HasValue)
-                    {
-                        throw new InvalidOperationException(
-                            "OpeningTime and ClosingTime must be configured for slot-based facilities.");
-                    }
-
                     if (!config.SlotDurationMinutes.HasValue || config.SlotDurationMinutes <= 0)
                     {
                         throw new InvalidOperationException(
-                            "SlotDurationMinutes must be configured for slot-based facilities.");
+                            "SlotDurationMinutes must be greater than 0.");
                     }
+
+                    if (!config.OpeningTime.HasValue || !config.ClosingTime.HasValue)
+                    {
+                        throw new InvalidOperationException(
+                            "OpeningTime and ClosingTime must be configured.");
+                    }
+
+                    if (config.OpeningTime >= config.ClosingTime)
+                    {
+                        throw new InvalidOperationException(
+                            "OpeningTime must be earlier than ClosingTime.");
+                    }
+
 
                     var slots = GenerateSlots(
                         config.OpeningTime.Value,
@@ -150,18 +157,33 @@ public class SearchFacilityAvailabilityHandler
     TimeOnly closing,
     int minutes)
     {
-        var list = new List<(TimeOnly, TimeOnly)>();
-        var current = opening;
+        if (minutes <= 0)
+            throw new ArgumentException("Slot duration must be greater than zero.");
 
-        while (current.AddMinutes(minutes) <= closing)
+        var list = new List<(TimeOnly, TimeOnly)>();
+
+        var openingMinutes = opening.Hour * 60 + opening.Minute;
+        var closingMinutes = closing.Hour * 60 + closing.Minute;
+
+        // Guard (no overnight support here)
+        if (openingMinutes >= closingMinutes)
+            throw new InvalidOperationException("OpeningTime must be before ClosingTime.");
+
+        var currentMinutes = openingMinutes;
+
+        while (currentMinutes + minutes <= closingMinutes)
         {
-            var end = current.AddMinutes(minutes);
-            list.Add((current, end));
-            current = end;
+            var start = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(currentMinutes));
+            var end = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(currentMinutes + minutes));
+
+            list.Add((start, end));
+            currentMinutes += minutes;
         }
 
         return list;
     }
+
+
 
 }
 
