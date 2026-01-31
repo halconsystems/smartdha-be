@@ -26,15 +26,15 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<Club> Clubs => Set<Club>();
     public DbSet<ClubImages> ClubImages => Set<ClubImages>();
-    public DbSet<ClubCategory> ClubCategories => Set<ClubCategory>();
-    public DbSet<Facility> Facilities => Set<Facility>();
-    public DbSet<FacilityService> FacilityServices => Set<FacilityService>();
-    public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>();
-    public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>();
-    public DbSet<FacilityUnit> FacilityUnits => Set<FacilityUnit>();
-    public DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs => Set<FacilityUnitBookingConfig>();
-    public DbSet<FacilityUnitService> FacilityUnitServices => Set<FacilityUnitService>();
-  
+    public DbSet<ClubCategory> ClubCategories => Set<ClubCategory>(); // Events, Allaid Facilities, Sports etc
+    public DbSet<Facility> Facilities => Set<Facility>(); // Events -> Banquet Hall, Sports -> Tennis Court , Padel Courts etc
+    public DbSet<FacilityService> FacilityServices => Set<FacilityService>(); //Banquet Hall -> Catering, Decoration etc
+    public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>(); //Banquet Hall -> Image1, Image2 etc
+    public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>(); // Club specific facilities with pricing and availability
+    public DbSet<FacilityUnit> FacilityUnits => Set<FacilityUnit>(); //Banquet Hall (Banquet Hall 1, Banquet Hall 2), Tennis Court (Tennis Court A, Tennis Court B)
+    public DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs => Set<FacilityUnitBookingConfig>(); // Banquet Hall 1 (Hourly, Daily), Tennis Court A (Hourly)
+    public DbSet<FacilityUnitService> FacilityUnitServices => Set<FacilityUnitService>(); // Banquet Hall 1 -> Catering; Banquet Hall 2 -> Decoration;Banquet Hall 3 -> Catering,Decoration etc
+
     //Bookings table here 
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<BookingSchedule> BookingSchedules => Set<BookingSchedule>();
