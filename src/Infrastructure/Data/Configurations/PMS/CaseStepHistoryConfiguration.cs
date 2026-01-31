@@ -7,7 +7,7 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations;
+namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations.PMS;
 public class CaseStepHistoryConfiguration
     : IEntityTypeConfiguration<CaseStepHistory>
 {

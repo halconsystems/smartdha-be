@@ -26,7 +26,7 @@ public class RoomBooking : BaseAuditableEntity
     //public Guid Booking { get; set; }
 
     [Required]
-    public DateTime? BookingDate { get; set; } = DateTime.UtcNow;
+    public DateTime? BookingDate { get; set; } = DateTime.Now;
 
     public BookingStatus Status { get; set; } = BookingStatus.Provisional;
 

@@ -86,6 +86,19 @@ public static class DependencyInjection
         services.AddScoped<IPMSApplicationDbContext>(provider =>
         provider.GetRequiredService<PMSApplicationDbContext>());
 
+        //CBMS
+
+        var CBMS = configuration.GetConnectionString("CMSConnection");
+        Guard.Against.Null(CBMS, message: "Connection string 'CMSConnection' not found.");
+        services.AddDbContext<CBMSApplicationDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(CBMS);
+
+        });
+        services.AddScoped<ICBMSApplicationDbContext>(provider =>
+        provider.GetRequiredService<CBMSApplicationDbContext>());
+
 
         //LMS
 

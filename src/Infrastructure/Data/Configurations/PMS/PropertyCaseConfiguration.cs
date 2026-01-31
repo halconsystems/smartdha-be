@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations;
+namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations.PMS;
 
 
 public class PropertyCaseConfiguration
