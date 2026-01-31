@@ -74,9 +74,11 @@
     <Folder Include="Feature\BowserCapacityRates\Queries\" />
     <Folder Include="Feature\CBMS\ClubImages\Queries\" />
     <Folder Include="Feature\CBMS\Clubs\Command\" />
+    <Folder Include="Feature\CBMS\FacilityAvailability\Commands\" />
     <Folder Include="Feature\CBMS\FacilityImages\Queries\" />
     <Folder Include="Feature\CBMS\FacilityService\Queries\" />
     <Folder Include="Feature\CBMS\FacilityUnitBookingConfig\Queries\" />
+    <Folder Include="Feature\CBMS\FacilityUnitImages\Queries\" />
     <Folder Include="Feature\CBMS\FacilityUnitService\Queries\" />
     <Folder Include="Feature\CBMS\FacilityUnit\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />

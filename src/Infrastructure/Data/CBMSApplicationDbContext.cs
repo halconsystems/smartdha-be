@@ -38,7 +38,9 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     //Bookings table here 
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<BookingSchedule> BookingSchedules => Set<BookingSchedule>();
+    public DbSet<BookingDateRange> BookingDateRanges => Set<BookingDateRange>();
     public DbSet<BookingService> BookingServices => Set<BookingService>();
+    public DbSet<FacilityUnitImage> FacilityUnitImages => Set<FacilityUnitImage>();
 
     public override async Task<int> SaveChangesAsync(
          CancellationToken cancellationToken = default)

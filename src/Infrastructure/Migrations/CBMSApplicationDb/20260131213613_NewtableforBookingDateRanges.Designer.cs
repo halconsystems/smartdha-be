@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
 {
     [DbContext(typeof(CBMSApplicationDbContext))]
-    partial class CBMSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131213613_NewtableforBookingDateRanges")]
+    partial class NewtableforBookingDateRanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -780,65 +783,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.ToTable("FacilityUnitBookingConfigs");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("FacilityUnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImageExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacilityUnitId");
-
-                    b.ToTable("FacilityUnitImages");
-                });
-
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitService", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1081,17 +1025,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitBookingConfig", b =>
-                {
-                    b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnit", "FacilityUnit")
-                        .WithMany()
-                        .HasForeignKey("FacilityUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FacilityUnit");
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnitImage", b =>
                 {
                     b.HasOne("DHAFacilitationAPIs.Domain.Entities.CBMS.FacilityUnit", "FacilityUnit")
                         .WithMany()

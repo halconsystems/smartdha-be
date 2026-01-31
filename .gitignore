@@ -5,3 +5,4 @@
 /.vs
 /artifacts
 /src/Web/Properties/PublishProfiles/FolderProfile1.pubxml.user
+/MobileAPI/wwwroot/logs
