@@ -27,6 +27,7 @@ public interface ICBMSApplicationDbContext
     DbSet<Booking> Bookings { get; }
     DbSet<BookingSchedule> BookingSchedules { get; }
     DbSet<BookingService> BookingServices { get; }
+    DbSet<BookingDateRange> BookingDateRanges { get; }
 
 
 

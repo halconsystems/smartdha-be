@@ -1,8 +1,10 @@
-﻿using DHAFacilitationAPIs.Application.Common.Security;
+﻿using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Common.Security;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries.GetClubCategories;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries.GetClubFacilitiesByCategory;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityAvailability.Queries.SearchFacilityAvailability;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetComplaintDropdowns;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaints;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,6 @@ public class ClubController : BaseApiController
             new GetClubDetailById(clubId),
             ct
         );
-
         return Ok(result);
     }
 
@@ -59,36 +60,26 @@ public class ClubController : BaseApiController
         Guid categoryId,
         CancellationToken ct)
     {
-        var result = await _mediator.Send(
-            new GetClubFacilitiesByCategoryQuery(clubId, categoryId),
-            ct
-        );
-
+        var result = await _mediator.Send(new GetClubFacilitiesByCategoryQuery(clubId, categoryId), ct);
         return Ok(result);
     }
 
-    //[HttpGet("Get-ClubHistory")]
-    //public async Task<IActionResult> Types(Guid Id,CancellationToken ct)
-    //{
-    //    var result = await Mediator.Send(new GetClubDetailById(Id), ct);
-    //    return Ok(result);
-    //}
+    [HttpGet("{clubId}/facility-search")]
+    public Task<ApiResult<List<FacilitySearchResponse>>> Search(
+        Guid clubId,
+        [FromQuery] Guid? facilityId,
+        [FromQuery] DateOnly? date,
+        [FromQuery] DateOnly? fromDate,
+        [FromQuery] DateOnly? toDate)
+    {
+        return _mediator.Send(new SearchFacilityAvailabilityQuery(
+            clubId,
+            facilityId,
+            date,
+            fromDate,
+            toDate
+        ));
+    }
 
-    //[HttpGet("by-category/{categoryId:guid}")]
-    //public async Task<IActionResult> GetByCategory(
-    //    Guid categoryId,
-    //    CancellationToken ct)
-    //{
-    //    return Ok(await Mediator.Send(
-    //        new GetClubServiceProcessByCatQuery(categoryId), ct));
-    //}
 
-    //[HttpGet("Club-service{processId:guid}")]
-    //public async Task<IActionResult> GetServiceById(
-    //  Guid processId,
-    //  CancellationToken ct)
-    //{
-    //    return Ok(await Mediator.Send(
-    //        new GetClubServiceProvessByIdQuery(processId), ct));
-    //}
 }
