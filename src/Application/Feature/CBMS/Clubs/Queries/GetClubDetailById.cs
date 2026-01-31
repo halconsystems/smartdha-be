@@ -9,8 +9,6 @@ using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 
-
-
 public record GetClubDetailById(Guid ClubId)
     : IRequest<ApiResult<ClubDTO>>;
 
