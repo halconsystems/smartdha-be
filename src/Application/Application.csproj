@@ -72,7 +72,6 @@
   <ItemGroup>
     <Folder Include="Feature\ApprovalProcess\Commands\" />
     <Folder Include="Feature\BowserCapacityRates\Queries\" />
-    <Folder Include="Feature\CBMS\ClubFacilities\Queries\" />
     <Folder Include="Feature\CBMS\ClubImages\Queries\" />
     <Folder Include="Feature\CBMS\Clubs\Command\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
