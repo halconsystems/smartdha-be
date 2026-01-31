@@ -5,19 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
-public class ClubFacility : BaseAuditableEntity
+public class FacilityUnit : BaseAuditableEntity
 {
     public Guid ClubId { get; set; }
     public Club Club { get; set; } = default!;
-
     public Guid FacilityId { get; set; }
     public Facility Facility { get; set; } = default!;
 
-    public decimal? Price { get; set; }
-    public bool IsAvailable { get; set; } = true;
-    public bool IsPriceVisible { get; set; } = true;
-
-    public bool HasAction { get; set; }
-    public string? ActionName { get; set; }
-    public string? ActionType { get; set; }
+    public string Name { get; set; } = default!;   // Room 101, Padel Court A
+    public string Code { get; set; } = default!;   // R-101, PC-A
+    public string? UnitType { get; set; }          // Premium, Standard, VIP
 }
+

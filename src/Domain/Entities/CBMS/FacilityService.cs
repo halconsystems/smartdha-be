@@ -12,10 +12,8 @@ public class FacilityService : BaseAuditableEntity
 
     public string Name { get; set; } = default!;
     public string Code { get; set; } = default!;
-
+    public bool IsComplimentary { get; set; }
     public decimal Price { get; set; }
-
-    public bool IsQuantityBased { get; set; } // food per head
-    public bool IsOptional { get; set; } = true;
+    public bool IsQuantityBased { get; set; } = false;
 }
 

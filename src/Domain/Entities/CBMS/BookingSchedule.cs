@@ -10,8 +10,8 @@ public class BookingSchedule : BaseAuditableEntity
     public Guid BookingId { get; set; }
     public Booking Booking { get; set; } = default!;
 
-    public DateOnly EventDate { get; set; }
-
+    // SlotBased
+    public DateOnly Date { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
 }

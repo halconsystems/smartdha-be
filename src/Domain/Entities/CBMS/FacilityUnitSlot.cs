@@ -5,13 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
-public class FacilitySlot : BaseAuditableEntity
+public class FacilityUnitSlot : BaseAuditableEntity
 {
-    public Guid FacilityId { get; set; }
+    public Guid FacilityUnitId { get; set; }
 
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
 
-    public decimal Price { get; set; }
+    public decimal Price { get; set; } // overrides base price
 }
+
 
