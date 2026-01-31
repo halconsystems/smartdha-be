@@ -11,6 +11,7 @@ namespace DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
 
 public class MemberRequestDTO
 {
+    public Guid Id { get; set; }
     public Guid MemberShipCategory { get; set; }
     public MemberShipCatergories? MemberShipCatergories { get; set; }
     

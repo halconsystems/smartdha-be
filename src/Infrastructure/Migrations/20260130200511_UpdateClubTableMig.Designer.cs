@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(OLMRSApplicationDbContext))]
-    partial class OLMRSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260130200511_UpdateClubTableMig")]
+    partial class UpdateClubTableMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +79,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookingGuests", (string)null);
+                    b.ToTable("BookingGuests");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubCategory", b =>
@@ -194,13 +197,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-<<<<<<< HEAD
                     b.HasIndex("FacilityId");
 
                     b.ToTable("ClubFacilities");
-=======
-                    b.ToTable("ClubCategories", (string)null);
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubFeeCategory", b =>
@@ -247,7 +246,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClubFeeCategory", (string)null);
+                    b.ToTable("ClubFeeCategory");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubFeeDefinition", b =>
@@ -311,7 +310,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubCategoryId");
 
-                    b.ToTable("ClubFeeDefinition", (string)null);
+                    b.ToTable("ClubFeeDefinition");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubFeeOption", b =>
@@ -377,7 +376,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("FeeDefinitionId");
 
-                    b.ToTable("ClubFeeOption", (string)null);
+                    b.ToTable("ClubFeeOption");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubImages", b =>
@@ -434,7 +433,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClubImages", (string)null);
+                    b.ToTable("ClubImages");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubPrerequisiteDefinitions", b =>
@@ -494,7 +493,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClubPrerequisiteDefinitions", (string)null);
+                    b.ToTable("ClubPrerequisiteDefinitions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubPrerequisiteOptions", b =>
@@ -552,7 +551,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("ClubPrerequisiteOptions", (string)null);
+                    b.ToTable("ClubPrerequisiteOptions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubProcessPrerequisite", b =>
@@ -605,7 +604,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("ClubProcessPrerequisite", (string)null);
+                    b.ToTable("ClubProcessPrerequisite");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.Facility", b =>
@@ -615,77 +614,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
-<<<<<<< HEAD
                     b.Property<Guid>("ClubCategoryId")
-=======
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageExtension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Ser")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
-
-                    b.Property<Guid>("ServiceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ClubServiceImages", (string)null);
-                });
-
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubServiceProcess", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(2);
-
-                    b.Property<bool?>("Action")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ActionName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActionType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CategoryId")
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -741,11 +670,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubCategoryId");
 
-<<<<<<< HEAD
                     b.ToTable("Facilities");
-=======
-                    b.ToTable("ClubProcess", (string)null);
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Club", b =>
@@ -813,7 +738,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clubs", (string)null);
+                    b.ToTable("Clubs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ClubBookingStandardTime", b =>
@@ -861,7 +786,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("ClubBookingStandardTimes", (string)null);
+                    b.ToTable("ClubBookingStandardTimes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.DiscountSetting", b =>
@@ -916,7 +841,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DiscountSettings", (string)null);
+                    b.ToTable("DiscountSettings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ExtraServiceCharges", b =>
@@ -959,7 +884,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExtraServiceCharges", (string)null);
+                    b.ToTable("ExtraServiceCharges");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundBooking", b =>
@@ -1053,7 +978,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("GroundsId");
 
-                    b.ToTable("GroundBookings", (string)null);
+                    b.ToTable("GroundBookings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundBookingSlot", b =>
@@ -1109,7 +1034,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("GroundSlotsId");
 
-                    b.ToTable("GroundBookingSlots", (string)null);
+                    b.ToTable("GroundBookingSlots");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundImages", b =>
@@ -1166,7 +1091,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroundImages", (string)null);
+                    b.ToTable("GroundImages");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundPaymentIpnLogs", b =>
@@ -1276,7 +1201,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroundPaymentIpnLogs", (string)null);
+                    b.ToTable("GroundPaymentIpnLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundSetting", b =>
@@ -1327,7 +1252,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("SettingId");
 
-                    b.ToTable("GroundSettings", (string)null);
+                    b.ToTable("GroundSettings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundSlots", b =>
@@ -1405,7 +1330,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("GroundsId");
 
-                    b.ToTable("GroundSlots", (string)null);
+                    b.ToTable("GroundSlots");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.GroundStandtardTime", b =>
@@ -1456,7 +1381,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("GroundsId");
 
-                    b.ToTable("GroundStandtardTimes", (string)null);
+                    b.ToTable("GroundStandtardTimes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.GBMS.Grounds", b =>
@@ -1525,7 +1450,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("Grounds", (string)null);
+                    b.ToTable("Grounds");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseDocument", b =>
@@ -1600,7 +1525,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("CaseDocument", (string)null);
+                    b.ToTable("CaseDocument");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CasePrerequisiteValue", b =>
@@ -1676,7 +1601,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasIndex("CaseId", "PrerequisiteDefinitionId")
                         .IsUnique();
 
-                    b.ToTable("CasePrerequisiteValue", (string)null);
+                    b.ToTable("CasePrerequisiteValue");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseRejectRequirement", b =>
@@ -1733,7 +1658,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("PrerequisiteDefinitionId");
 
-                    b.ToTable("CaseRejectRequirement", (string)null);
+                    b.ToTable("CaseRejectRequirement");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.CaseStepHistory", b =>
@@ -1814,7 +1739,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("StepId");
 
-                    b.ToTable("CaseStepHistory", (string)null);
+                    b.ToTable("CaseStepHistory");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.Directorate", b =>
@@ -1867,7 +1792,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Directorate", (string)null);
+                    b.ToTable("Directorate");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteDefinition", b =>
@@ -1927,7 +1852,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PrerequisiteDefinition", (string)null);
+                    b.ToTable("PrerequisiteDefinition");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PrerequisiteOption", b =>
@@ -2055,7 +1980,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ProcessId");
 
-                    b.ToTable("ProcessStep", (string)null);
+                    b.ToTable("ProcessStep");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.PropertyCase", b =>
@@ -2148,7 +2073,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("UserPropertyId");
 
-                    b.ToTable("PropertyCase", (string)null);
+                    b.ToTable("PropertyCase");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceCategory", b =>
@@ -2195,7 +2120,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ServiceCategory", (string)null);
+                    b.ToTable("ServiceCategory");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.ServiceProcess", b =>
@@ -2268,7 +2193,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ServiceProcess", (string)null);
+                    b.ToTable("ServiceProcess");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PMS.UserProperty", b =>
@@ -2377,7 +2302,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProperty", (string)null);
+                    b.ToTable("UserProperty");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RefundPolicy", b =>
@@ -2434,7 +2359,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("RefundPolicies", (string)null);
+                    b.ToTable("RefundPolicies");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RefundRequest", b =>
@@ -2497,7 +2422,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ReservationId");
 
-                    b.ToTable("RefundRequests", (string)null);
+                    b.ToTable("RefundRequests");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ResidenceType", b =>
@@ -2550,7 +2475,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("ResidenceTypes", (string)null);
+                    b.ToTable("ResidenceTypes");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Room", b =>
@@ -2627,7 +2552,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasIndex("ClubId", "No")
                         .IsUnique();
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomAvailability", b =>
@@ -2790,7 +2715,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomBookings", (string)null);
+                    b.ToTable("RoomBookings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCategory", b =>
@@ -2843,7 +2768,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("RoomCategories", (string)null);
+                    b.ToTable("RoomCategories");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomCharge", b =>
@@ -2894,7 +2819,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomCharges", (string)null);
+                    b.ToTable("RoomCharges");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomImage", b =>
@@ -2951,7 +2876,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomImages", (string)null);
+                    b.ToTable("RoomImages");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.RoomRating", b =>
@@ -2994,7 +2919,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomRatings", (string)null);
+                    b.ToTable("RoomRatings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.ServiceMapping", b =>
@@ -3043,7 +2968,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[IsDeleted] = 0");
 
-                    b.ToTable("ServiceMappings", (string)null);
+                    b.ToTable("ServiceMappings");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Services", b =>
@@ -3101,7 +3026,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserClubMembership", b =>
@@ -3150,7 +3075,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserClubMemberships", (string)null);
+                    b.ToTable("UserClubMemberships");
                 });
 
             modelBuilder.Entity("Payment", b =>
@@ -3219,7 +3144,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("PaymentIntentId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("PaymentIntent", b =>
@@ -3295,7 +3220,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ReservationId");
 
-                    b.ToTable("PaymentIntents", (string)null);
+                    b.ToTable("PaymentIntents");
                 });
 
             modelBuilder.Entity("Reservation", b =>
@@ -3382,7 +3307,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("GuestId");
 
-                    b.ToTable("Reservations", (string)null);
+                    b.ToTable("Reservations");
                 });
 
             modelBuilder.Entity("ReservationRoom", b =>
@@ -3453,7 +3378,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("ReservationRooms", (string)null);
+                    b.ToTable("ReservationRooms");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubFacility", b =>

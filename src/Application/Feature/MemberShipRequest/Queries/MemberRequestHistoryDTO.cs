@@ -10,7 +10,7 @@ namespace DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
 
 public class MemberRequestHistoryDTO
 {
-
+    public Guid Id { get; set; }
     public string? MemberShipCategory { get; set; }
     public string? Purpose { get; set; }
     public string? CNIC { get; set; } = default!;

@@ -14,5 +14,6 @@ public record IdClubDto(
     string? AccountNo,
     string? AccountNoAccronym,
     bool? IsActive,
-    bool? IsDeleted
+    bool? IsDeleted,
+    string? Email
 );

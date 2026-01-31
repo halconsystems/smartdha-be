@@ -72,7 +72,8 @@ public class GetClubByIdQueryHandler: IRequestHandler<GetClubByIdQuery, SuccessR
                 c.AccountNo,
                 c.AccountNoAccronym,
                 c.IsActive,
-                c.IsDeleted
+                c.IsDeleted,
+                c.Email
             ))
             .FirstOrDefaultAsync(ct);
 

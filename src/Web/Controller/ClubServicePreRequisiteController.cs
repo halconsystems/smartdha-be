@@ -1,11 +1,20 @@
 ﻿//using DHAFacilitationAPIs.Application.Common.Interfaces;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Command;
+<<<<<<< HEAD
+////using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Command;
+////using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
+////using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisite.Command;
+////using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisite.Queries;
+////using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisiteDefination.Command;
+////using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisiteDefination.Queries;
+=======
 //using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Command;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisite.Command;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisite.Queries;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisiteDefination.Command;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.PreRequisiteDefination.Queries;
+>>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
 //using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands;
 //using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.AddProcessPrerequisite;
 //using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Commands.CreateAndAttachPrerequisite;

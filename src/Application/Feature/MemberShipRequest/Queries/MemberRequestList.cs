@@ -30,6 +30,7 @@ public class GetMemberRequestListQueryHandler : IRequestHandler<GetMemberRequest
 
         var result = memberRequest.Select(x => new MemberRequestDTO
         {
+            Id = x.Id,
             Name = x.Name,
             CNIC = x.CNIC,
             Email = x.Email,

@@ -160,6 +160,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
     c.SwaggerEndpoint("/swagger/RealTime-SignalR/swagger.json", "RealTime SignalR");
     c.SwaggerEndpoint("/swagger/Non-Member/swagger.json", "Non Member");
+    c.SwaggerEndpoint("/swagger/MemberShip/swagger.json", "MemberShip");
 });
 
 //app.UseHealthChecks("/health");

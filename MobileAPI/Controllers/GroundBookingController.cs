@@ -35,56 +35,56 @@ public class GroundBookingController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpGet("get-user-grounds")]
-    public async Task<IActionResult> GetUserClubs()
-    {
-        var result = await _mediator.Send(new GetGroundClubsQuery());
-        return Ok(result);
-    }
+    //[HttpGet("get-user-grounds")]
+    //public async Task<IActionResult> GetUserClubs()
+    //{
+    //    var result = await _mediator.Send(new GetGroundClubsQuery());
+    //    return Ok(result);
+    //}
 
-    [HttpGet("search-rooms"), AllowAnonymous]
-    public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType)
-    {
-        var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
-        return Ok(result);
-    }
+    //[HttpGet("search-rooms"), AllowAnonymous]
+    //public async Task<IActionResult> SearchRooms([FromQuery] Guid clubId, [FromQuery] DateOnly checkInDate, [FromQuery] DateOnly checkOutDate, [FromQuery] RoomBookingType bookingType)
+    //{
+    //    var result = await _mediator.Send(new SearchRoomsQuery(clubId, checkInDate, checkOutDate, bookingType));
+    //    return Ok(result);
+    //}
 
-    [HttpGet("get-room-details"), AllowAnonymous]
-    public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] RoomBookingType bookingType)
-    {
-        var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
-        return Ok(result);
-    }
+    //[HttpGet("get-room-details"), AllowAnonymous]
+    //public async Task<IActionResult> GetRoomDetails([FromQuery] Guid roomId, [FromQuery] RoomBookingType bookingType)
+    //{
+    //    var result = await _mediator.Send(new GetRoomDetailsQuery(roomId, bookingType));
+    //    return Ok(result);
+    //}
 
-    [HttpPost("create-reservation"), AllowAnonymous]
-    public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand cmd, CancellationToken ct)
-    {
-        var reservationId = await _mediator.Send(cmd);
-        return Ok(reservationId);
-    }
+    //[HttpPost("create-reservation"), AllowAnonymous]
+    //public async Task<ActionResult<Guid>> CreateReservation([FromBody] CreateReservationCommand cmd, CancellationToken ct)
+    //{
+    //    var reservationId = await _mediator.Send(cmd);
+    //    return Ok(reservationId);
+    //}
 
-    [HttpGet("get-all-reservations"), AllowAnonymous]
-    public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                       ?? User.FindFirst("sub")?.Value;
+    //[HttpGet("get-all-reservations"), AllowAnonymous]
+    //public async Task<ActionResult<List<ReservationListDto>>> GetAllReservations()
+    //{
+    //    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+    //                   ?? User.FindFirst("sub")?.Value;
 
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
-            return Unauthorized("Invalid or missing user ID in token");
-        }
+    //    if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+    //    {
+    //        return Unauthorized("Invalid or missing user ID in token");
+    //    }
 
-        var result = await _mediator.Send(new GetAllGroundReservationsQuery(userId));
+    //    var result = await _mediator.Send(new GetAllGroundReservationsQuery(userId));
 
-        return Ok(result);
-    }
+    //    return Ok(result);
+    //}
 
-    [HttpGet("get-reservation-status"), AllowAnonymous]
-    public async Task<ActionResult<ReservationStatusDto>> GetReservationStatus(Guid reservationId)
-    {
-        var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
-        return Ok(result);
-    }
+    //[HttpGet("get-reservation-status"), AllowAnonymous]
+    //public async Task<ActionResult<ReservationStatusDto>> GetReservationStatus(Guid reservationId)
+    //{
+    //    var result = await _mediator.Send(new GetReservationStatusQuery(reservationId));
+    //    return Ok(result);
+    //}
 
     [HttpGet("GetGround"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<GroundDTO>>> GetRoom([FromQuery] GetGroundQuery cmd, CancellationToken ct)
