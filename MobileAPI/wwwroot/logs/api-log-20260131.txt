@@ -163,3 +163,133 @@ Request:
 Response:
 []
 ==============================================
+2026-01-31 20:22:55.745 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RI6GMU1T:00000001
+Request  : GetAllClubQuery
+Duration : 747 ms
+2026-01-31 20:22:55.934 +05:00 [WRN] CMS Long Running Request: GetAllClubQuery (801 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetAllClubQuery"}
+2026-01-31 20:22:56.002 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RI6GMU1T:00000001
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 200
+Duration : 1368 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"64af48e7-857a-4ed2-91b6-5cd13c9571b6","name":"DA Beach View","description":"A beachfront paradise offering relaxation and recreation with stunning sea views","imageUrl":"https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/d24a64d061b746e091142f0250755a6b.jpg","bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/1907cd2b99fd401a8193b591d3d98489.jpg","https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/16fc8413c1ff4ff7b240597c5c9c641e.jpg","https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/f565a3db28aa41c79985b694d0de58eb.jpg"],"location":"Phase 8, DHA Karachi","contactNumber":"+92 21 35345678","accountNo":null,"accountNoAccronym":null,"clubType":"Club","highlights":[],"categories":[]}]}
+==============================================
+2026-01-31 20:36:56.942 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS73:00000001
+Request  : GetAllClubQuery
+Duration : 4902 ms
+2026-01-31 20:36:57.047 +05:00 [WRN] CMS Long Running Request: GetAllClubQuery (4929 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"$type":"GetAllClubQuery"}
+2026-01-31 20:36:57.079 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS73:00000001
+Method   : GET
+Path     : /api/club/get-allclubs-list
+Status   : 200
+Duration : 5304 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+{"success":true,"message":null,"data":[{"id":"64af48e7-857a-4ed2-91b6-5cd13c9571b6","name":"DA Beach View","description":"A beachfront paradise offering relaxation and recreation with stunning sea views","imageUrl":"https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/d24a64d061b746e091142f0250755a6b.jpg","bannerIamges":["https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/1907cd2b99fd401a8193b591d3d98489.jpg","https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/16fc8413c1ff4ff7b240597c5c9c641e.jpg","https://gw.dhakarachi.org/CBMS/Club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/f565a3db28aa41c79985b694d0de58eb.jpg"],"location":"Phase 8, DHA Karachi","contactNumber":"+92 21 35345678","highlights":["Events","Sports","Facilities"],"categories":[{"id":"9ba006db-1b85-4fda-84fe-06b62a67b434","name":"Events"},{"id":"b50f2105-f8f8-43a9-b788-72af34170a29","name":"Sports"},{"id":"f4024d38-79f9-4458-b9cf-bcf6d0653121","name":"Facilities"}]}]}
+==============================================
+2026-01-31 20:37:38.025 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS73:00000002
+Request  : GetClubCategoriesQuery
+Duration : 64 ms
+2026-01-31 20:37:38.034 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS73:00000002
+Method   : GET
+Path     : /api/club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/categories
+Status   : 200
+Duration : 91 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"9ba006db-1b85-4fda-84fe-06b62a67b434","name":"Events","code":"EV","description":"","displayName":"Events"},{"id":"b50f2105-f8f8-43a9-b788-72af34170a29","name":"Sports","code":"SP","description":"","displayName":"Sports"},{"id":"f4024d38-79f9-4458-b9cf-bcf6d0653121","name":"Facilities","code":"FC","description":"","displayName":"Facilities"}]
+==============================================
+2026-01-31 20:38:36.252 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS73:00000003
+Request  : GetClubFacilitiesByCategoryQuery
+Duration : 22 ms
+2026-01-31 20:38:36.258 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS73:00000003
+Method   : GET
+Path     : /api/club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/categories/64af48e7-857a-4ed2-91b6-5cd13c9571b6/facilities
+Status   : 200
+Duration : 40 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================
+2026-01-31 20:39:43.559 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS73:00000004
+Request  : GetClubFacilitiesByCategoryQuery
+Duration : 9634 ms
+2026-01-31 20:39:43.571 +05:00 [WRN] CMS Long Running Request: GetClubFacilitiesByCategoryQuery (9635 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"ClubId":"64af48e7-857a-4ed2-91b6-5cd13c9571b6","CategoryId":"9ba006db-1b85-4fda-84fe-06b62a67b434","$type":"GetClubFacilitiesByCategoryQuery"}
+2026-01-31 20:39:43.578 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS73:00000004
+Method   : GET
+Path     : /api/club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/categories/9BA006DB-1B85-4FDA-84FE-06B62A67B434/facilities
+Status   : 200
+Duration : 9657 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"fc4278b2-2411-4117-986c-37ca9f5481b9","name":"Wedding Garden","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"View Details","actionType":null},{"id":"17dd83d9-f230-4f68-baa2-516d4395666d","name":"Banquet Halls","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"Request Booking","actionType":null}]
+==============================================
+2026-01-31 20:47:33.646 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS75:00000001
+Request  : GetClubFacilitiesByCategoryQuery
+Duration : 4439 ms
+2026-01-31 20:47:33.715 +05:00 [WRN] CMS Long Running Request: GetClubFacilitiesByCategoryQuery (4440 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"ClubId":"64af48e7-857a-4ed2-91b6-5cd13c9571b6","CategoryId":"9ba006db-1b85-4fda-84fe-06b62a67b434","$type":"GetClubFacilitiesByCategoryQuery"}
+2026-01-31 20:47:33.716 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS75:00000001
+Method   : GET
+Path     : /api/club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/categories/9BA006DB-1B85-4FDA-84FE-06B62A67B434/facilities
+Status   : 200
+Duration : 4519 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"fc4278b2-2411-4117-986c-37ca9f5481b9","name":"Wedding Garden","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"View Details","actionType":null},{"id":"17dd83d9-f230-4f68-baa2-516d4395666d","name":"Banquet Halls","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"Request Booking","actionType":null}]
+==============================================
+2026-01-31 20:47:55.954 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0RPTSHS75:00000002
+Request  : GetClubFacilitiesByCategoryQuery
+Duration : 12 ms
+2026-01-31 20:47:55.955 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0RPTSHS75:00000002
+Method   : GET
+Path     : /api/club/64af48e7-857a-4ed2-91b6-5cd13c9571b6/categories/B50F2105-F8F8-43A9-B788-72AF34170A29/facilities
+Status   : 200
+Duration : 14 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[{"id":"e37e4e0a-edfb-4a39-8bf2-1de89d242a8f","name":"Tennis Court","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"Book Now","actionType":null},{"id":"e09393a7-f357-4a60-9a00-28e2c5d300ad","name":"Padel Court","imageUrl":null,"price":0.00,"isAvailable":true,"hasAction":true,"actionName":"Reserve Court","actionType":null}]
+==============================================

@@ -45,8 +45,14 @@ public class AddFacilityToClubCommandHandler
         };
 
         _ctx.ClubFacilities.Add(clubFacility);
-        await _ctx.SaveChangesAsync(ct);
-
+        try
+        {
+            await _ctx.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            return ApiResult<Guid>.Fail($"Error adding facility to club: {ex.Message}");
+        }
         return ApiResult<Guid>.Ok(clubFacility.Id);
     }
 }

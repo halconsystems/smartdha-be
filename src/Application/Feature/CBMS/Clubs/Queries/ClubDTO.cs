@@ -18,9 +18,6 @@ public class ClubDTO
     public List<string>? bannerIamges { get; set; }
     public string? Location { get; set; }
     public string? ContactNumber { get; set; }
-    public string? AccountNo { get; set; }
-    [MaxLength(4)] public string? AccountNoAccronym { get; set; }
-    public ClubType ClubType { get; set; } = ClubType.Club;
     public List<string>? highlights { get; set; }
     public List<HighlightDTO>? Categories { get; set; }
 }

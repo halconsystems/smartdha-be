@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.CreateFacility;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -16,6 +17,7 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -320,6 +322,68 @@ public class clubsController : BaseApiController
     //    var result = await _mediator.Send(cmd, ct);
     //    return Ok(result);
     //}
+
+
+
+    [HttpPost("Facility/images/add"), AllowAnonymous]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
+    public async Task<IActionResult> AddFacilityImages(
+    Guid FacilityId,
+    [FromForm] AddClubImagesFlatForm form,
+    CancellationToken ct)
+    {
+        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        if (form.Files == null || form.Files.Count == 0)
+            return BadRequest("No images uploaded.");
+
+        // Keep parallel arrays aligned (if provided)
+        int n = form.Files.Count;
+        if (form.ImageNames.Count != 0 && form.ImageNames.Count != n)
+            return BadRequest("ImageNames count must match Files count.");
+        if (form.Descriptions.Count != 0 && form.Descriptions.Count != n)
+            return BadRequest("Descriptions count must match Files count.");
+        if (form.Categories.Count != 0 && form.Categories.Count != n)
+            return BadRequest("Categories count must match Files count.");
+
+        var folder = $"Facility/{FacilityId}";
+        var uploaded = new List<AddClubImageDTO>();
+
+        for (int i = 0; i < n; i++)
+        {
+            var file = form.Files[i];
+
+            // Save file (your IFileStorageService validates size/ext & creates folder)
+            //var relativePath = await _files.SaveFileAsync(file, folder, ct);
+            var relativePath = await _files.SaveFileAsync(
+              file,
+              folder,
+              ct,
+              maxBytes: 5 * 1024 * 1024,                       // 5 MB
+              allowedExtensions: new[] { ".jpg", ".jpeg", ".png" }
+             );
+
+            var ext = Path.GetExtension(relativePath);
+
+            // Pick metadata by index (or defaults)
+            var name = form.ImageNames.ElementAtOrDefault(i);
+            var desc = form.Descriptions.ElementAtOrDefault(i);
+            var cat = form.Categories.ElementAtOrDefault(i);
+
+            uploaded.Add(new AddClubImageDTO(
+                ImageURL: relativePath,                 // e.g. /uploads/rooms/{roomId}/{guid}.jpg
+                ImageExtension: ext,
+                ImageName: name,
+                Description: desc,
+                Category: cat                           // enum value
+            ));
+        }
+
+        // Hand off to your command (enforces “only one Main” etc.)
+        var cmd = new AddFacilityImagesCommand(FacilityId, uploaded);
+        var result = await _mediator.Send(cmd, ct);
+        return Ok(result);
+    }
 }
 public record ClubUpdateServiceCategoryRequest(
     Guid ClubId,
