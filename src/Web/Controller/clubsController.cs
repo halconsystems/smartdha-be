@@ -1,10 +1,15 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Command;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.CreateFacility;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityService.Commands.CreateFacilityService;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnit.Commands.CreateFacilityUnit;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig.Commands.CreateFacilityUnitBookingConfig;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.AddFacilityUnitService;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -384,6 +389,23 @@ public class clubsController : BaseApiController
         var result = await _mediator.Send(cmd, ct);
         return Ok(result);
     }
+
+    [HttpPost("services")]
+    public Task<ApiResult<Guid>> AddService(CreateFacilityServiceDto dto)
+        => _mediator.Send(new CreateFacilityServiceCommand(dto));
+
+    [HttpPost("units")]
+    public Task<ApiResult<Guid>> AddUnit(CreateFacilityUnitDto dto)
+        => _mediator.Send(new CreateFacilityUnitCommand(dto));
+
+    [HttpPost("unit-config")]
+    public Task<ApiResult<Guid>> UpsertUnitConfig(CreateFacilityUnitBookingConfigDto dto)
+        => _mediator.Send(new CreateFacilityUnitBookingConfigCommand(dto));
+
+    [HttpPost("unit-services")]
+    public Task<ApiResult<Guid>> AddUnitService(AddFacilityUnitServiceDto dto)
+        => _mediator.Send(new AddFacilityUnitServiceCommand(dto));
+
 }
 public record ClubUpdateServiceCategoryRequest(
     Guid ClubId,
