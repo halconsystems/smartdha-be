@@ -20,9 +20,9 @@ public record CreateFacilityCommand(
 ) : IRequest<ApiResult<Guid>>;
 public class CreateFacilityCommandHandler : IRequestHandler<CreateFacilityCommand, ApiResult<Guid>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
 
-    public CreateFacilityCommandHandler(IOLMRSApplicationDbContext ctx)
+    public CreateFacilityCommandHandler(ICBMSApplicationDbContext ctx)
     {
         _ctx = ctx;
     }

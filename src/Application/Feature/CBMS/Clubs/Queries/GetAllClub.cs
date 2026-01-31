@@ -20,23 +20,14 @@ public record GetAllClubQuery()
 public class GetAllClubQueryHandler
     : IRequestHandler<GetAllClubQuery, ApiResult<List<ClubDTO>>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;       // Clubs DbContext
-    private readonly IApplicationDbContext _appCtx;         // Auth/Assignments DbContext
-    private readonly ICurrentUserService _currentUser;
-    private readonly IMapper _mapper;
+    private readonly ICBMSApplicationDbContext _ctx;       // Clubs DbContext
     private readonly IFileStorageService _fileStorageService;
 
     public GetAllClubQueryHandler(
-       IOLMRSApplicationDbContext ctx,
-       IApplicationDbContext appCtx,
-       ICurrentUserService currentUser,
-       IMapper mapper,
+       ICBMSApplicationDbContext ctx,
        IFileStorageService fileStorageService)
     {
         _ctx = ctx;
-        _appCtx = appCtx;
-        _currentUser = currentUser;
-        _mapper = mapper;
         _fileStorageService = fileStorageService;
     }
 

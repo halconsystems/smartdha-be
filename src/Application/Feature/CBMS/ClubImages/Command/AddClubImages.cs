@@ -16,9 +16,9 @@ public record AddClubImagesCommand(
 public class AddClubImagesCommandHandler
     : IRequestHandler<AddClubImagesCommand, SuccessResponse<List<Guid>>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
 
-    public AddClubImagesCommandHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    public AddClubImagesCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<SuccessResponse<List<Guid>>> Handle(AddClubImagesCommand request, CancellationToken ct)
     {

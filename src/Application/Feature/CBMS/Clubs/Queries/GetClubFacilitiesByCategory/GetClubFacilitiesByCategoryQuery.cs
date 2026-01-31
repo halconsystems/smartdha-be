@@ -13,8 +13,8 @@ public record GetClubFacilitiesByCategoryQuery(
 public class GetClubFacilitiesByCategoryQueryHandler
     : IRequestHandler<GetClubFacilitiesByCategoryQuery, List<FacilityDTO>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
-    public GetClubFacilitiesByCategoryQueryHandler(IOLMRSApplicationDbContext ctx)
+    private readonly ICBMSApplicationDbContext _ctx;
+    public GetClubFacilitiesByCategoryQueryHandler(ICBMSApplicationDbContext ctx)
     {
         _ctx = ctx;
     }

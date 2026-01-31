@@ -15,13 +15,11 @@ public record CreateClubCommand(string Name, string? Description, string? Locati
 
 public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, SuccessResponse<string>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
-    public CreateClubCommandHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
+    public CreateClubCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<SuccessResponse<string>> Handle(CreateClubCommand request, CancellationToken ct)
     {
-        try
-        {
             var entity = new Club
             {
                 Name = request.Name,
@@ -36,13 +34,7 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
             _ctx.Clubs.Add(entity);
             await _ctx.SaveChangesAsync(ct);
             return Success.Created(entity.Id.ToString());
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-            return Success.Created(Guid.NewGuid().ToString());
-        }
-        ;
+        
     }
 }
 

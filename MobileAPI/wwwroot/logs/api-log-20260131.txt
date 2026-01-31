@@ -144,3 +144,22 @@ StackExchange.Redis.RedisConnectionException: SocketFailure (ReadSocketError/Tim
    at System.IO.Pipelines.Pipe.GetReadAsyncResult()
    at StackExchange.Redis.PhysicalConnection.ReadFromPipe() in /_/src/StackExchange.Redis/PhysicalConnection.cs:line 1796
    --- End of inner exception stack trace ---
+2026-01-31 20:09:50.828 +05:00 [INF] [CQRS]
+TraceId  : 0HNJ0R9KQ3VR3:00000001
+Request  : GetClubCategoriesQuery
+Duration : 549 ms
+2026-01-31 20:09:51.003 +05:00 [WRN] CMS Long Running Request: GetClubCategoriesQuery (604 milliseconds) 8c4ba5a5-b335-4da7-96b2-093720c41688 3220312345678 {"ClubId":"64af48e7-857a-4ed2-91b6-5cd13c9571b6","$type":"GetClubCategoriesQuery"}
+2026-01-31 20:09:51.059 +05:00 [INF] ================ HTTP REQUEST =================
+TraceId  : 0HNJ0R9KQ3VR3:00000001
+Method   : GET
+Path     : /api/club/64AF48E7-857A-4ED2-91B6-5CD13C9571B6/categories
+Status   : 200
+Duration : 2374 ms
+IP       : ::1
+
+Request:
+[NOT READ]
+
+Response:
+[]
+==============================================

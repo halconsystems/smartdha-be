@@ -14,8 +14,8 @@ public record CreateClubCategoryCommand(string Name, string Code,string DisplayN
 
 public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCategoryCommand, ApiResult<Guid>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
-    public CreateClubCategoryCommandHandler(IOLMRSApplicationDbContext db) => _db = db;
+    private readonly ICBMSApplicationDbContext _db;
+    public CreateClubCategoryCommandHandler(ICBMSApplicationDbContext db) => _db = db;
 
     public async Task<ApiResult<Guid>> Handle(CreateClubCategoryCommand request, CancellationToken ct)
     {

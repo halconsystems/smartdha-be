@@ -21,9 +21,9 @@ public record AddFacilityToClubCommand(
 public class AddFacilityToClubCommandHandler
     : IRequestHandler<AddFacilityToClubCommand, ApiResult<Guid>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
 
-    public AddFacilityToClubCommandHandler(IOLMRSApplicationDbContext ctx)
+    public AddFacilityToClubCommandHandler(ICBMSApplicationDbContext ctx)
     {
         _ctx = ctx;
     }
