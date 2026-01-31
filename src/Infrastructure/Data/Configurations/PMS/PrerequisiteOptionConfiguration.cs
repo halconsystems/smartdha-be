@@ -7,7 +7,7 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations;
+namespace DHAFacilitationAPIs.Infrastructure.Data.Configurations.PMS;
 public class PrerequisiteOptionConfiguration : IEntityTypeConfiguration<PrerequisiteOption>
 {
     public void Configure(EntityTypeBuilder<PrerequisiteOption> builder)

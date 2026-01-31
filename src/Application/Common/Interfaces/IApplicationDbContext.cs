@@ -20,7 +20,6 @@ public interface IApplicationDbContext
     DbSet<RequestTracking> RequestTrackings { get; }
     DbSet<RequestProcessStep> RequestProcessSteps { get; }
     DbSet<UserMembershipPurpose> UserMembershipPurposes { get; }
-
     DbSet<RoleAssignment> RoleAssignments { get; }
     //User management and RBAC
     DbSet<Module> Modules { get; }
@@ -84,7 +83,6 @@ public interface IApplicationDbContext
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
-
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }
 

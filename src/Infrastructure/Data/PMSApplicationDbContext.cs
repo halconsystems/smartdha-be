@@ -92,7 +92,10 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Apply configurations if you use IEntityTypeConfiguration<>
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PMSApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+        typeof(CBMSApplicationDbContext).Assembly,
+        t => t.Namespace!.Contains("Data.PMS")
+    );
 
         // Global filter: exclude soft deleted records
         //foreach (var entityType in modelBuilder.Model.GetEntityTypes())

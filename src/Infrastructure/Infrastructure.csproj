@@ -48,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Configurations\CBMS\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 
