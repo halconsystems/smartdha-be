@@ -16,9 +16,10 @@ public interface ICBMSApplicationDbContext
     DbSet<ClubCategory> ClubCategories { get; }
     DbSet<Facility> Facilities { get; }
     DbSet<ClubFacility> ClubFacilities { get; }
-    DbSet<FacilityAvailability> FacilityAvailabilities { get; }
-    DbSet<FacilityBookingConfig> FacilityBookingConfigs { get; }
-    DbSet<FacilitySlot> FacilitySlots { get; }
+    DbSet<FacilityUnit> FacilityUnits { get; }
+    DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs { get; }
+    DbSet<FacilityUnitSlot> FacilityUnitSlots { get; }
+    DbSet<FacilityUnitService> FacilityUnitServices { get; }
     DbSet<FacilitiesImage> FacilitiesImages { get; } 
 
     //Booking related

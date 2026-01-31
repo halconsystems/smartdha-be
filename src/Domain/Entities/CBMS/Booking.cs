@@ -22,6 +22,9 @@ public class Booking : BaseAuditableEntity
     public Guid FacilityId { get; set; }
     public Facility Facility { get; set; } = default!;
 
+    public Guid FacilityUnitId { get; set; }   // physical instance
+    public FacilityUnit FacilityUnit { get; set; } = default!;  // physical instance
+
     // Status
     public BookingStatus Status { get; set; } = BookingStatus.Draft;
 
@@ -33,7 +36,6 @@ public class Booking : BaseAuditableEntity
     public bool RequiresApproval { get; set; }
     public Guid? ApprovedBy { get; set; }
     public DateTime? ApprovedOn { get; set; }
-
     public string? Remarks { get; set; }
 
 }

@@ -6,19 +6,20 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
 namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
-public class FacilityBookingConfig : BaseAuditableEntity
+public class FacilityUnitBookingConfig : BaseAuditableEntity
 {
-    public Guid FacilityId { get; set; }
-    public Facility Facility { get; set; } = default!;
-
+    public Guid FacilityUnitId { get; set; }
+    public FacilityUnit FacilityUnit { get; set; } = default!;
     public BookingMode BookingMode { get; set; }
-
     public bool RequiresApproval { get; set; }
-
-    public int? SlotDurationMinutes { get; set; } // 60 for Padel
-    public int? MaxBookingsPerDay { get; set; }
-
+    // Slot-based
+    public int? SlotDurationMinutes { get; set; }
     public TimeOnly? OpeningTime { get; set; }
     public TimeOnly? ClosingTime { get; set; }
+    // Pricing
+    public decimal BasePrice { get; set; }
+    // Capacity
+    public int MaxConcurrentBookings { get; set; } = 1;
 }
+
 
