@@ -4,11 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.CreateFacility;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
-<<<<<<< HEAD
-//using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Command;
-//using DHAFacilitationAPIs.Application.Feature.CBMS.ClubServices.Queries;
-=======
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -19,18 +15,9 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubBookingStandardTimes;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubById;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetClubs;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.DeleteServiceProcess;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.UpdateServiceProcess;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceCategory.Commands.CreateServiceCategory;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceCategory.Commands.DeleteServiceCategory;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceCategory.Commands.UpdateServiceCategory;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceCategory.Queries.GetServiceCategories;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceProcess.Commands.CreateServiceProcess;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceProcess.Queries.GetServiceProcessById;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSServiceProcess.Queries.GetServiceProcessesByCategory;
-using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -164,8 +151,6 @@ public class clubsController : BaseApiController
     //[HttpGet("GetClubCategory")]
     //public async Task<IActionResult> Get(CancellationToken ct)
     //    => Ok(await _mediator.Send(new GetClubCategoriesQuery(), ct));
-
-<<<<<<< HEAD
     [HttpPut("Club-Category-Update{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
@@ -173,7 +158,6 @@ public class clubsController : BaseApiController
         CancellationToken ct)
         => Ok(await _mediator.Send(
             new UpdateClubCategoryCommand(id, body.Name, body.Code,body.DisplayName,body.Descriptio), ct));
-=======
     //[HttpPut("Club-Category-Update{id:guid}")]
     //public async Task<IActionResult> Update(
     //    Guid id,
@@ -181,7 +165,6 @@ public class clubsController : BaseApiController
     //    CancellationToken ct)
     //    => Ok(await _mediator.Send(
     //        new UpdateClubCategoryCommand(id,body.ClubId, body.Name, body.Code), ct));
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
 
     [HttpDelete("Club-Category-Delete{id:guid}")]
     public async Task<IActionResult> ClubDelete(
@@ -190,7 +173,6 @@ public class clubsController : BaseApiController
         => Ok(await _mediator.Send(
             new DeleteClubCategoryCommand(id), ct));
 
-<<<<<<< HEAD
 
     //[HttpPost("Create-Club-Facilities")]
     //public async Task<IActionResult> Create(CreateClubCategoryCommand cmd, CancellationToken ct)
@@ -214,7 +196,6 @@ public class clubsController : BaseApiController
     //    CancellationToken ct)
     //    => Ok(await _mediator.Send(
     //        new DeleteClubCategoryCommand(id), ct));
-=======
     [HttpPost("CreateFacility")]
     public async Task<IActionResult> CreateFacility(
         [FromBody] CreateFacilityCommand command,
@@ -235,22 +216,20 @@ public class clubsController : BaseApiController
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
 
 
     //[HttpPost("Create-Club-Service")]
     //public async Task<IActionResult> Create(CreateClubServiceProcessCommand cmd, CancellationToken ct)
     //   => Ok(await _mediator.Send(cmd, ct));
 
-<<<<<<< HEAD
+
     //[HttpGet("by-category/{categoryId:guid}")]
     //public async Task<IActionResult> ByCategory(Guid categoryId, CancellationToken ct)
     //    => Ok(await _mediator.Send(new GetProcessesByCategoryQuery(categoryId), ct));
-=======
+
     ////[HttpGet("by-category/{categoryId:guid}")]
     ////public async Task<IActionResult> ByCategory(Guid categoryId, CancellationToken ct)
     ////    => Ok(await _mediator.Send(new GetProcessesByCategoryQuery(categoryId), ct));
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
 
     //[HttpGet("by-category/{categoryId:guid}")]
     //public async Task<IActionResult> GetByCategory(
@@ -258,11 +237,9 @@ public class clubsController : BaseApiController
     //    CancellationToken ct)
     //{
     //    return Ok(await _mediator.Send(
-<<<<<<< HEAD
+
     //        new getclubca(categoryId), ct));
-=======
     //        new GetClubServiceProcessByCatQuery(categoryId), ct));
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
     //}
 
     //[HttpGet("Club-service{processId:guid}")]
@@ -345,6 +322,68 @@ public class clubsController : BaseApiController
     //    var result = await _mediator.Send(cmd, ct);
     //    return Ok(result);
     //}
+
+
+
+    [HttpPost("Facility/images/add"), AllowAnonymous]
+    [Consumes("multipart/form-data")]
+    [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
+    public async Task<IActionResult> AddFacilityImages(
+    Guid FacilityId,
+    [FromForm] AddClubImagesFlatForm form,
+    CancellationToken ct)
+    {
+        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+        if (form.Files == null || form.Files.Count == 0)
+            return BadRequest("No images uploaded.");
+
+        // Keep parallel arrays aligned (if provided)
+        int n = form.Files.Count;
+        if (form.ImageNames.Count != 0 && form.ImageNames.Count != n)
+            return BadRequest("ImageNames count must match Files count.");
+        if (form.Descriptions.Count != 0 && form.Descriptions.Count != n)
+            return BadRequest("Descriptions count must match Files count.");
+        if (form.Categories.Count != 0 && form.Categories.Count != n)
+            return BadRequest("Categories count must match Files count.");
+
+        var folder = $"Facility/{FacilityId}";
+        var uploaded = new List<AddClubImageDTO>();
+
+        for (int i = 0; i < n; i++)
+        {
+            var file = form.Files[i];
+
+            // Save file (your IFileStorageService validates size/ext & creates folder)
+            //var relativePath = await _files.SaveFileAsync(file, folder, ct);
+            var relativePath = await _files.SaveFileAsync(
+              file,
+              folder,
+              ct,
+              maxBytes: 5 * 1024 * 1024,                       // 5 MB
+              allowedExtensions: new[] { ".jpg", ".jpeg", ".png" }
+             );
+
+            var ext = Path.GetExtension(relativePath);
+
+            // Pick metadata by index (or defaults)
+            var name = form.ImageNames.ElementAtOrDefault(i);
+            var desc = form.Descriptions.ElementAtOrDefault(i);
+            var cat = form.Categories.ElementAtOrDefault(i);
+
+            uploaded.Add(new AddClubImageDTO(
+                ImageURL: relativePath,                 // e.g. /uploads/rooms/{roomId}/{guid}.jpg
+                ImageExtension: ext,
+                ImageName: name,
+                Description: desc,
+                Category: cat                           // enum value
+            ));
+        }
+
+        // Hand off to your command (enforces “only one Main” etc.)
+        var cmd = new AddFacilityImagesCommand(FacilityId, uploaded);
+        var result = await _mediator.Send(cmd, ct);
+        return Ok(result);
+    }
 }
 public record ClubUpdateServiceCategoryRequest(
     Guid ClubId,

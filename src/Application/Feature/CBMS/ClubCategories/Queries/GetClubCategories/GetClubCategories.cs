@@ -11,9 +11,9 @@ public record GetClubCategoriesQuery(Guid ClubId)
 public class GetClubCategoriesQueryHandler
     : IRequestHandler<GetClubCategoriesQuery, List<CategoryDTO>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
 
-    public GetClubCategoriesQueryHandler(IOLMRSApplicationDbContext ctx)
+    public GetClubCategoriesQueryHandler(ICBMSApplicationDbContext ctx)
     {
         _ctx = ctx;
     }

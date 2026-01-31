@@ -4,28 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
+using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 
-namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
-public record AddClubImagesCommand(
-    Guid ClubId,
+namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
+public record AddFacilityImagesCommand(
+    Guid FacilityId,
     List<AddClubImageDTO> Images
 ) : IRequest<SuccessResponse<List<Guid>>>;
-public class AddClubImagesCommandHandler
-    : IRequestHandler<AddClubImagesCommand, SuccessResponse<List<Guid>>>
+public class AddFacilityImagesCommandHandler
+    : IRequestHandler<AddFacilityImagesCommand, SuccessResponse<List<Guid>>>
 {
     private readonly ICBMSApplicationDbContext _ctx;
 
-    public AddClubImagesCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
+    public AddFacilityImagesCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
-    public async Task<SuccessResponse<List<Guid>>> Handle(AddClubImagesCommand request, CancellationToken ct)
+    public async Task<SuccessResponse<List<Guid>>> Handle(AddFacilityImagesCommand request, CancellationToken ct)
     {
         // 1) Room must exist
-        var roomExists = await _ctx.Clubs
+        var roomExists = await _ctx.Facilities
             .AsNoTracking()
-            .AnyAsync(r => r.Id == request.ClubId && (r.IsDeleted == false || r.IsDeleted == null), ct);
+            .AnyAsync(r => r.Id == request.FacilityId && (r.IsDeleted == false || r.IsDeleted == null), ct);
 
         if (!roomExists)
             throw new KeyNotFoundException("Club not found.");
@@ -33,9 +34,9 @@ public class AddClubImagesCommandHandler
         var images = request.Images ?? new();
 
         // 2) Enforce single Main image overall (DB already has filtered unique index; also check here)
-        bool dbHasMain = await _ctx.ClubImages
+        bool dbHasMain = await _ctx.FacilitiesImages
             .AsNoTracking()
-            .AnyAsync(x => x.ClubId == request.ClubId
+            .AnyAsync(x => x.FacilityId == request.FacilityId
                         && x.Category == ImageCategory.Main
                         && (x.IsDeleted == false || x.IsDeleted == null), ct);
 
@@ -54,9 +55,9 @@ public class AddClubImagesCommandHandler
         // }
 
         // 3) Map and save
-        var entities = images.Select(i => new Domain.Entities.CBMS.ClubImages
+        var entities = images.Select(i => new FacilitiesImage
         {
-            ClubId = request.ClubId,
+            FacilityId = request.FacilityId,
             ImageURL = i.ImageURL,
             ImageExtension = i.ImageExtension,
             ImageName = i.ImageName,
@@ -69,11 +70,10 @@ public class AddClubImagesCommandHandler
             Created = DateTime.UtcNow
         }).ToList();
 
-        _ctx.ClubImages.AddRange(entities);
+        _ctx.FacilitiesImages.AddRange(entities);
         await _ctx.SaveChangesAsync(ct);
 
         var ids = entities.Select(e => e.Id).ToList();
         return new SuccessResponse<List<Guid>>(ids, "Images added.");
     }
 }
-

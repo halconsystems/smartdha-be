@@ -21,9 +21,9 @@ public record AddFacilityToClubCommand(
 public class AddFacilityToClubCommandHandler
     : IRequestHandler<AddFacilityToClubCommand, ApiResult<Guid>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
 
-    public AddFacilityToClubCommandHandler(IOLMRSApplicationDbContext ctx)
+    public AddFacilityToClubCommandHandler(ICBMSApplicationDbContext ctx)
     {
         _ctx = ctx;
     }
@@ -45,8 +45,14 @@ public class AddFacilityToClubCommandHandler
         };
 
         _ctx.ClubFacilities.Add(clubFacility);
-        await _ctx.SaveChangesAsync(ct);
-
+        try
+        {
+            await _ctx.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            return ApiResult<Guid>.Fail($"Error adding facility to club: {ex.Message}");
+        }
         return ApiResult<Guid>.Ok(clubFacility.Id);
     }
 }

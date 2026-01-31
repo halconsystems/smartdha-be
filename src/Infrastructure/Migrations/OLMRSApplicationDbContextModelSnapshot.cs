@@ -194,13 +194,10 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
                     b.HasIndex("ClubId");
 
-<<<<<<< HEAD
                     b.HasIndex("FacilityId");
 
                     b.ToTable("ClubFacilities");
-=======
                     b.ToTable("ClubCategories", (string)null);
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.CBMS.ClubFeeCategory", b =>
@@ -614,10 +611,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
-
-<<<<<<< HEAD
-                    b.Property<Guid>("ClubCategoryId")
-=======
+                    b.Property<Guid>("ClubCategoryId");
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
@@ -685,7 +679,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("CategoryId")
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
@@ -740,12 +733,8 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClubCategoryId");
-
-<<<<<<< HEAD
                     b.ToTable("Facilities");
-=======
                     b.ToTable("ClubProcess", (string)null);
->>>>>>> bd3a3e12ccc048f23443051489e699a6ef51c5b5
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Club", b =>
