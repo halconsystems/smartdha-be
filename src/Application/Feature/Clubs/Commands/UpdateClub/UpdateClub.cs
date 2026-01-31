@@ -7,7 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
-public record UpdateClubCommand(Guid Id, string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, bool? IsActive)
+public record UpdateClubCommand(Guid Id, string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, bool? IsActive, string? Email)
     : IRequest<SuccessResponse<string>>;
 
 public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, SuccessResponse<string>>
@@ -28,6 +28,7 @@ public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, Succe
         entity.AccountNoAccronym = request.AccountNoAccronym;
         if (request.IsActive.HasValue) entity.IsActive = request.IsActive;
         entity.LastModified = DateTime.Now;
+        entity.Email = request.Email;
 
         await _ctx.SaveChangesAsync(ct);
         return Success.Update(entity.Id.ToString());

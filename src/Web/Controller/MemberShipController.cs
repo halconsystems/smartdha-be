@@ -99,7 +99,7 @@ public class MemberShipController : BaseApiController
     [HttpGet("get-MemberShipRequestLisr"), AllowAnonymous]
     public async Task<ActionResult<MemberShipDTO>> GetAllMemberShipsRequest(CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetAllMembershipPurposesQuery(), ct);
+        var result = await _mediator.Send(new GetMemberRequestListQuery(), ct);
         return Ok(result);
     }
 

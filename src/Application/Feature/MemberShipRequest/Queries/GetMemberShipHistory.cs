@@ -44,6 +44,7 @@ public class GetMemberShipHistoryQueryHandler : IRequestHandler<GetMemberShipHis
 
         var result = new MemberRequestHistoryDTO
         {
+            Id = memberRequest.Id,
             Name = memberRequest.Name,
             MemberShipCategory = MemberShipCatergories.displayname,
             Purpose = MemberShipPurpose?.DisplayName,
