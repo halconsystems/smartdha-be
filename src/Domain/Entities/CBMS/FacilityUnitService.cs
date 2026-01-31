@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
 public class FacilityUnitService : BaseAuditableEntity
 {
-    public Guid FacilityId { get; set; }
-    public Facility Facility { get; set; } = default!;
-    public string Name { get; set; } = default!;
-    public string Code { get; set; } = default!;
-
-    public decimal Price { get; set; }
-    public bool IsQuantityBased { get; set; } // food per head
-    public bool IsOptional { get; set; } = true;
-    public bool IsComplimentary { get; set; } = false;
+    public Guid FacilityUnitId { get; set; }
+    public FacilityUnit FacilityUnit { get; set; } = default!;
+    public Guid FacilityServiceId { get; set; }
+    public FacilityService FacilityService { get; set; } = default!;
+    public decimal? OverridePrice { get; set; }
+    public bool IsEnabled { get; set; } = true;
 }
 

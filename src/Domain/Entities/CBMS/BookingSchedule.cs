@@ -11,11 +11,8 @@ public class BookingSchedule : BaseAuditableEntity
     public Booking Booking { get; set; } = default!;
 
     // SlotBased
-    public DateOnly? Date { get; set; }
-    public Guid? SlotId { get; set; }
-
-    // RangeBased
-    public DateOnly? FromDate { get; set; }
-    public DateOnly? ToDate { get; set; }
+    public DateOnly Date { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
 }
 

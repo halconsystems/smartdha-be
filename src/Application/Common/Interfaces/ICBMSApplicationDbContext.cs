@@ -15,12 +15,13 @@ public interface ICBMSApplicationDbContext
     DbSet<ClubImages> ClubImages { get; }
     DbSet<ClubCategory> ClubCategories { get; }
     DbSet<Facility> Facilities { get; }
+    DbSet<FacilitiesImage> FacilitiesImages { get; }
+    DbSet<FacilityService> FacilityServices { get; }
+
     DbSet<ClubFacility> ClubFacilities { get; }
     DbSet<FacilityUnit> FacilityUnits { get; }
     DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs { get; }
-    DbSet<FacilityUnitSlot> FacilityUnitSlots { get; }
     DbSet<FacilityUnitService> FacilityUnitServices { get; }
-    DbSet<FacilitiesImage> FacilitiesImages { get; } 
 
     //Booking related
     DbSet<Booking> Bookings { get; }

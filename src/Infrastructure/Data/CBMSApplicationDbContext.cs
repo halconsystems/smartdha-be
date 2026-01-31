@@ -28,14 +28,13 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<ClubImages> ClubImages => Set<ClubImages>();
     public DbSet<ClubCategory> ClubCategories => Set<ClubCategory>();
     public DbSet<Facility> Facilities => Set<Facility>();
+    public DbSet<FacilityService> FacilityServices => Set<FacilityService>();
+    public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>();
     public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>();
     public DbSet<FacilityUnit> FacilityUnits => Set<FacilityUnit>();
     public DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs => Set<FacilityUnitBookingConfig>();
     public DbSet<FacilityUnitService> FacilityUnitServices => Set<FacilityUnitService>();
-    public DbSet<FacilityUnitSlot> FacilityUnitSlots => Set<FacilityUnitSlot>();
-    public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>();
-
-
+  
     //Bookings table here 
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<BookingSchedule> BookingSchedules => Set<BookingSchedule>();
@@ -98,6 +97,19 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
             entity.HasOne(b => b.FacilityUnit)
                 .WithMany()
                 .HasForeignKey(b => b.FacilityUnitId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<FacilityUnitService>(entity =>
+        {
+            entity.HasOne(x => x.FacilityUnit)
+                .WithMany()
+                .HasForeignKey(x => x.FacilityUnitId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(x => x.FacilityService)
+                .WithMany()
+                .HasForeignKey(x => x.FacilityServiceId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
