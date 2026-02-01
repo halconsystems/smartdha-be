@@ -21,10 +21,12 @@ public class SearchFacilityAvailabilityHandler
     : IRequestHandler<SearchFacilityAvailabilityQuery, ApiResult<List<FacilitySearchResponse>>>
 {
     private readonly ICBMSApplicationDbContext _db;
+    private readonly IFileStorageService _fileStorageService;
 
-    public SearchFacilityAvailabilityHandler(ICBMSApplicationDbContext db)
+    public SearchFacilityAvailabilityHandler(ICBMSApplicationDbContext db, IFileStorageService fileStorageService)
     {
         _db = db;
+        _fileStorageService = fileStorageService;
     }
 
         public async Task<ApiResult<List<FacilitySearchResponse>>> Handle(
@@ -55,12 +57,30 @@ public class SearchFacilityAvailabilityHandler
                     u.IsActive==true && u.IsDeleted !=true)
                 .ToListAsync(ct);
 
+
+
             var unitResponses = new List<FacilityUnitAvailabilityDto>();
 
             foreach (var unit in units)
             {
+
+                var unitMainImagePath = await _db.FacilityUnitImages
+                .Where(x =>
+                    x.FacilityUnitId == unit.Id &&
+                    x.Category == ImageCategory.Main &&
+                    x.IsActive == true &&
+                    x.IsDeleted != true)
+                .Select(x => x.ImageURL)
+                .FirstOrDefaultAsync(ct);
+
+                var unitMainImageUrl = unitMainImagePath != null
+                    ? _fileStorageService.GetPublicUrl(unitMainImagePath)
+                    : null;
+
                 var config = await _db.FacilityUnitBookingConfigs
                     .FirstOrDefaultAsync(x => x.FacilityUnitId == unit.Id, ct);
+
+
 
                 if (config == null)
                     continue;
@@ -126,7 +146,8 @@ public class SearchFacilityAvailabilityHandler
                         unit.UnitType,
                         config.BasePrice,
                         true,
-                        availableSlots
+                        availableSlots,
+                        unitMainImageUrl
                     ));
                 }
                 // =========================
@@ -161,7 +182,8 @@ public class SearchFacilityAvailabilityHandler
                         unit.UnitType,
                         config.BasePrice,
                         true,
-                        null
+                        null,
+                        unitMainImageUrl
                     ));
                 }
             }
@@ -183,7 +205,7 @@ public class SearchFacilityAvailabilityHandler
                     ? BookingMode.SlotBased
                     : BookingMode.DayBased,
                 unitResponses
-            ));
+               ));
         }
 
         return ApiResult<List<FacilitySearchResponse>>.Ok(result);
