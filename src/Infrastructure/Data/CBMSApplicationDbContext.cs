@@ -41,6 +41,11 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<BookingDateRange> BookingDateRanges => Set<BookingDateRange>();
     public DbSet<BookingService> BookingServices => Set<BookingService>();
     public DbSet<FacilityUnitImage> FacilityUnitImages => Set<FacilityUnitImage>();
+    public DbSet<FacilityUnitAvailabilityRule> FacilityUnitAvailabilityRules => Set<FacilityUnitAvailabilityRule>();
+    public DbSet<Discount> Discounts => Set<Discount>();
+    public DbSet<Tax> Taxes => Set<Tax>();
+    public DbSet<FacilityUnitDiscount> FacilityUnitDiscounts => Set<FacilityUnitDiscount>();
+    public DbSet<FacilityUnitTax> FacilityUnitTax => Set<FacilityUnitTax>();
 
     public override async Task<int> SaveChangesAsync(
          CancellationToken cancellationToken = default)

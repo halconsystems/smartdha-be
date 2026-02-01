@@ -12,6 +12,8 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.Updat
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.ClubFacilities;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.Facilities;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Discount.Commands.AssignFacilityUnitDiscount;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Discount.Commands.CreateDiscount;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityService.Commands.ActiveInActiveFaciltityService;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityService.Commands.CreateFacilityService;
@@ -31,8 +33,13 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig.Que
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitImages.Commands;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.ActiveInAactiveFacilityServiceUnit;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.AddFacilityUnitService;
+<<<<<<< HEAD
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.UpdateFacilityUnitService;
+=======
+using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
+>>>>>>> 3049b88ee15eede97b77c0055663c7364f93ebce
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -611,6 +618,22 @@ public class clubsController : BaseApiController
         return Ok(result);
     }
 
+
+    [HttpPost("discounts")]
+    public Task<ApiResult<Guid>> CreateDiscount(CreateDiscountDto dto)
+        => _mediator.Send(new CreateDiscountCommand(dto));
+
+    [HttpPost("taxes")]
+    public Task<ApiResult<Guid>> CreateTax(CreateTaxDto dto)
+        => _mediator.Send(new CreateTaxCommand(dto));
+
+    [HttpPost("facility-unit/discount")]
+    public Task<ApiResult<Guid>> AssignDiscount(AssignFacilityUnitDiscountDto dto)
+        => _mediator.Send(new AssignFacilityUnitDiscountCommand(dto));
+
+    [HttpPost("facility-unit/tax")]
+    public Task<ApiResult<Guid>> AssignTax(AssignFacilityUnitTaxDto dto)
+        => _mediator.Send(new AssignFacilityUnitTaxCommand(dto));
 }
 public record ClubUpdateServiceCategoryRequest(
     Guid ClubId,

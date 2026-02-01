@@ -20,6 +20,7 @@ public class FacilityUnitBookingConfig : BaseAuditableEntity
     public decimal BasePrice { get; set; }
     // Capacity
     public int MaxConcurrentBookings { get; set; } = 1;
+    public bool UseAvailabilityRules { get; set; } =true;
 }
 
 

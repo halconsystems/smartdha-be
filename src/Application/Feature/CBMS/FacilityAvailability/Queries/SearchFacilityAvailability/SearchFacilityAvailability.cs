@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
@@ -20,13 +21,15 @@ public class SearchFacilityAvailabilityHandler
     : IRequestHandler<SearchFacilityAvailabilityQuery, ApiResult<List<FacilitySearchResponse>>>
 {
     private readonly ICBMSApplicationDbContext _db;
+    private readonly IFileStorageService _fileStorageService;
 
-    public SearchFacilityAvailabilityHandler(ICBMSApplicationDbContext db)
+    public SearchFacilityAvailabilityHandler(ICBMSApplicationDbContext db, IFileStorageService fileStorageService)
     {
         _db = db;
+        _fileStorageService = fileStorageService;
     }
 
-    public async Task<ApiResult<List<FacilitySearchResponse>>> Handle(
+        public async Task<ApiResult<List<FacilitySearchResponse>>> Handle(
         SearchFacilityAvailabilityQuery request,
         CancellationToken ct)
     {
@@ -48,37 +51,59 @@ public class SearchFacilityAvailabilityHandler
         foreach (var facility in facilities)
         {
             var units = await _db.FacilityUnits
-                .Where(u => u.ClubId == request.ClubId && u.FacilityId == facility.Id && u.IsActive ==true)
+                .Where(u =>
+                    u.ClubId == request.ClubId &&
+                    u.FacilityId == facility.Id &&
+                    u.IsActive==true && u.IsDeleted !=true)
                 .ToListAsync(ct);
+
+
 
             var unitResponses = new List<FacilityUnitAvailabilityDto>();
 
             foreach (var unit in units)
             {
-                var config = await _db.FacilityUnitBookingConfigs
-                    .FirstAsync(x => x.FacilityUnitId == unit.Id, ct);
 
+                var unitMainImagePath = await _db.FacilityUnitImages
+                .Where(x =>
+                    x.FacilityUnitId == unit.Id &&
+                    x.Category == ImageCategory.Main &&
+                    x.IsActive == true &&
+                    x.IsDeleted != true)
+                .Select(x => x.ImageURL)
+                .FirstOrDefaultAsync(ct);
+
+                var unitMainImageUrl = unitMainImagePath != null
+                    ? _fileStorageService.GetPublicUrl(unitMainImagePath)
+                    : null;
+
+                var config = await _db.FacilityUnitBookingConfigs
+                    .FirstOrDefaultAsync(x => x.FacilityUnitId == unit.Id, ct);
+
+
+
+                if (config == null)
+                    continue;
+
+                // Load availability rules (once per unit)
+                var rules = await _db.FacilityUnitAvailabilityRules
+                    .Where(r => r.FacilityUnitId == unit.Id)
+                    .ToListAsync(ct);
+
+                // =========================
+                // SLOT BASED (PADEL)
+                // =========================
                 if (config.BookingMode == BookingMode.SlotBased)
                 {
-                    // 🟢 PADEL COURT LOGIC
-                    if (!config.SlotDurationMinutes.HasValue || config.SlotDurationMinutes <= 0)
-                    {
-                        throw new InvalidOperationException(
-                            "SlotDurationMinutes must be greater than 0.");
-                    }
+                    if (!request.Date.HasValue)
+                        continue;
 
-                    if (!config.OpeningTime.HasValue || !config.ClosingTime.HasValue)
-                    {
-                        throw new InvalidOperationException(
-                            "OpeningTime and ClosingTime must be configured.");
-                    }
-
-                    if (config.OpeningTime >= config.ClosingTime)
-                    {
-                        throw new InvalidOperationException(
-                            "OpeningTime must be earlier than ClosingTime.");
-                    }
-
+                    // Hard validation
+                    if (!config.OpeningTime.HasValue ||
+                        !config.ClosingTime.HasValue ||
+                        !config.SlotDurationMinutes.HasValue ||
+                        config.SlotDurationMinutes <= 0)
+                        continue;
 
                     var slots = GenerateSlots(
                         config.OpeningTime.Value,
@@ -86,104 +111,165 @@ public class SearchFacilityAvailabilityHandler
                         config.SlotDurationMinutes.Value
                     );
 
-
                     var bookings = await _db.BookingSchedules
                         .Where(b =>
-                            b.Date == request.Date &&
+                            b.Date == request.Date.Value &&
                             b.Booking.FacilityUnitId == unit.Id &&
                             b.Booking.Status != BookingStatus.Cancelled)
                         .ToListAsync(ct);
 
-                    var slotDtos = slots.Select(s => new SlotAvailabilityDto(
-                        s.start,
-                        s.end,
-                        config.BasePrice,
-                        !bookings.Any(b =>
-                            s.start < b.EndTime &&
-                            s.end > b.StartTime)
-                    )).ToList();
+                    var availableSlots = slots
+                        .Where(s =>
+                            IsSlotAllowed(
+                                request.Date.Value,
+                                s.start,
+                                s.end,
+                                rules,
+                                config.UseAvailabilityRules))
+                        .Where(s =>
+                            !bookings.Any(b =>
+                                s.start < b.EndTime &&
+                                s.end > b.StartTime))
+                        .Select(s => new SlotAvailabilityDto(
+                            s.start,
+                            s.end,
+                            config.BasePrice,
+                            true))
+                        .ToList();
+
+                    if (!availableSlots.Any())
+                        continue;
 
                     unitResponses.Add(new FacilityUnitAvailabilityDto(
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
                         config.BasePrice,
-                        slotDtos.Any(x => x.IsAvailable),
-                        slotDtos
+                        true,
+                        availableSlots,
+                        unitMainImageUrl
                     ));
                 }
+                // =========================
+                // DAY / NIGHT BASED
+                // =========================
                 else
                 {
-                    // 🟡 BANQUET / GUEST ROOM
-                    var hasConflict = await _db.BookingDateRanges.AnyAsync(b =>
-                     b.Booking.FacilityUnitId == unit.Id &&
-                     b.Booking.Status != BookingStatus.Cancelled &&
-                     request.FromDate < b.ToDate &&
-                     request.ToDate > b.FromDate,
-                     ct);
+                    if (!request.FromDate.HasValue || !request.ToDate.HasValue)
+                        continue;
 
+                    var isAllowed = IsDateAllowed(
+                        request.FromDate.Value,
+                        rules,
+                        config.UseAvailabilityRules);
+
+                    if (!isAllowed)
+                        continue;
+
+                    var hasConflict = await _db.BookingDateRanges.AnyAsync(b =>
+                        b.Booking.FacilityUnitId == unit.Id &&
+                        b.Booking.Status != BookingStatus.Cancelled &&
+                        request.FromDate < b.ToDate &&
+                        request.ToDate > b.FromDate,
+                        ct);
+
+                    if (hasConflict)
+                        continue;
 
                     unitResponses.Add(new FacilityUnitAvailabilityDto(
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
                         config.BasePrice,
-                        !hasConflict,
-                        null
+                        true,
+                        null,
+                        unitMainImageUrl
                     ));
                 }
             }
+
+            if (!unitResponses.Any())
+                continue;
 
             result.Add(new FacilitySearchResponse(
                 facility.Id,
                 facility.DisplayName,
                 facility.ClubCategory.Name,
                 _db.FacilitiesImages
-                    .Where(x => x.FacilityId == facility.Id && x.Category==ImageCategory.Main)
+                    .Where(x =>
+                        x.FacilityId == facility.Id &&
+                        x.Category == ImageCategory.Main)
                     .Select(x => x.ImageURL)
                     .FirstOrDefault(),
                 unitResponses.First().Slots != null
                     ? BookingMode.SlotBased
                     : BookingMode.DayBased,
                 unitResponses
-            ));
+               ));
         }
 
         return ApiResult<List<FacilitySearchResponse>>.Ok(result);
     }
 
+    // =========================
+    // SLOT GENERATION (SAFE)
+    // =========================
     private static List<(TimeOnly start, TimeOnly end)> GenerateSlots(
-    TimeOnly opening,
-    TimeOnly closing,
-    int minutes)
+        TimeOnly opening,
+        TimeOnly closing,
+        int minutes)
     {
-        if (minutes <= 0)
-            throw new ArgumentException("Slot duration must be greater than zero.");
-
         var list = new List<(TimeOnly, TimeOnly)>();
 
         var openingMinutes = opening.Hour * 60 + opening.Minute;
         var closingMinutes = closing.Hour * 60 + closing.Minute;
 
-        // Guard (no overnight support here)
         if (openingMinutes >= closingMinutes)
-            throw new InvalidOperationException("OpeningTime must be before ClosingTime.");
+            return list;
 
-        var currentMinutes = openingMinutes;
+        var current = openingMinutes;
 
-        while (currentMinutes + minutes <= closingMinutes)
+        while (current + minutes <= closingMinutes)
         {
-            var start = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(currentMinutes));
-            var end = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(currentMinutes + minutes));
-
+            var start = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(current));
+            var end = TimeOnly.FromTimeSpan(TimeSpan.FromMinutes(current + minutes));
             list.Add((start, end));
-            currentMinutes += minutes;
+            current += minutes;
         }
 
         return list;
     }
 
+    // =========================
+    // RULE CHECKS
+    // =========================
+    private static bool IsSlotAllowed(
+        DateOnly date,
+        TimeOnly start,
+        TimeOnly end,
+        List<FacilityUnitAvailabilityRule> rules,
+        bool useRules)
+    {
+        if (!useRules)
+            return true;
 
+        var rule = rules.FirstOrDefault(r =>
+            r.Date == date &&
+            r.StartTime <= start &&
+            r.EndTime >= end);
 
+        return rule?.IsAvailable ?? false;
+    }
+
+    private static bool IsDateAllowed(
+        DateOnly date,
+        List<FacilityUnitAvailabilityRule> rules,
+        bool useRules)
+    {
+        if (!useRules)
+            return true;
+
+        var rule = rules.FirstOrDefault(r => r.Date == date);
+        return rule?.IsAvailable ?? false;
+    }
 }
-

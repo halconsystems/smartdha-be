@@ -21,7 +21,8 @@ public record FacilityUnitAvailabilityDto(
     string? UnitType,
     decimal BasePrice,
     bool IsAvailable,
-    List<SlotAvailabilityDto>? Slots
+    List<SlotAvailabilityDto>? Slots,
+    string? MainImageUrl
 );
 
 public record SlotAvailabilityDto(

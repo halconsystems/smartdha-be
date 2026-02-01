@@ -5,6 +5,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries.GetClu
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries.GetClubFacilitiesByCategory;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityAvailability.Queries.SearchFacilityAvailability;
+using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnit.Queries.FacilityUnitDetail;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetComplaintDropdowns;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaints;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +81,9 @@ public class ClubController : BaseApiController
             toDate
         ));
     }
-
+    [HttpGet("{facilityUnitId}/GetFacilityUnitDetail")]
+    public Task<ApiResult<FacilityUnitDetailResponse>> GetDetail(
+        Guid facilityUnitId)
+        => _mediator.Send(new GetFacilityUnitDetailQuery(facilityUnitId));
 
 }

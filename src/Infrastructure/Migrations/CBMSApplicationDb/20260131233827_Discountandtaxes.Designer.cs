@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
 {
     [DbContext(typeof(CBMSApplicationDbContext))]
-    partial class CBMSApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260131233827_Discountandtaxes")]
+    partial class Discountandtaxes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,9 +369,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
                     b.Property<string>("ActionType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookingMode")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("ClubId")
                         .HasColumnType("uniqueidentifier");
 
@@ -377,9 +377,6 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.CBMSApplicationDb
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FacilityActionType")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("FacilityId")
                         .HasColumnType("uniqueidentifier");
