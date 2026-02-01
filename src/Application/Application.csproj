@@ -9,6 +9,7 @@
     <Compile Remove="Feature\CBMS\ClubFeeCategories\**" />
     <Compile Remove="Feature\CBMS\ClubFeeOption\**" />
     <Compile Remove="Feature\CBMS\ClubServices\**" />
+    <Compile Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
     <Compile Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <Compile Remove="Feature\CBMS\FeeDefination\**" />
     <Compile Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -23,6 +24,7 @@
     <EmbeddedResource Remove="Feature\CBMS\ClubFeeCategories\**" />
     <EmbeddedResource Remove="Feature\CBMS\ClubFeeOption\**" />
     <EmbeddedResource Remove="Feature\CBMS\ClubServices\**" />
+    <EmbeddedResource Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
     <EmbeddedResource Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <EmbeddedResource Remove="Feature\CBMS\FeeDefination\**" />
     <EmbeddedResource Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -37,6 +39,7 @@
     <None Remove="Feature\CBMS\ClubFeeCategories\**" />
     <None Remove="Feature\CBMS\ClubFeeOption\**" />
     <None Remove="Feature\CBMS\ClubServices\**" />
+    <None Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
     <None Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <None Remove="Feature\CBMS\FeeDefination\**" />
     <None Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -76,11 +79,7 @@
     <Folder Include="Feature\CBMS\Clubs\Command\" />
     <Folder Include="Feature\CBMS\FacilityAvailability\Commands\" />
     <Folder Include="Feature\CBMS\FacilityImages\Queries\" />
-    <Folder Include="Feature\CBMS\FacilityService\Queries\" />
-    <Folder Include="Feature\CBMS\FacilityUnitBookingConfig\Queries\" />
     <Folder Include="Feature\CBMS\FacilityUnitImages\Queries\" />
-    <Folder Include="Feature\CBMS\FacilityUnitService\Queries\" />
-    <Folder Include="Feature\CBMS\FacilityUnit\Queries\" />
     <Folder Include="Feature\ConfirmBooking\Queries\" />
     <Folder Include="Feature\DiscountSetting\Queries\" />
     <Folder Include="Feature\ForgetPassword\Queries\" />

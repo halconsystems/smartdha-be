@@ -14,8 +14,8 @@ public record GetClubWiseCategories() : IRequest<ApiResult<List<ClubCategoriesDT
 
 public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubWiseCategories, ApiResult<List<ClubCategoriesDTO>>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
-    public GetClubCategoriesQueryHandler(IOLMRSApplicationDbContext db) => _db = db;
+    private readonly ICBMSApplicationDbContext _db;
+    public GetClubCategoriesQueryHandler(ICBMSApplicationDbContext db) => _db = db;
 
     public async Task<ApiResult<List<ClubCategoriesDTO>>> Handle(GetClubWiseCategories request, CancellationToken ct)
     {

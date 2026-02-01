@@ -11,18 +11,18 @@ using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitImages.Commands;
-public record AddFacilityImagesCommand(
+public record AddFacilityUnitImagesCommand(
     Guid FacilityUnitId,
     List<AddClubImageDTO> Images
 ) : IRequest<SuccessResponse<List<Guid>>>;
 public class AddFacilityUnitImagesCommandHandler
-    : IRequestHandler<AddFacilityImagesCommand, SuccessResponse<List<Guid>>>
+    : IRequestHandler<AddFacilityUnitImagesCommand, SuccessResponse<List<Guid>>>
 {
     private readonly ICBMSApplicationDbContext _ctx;
 
     public AddFacilityUnitImagesCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
-    public async Task<SuccessResponse<List<Guid>>> Handle(AddFacilityImagesCommand request, CancellationToken ct)
+    public async Task<SuccessResponse<List<Guid>>> Handle(AddFacilityUnitImagesCommand request, CancellationToken ct)
     {
         // 1) Room must exist
         var roomExists = await _ctx.FacilityUnits

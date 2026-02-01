@@ -13,9 +13,9 @@ public record ActiveInActiveFaciltityCommand(Guid Id, bool Active)
 public class ActiveInActiveFaciltityCommandHandler
     : IRequestHandler<ActiveInActiveFaciltityCommand, ApiResult<bool>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
+    private readonly ICBMSApplicationDbContext _db;
 
-    public ActiveInActiveFaciltityCommandHandler(IOLMRSApplicationDbContext db)
+    public ActiveInActiveFaciltityCommandHandler(ICBMSApplicationDbContext db)
     {
         _db = db;
     }
