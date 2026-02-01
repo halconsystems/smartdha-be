@@ -15,9 +15,9 @@ public record UpdateFacilityCommand(Guid Id,string Name, string Code, string Dis
 public class UpdateFacilityCommandHandler
     : IRequestHandler<UpdateFacilityCommand, ApiResult<bool>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
+    private readonly ICBMSApplicationDbContext _db;
 
-    public UpdateFacilityCommandHandler(IOLMRSApplicationDbContext db)
+    public UpdateFacilityCommandHandler(ICBMSApplicationDbContext db)
     {
         _db = db;
     }

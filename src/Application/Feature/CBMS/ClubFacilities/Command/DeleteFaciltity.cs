@@ -12,9 +12,9 @@ public record DeleteFaciltityCommand(Guid Id)
 public class DeleteFaciltityCommandHandler
     : IRequestHandler<DeleteFaciltityCommand, ApiResult<bool>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
+    private readonly ICBMSApplicationDbContext   _db;
 
-    public DeleteFaciltityCommandHandler(IOLMRSApplicationDbContext db)
+    public DeleteFaciltityCommandHandler(ICBMSApplicationDbContext db)
     {
         _db = db;
     }

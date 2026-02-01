@@ -14,8 +14,8 @@ public record AddCategoryFacilitiesCommand(string Name, string Code, string Disp
 
 public class AddCategoryFacilitiesCommandHandler : IRequestHandler<AddCategoryFacilitiesCommand, ApiResult<Guid>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
-    public AddCategoryFacilitiesCommandHandler(IOLMRSApplicationDbContext db) => _db = db;
+    private readonly ICBMSApplicationDbContext _db;
+    public AddCategoryFacilitiesCommandHandler(ICBMSApplicationDbContext db) => _db = db;
 
     public async Task<ApiResult<Guid>> Handle(AddCategoryFacilitiesCommand request, CancellationToken ct)
     {
