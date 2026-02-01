@@ -1,5 +1,8 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Common.Security;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Commands.CreateBooking;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Queries.GetBookingDetail;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Queries.MyBookings;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Queries.GetClubCategories;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
@@ -82,8 +85,52 @@ public class ClubController : BaseApiController
         ));
     }
     [HttpGet("{facilityUnitId}/GetFacilityUnitDetail")]
+   
     public Task<ApiResult<FacilityUnitDetailResponse>> GetDetail(
         Guid facilityUnitId)
         => _mediator.Send(new GetFacilityUnitDetailQuery(facilityUnitId));
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBooking(
+        [FromBody] CreateBookingRequest request,
+        CancellationToken ct)
+    {
+        var command = new CreateBookingCommand(
+            request.ClubId,
+            request.FacilityId,
+            request.FacilityUnitId,
+
+            request.BookingMode,
+
+            request.SlotRequest,
+            request.DateRangeRequest,
+
+            request.DiscountPercent
+        );
+        var result = await _mediator.Send(command, ct);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    [HttpGet("GetMyBookings")]
+    public async Task<IActionResult> GetMyBookings(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetMyBookingsQuery(), ct);
+        return Ok(result);
+    }
+
+    [HttpGet("{bookingId:guid}/GetBookings")]
+    public async Task<IActionResult> GetBookingDetail(
+    Guid bookingId,
+    CancellationToken ct)
+    {
+        var result = await _mediator.Send(
+            new GetBookingDetailQuery(bookingId), ct);
+
+        return result.Success
+            ? Ok(result)
+            : NotFound(result);
+    }
 
 }

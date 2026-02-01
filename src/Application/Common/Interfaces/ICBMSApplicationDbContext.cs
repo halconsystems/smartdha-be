@@ -34,6 +34,8 @@ public interface ICBMSApplicationDbContext
     DbSet<Tax> Taxes { get; }
     DbSet<FacilityUnitDiscount> FacilityUnitDiscounts { get; }
     DbSet<FacilityUnitTax> FacilityUnitTax { get; }
+    DbSet<BookingTax> BookingTaxes { get; }
+    DbSet<BookingDiscount> BookingDiscounts { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

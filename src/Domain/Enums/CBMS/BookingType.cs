@@ -10,6 +10,7 @@ public enum BookingType
     Banquet = 1,
     Sports = 2,
     Ground = 3,
-    GuestRoom = 4
+    GuestRoom = 4,
+    Facility = 5,
 }
 
