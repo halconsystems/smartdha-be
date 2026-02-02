@@ -38,12 +38,8 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.UpdateFacilityUnitService;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
-<<<<<<< HEAD
-
 //using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
-=======
->>>>>>> 5a9f907b50f485a0703f56ab3256ce9e6421ae2f
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;

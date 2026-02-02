@@ -14,9 +14,9 @@ public record SavePaymentIpnCommand(
 public class SavePaymentIpnCommandHandler
     : IRequestHandler<SavePaymentIpnCommand, Guid>
 {
-    private readonly IApplicationDbContext _ctx;
+    private readonly IPaymentDbContext _ctx;
 
-    public SavePaymentIpnCommandHandler(IApplicationDbContext ctx)
+    public SavePaymentIpnCommandHandler(IPaymentDbContext ctx)
     {
         _ctx = ctx;
     }

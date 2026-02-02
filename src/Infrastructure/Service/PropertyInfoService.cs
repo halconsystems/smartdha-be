@@ -9,6 +9,7 @@ using DHAFacilitationAPIs.Application.Common.Dto;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
+using DHAFacilitationAPIs.Domain.Enums.Payment;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,82 +17,79 @@ namespace DHAFacilitationAPIs.Infrastructure.Service;
 public class PropertyInfoService : IPropertyInfoService
 {
     private readonly IProcedureService _procedureService;
-    private readonly IPMSApplicationDbContext _db;
-    public PropertyInfoService(IProcedureService procedureService, IPMSApplicationDbContext db)
+    private readonly IPaymentDbContext _db;
+    public PropertyInfoService(IProcedureService procedureService, IPaymentDbContext db)
     {
         _procedureService = procedureService;
         _db = db;
     }
 
     public async Task<List<SmartPayBillData>> GetPendingBillsByUserAsync(
-        string userId,
-        CancellationToken ct)
+     string userId,
+     CancellationToken ct)
     {
-        var rows = await (
-            from bill in _db.Set<CaseFeeReceipt>().AsNoTracking()
-            join c in _db.Set<PropertyCase>().AsNoTracking()
-                on bill.CaseId equals c.Id
-            join p in _db.Set<UserProperty>().AsNoTracking()
-                on c.UserPropertyId equals p.Id
-            join proc in _db.Set<ServiceProcess>().AsNoTracking()
-                on c.ProcessId equals proc.Id
-            where
-                bill.IsActive == true &&
-                bill.IsDeleted != true &&
-                bill.PaymentStatus == PaymentStatus.Pending &&
+        var bills = await _db.PayBills
+            .AsNoTracking()
+            .Where(x =>
+                x.UserId == userId &&
+                (x.PaymentStatus == PaymentBillStatus.Generated ||
+                 x.PaymentStatus == PaymentBillStatus.PartiallyPaid) &&
+                (x.ExpiryDate == null || x.ExpiryDate > DateTime.Now))
+            .OrderByDescending(x => x.BillGeneratedOn)
+            .ToListAsync(ct);
 
-                c.IsActive == true &&
-                c.IsDeleted != true &&
-                c.CreatedBy == userId
-
-            orderby bill.Created descending
-            select new
-            {
-                bill.Id,
-                bill.TotalPayable,
-                bill.Created,
-                bill.OneBillId,
-                bill.VoucherNo,
-
-                CaseNo = c.CaseNo,
-                ProcessName = proc.Name,
-
-                p.SubDivision,
-                p.Phase,
-                p.StreetName,
-                p.PlotNo,
-                p.ActualSize
-            }
-        ).ToListAsync(ct);
-
-        return rows.Select(x =>
+        return bills.Select(bill =>
         {
-            var consumerDetail = BuildConsumerDetail(
-                x.SubDivision,
-                x.Phase,
-                x.StreetName,
-                x.PlotNo,
-                x.ActualSize
-            );
-
-            var reference = !string.IsNullOrWhiteSpace(x.VoucherNo)
-                ? x.VoucherNo!
-                : !string.IsNullOrWhiteSpace(x.OneBillId)
-                    ? x.OneBillId!
-                    : $"BILL-{x.Created:yyyyMMddHHmmss}";
-
-            var amount = (x.TotalPayable ?? 0m).ToString("0.##");
+            var reference = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
+                ? bill.SourceVoucherNo
+                : bill.PaymentBillId.ToString();
 
             return new SmartPayBillData
             {
-                Institution = x.ProcessName,
-                Consumer_Number = x.CaseNo,
-                Consumer_Detail = consumerDetail,
-                Reference_Info = reference,
-                BillAmount = amount
-            };
+                // 🔹 Consumer Info
+                Institution = bill.Title,
+                Consumer_Number = "",
+                Consumer_Detail = bill.EntityName ?? string.Empty,
+
+                // 🔹 Bill Info
+                Reference_Info = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
+                ? bill.SourceVoucherNo
+                : bill.PaymentBillId.ToString(),
+
+                Billing_Month = bill.BillGeneratedOn.ToString("yyyy-MM"),
+
+                // 🔹 Amounts (DECIMAL → STRING)
+                BillAmount = bill.BillAmount.ToString("0.##"),
+                LateFee = "0", // Late fee is calculated in source system
+                AmountAfterDueDate = bill.BillAmount.ToString("0.##"),
+
+                // 🔹 Dates (DateTime → STRING)
+                DueDate = bill.DueDate.HasValue
+                ? bill.DueDate.Value.ToString("yyyy-MM-dd")
+                : string.Empty,
+                
+                        ExpDate = bill.ExpiryDate.HasValue
+                ? bill.ExpiryDate.Value.ToString("yyyy-MM-dd")
+                : string.Empty,
+                
+                        // 🔹 Payment Status
+                        PaymentStatus = bill.PaymentStatus.ToString(),
+                
+                        Amount_Paid = bill.PaidAmount.ToString("0.##"),
+                
+                        PaymentDateTime = bill.LastPaymentDate?.ToString("yyyy-MM-dd"),
+                
+                        // 🔹 Gateway Info
+                        AuthNo = bill.LastAuthNo ?? string.Empty,
+                
+                        Fee_Amount = bill.BillAmount.ToString("0.##"),
+                
+                        BillGenerateOn = bill.Created.ToString("yyyy-MM-dd")
+                    };
+                
         }).ToList();
     }
+
 
     public async Task<List<PropertyDetailDTO>> GetPropertiesByCnicAsync(
         string cnic,

@@ -71,13 +71,15 @@ public class GetCaseWorkflowHierarchyHandler
     private readonly IFileStorageService _fileStorageService;
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IPaymentDbContext _paymentDbContext;
 
-    public GetCaseWorkflowHierarchyHandler(IPMSApplicationDbContext db, IFileStorageService fileStorageService, IApplicationDbContext applicationDbContext,UserManager<ApplicationUser> userManager)
+    public GetCaseWorkflowHierarchyHandler(IPMSApplicationDbContext db, IFileStorageService fileStorageService, IApplicationDbContext applicationDbContext,UserManager<ApplicationUser> userManager, IPaymentDbContext paymentDbContext)
     {
         _db = db;
         _fileStorageService = fileStorageService;
         _applicationDbContext = applicationDbContext;
         _userManager = userManager;
+        _paymentDbContext = paymentDbContext;
     }
 
     public async Task<ApiResult<FinalWorkFlowWithFee>> Handle(GetCaseWorkflowHierarchyQuery request, CancellationToken ct)
@@ -115,7 +117,7 @@ public class GetCaseWorkflowHierarchyHandler
             fee.PaymentStatus == PaymentStatus.Pending &&
             string.IsNullOrEmpty(fee.GatewayTransactionId))
         {
-            var ipn = await _applicationDbContext.Set<PaymentIpnLog>()
+            var ipn = await _paymentDbContext.Set<PaymentIpnLog>()
                 .Where(x =>
                     x.BasketId == fee.BankRefNo &&
                     x.ErrMsg == "Success")
