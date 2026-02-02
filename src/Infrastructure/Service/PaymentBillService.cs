@@ -25,51 +25,74 @@ public class PaymentBillService : IPaymentBillService
     }
 
     public async Task<Guid> CreatePaymentBillAsync(
-        CreatePaymentBillRequest r,
-        CancellationToken ct)
+     CreatePaymentBillRequest r,
+     CancellationToken ct)
     {
-        // Prevent duplicate snapshot
+        // =========================
+        // 1️⃣ Prevent duplicate snapshot
+        // =========================
         var exists = await _paymentDb.PayBills.AnyAsync(x =>
             x.SourceSystem == r.SourceSystem &&
             x.SourceVoucherId == r.SourceVoucherId,
             ct);
 
         if (exists)
-            throw new InvalidOperationException("Payment bill already exists.");
+            throw new InvalidOperationException(
+                $"Payment bill already exists for {r.SourceSystem} voucher {r.SourceVoucherId}");
 
-        // Resolve merchant ONCE
+        // =========================
+        // 2️⃣ Resolve merchant ONCE
+        // =========================
         var merchantCode = await _merchantResolver.ResolveAsync(
             r.SourceSystem,
             r.EntityType,
             r.EntityId,
             ct);
 
+        // =========================
+        // 3️⃣ Create Payment Bill
+        // =========================
         var bill = new PayBill
         {
-            Id = Guid.NewGuid(),
+            PaymentBillId = Guid.NewGuid(),
+
+            // 🔹 Consumer / Owner
+            UserId = r.UserId,
+            EntityName = r.EntityName,
             SourceSystem = r.SourceSystem,
+
+            // 🔹 Bill Identity
             SourceVoucherId = r.SourceVoucherId,
             SourceVoucherNo = r.SourceVoucherNo,
             Title = r.Title,
 
-            EntityType = r.EntityType,
-            EntityId = r.EntityId,
-            EntityName = r.EntityName,
-
-            UserId = r.UserId,
-            MerchantCode = merchantCode,
-
-            TotalAmount = r.TotalAmount,
+            // 🔹 Billing Info
+            BillAmount = r.TotalAmount,
             PaidAmount = 0,
+            OutstandingAmount = r.TotalAmount,
 
-            Status = PaymentBillStatus.Generated,
             DueDate = r.DueDate,
-            CreatedAt = DateTime.Now
+
+            // Optional expiry (recommended)
+            ExpiryDate = r.DueDate ?? DateTime.UtcNow.AddMinutes(15),
+
+            // 🔹 Status
+            PaymentStatus = PaymentBillStatus.Generated,
+
+            // 🔹 Payment Info
+            MerchantCode = merchantCode,
+            LastPaymentDate = null,
+            LastAuthNo = null,
+
+            // 🔹 Audit
+            BillGeneratedOn = DateTime.UtcNow
         };
 
         _paymentDb.PayBills.Add(bill);
         await _paymentDb.SaveChangesAsync(ct);
 
-        return bill.Id;
+        return bill.PaymentBillId;
     }
+
+
 }

@@ -74,9 +74,6 @@ public class PaymentDbContext : DbContext, IPaymentDbContext
             .HasIndex(x => new { x.SourceSystem, x.SourceVoucherId })
             .IsUnique();
 
-        modelBuilder.Entity<PayBill>()
-            .HasIndex(x => new { x.UserId, x.Status, x.CreatedAt });
-
         modelBuilder.Entity<PayTransaction>()
             .HasIndex(x => x.BasketId)
             .IsUnique();

@@ -186,11 +186,11 @@ public class GenerateCaseBillHandler
                SourceVoucherId = bill.Id,
                SourceVoucherNo = bill.VoucherNo ?? bill.Id.ToString(),
 
-               Title = $"Case Fee - {c.CaseNo}",
+               Title = $"{c.Process.Name} - {c.CaseNo}",
 
-               EntityType = "PROPERTY",
-               EntityId = bill.Id,
-               EntityName = c.UserPropertyId.ToString(),
+               EntityType = "Property",
+               EntityId = c.UserPropertyId,
+               EntityName = c.Process.Name.ToString(),
 
                UserId = c.CreatedBy!,
                TotalAmount = totalPayable,
