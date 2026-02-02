@@ -19,9 +19,9 @@ public record UpdateClubCategoryCommand(
 public class UpdateClubCategoryCommandHandler
     : IRequestHandler<UpdateClubCategoryCommand, ApiResult<bool>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
+    private readonly ICBMSApplicationDbContext _db;
 
-    public UpdateClubCategoryCommandHandler(IOLMRSApplicationDbContext db)
+    public UpdateClubCategoryCommandHandler(ICBMSApplicationDbContext db)
     {
         _db = db;
     }

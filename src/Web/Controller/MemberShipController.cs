@@ -1,9 +1,12 @@
-﻿using DHAFacilitationAPIs.Application.Feature.MemberShip.Command;
+﻿using DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationDashboard.Queries;
+using DHAFacilitationAPIs.Application.Feature.MemberShip.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
 using DHAFacilitationAPIs.Application.Feature.MembershipPurpose.Queries.GetAllMembershipPurposes;
+using DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
+using DHAFacilitationAPIs.Application.Feature.NonMember.Commands.UpdateNonMemberVerificationCommand;
 using DHAFacilitationAPIs.Application.Feature.Religion.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Queries;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Command;
@@ -11,6 +14,7 @@ using DHAFacilitationAPIs.Application.Feature.ReligonSect.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationDashboard.Queries.FemugationDashBoardDTO;
 
 namespace DHAFacilitationAPIs.Web.Controller;
 
@@ -108,5 +112,17 @@ public class MemberShipController : BaseApiController
     {
         var result = await _mediator.Send(new GetMemberShipHistoryQuery(MemberShipId), ct);
         return Ok(result);
+    }
+
+    [HttpGet("Dashboard")]
+    public Task<MemberShipDashboardDTO> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
+        => _mediator.Send(new GetMemberShipDashboardSummaryQuery(from, to));
+
+    [HttpPost("Update-member-requests")]
+    public async Task<IActionResult> UpdateNonMemberRequests(UpdateMemberShipRequestCommand updateNonMemberVerificationCommand)
+    {
+        var result = await Mediator.Send(updateNonMemberVerificationCommand);
+        return Ok(result);
+
     }
 }

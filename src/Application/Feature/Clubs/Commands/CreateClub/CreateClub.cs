@@ -10,7 +10,7 @@ using DHAFacilitationAPIs.Domain.Enums;
 using static Dapper.SqlMapper;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
-public record CreateClubCommand(string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, ClubType ClubType, string Email)
+public record CreateClubCommand(string Name,string DisplayName, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, ClubType ClubType, string Email)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, SuccessResponse<string>>
@@ -20,9 +20,12 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
 
     public async Task<SuccessResponse<string>> Handle(CreateClubCommand request, CancellationToken ct)
     {
+        try
+        {
             var entity = new Club
             {
                 Name = request.Name,
+                DisplayName = request.DisplayName,
                 Description = request.Description,
                 Location = request.Location,
                 ContactNumber = request.ContactNumber,
@@ -34,6 +37,12 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
             _ctx.Clubs.Add(entity);
             await _ctx.SaveChangesAsync(ct);
             return Success.Created(entity.Id.ToString());
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
         
     }
 }

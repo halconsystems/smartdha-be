@@ -12,6 +12,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.Updat
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.ClubFacilities;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.Facilities;
 using DHAFacilitationAPIs.Application.Feature.CBMS.ClubImages.Command;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Discount.Commands.AssignFacilityUnitDiscount;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Discount.Commands.CreateDiscount;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityImages.Commands;
@@ -33,13 +34,13 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig.Que
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitImages.Commands;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.ActiveInAactiveFacilityServiceUnit;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.AddFacilityUnitService;
-<<<<<<< HEAD
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.UpdateFacilityUnitService;
-=======
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
->>>>>>> 3049b88ee15eede97b77c0055663c7364f93ebce
+
+//using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
+//using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -88,11 +89,11 @@ public class clubsController : BaseApiController
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<Club?>> GetById(Guid id, CancellationToken ct)
-        => Ok(await _mediator.Send(new GetClubByIdQuery(id), ct));
+        => Ok(await _mediator.Send(new GetClubDetailById(id), ct));
 
     [HttpGet]
     public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] ClubType clubType)
-        => Ok(await _mediator.Send(new GetClubsQuery(clubType)));
+        => Ok(await _mediator.Send(new GetAllClubQuery(clubType)));
 
     [HttpPost("Create-Club Booking Standard Time"), AllowAnonymous]
     public async Task<IActionResult> CreateClubBookingStandardTime([FromBody] ClubBookingStandardTimeDto dto, CancellationToken ct)

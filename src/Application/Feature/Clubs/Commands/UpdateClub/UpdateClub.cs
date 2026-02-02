@@ -7,13 +7,13 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
-public record UpdateClubCommand(Guid Id, string Name, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, bool? IsActive, string? Email)
+public record UpdateClubCommand(Guid Id, string Name, string DisplayName, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, bool? IsActive, string? Email)
     : IRequest<SuccessResponse<string>>;
 
 public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, SuccessResponse<string>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
-    public UpdateClubCommandHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
+    public UpdateClubCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<SuccessResponse<string>> Handle(UpdateClubCommand request, CancellationToken ct)
     {
@@ -22,6 +22,7 @@ public class UpdateClubCommandHandler : IRequestHandler<UpdateClubCommand, Succe
 
         entity.Name = request.Name;
         entity.Description = request.Description;
+        entity.DisplayName = request.DisplayName;
         entity.Location = request.Location;
         entity.ContactNumber = request.ContactNumber;
         entity.AccountNo = request.AccountNo;

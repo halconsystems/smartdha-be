@@ -14,7 +14,7 @@ using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 
-public record GetAllClubQuery()
+public record GetAllClubQuery(ClubType ClubType)
     : IRequest<ApiResult<List<ClubDTO>>>;
 
 public class GetAllClubQueryHandler
@@ -35,6 +35,7 @@ public class GetAllClubQueryHandler
     {
 
         var clubs = await _ctx.Clubs
+            .Where(x => x.ClubType == request.ClubType)
         .AsNoTracking()
         .ToListAsync(ct);
 

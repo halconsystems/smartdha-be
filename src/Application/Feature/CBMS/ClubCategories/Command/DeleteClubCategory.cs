@@ -14,9 +14,9 @@ public record DeleteClubCategoryCommand(Guid Id)
 public class DeleteClubCategoryCommandHandler
     : IRequestHandler<DeleteClubCategoryCommand, ApiResult<bool>>
 {
-    private readonly IOLMRSApplicationDbContext _db;
+    private readonly ICBMSApplicationDbContext _db;
 
-    public DeleteClubCategoryCommandHandler(IOLMRSApplicationDbContext db)
+    public DeleteClubCategoryCommandHandler(ICBMSApplicationDbContext db)
     {
         _db = db;
     }

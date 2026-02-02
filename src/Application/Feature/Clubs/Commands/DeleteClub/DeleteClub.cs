@@ -11,8 +11,8 @@ public record DeleteClubCommand(Guid Id) : IRequest<SuccessResponse<string>>;
 
 public class DeleteClubCommandHandler : IRequestHandler<DeleteClubCommand, SuccessResponse<string>>
 {
-    private readonly IOLMRSApplicationDbContext _ctx;
-    public DeleteClubCommandHandler(IOLMRSApplicationDbContext ctx) => _ctx = ctx;
+    private readonly ICBMSApplicationDbContext _ctx;
+    public DeleteClubCommandHandler(ICBMSApplicationDbContext ctx) => _ctx = ctx;
 
     public async Task<SuccessResponse<string>> Handle(DeleteClubCommand request, CancellationToken ct)
     {
