@@ -60,6 +60,10 @@ public class PayBill : BaseAuditableEntity
     public DateTime BillGeneratedOn { get; set; }
 
     // Payment attempts for this bill
+
+    public decimal? LateFee { get; set; } = 0;
+    public decimal? AmountAfterDueDate { get; set; } = 0;
+
     public ICollection<PayTransaction> Transactions { get; set; } = new List<PayTransaction>();
 }
 

@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 {
     [DbContext(typeof(PaymentDbContext))]
-    partial class PaymentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260202204348_Changesinpaymentlatefee")]
+    partial class Changesinpaymentlatefee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
                     b.HasIndex("SourceSystem", "SourceVoucherId")
                         .IsUnique();
 
-                    b.ToTable("PayBills", (string)null);
+                    b.ToTable("PayBills");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayMerchant", b =>
@@ -190,7 +193,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("PayMerchants", (string)null);
+                    b.ToTable("PayMerchants");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayMerchantRule", b =>
@@ -250,7 +253,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasIndex("SourceSystem", "EntityType", "EntityId", "CategoryCode", "IsActive", "Priority");
 
-                    b.ToTable("PayMerchantRules", (string)null);
+                    b.ToTable("PayMerchantRules");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayTransaction", b =>
@@ -335,7 +338,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasIndex("PayBillId");
 
-                    b.ToTable("PayTransactions", (string)null);
+                    b.ToTable("PayTransactions");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PaymentIpnLog", b =>
@@ -445,7 +448,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentIpnLogs", (string)null);
+                    b.ToTable("PaymentIpnLogs");
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayTransaction", b =>
