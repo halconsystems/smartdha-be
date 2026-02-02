@@ -38,8 +38,6 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.UpdateFacilityUnitService;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
-//using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
-//using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -92,7 +90,7 @@ public class clubsController : BaseApiController
 
     [HttpGet]
     public async Task<ActionResult<List<ClubDto>>> GetAll([FromQuery] ClubType clubType)
-        => Ok(await _mediator.Send(new GetAllClubQuery(clubType)));
+        => Ok(await _mediator.Send(new GetAllClubByTypeQuery(clubType)));
 
     [HttpPost("Create-Club Booking Standard Time"), AllowAnonymous]
     public async Task<IActionResult> CreateClubBookingStandardTime([FromBody] ClubBookingStandardTimeDto dto, CancellationToken ct)

@@ -27,9 +27,9 @@ public class ClubController : BaseApiController
     public ClubController(IMediator med) => _mediator = med;
 
     [HttpGet("Get-AllClubs-List")]
-    public async Task<IActionResult> Types(ClubType clubType,CancellationToken ct)
+    public async Task<IActionResult> Types(CancellationToken ct)
     {
-        var result = await Mediator.Send(new GetAllClubQuery(clubType),ct);
+        var result = await Mediator.Send(new GetAllClubQuery(),ct);
         return Ok(result);
     }
 

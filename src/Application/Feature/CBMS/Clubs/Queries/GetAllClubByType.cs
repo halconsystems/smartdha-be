@@ -1,29 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
-using DHAFacilitationAPIs.Application.ViewModels;
-using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.Clubs.Queries;
 
-public record GetAllClubQuery()
+public record GetAllClubByTypeQuery(ClubType ClubType)
     : IRequest<ApiResult<List<ClubDTO>>>;
 
-public class GetAllClubQueryHandler
-    : IRequestHandler<GetAllClubQuery, ApiResult<List<ClubDTO>>>
+public class GetAllClubByTypeQueryHandler
+    : IRequestHandler<GetAllClubByTypeQuery, ApiResult<List<ClubDTO>>>
 {
     private readonly ICBMSApplicationDbContext _ctx;       // Clubs DbContext
     private readonly IFileStorageService _fileStorageService;
 
-    public GetAllClubQueryHandler(
+    public GetAllClubByTypeQueryHandler(
        ICBMSApplicationDbContext ctx,
        IFileStorageService fileStorageService)
     {
@@ -31,10 +26,11 @@ public class GetAllClubQueryHandler
         _fileStorageService = fileStorageService;
     }
 
-    public async Task<ApiResult<List<ClubDTO>>> Handle(GetAllClubQuery request, CancellationToken ct)
+    public async Task<ApiResult<List<ClubDTO>>> Handle(GetAllClubByTypeQuery request, CancellationToken ct)
     {
 
         var clubs = await _ctx.Clubs
+            .Where(x => x.ClubType == request.ClubType)
         .AsNoTracking()
         .ToListAsync(ct);
 
