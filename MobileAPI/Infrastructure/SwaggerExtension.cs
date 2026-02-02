@@ -140,7 +140,16 @@ namespace MobileAPI.Infrastructure
                     Title = "Femugation Module",
                     Version = "v1"
                 });
-
+                o.SwaggerDoc("smartpay", new OpenApiInfo
+                {
+                    Title = "Smart Pay",
+                    Version = "v1"
+                });
+                o.SwaggerDoc("mybills", new OpenApiInfo
+                {
+                    Title = "My Bills",
+                    Version = "v1"
+                });
                 o.SwaggerDoc("other", new OpenApiInfo
                 {
                     Title = "Other Module",

@@ -21,5 +21,6 @@ public class CaseFeeReceipt : BaseAuditableEntity
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
     public string? OneBillId { get; set; }
     public string? VoucherNo { get; set; }
+    public DateTime? DueDate { get; set; }
 }
 

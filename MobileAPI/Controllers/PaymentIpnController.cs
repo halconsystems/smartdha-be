@@ -18,6 +18,8 @@ public class PaymentIpnController : BaseApiController
         _med = med;
     }
 
+
+
     [HttpPost("checkout")]
     [AllowAnonymous] // IPN usually unauthenticated
     public async Task<IActionResult> ReceiveIpn(CancellationToken ct)

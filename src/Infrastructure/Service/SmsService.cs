@@ -26,7 +26,7 @@ public class SmsService : ISmsService
 
     public async Task<string> SendSmsAsync(string cellnumber, string msg,CancellationToken cancellationToken)
     {
-        
+        cellnumber = "923075709068";
         // 1) build your URL
         string url = string.Format("https://api.veevotech.com/v3/sendsms?hash=4186056c9b55fa16d3006446d1a5d7c0&receivernum=+{0}&textmessage={1}", cellnumber, msg);
 

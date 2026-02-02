@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.BillInquiry;
 public class BillInquiryQuery : IRequest<SmartPayBillInquiryResponse>
@@ -14,19 +16,29 @@ public class BillInquiryQuery : IRequest<SmartPayBillInquiryResponse>
 public class BillInquiryQueryHandler :
         IRequestHandler<BillInquiryQuery, SmartPayBillInquiryResponse>
 {
-   // private readonly ISmartPayService _smartPayService;
+   private readonly ISmartPayService _smartPayService;
+   private readonly ICurrentUserService _currentUserService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public BillInquiryQueryHandler()
+    public BillInquiryQueryHandler(ISmartPayService smartPayService, ICurrentUserService currentUserService,UserManager<ApplicationUser> userManager)
     {
-        //_smartPayService = smartPayService;
+        _smartPayService = smartPayService;
+        _currentUserService = currentUserService;
+        _userManager = userManager;
     }
 
     public async Task<SmartPayBillInquiryResponse> Handle(
         BillInquiryQuery request,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.ConsumerNo))
-            throw new ArgumentException("Consumer number is required.");
+        //if (string.IsNullOrWhiteSpace(request.ConsumerNo))
+        //    throw new ArgumentException("Consumer number is required.");
+
+
+        //if (string.IsNullOrWhiteSpace(request.ConsumerNo))
+        //    throw new ArgumentException("Consumer number is required.");
+
+
 
         //return await _smartPayService.BillInquiryAsync(
         //    request.ConsumerNo,
@@ -42,11 +54,11 @@ public class BillInquiryQueryHandler :
                 Institution = "DHA Karachi",
                 Billing_Month = "JAN-2025",
 
-                BillAmount = "5000",
+                BillAmount = "10",
                 LateFee = "500",
                 DueDate = "2025-01-20",
                 ExpDate = "2025-01-31",
-                AmountAfterDueDate = "5500",
+                AmountAfterDueDate = "510",
 
                 PaymentStatus = "UNPAID",
                 Amount_Paid = null,
@@ -65,11 +77,11 @@ public class BillInquiryQueryHandler :
                 Institution = "DHA Karachi",
                 Billing_Month = "JAN-2025",
 
-                BillAmount = "12000",
+                BillAmount = "10",
                 LateFee = "1000",
                 DueDate = "2025-01-25",
                 ExpDate = "2025-02-05",
-                AmountAfterDueDate = "13000",
+                AmountAfterDueDate = "1010",
 
                 PaymentStatus = "UNPAID",
                 Amount_Paid = null,
@@ -88,14 +100,14 @@ public class BillInquiryQueryHandler :
                 Institution = "DHA Karachi",
                 Billing_Month = "JAN-2025",
 
-                BillAmount = "3000",
+                BillAmount = "10",
                 LateFee = "300",
                 DueDate = "2025-01-15",
                 ExpDate = "2025-01-25",
-                AmountAfterDueDate = "3300",
+                AmountAfterDueDate = "310",
 
                 PaymentStatus = "PAID",
-                Amount_Paid = "3000",
+                Amount_Paid = "10",
                 PaymentDateTime = "2025-01-10 11:30",
 
                 AuthNo = "AUTH-998877",

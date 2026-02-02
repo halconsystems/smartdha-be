@@ -49,6 +49,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Configurations\CBMS\" />
+    <Folder Include="Data\Configurations\Payment\" />
     <Folder Include="Repository\" />
   </ItemGroup>
 

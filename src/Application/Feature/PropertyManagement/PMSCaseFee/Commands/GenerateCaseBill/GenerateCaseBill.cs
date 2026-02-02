@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Dto;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -26,14 +27,16 @@ public class GenerateCaseBillHandler
     private readonly INotificationService _notify;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationDbContext _appDb;
+    private readonly IPaymentBillService _paymentBillService;
 
-    public GenerateCaseBillHandler(IPMSApplicationDbContext db, ISmsService sms, INotificationService notify, UserManager<ApplicationUser> userManager, IApplicationDbContext appDb)
+    public GenerateCaseBillHandler(IPMSApplicationDbContext db, ISmsService sms, INotificationService notify, UserManager<ApplicationUser> userManager, IApplicationDbContext appDb, IPaymentBillService paymentBillService)
     {
         _db = db;
         _sms = sms;
         _notify = notify;
         _userManager = userManager;
         _appDb = appDb;
+        _paymentBillService = paymentBillService;
     }
 
     public async Task<ApiResult<Guid>> Handle(
@@ -175,6 +178,26 @@ public class GenerateCaseBillHandler
 
         _db.Set<CaseFeeReceipt>().Add(bill);
         await _db.SaveChangesAsync(ct);
+
+        await _paymentBillService.CreatePaymentBillAsync(
+           new CreatePaymentBillRequest
+           {
+               SourceSystem = "PMS",
+               SourceVoucherId = bill.Id,
+               SourceVoucherNo = bill.VoucherNo ?? bill.Id.ToString(),
+
+               Title = $"Case Fee - {c.CaseNo}",
+
+               EntityType = "PROPERTY",
+               EntityId = bill.Id,
+               EntityName = c.UserPropertyId.ToString(),
+
+               UserId = c.CreatedBy!,
+               TotalAmount = totalPayable,
+
+               DueDate = bill.DueDate
+           },
+           ct);
 
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == c.CreatedBy);
         if (user != null)

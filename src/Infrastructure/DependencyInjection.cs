@@ -99,6 +99,19 @@ public static class DependencyInjection
         services.AddScoped<ICBMSApplicationDbContext>(provider =>
         provider.GetRequiredService<CBMSApplicationDbContext>());
 
+        //DFPBills
+
+        var bills = configuration.GetConnectionString("BillsConnection");
+        Guard.Against.Null(bills, message: "Connection string 'BillsConnection' not found.");
+        services.AddDbContext<PaymentDbContext>((sp, options) =>
+        {
+            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            options.UseSqlServer(bills);
+
+        });
+        services.AddScoped<IPaymentDbContext>(provider =>
+        provider.GetRequiredService<PaymentDbContext>());
+
 
         //LMS
 
@@ -212,8 +225,18 @@ public static class DependencyInjection
 
         services.AddSingleton<IVehicleLocationStore, VehicleLocationStore>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IPropertyInfoService, PropertyInfoService>();
 
+        services.AddHttpClient<IPayFastService, PayFastService>(client =>
+        {
+            client.BaseAddress = new Uri("https://epg.apps.net.pk/api");
+        });
 
+        services.AddDataProtection();
+        services.AddScoped<ISecureKeyProtector, SecureKeyProtector>();
+        services.AddSingleton<IBasketIdGenerator, BasketIdGenerator>();
+        services.AddScoped<IMerchantResolver, MerchantResolver>();
+        services.AddScoped<IPaymentBillService, PaymentBillService>();
 
         return services;
     }
