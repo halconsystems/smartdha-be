@@ -111,13 +111,15 @@ public class SearchFacilityAvailabilityHandler
                         config.SlotDurationMinutes.Value
                     );
 
-                    var bookings = await _db.BookingSchedules
-                        .Where(b =>
-                            b.Date == request.Date.Value &&
-                            b.Booking.FacilityUnitId == unit.Id &&
-                            b.Booking.Status != BookingStatus.Cancelled)
-                        .ToListAsync(ct);
-
+                    var bookings = await (
+                     from bs in _db.BookingSchedules
+                     join b in _db.Bookings on bs.BookingId equals b.Id
+                     where
+                         bs.Date == request.Date.Value &&
+                         b.FacilityUnitId == unit.Id &&
+                         b.Status != BookingStatus.Cancelled
+                     select bs).ToListAsync(ct);
+                
                     var availableSlots = slots
                         .Where(s =>
                             IsSlotAllowed(
@@ -166,12 +168,17 @@ public class SearchFacilityAvailabilityHandler
                     if (!isAllowed)
                         continue;
 
-                    var hasConflict = await _db.BookingDateRanges.AnyAsync(b =>
-                        b.Booking.FacilityUnitId == unit.Id &&
-                        b.Booking.Status != BookingStatus.Cancelled &&
-                        request.FromDate < b.ToDate &&
-                        request.ToDate > b.FromDate,
-                        ct);
+                    var hasConflict = await (
+     from br in _db.BookingDateRanges
+     join b in _db.Bookings on br.BookingId equals b.Id
+     where
+         b.FacilityUnitId == unit.Id &&
+         b.Status != BookingStatus.Cancelled &&
+         request.FromDate < br.ToDate &&
+         request.ToDate > br.FromDate
+     select br.Id
+ ).AnyAsync(ct);
+
 
                     if (hasConflict)
                         continue;

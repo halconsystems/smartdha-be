@@ -38,9 +38,12 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.UpdateFacilityUnitService;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
+<<<<<<< HEAD
 
 //using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.AssignFacilityUnitTax;
 //using DHAFacilitationAPIs.Application.Feature.CBMS.Tax.Commands.CreateTax;
+=======
+>>>>>>> 5a9f907b50f485a0703f56ab3256ce9e6421ae2f
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClubBookingStandardTime;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
@@ -479,8 +482,14 @@ public class clubsController : BaseApiController
 
 
     [HttpPost("unit-config")]
-    public Task<ApiResult<Guid>> UpsertUnitConfig(CreateFacilityUnitBookingConfigDto dto)
-        => _mediator.Send(new CreateFacilityUnitBookingConfigCommand(dto));
+    public async Task<ActionResult<ApiResult<Guid>>> UpsertUnitConfig(
+    [FromBody] CreateFacilityUnitBookingConfigCommand cmd,
+    CancellationToken ct
+)
+    => Ok(await _mediator.Send(cmd, ct));
+
+
+
 
     [HttpPut("Update-unit-config"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> UpdateunitsConfig([FromBody] UpdateFacilityUnitBookingConfigCommand cmd, CancellationToken ct)

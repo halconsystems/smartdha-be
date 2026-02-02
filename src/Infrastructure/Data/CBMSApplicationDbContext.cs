@@ -46,6 +46,8 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<Tax> Taxes => Set<Tax>();
     public DbSet<FacilityUnitDiscount> FacilityUnitDiscounts => Set<FacilityUnitDiscount>();
     public DbSet<FacilityUnitTax> FacilityUnitTax => Set<FacilityUnitTax>();
+    public DbSet<BookingTax> BookingTaxes => Set<BookingTax>();
+    public DbSet<BookingDiscount> BookingDiscounts => Set<BookingDiscount>();
 
     public override async Task<int> SaveChangesAsync(
          CancellationToken cancellationToken = default)

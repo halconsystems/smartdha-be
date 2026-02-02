@@ -1,7 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.BillsPayment;
 using DHAFacilitationAPIs.Domain.Enums;
 using DHAFacilitationAPIs.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +25,8 @@ public static class InitialiserExtensions
         await initialiser.InitialiseAsync();
 
         await initialiser.SeedAsync();
+
+        await initialiser.SeedMerchantsAsync();
     }
 }
 
@@ -32,13 +36,17 @@ public class ApplicationDbContextInitialiser
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly PaymentDbContext _db;
+    private readonly ISecureKeyProtector _secureKeyProtector;
 
-    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, PaymentDbContext db,ISecureKeyProtector secureKeyProtector)
     {
         _logger = logger;
         _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
+        _db = db;
+        _secureKeyProtector = secureKeyProtector;
     }
 
     public async Task InitialiseAsync()
@@ -66,7 +74,6 @@ public class ApplicationDbContextInitialiser
             throw;
         }
     }
-
 
     public async Task TrySeedAsync()
     {
@@ -304,5 +311,70 @@ public class ApplicationDbContextInitialiser
         await _context.SaveChangesAsync();
     }
 
+    public async Task SeedMerchantsAsync()
+    {
+        foreach (var (code, name, merchantId) in PayMerchantSeedData.Merchants)
+        {
+            var exists = await _db.PayMerchants
+                .AnyAsync(x => x.Code == code);
+
+            if (exists)
+                continue;
+
+            var secureKeyPlain = $"wZLV_F2VcDmJ9voSHp6t8ND";
+            // Replace above with actual secure key before PROD
+
+            var merchant = new PayMerchant
+            {
+                Id = Guid.NewGuid(),
+                Code = code,
+                DisplayName = name,
+                MerchantId = "244018",
+                SmartPayMerchantId= merchantId,
+                SecureKeyEncrypted = _secureKeyProtector.Encrypt(secureKeyPlain),
+                Gateway = "PAYFAST",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _db.PayMerchants.Add(merchant);
+        }
+
+        await _db.SaveChangesAsync();
+    }
+
+    public static class PayMerchantSeedData
+    {
+        public static IReadOnlyList<(string Code, string Name, string MerchantId)> Merchants
+            => new List<(string, string, string)>
+        {
+        ("DHA_SECURITY", "DHA Security & Vigilance Directorate", "6005"),
+        ("DHA_RENTAL", "DHA Karachi (Rental Billing)", "6010"),
+
+        ("MARINA_CLUB", "Marina Club", "6031"),
+        ("ZAMZAMA_CLUB", "DHA Zamzama Club", "6032"),
+        ("BEACHVIEW_CLUB", "DHA Beachview Club", "6033"),
+        ("AUTHORITY_CLUB", "DHA Authority Club", "6034"),
+        ("SUNSET_CLUB", "DHA Sunset Club", "6035"),
+        ("CREEK_CLUB", "DHA Creek Club", "6036"),
+        ("MOIN_KHAN_ACADEMY", "Moin Khan Academy", "6037"),
+        ("COUNTRY_GOLF_CLUB", "DHA Country & Golf Club", "6038"),
+
+        ("DHACSS_WOMEN_COLLEGE", "DHACSS College For Women", "6111"),
+        ("DHACSS_BOYS_COLLEGE", "DHACSS Degree College (Boys)", "6112"),
+        ("DHACSS_CREEK", "DHACSS Creek Campus", "6113"),
+        ("DHACSS_SKBZ", "DHACSS SKBZ Campus", "6114"),
+        ("DHACSS_SEAVIEW", "DHACSS Seaview Campus", "6115"),
+        ("DHACSS_PHASE4", "DHACSS Phase-IV Campus", "6116"),
+        ("DHACSS_PHASE7", "DHACSS PH-VII Campus", "6117"),
+        ("DHACSS_BEACHVIEW", "DHACSS Beachview Campus", "6118"),
+        ("DHACSS_MONTESSORI", "DHACSS Montessori", "6119"),
+        ("DHA_KIDS", "DHA Kids Campus", "6120"),
+        ("DHACSS_TOOBA", "DHACSS Tooba Campus", "6121"),
+        ("DHACSS_NEELAM", "DHACSS Neelam Campus", "6122"),
+        ("DHACSS_IGRA", "DHACSS Igra Campus", "6123"),
+        ("PMS", "Property Management System", "0000")
+        };
+    }
 
 }
