@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
+using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
 public record AddFacilityToClubCommand(
@@ -16,7 +17,8 @@ public record AddFacilityToClubCommand(
     bool IsPriceVisible,
     bool HasAction,
     string? ActionName,
-    string? ActionType
+    string? ActionType,
+    FacilityActionType FacilityActionType
 ) : IRequest<ApiResult<Guid>>;
 public class AddFacilityToClubCommandHandler
     : IRequestHandler<AddFacilityToClubCommand, ApiResult<Guid>>
@@ -41,7 +43,8 @@ public class AddFacilityToClubCommandHandler
             IsPriceVisible = request.IsPriceVisible,
             HasAction = request.HasAction,
             ActionName = request.ActionName,
-            ActionType = request.ActionType
+            ActionType = request.ActionType,
+            FacilityActionType = request.FacilityActionType
         };
 
         _ctx.ClubFacilities.Add(clubFacility);

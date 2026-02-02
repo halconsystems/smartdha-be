@@ -11,7 +11,7 @@ using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Command;
 
-public record UpdateFacilityCommand(Guid Id,string Name, string Code, string DisplayName, string Description, Guid CategoryId, string? descrption, FoodType FoodType, string? Price, bool? IsAvailable, bool? IsPriceVisible, bool? Action, string? ActionName, string? ActionType) : IRequest<ApiResult<bool>>;
+public record UpdateFacilityCommand(Guid Id,string Name, string Code, string DisplayName, string Description, Guid CategoryId, string? descrption, FoodType FoodType) : IRequest<ApiResult<bool>>;
 public class UpdateFacilityCommandHandler
     : IRequestHandler<UpdateFacilityCommand, ApiResult<bool>>
 {

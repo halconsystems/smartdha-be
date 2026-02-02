@@ -11,6 +11,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityAvailability.Queries.
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnit.Queries.FacilityUnitDetail;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetComplaintDropdowns;
 using DHAFacilitationAPIs.Application.Feature.ComplaintsManagement.Queries.GetMyComplaints;
+using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using MobileAPI.Authorization;
 
@@ -26,9 +27,9 @@ public class ClubController : BaseApiController
     public ClubController(IMediator med) => _mediator = med;
 
     [HttpGet("Get-AllClubs-List")]
-    public async Task<IActionResult> Types(CancellationToken ct)
+    public async Task<IActionResult> Types(ClubType clubType,CancellationToken ct)
     {
-        var result = await Mediator.Send(new GetAllClubQuery(),ct);
+        var result = await Mediator.Send(new GetAllClubQuery(clubType),ct);
         return Ok(result);
     }
 

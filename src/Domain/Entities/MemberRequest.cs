@@ -94,6 +94,8 @@ public class MemberRequest : BaseAuditableEntity
     public bool BestKnowledge { get; set; }
     public bool Rservation { get; set; }
 
+    public VerificationStatus Status { get; set; } = VerificationStatus.Pending;
+
 
 }
 
