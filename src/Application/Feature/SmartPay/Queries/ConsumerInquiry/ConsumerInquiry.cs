@@ -31,48 +31,48 @@ public class ConsumerInquiryQueryHandler
         ConsumerInquiryQuery request,
         CancellationToken ct)
     {
-        
-     //if (string.IsNullOrWhiteSpace(request.CellNo))
-        //    throw new ArgumentException("Cell number is required.");
+
+        if (string.IsNullOrWhiteSpace(request.CellNo))
+            throw new ArgumentException("Cell number is required.");
 
         //Call SmartPay API
-        //return await _smartPayService.ConsumerInquiryAsync(
-        //    request.CellNo,
-        //    ct);
-        return await Task.FromResult(new SmartPayConsumerInquiryResponse
-        {
-            ResponseCode = "00",
-            ResponseMsg = "SUCCESS",
+        return await _smartPayService.ConsumerInquiryAsync(
+            request.CellNo,
+            ct);
+        //return await Task.FromResult(new SmartPayConsumerInquiryResponse
+        //{
+        //    ResponseCode = "00",
+        //    ResponseMsg = "SUCCESS",
 
-            Bills = new List<SmartPayConsumerInquiryBill>
-            {
-                 new SmartPayConsumerInquiryBill
-                  {
-                      Institution = "Security Charges",
-                      Consumer_Number = "1001",
-                      Consumer_Detail = "DHA Karachi - Phase 2",
-                      Reference_Info = "SC-2025-0001",
-                      BillAmount="10",
+        //    Bills = new List<SmartPayConsumerInquiryBill>
+        //    {
+        //         new SmartPayConsumerInquiryBill
+        //          {
+        //              Institution = "Security Charges",
+        //              Consumer_Number = "1001",
+        //              Consumer_Detail = "DHA Karachi - Phase 2",
+        //              Reference_Info = "SC-2025-0001",
+        //              BillAmount="10",
 
-                  },
-                  new SmartPayConsumerInquiryBill
-                  {
-                      Institution = "Maintenance Charges",
-                      Consumer_Number = "1002",
-                      Consumer_Detail = "DHA Karachi - Phase 7",
-                      Reference_Info = "MNT-2025-0042",
-                       BillAmount="10",
-                  },
-                  new SmartPayConsumerInquiryBill
-                  {
-                      Institution = "DA Club",
-                      Consumer_Number = "1003",
-                      Consumer_Detail = "DHA Karachi - Club Bill",
-                      Reference_Info = "DA-2025-0110",
-                       BillAmount="10",
-                  }
-            }
-        });
+        //          },
+        //          new SmartPayConsumerInquiryBill
+        //          {
+        //              Institution = "Maintenance Charges",
+        //              Consumer_Number = "1002",
+        //              Consumer_Detail = "DHA Karachi - Phase 7",
+        //              Reference_Info = "MNT-2025-0042",
+        //               BillAmount="10",
+        //          },
+        //          new SmartPayConsumerInquiryBill
+        //          {
+        //              Institution = "DA Club",
+        //              Consumer_Number = "1003",
+        //              Consumer_Detail = "DHA Karachi - Club Bill",
+        //              Reference_Info = "DA-2025-0110",
+        //               BillAmount="10",
+        //          }
+        //    }
+        //});
     }
 
     static string BuildConsumerDetail(
