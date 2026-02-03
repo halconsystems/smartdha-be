@@ -15,13 +15,16 @@ public class PaymentBillService : IPaymentBillService
 {
     private readonly IPaymentDbContext _paymentDb;
     private readonly IMerchantResolver _merchantResolver;
+    private readonly ILateFeePolicyResolver _lateFeePolicyResolver;
 
     public PaymentBillService(
         IPaymentDbContext paymentDb,
-        IMerchantResolver merchantResolver)
+        IMerchantResolver merchantResolver,
+        ILateFeePolicyResolver lateFeePolicyResolver)
     {
         _paymentDb = paymentDb;
         _merchantResolver = merchantResolver;
+        _lateFeePolicyResolver = lateFeePolicyResolver;
     }
 
     public async Task<Guid> CreatePaymentBillAsync(
@@ -52,6 +55,23 @@ public class PaymentBillService : IPaymentBillService
         // =========================
         // 3️⃣ Create Payment Bill
         // =========================
+
+        // Resolve late fee policy
+        var policy = await _lateFeePolicyResolver
+            .ResolveAsync(r.SourceSystem, ct);
+
+        var now = DateTime.Now;
+
+        // 1️⃣ Due Date
+        DateTime dueDate = r.DueDate
+            ?? now.AddDays(policy.DueAfterDays);
+
+        // 2️⃣ Expiry Date
+        DateTime expiryDate = policy.ExpireAfterDays > 0
+            ? dueDate.AddDays(policy.ExpireAfterDays)
+            : dueDate.AddYears(10); // never expire (fallback)
+
+
         var bill = new PayBill
         {
             PaymentBillId = Guid.NewGuid(),
@@ -71,10 +91,8 @@ public class PaymentBillService : IPaymentBillService
             PaidAmount = 0,
             OutstandingAmount = r.TotalAmount,
 
-            DueDate = r.DueDate,
-
-            // Optional expiry (recommended)
-            ExpiryDate = r.DueDate ?? DateTime.UtcNow.AddMinutes(15),
+            DueDate = dueDate,
+            ExpiryDate = expiryDate,
 
             // 🔹 Status
             PaymentStatus = PaymentBillStatus.Generated,
@@ -85,7 +103,7 @@ public class PaymentBillService : IPaymentBillService
             LastAuthNo = null,
 
             // 🔹 Audit
-            BillGeneratedOn = DateTime.UtcNow
+            BillGeneratedOn = DateTime.Now
         };
 
         _paymentDb.PayBills.Add(bill);

@@ -51,9 +51,7 @@ public class GetAllBillsHandler : IRequestHandler<GetAllBillsQuery, ApiResult<Li
             ct);
 
         var result = new List<SmartPayBillData>();
-        if (consumerInquiry?.Bills == null || !consumerInquiry.Bills.Any())
-             return ApiResult<List<SmartPayBillData>>.Ok(result);
-        
+       
         foreach (var consumer in consumerInquiry.Bills)
         {
             // Call bill inquiry for EACH consumer number

@@ -73,14 +73,12 @@ public class ClubController : BaseApiController
     public Task<ApiResult<List<FacilitySearchResponse>>> Search(
         Guid clubId,
         [FromQuery] Guid? facilityId,
-        [FromQuery] DateOnly? date,
         [FromQuery] DateOnly? fromDate,
         [FromQuery] DateOnly? toDate)
     {
         return _mediator.Send(new SearchFacilityAvailabilityQuery(
             clubId,
             facilityId,
-            date,
             fromDate,
             toDate
         ));

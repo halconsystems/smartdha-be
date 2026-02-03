@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SaveWebhookCallback;
+using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Queries.InitiatePayFastCheckout;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,17 @@ public class PaymentIpnController : BaseApiController
         _med = med;
     }
 
+    [HttpPost("payments/payfast/initiate")]
+    public async Task<IActionResult> InitiatePayFast(
+    [FromBody] Guid billId,
+    CancellationToken ct)
+    {
+        var result = await _med.Send(
+            new InitiatePayFastCheckoutCommand(billId),
+            ct);
 
+        return Ok(result);
+    }
 
     [HttpPost("checkout")]
     [AllowAnonymous] // IPN usually unauthenticated

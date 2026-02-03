@@ -13,7 +13,6 @@ namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityAvailability.Quer
 public record SearchFacilityAvailabilityQuery(
     Guid ClubId,
     Guid? FacilityId,
-    DateOnly? Date,
     DateOnly? FromDate,
     DateOnly? ToDate
 ) : IRequest<ApiResult<List<FacilitySearchResponse>>>;
@@ -95,7 +94,7 @@ public class SearchFacilityAvailabilityHandler
                 // =========================
                 if (config.BookingMode == BookingMode.SlotBased)
                 {
-                    if (!request.Date.HasValue)
+                    if (!request.FromDate.HasValue)
                         continue;
 
                     // Hard validation
@@ -115,7 +114,7 @@ public class SearchFacilityAvailabilityHandler
                      from bs in _db.BookingSchedules
                      join b in _db.Bookings on bs.BookingId equals b.Id
                      where
-                         bs.Date == request.Date.Value &&
+                         bs.Date == request.FromDate.Value &&
                          b.FacilityUnitId == unit.Id &&
                          b.Status != BookingStatus.Cancelled
                      select bs).ToListAsync(ct);
@@ -123,7 +122,7 @@ public class SearchFacilityAvailabilityHandler
                     var availableSlots = slots
                         .Where(s =>
                             IsSlotAllowed(
-                                request.Date.Value,
+                                request.FromDate.Value,
                                 s.start,
                                 s.end,
                                 rules,

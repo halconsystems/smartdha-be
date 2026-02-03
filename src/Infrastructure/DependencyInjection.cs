@@ -237,6 +237,8 @@ public static class DependencyInjection
         services.AddSingleton<IBasketIdGenerator, BasketIdGenerator>();
         services.AddScoped<IMerchantResolver, MerchantResolver>();
         services.AddScoped<IPaymentBillService, PaymentBillService>();
+        services.AddScoped<ILateFeePolicyResolver, LateFeePolicyResolver>();
+
 
         return services;
     }

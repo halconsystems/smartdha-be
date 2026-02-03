@@ -15,6 +15,7 @@ public interface IPaymentDbContext
     DbSet<PayBill> PayBills { get; }
     DbSet<PayTransaction> PayTransactions { get; }
     DbSet<PaymentIpnLog> PaymentIpnLogs { get; }
+    DbSet<PayLateFeePolicy> PayLateFeePolicies { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

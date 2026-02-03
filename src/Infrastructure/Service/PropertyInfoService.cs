@@ -8,6 +8,7 @@ using Dapper;
 using DHAFacilitationAPIs.Application.Common.Dto;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities.BillsPayment;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.Payment;
 using DHAFacilitationAPIs.Infrastructure.Data;
@@ -18,33 +19,44 @@ public class PropertyInfoService : IPropertyInfoService
 {
     private readonly IProcedureService _procedureService;
     private readonly IPaymentDbContext _db;
-    public PropertyInfoService(IProcedureService procedureService, IPaymentDbContext db)
+    private readonly ILateFeePolicyResolver _lateFeePolicyResolver;
+    public PropertyInfoService(IProcedureService procedureService, IPaymentDbContext db, ILateFeePolicyResolver lateFeePolicyResolver)
     {
         _procedureService = procedureService;
         _db = db;
+        _lateFeePolicyResolver = lateFeePolicyResolver;
     }
 
     public async Task<List<SmartPayBillData>> GetPendingBillsByUserAsync(
-     string userId,
-     CancellationToken ct)
+    string userId,
+    CancellationToken ct)
     {
+        var now = DateTime.Now;
+
         var bills = await _db.PayBills
             .AsNoTracking()
             .Where(x =>
                 x.UserId == userId &&
                 (x.PaymentStatus == PaymentBillStatus.Generated ||
-                 x.PaymentStatus == PaymentBillStatus.PartiallyPaid) &&
-                (x.ExpiryDate == null || x.ExpiryDate > DateTime.Now))
+                 x.PaymentStatus == PaymentBillStatus.PartiallyPaid) 
+                 && (x.ExpiryDate == null || x.ExpiryDate > now)
+                 )
             .OrderByDescending(x => x.BillGeneratedOn)
             .ToListAsync(ct);
 
-        return bills.Select(bill =>
-        {
-            var reference = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
-                ? bill.SourceVoucherNo
-                : bill.PaymentBillId.ToString();
+        var result = new List<SmartPayBillData>();
 
-            return new SmartPayBillData
+        foreach (var bill in bills)
+        {
+            // 🔹 Resolve policy PER BILL (PMS / CLUB / SCHOOL)
+            var policy = await _lateFeePolicyResolver
+                .ResolveAsync(bill.SourceSystem, ct);
+
+            // 🔹 Calculate late fee (read-only)
+            var lateFee = CalculateLateFee(bill, policy, now);
+            var amountAfterDueDate = bill.BillAmount + lateFee;
+
+            result.Add(new SmartPayBillData
             {
                 // 🔹 Consumer Info
                 Institution = bill.Title,
@@ -53,42 +65,42 @@ public class PropertyInfoService : IPropertyInfoService
 
                 // 🔹 Bill Info
                 Reference_Info = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
-                ? bill.SourceVoucherNo
-                : bill.PaymentBillId.ToString(),
+                    ? bill.SourceVoucherNo
+                    : bill.PaymentBillId.ToString(),
 
                 Billing_Month = bill.BillGeneratedOn.ToString("yyyy-MM"),
 
-                // 🔹 Amounts (DECIMAL → STRING)
+                // 🔹 Amounts (calculated)
                 BillAmount = bill.BillAmount.ToString("0.##"),
-                LateFee = "0", // Late fee is calculated in source system
-                AmountAfterDueDate = bill.BillAmount.ToString("0.##"),
+                LateFee = lateFee.ToString("0.##"),
+                AmountAfterDueDate = amountAfterDueDate.ToString("0.##"),
 
-                // 🔹 Dates (DateTime → STRING)
+                // 🔹 Dates
                 DueDate = bill.DueDate.HasValue
-                ? bill.DueDate.Value.ToString("yyyy-MM-dd")
-                : string.Empty,
-                
-                        ExpDate = bill.ExpiryDate.HasValue
-                ? bill.ExpiryDate.Value.ToString("yyyy-MM-dd")
-                : string.Empty,
-                
-                        // 🔹 Payment Status
-                        PaymentStatus = bill.PaymentStatus.ToString(),
-                
-                        Amount_Paid = bill.PaidAmount.ToString("0.##"),
-                
-                        PaymentDateTime = bill.LastPaymentDate?.ToString("yyyy-MM-dd"),
-                
-                        // 🔹 Gateway Info
-                        AuthNo = bill.LastAuthNo ?? string.Empty,
-                
-                        Fee_Amount = bill.BillAmount.ToString("0.##"),
-                
-                        BillGenerateOn = bill.Created.ToString("yyyy-MM-dd")
-                    };
-                
-        }).ToList();
+                    ? bill.DueDate.Value.ToString("yyyy-MM-dd")
+                    : string.Empty,
+
+                ExpDate = bill.ExpiryDate.HasValue
+                    ? bill.ExpiryDate.Value.ToString("yyyy-MM-dd")
+                    : string.Empty,
+
+                // 🔹 Status
+                PaymentStatus = bill.PaymentStatus.ToString(),
+                Amount_Paid = bill.PaidAmount.ToString("0.##"),
+
+                PaymentDateTime = bill.LastPaymentDate?.ToString("yyyy-MM-dd"),
+
+                // 🔹 Gateway
+                AuthNo = bill.LastAuthNo ?? string.Empty,
+
+                Fee_Amount = bill.BillAmount.ToString("0.##"),
+                BillGenerateOn = bill.BillGeneratedOn.ToString("yyyy-MM-dd")
+            });
+        }
+
+        return result;
     }
+
 
 
     public async Task<List<PropertyDetailDTO>> GetPropertiesByCnicAsync(
@@ -131,23 +143,31 @@ public class PropertyInfoService : IPropertyInfoService
             ALLRESPLOT = x.ALLRESPLOT,
         }).ToList();
     }
-    private static string BuildConsumerDetail(
-            string? subDivision,
-            string? phase,
-            string? streetName,
-            string? plotNo,
-            string? actualSize)
+
+
+    private static decimal CalculateLateFee(
+    PayBill bill,
+    PayLateFeePolicy policy,
+    DateTime nowUtc)
     {
-        return string.Join(", ",
-            new[]
-            {
-                subDivision,
-                phase,
-                streetName,
-                plotNo,
-                actualSize
-            }.Where(x => !string.IsNullOrWhiteSpace(x))
-        );
+        if (!bill.DueDate.HasValue)
+            return 0;
+
+        var lateStartDate = bill.DueDate.Value.AddDays(policy.GraceDays);
+
+        if (nowUtc <= lateStartDate)
+            return 0;
+
+        return policy.LateFeeType switch
+        {
+            LateFeeType.Fixed => policy.FixedLateFee,
+
+            LateFeeType.PerDay =>
+                (decimal)(nowUtc.Date - lateStartDate.Date).TotalDays
+                * policy.PerDayLateFee,
+
+            _ => 0
+        };
     }
 
 }
