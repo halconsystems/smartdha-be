@@ -87,7 +87,7 @@
     <Folder Include="Feature\MyBills\Commands\" />
     <Folder Include="Feature\OrderDispatch\Queries\" />
     <Folder Include="Feature\OrderPaymentIpn\Queries\" />
-    <Folder Include="Feature\PaymentIpn\Queries\" />
+    <Folder Include="Feature\PaymentBills\Queries\" />
     <Folder Include="Feature\Proeperty\Commands\" />
     <Folder Include="Feature\PropertyManagement\PMSNotification\Queries\" />
     <Folder Include="Feature\PropertyManagement\PMSVoucher\Queries\" />

@@ -14,7 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCaseFee.Commands.GenerateCaseBill;
-public record GenerateCaseBillCommand(
+public record  GenerateCaseBillCommand(
     Guid CaseId,
     Guid FeeDefinitionId,
     Guid? FeeOptionId    // required only for option-based fees

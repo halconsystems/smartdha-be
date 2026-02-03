@@ -161,6 +161,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/RealTime-SignalR/swagger.json", "RealTime SignalR");
     c.SwaggerEndpoint("/swagger/Non-Member/swagger.json", "Non Member");
     c.SwaggerEndpoint("/swagger/MemberShip/swagger.json", "MemberShip");
+    c.SwaggerEndpoint("/swagger/payment/swagger.json", "Payment Bills");
 });
 
 //app.UseHealthChecks("/health");
