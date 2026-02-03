@@ -22,16 +22,16 @@ public class GetClubCategoriesQueryHandler
         GetClubCategoriesQuery request,
         CancellationToken ct)
     {
-        return await _ctx.ClubCategories
+        return await _ctx.ClubFacilities
             .AsNoTracking()
-            .Where(x => x.Id == request.ClubId)
+            .Where(x => x.ClubId == request.ClubId && x.IsAvailable)
             .Select(x => new CategoryDTO
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description= x.Description ?? "",
-                DisplayName= x.DisplayName,
-                Code= x.Code
+                Id = x.Facility.ClubCategory.Id,
+                Name = x.Facility.ClubCategory.DisplayName,
+                Description= x.Facility.ClubCategory.Description ?? "",
+                DisplayName= x.Facility.ClubCategory.DisplayName,
+                Code= x.Facility.ClubCategory.Code
             })
             .Distinct()
             .ToListAsync(ct);

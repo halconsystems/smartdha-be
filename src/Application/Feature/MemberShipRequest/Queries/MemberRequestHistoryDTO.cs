@@ -20,6 +20,7 @@ public class MemberRequestHistoryDTO
     public string? Name { get; set; }
     public Gender? Gender { get; set; }
     public MaritalStatus? MaritalStatus { get; set; }
+    public VerificationStatus? status { get; set; }
     public string? NTNno { get; set; }
     public string? PassportNo { get; set; }
     public string? PassportPlace { get; set; }

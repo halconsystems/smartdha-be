@@ -19,6 +19,7 @@ public class MemberRequestDTO
     public string? CNIC { get; set; } = default!;
    
     public string? Name { get; set; }
+    public VerificationStatus status { get; set; }
    
     public string? Email { get; set; }
     public bool? IsActive { get; set; }

@@ -115,7 +115,7 @@ public class MemberShipController : BaseApiController
     }
 
     [HttpGet("Dashboard")]
-    public Task<MemberShipDashboardDTO> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
+    public Task<MemberVerificationDashboardDto> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
         => _mediator.Send(new GetMemberShipDashboardSummaryQuery(from, to));
 
     [HttpPost("Update-member-requests")]
