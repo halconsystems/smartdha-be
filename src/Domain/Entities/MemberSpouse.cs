@@ -20,9 +20,13 @@ public class MemberSpouse : BaseAuditableEntity
     public string? PicturePath { get; set; }
     public Nationality Nationality { get; set; }
     public string? otherNationality { get; set; }
+    public string? PassportNo { get; set; }
+    public DateOnly? PassportExpiryDate { get; set; }
 
     [MaxLength(500)]
     public string? CnicFrontImage { get; set; }
+    [MaxLength(500)]
+    public string? UploadPassport { get; set; }
     [MaxLength(500)]
     public string? CnicBackImage { get; set; }
     public string Cnic { get; set; } = default!;

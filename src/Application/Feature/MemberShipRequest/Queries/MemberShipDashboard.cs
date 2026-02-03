@@ -49,7 +49,7 @@ public class GetMemberShipDashboardSummaryQueryHandler : IRequestHandler<GetMemb
 
         var q = _ctx.MemberRequests
             .AsNoTracking()
-            .Where(x => x.Created >= from && x.Created < to && (x.IsDeleted == false || x.IsDeleted == null));
+            .Where(x => x.IsDeleted == false || x.IsDeleted == null);
 
         // ---- Summary in ONE query (no concurrency) ----
         var summaryRaw = await q
@@ -59,9 +59,18 @@ public class GetMemberShipDashboardSummaryQueryHandler : IRequestHandler<GetMemb
                 Total = g.Count(),
                 Approved = g.Count(x => x.Status == VerificationStatus.Approved),
                 Rejected = g.Count(x => x.Status == VerificationStatus.Rejected),
-                Pending = g.Count(x => x.Status == VerificationStatus.Pending)
+                Pending = g.Count(x => x.Status == VerificationStatus.Pending),
+
+                ApprovalRate = g.Count() > 0
+                    ? (decimal)g.Count(x => x.Status == VerificationStatus.Approved) / g.Count()
+                    : 0m,
+
+                RejectedRate = g.Count() > 0
+                    ? (decimal)g.Count(x => x.Status == VerificationStatus.Rejected) / g.Count()
+                    : 0m,
             })
             .SingleOrDefaultAsync(ct);
+
 
 
 
@@ -70,8 +79,8 @@ public class GetMemberShipDashboardSummaryQueryHandler : IRequestHandler<GetMemb
            Approved: summaryRaw?.Approved ?? 0,
            Rejected: summaryRaw?.Rejected ?? 0,
            Pending: summaryRaw?.Pending ?? 0,
-           ApprovalRate: Convert.ToDecimal(summaryRaw?.Total > 0 ? (summaryRaw?.Approved / summaryRaw?.Total) : 0),
-           RejectedRate: Convert.ToDecimal(summaryRaw?.Total > 0 ? (summaryRaw?.Rejected / summaryRaw?.Total) : 0)
+           ApprovalRate: summaryRaw?.ApprovalRate ?? 0,
+           RejectedRate: summaryRaw?.RejectedRate ?? 0
        );
 
         // ---- Current month day-wise (Created date) ----

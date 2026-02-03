@@ -19,6 +19,7 @@ public class MemberRequest : BaseAuditableEntity
     public DateTime Dob { get; set; }
     [Required]
     public string Name { get; set; } = default!;
+    public Ranks? Ranks { get; set; }
     public Gender Gender { get; set; }
     public MaritalStatus MaritalStatus { get; set; }
     public string? NTNno { get; set; }
@@ -33,6 +34,12 @@ public class MemberRequest : BaseAuditableEntity
     public Nationality Nationality { get; set; }
     public string? OtherNationality { get; set; }
 
+    //Military Service
+    public string? Serving { get; set; }
+    public string? ServiceNo { get; set; }
+    public string? ArmsSvc { get; set; }
+    public CauseRetirement? CauseRetirement { get; set; }
+
     [Required]
     [MaxLength(500)]
     public string CNICFrontImagePath { get; set; } = default!;
@@ -43,6 +50,8 @@ public class MemberRequest : BaseAuditableEntity
 
     [Required]
     public string PicturePath { get; set; } = default!;
+    [MaxLength(500)]
+    public string? NonPassportCopy {  get; set; }
     public string? Qualification { get; set; }
     public Profession? Profession { get; set; }
 

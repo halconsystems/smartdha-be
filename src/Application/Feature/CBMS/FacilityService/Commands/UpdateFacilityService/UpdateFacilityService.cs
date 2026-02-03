@@ -39,7 +39,15 @@ public class UpdateFacilityServiceCommandHandler
         existService.IsComplimentary = request.Dto.IsComplimentary;
         existService.IsQuantityBased = request.Dto.IsQuantityBased;
 
-        await _db.SaveChangesAsync(ct);
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception(ex.Message);
+        }
 
         return ApiResult<bool>.Ok(true, "Service Updated");
     }

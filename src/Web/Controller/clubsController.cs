@@ -388,7 +388,7 @@ public class clubsController : BaseApiController
         => _mediator.Send(new CreateFacilityServiceCommand(dto));
 
     [HttpPut("Update-services"), AllowAnonymous]
-    public async Task<ActionResult<SuccessResponse<Guid>>> Updateservices([FromBody] UpdateFacilityServiceCommand cmd, CancellationToken ct)
+    public async Task<ActionResult<SuccessResponse<bool>>> Updateservices([FromBody] UpdateFacilityServiceCommand cmd, CancellationToken ct)
     {
         var result = await _mediator.Send(cmd, ct);
         return Ok(result);
