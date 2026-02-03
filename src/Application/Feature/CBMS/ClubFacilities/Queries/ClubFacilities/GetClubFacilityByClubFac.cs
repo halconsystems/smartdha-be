@@ -24,7 +24,7 @@ public class GetClubFacilityByClubFacQueryHandler : IRequestHandler<GetClubFacil
             list = await _db.Set<Domain.Entities.CBMS.ClubFacility>()
             .Where(x => x.ClubId == request.ClubId)
             .OrderBy(x => x.Price)
-            .Select(x => new ClubFacilitiesDTO(x.Id, x.FacilityId, x.ClubId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
+            .Select(x => new ClubFacilitiesDTO(x.Id, x.ClubId, x.FacilityId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);
 
         }
@@ -33,7 +33,7 @@ public class GetClubFacilityByClubFacQueryHandler : IRequestHandler<GetClubFacil
             list = await _db.Set<Domain.Entities.CBMS.ClubFacility>()
             .Where(x => x.FacilityId == request.Facility)
             .OrderBy(x => x.Price)
-            .Select(x => new ClubFacilitiesDTO(x.Id, x.FacilityId, x.ClubId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
+            .Select(x => new ClubFacilitiesDTO(x.Id, x.ClubId, x.FacilityId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);
         }
         else
@@ -41,7 +41,7 @@ public class GetClubFacilityByClubFacQueryHandler : IRequestHandler<GetClubFacil
             list = await _db.Set<Domain.Entities.CBMS.ClubFacility>()
            .Where(x => x.FacilityId == request.Facility && x.ClubId == request.Facility)
            .OrderBy(x => x.Price)
-           .Select(x => new ClubFacilitiesDTO(x.Id, x.FacilityId, x.ClubId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
+           .Select(x => new ClubFacilitiesDTO(x.Id, x.ClubId, x.FacilityId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
            .ToListAsync(ct);
         }
 
