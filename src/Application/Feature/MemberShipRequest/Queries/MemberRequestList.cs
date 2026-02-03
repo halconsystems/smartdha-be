@@ -36,8 +36,8 @@ public class GetMemberRequestListQueryHandler : IRequestHandler<GetMemberRequest
             Email = x.Email,
             IsActive = x.IsActive,
             IsDelete = x.IsDeleted,
-            MemberShipCatergories = x.MemberShipCatergories,
-            Purpose = MemberShipPurpose?.FirstOrDefault(p => p.Id == x.MemberShipCategory)?.DisplayName
+            Purpose = MemberShipPurpose?.FirstOrDefault(p => p.Id == x.MemberShipCategory)?.DisplayName,
+            status = x.Status
         }).ToList();
 
         return result;

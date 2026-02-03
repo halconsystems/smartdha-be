@@ -115,6 +115,7 @@ public class GetMemberShipHistoryQueryHandler : IRequestHandler<GetMemberShipHis
             PermenantCountry = memberRequest.PermenantCountry,
             BestKnowledge = memberRequest.BestKnowledge,
             Rservation = memberRequest.Rservation,
+            status = memberRequest.Status
         };
 
         return result;
