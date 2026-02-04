@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,7 +104,8 @@ public class PaymentBillService : IPaymentBillService
             LastAuthNo = null,
 
             // 🔹 Audit
-            BillGeneratedOn = DateTime.Now
+            BillGeneratedOn = DateTime.Now,
+            IsSmartPayBill=false
         };
 
         _paymentDb.PayBills.Add(bill);
@@ -112,5 +114,85 @@ public class PaymentBillService : IPaymentBillService
         return bill.PaymentBillId;
     }
 
+    // ===============================
+    // 🔥 SMARTPAY METHOD (NEW)
+    // ===============================
+    public async Task<PayBill> CreatePaymentBillFromSmartPayAsync(
+        CreateSmartPayBillRequest r,
+        CancellationToken ct)
+    {
+        // 1️⃣ Validate consumer number
+        if (string.IsNullOrWhiteSpace(r.ConsumerNumber) || r.ConsumerNumber.Length < 4)
+            throw new InvalidOperationException("Invalid SmartPay consumer number.");
 
+        // 2️⃣ Prevent duplicates (SmartPay reference)
+        var exists = await _paymentDb.PayBills.AnyAsync(x =>
+            x.SourceVoucherNo == r.ConsumerNumber,
+            ct);
+
+        if (exists)
+            throw new InvalidOperationException("SmartPay bill already exists.");
+
+        // 3️⃣ Extract SmartPay merchant prefix (first 4 digits)
+        var smartPayMerchantId = r.ConsumerNumber.Substring(0, 4);
+
+        // 4️⃣ Resolve MerchantCode
+        var merchantCode = await _merchantResolver
+            .ResolveBySmartPayCodeAsync(smartPayMerchantId, ct);
+
+        // 5️⃣ Parse amounts safely
+        var billAmount = decimal.Parse(
+            r.AmountAfterDueDate,
+            CultureInfo.InvariantCulture);
+
+        // 6️⃣ Parse dates
+        var dueDate = DateTime.ParseExact(
+            r.DueDate,
+            "dd/MM/yyyy",
+            CultureInfo.InvariantCulture);
+
+        var expiryDate = DateTime.ParseExact(
+            r.ExpiryDate,
+            "dd/MM/yyyy",
+            CultureInfo.InvariantCulture);
+
+        var generatedOn = DateTime.ParseExact(
+            r.BillGenerateOn,
+            "dd/MM/yyyy",
+            CultureInfo.InvariantCulture);
+
+        // 7️⃣ Create PayBill
+        var bill = new PayBill
+        {
+            PaymentBillId = Guid.NewGuid(),
+
+            UserId = r.UserId,
+            EntityName = r.ConsumerDetail,
+
+            SourceSystem = r.ReferenceInfo,
+            SourceVoucherId = Guid.NewGuid(),
+            SourceVoucherNo = r.ConsumerNumber,
+
+            Title = r.Institution,
+
+            BillAmount = billAmount,
+            PaidAmount = 0,
+            OutstandingAmount = billAmount,
+
+            DueDate = dueDate,
+            ExpiryDate = expiryDate,
+
+            PaymentStatus = PaymentBillStatus.Generated,
+
+            MerchantCode = merchantCode,
+
+            BillGeneratedOn = generatedOn,
+            IsSmartPayBill=true
+        };
+
+        _paymentDb.PayBills.Add(bill);
+        await _paymentDb.SaveChangesAsync(ct);
+
+        return bill;
+    }
 }

@@ -24,6 +24,7 @@ public class PaymentDbContext : DbContext, IPaymentDbContext
     public DbSet<PayTransaction> PayTransactions => Set<PayTransaction>();
     public DbSet<PaymentIpnLog> PaymentIpnLogs => Set<PaymentIpnLog>();
     public DbSet<PayLateFeePolicy> PayLateFeePolicies => Set<PayLateFeePolicy>();
+    public DbSet<WebhookCallbackLog> WebhookCallbackLogs => Set<WebhookCallbackLog>();
 
     public override async Task<int> SaveChangesAsync(
          CancellationToken cancellationToken = default)

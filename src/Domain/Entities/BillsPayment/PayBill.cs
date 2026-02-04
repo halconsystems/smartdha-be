@@ -63,6 +63,7 @@ public class PayBill : BaseAuditableEntity
 
     public decimal? LateFee { get; set; } = 0;
     public decimal? AmountAfterDueDate { get; set; } = 0;
+    public bool IsSmartPayBill { get; set; } = false;
 
     public ICollection<PayTransaction> Transactions { get; set; } = new List<PayTransaction>();
 }

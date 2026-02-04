@@ -36,7 +36,7 @@ public class PropertyInfoService : IPropertyInfoService
         var bills = await _db.PayBills
             .AsNoTracking()
             .Where(x =>
-                x.UserId == userId &&
+                x.UserId == userId && x.IsSmartPayBill==false &&
                 (x.PaymentStatus == PaymentBillStatus.Generated ||
                  x.PaymentStatus == PaymentBillStatus.PartiallyPaid) 
                  && (x.ExpiryDate == null || x.ExpiryDate > now)
@@ -60,13 +60,13 @@ public class PropertyInfoService : IPropertyInfoService
             {
                 // 🔹 Consumer Info
                 Institution = bill.Title,
-                Consumer_Number = "",
+                Reference_Info = "",
                 Consumer_Detail = bill.EntityName ?? string.Empty,
 
                 // 🔹 Bill Info
-                Reference_Info = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
+                Consumer_Number = !string.IsNullOrWhiteSpace(bill.SourceVoucherNo)
                     ? bill.SourceVoucherNo
-                    : bill.PaymentBillId.ToString(),
+                    : bill.SourceVoucherId.ToString(),
 
                 Billing_Month = bill.BillGeneratedOn.ToString("yyyy-MM"),
 

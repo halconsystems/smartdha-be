@@ -240,7 +240,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/Laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/GroundBooking/swagger.json", "Ground Booking Module");
     c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
-    c.SwaggerEndpoint("/swagger/smartpay/swagger.json", "Smart Pay");
     c.SwaggerEndpoint("/swagger/mybills/swagger.json", "My Bills");
     c.SwaggerEndpoint("/swagger/payment/swagger.json", "Payment");
     c.SwaggerEndpoint("/swagger/other/swagger.json", "Other Module");

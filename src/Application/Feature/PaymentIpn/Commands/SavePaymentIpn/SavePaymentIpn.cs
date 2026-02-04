@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.BillsPayment;
+using DHAFacilitationAPIs.Domain.Enums.Payment;
 
 namespace DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
 public record SavePaymentIpnCommand(
@@ -79,6 +81,69 @@ public class SavePaymentIpnCommandHandler
         _ctx.PaymentIpnLogs.Add(entity);
         await _ctx.SaveChangesAsync(ct);
 
+
+        var transaction = await _ctx.Set<PayTransaction>()      
+            .FirstOrDefaultAsync(x => x.BasketId == p.basket_id, ct);
+
+        if (transaction == null)
+        {
+           return entity.Id;
+        }
+
+        // =========================
+        // 2️⃣ Load bill
+        // =========================
+        var bill = await _ctx.Set<PayBill>()
+            .FirstOrDefaultAsync(x => x.PaymentBillId == transaction.PayBillId, ct);
+
+        if (bill == null)
+        {
+            return entity.Id;
+        }
+
+        // =========================
+        // 3️⃣ Idempotency guard
+        // =========================
+        if (transaction.Status == PaymentTransactionStatus.Success)
+        {
+            // Already processed
+            return entity.Id;
+        }
+
+        // =========================
+        // 4️⃣ Success / Failure handling
+        // =========================
+        if (p.err_code == "000")
+        {
+            var paidAmount = ParseDecimal(p.transaction_amount);
+
+            // ---- Update transaction
+            transaction.Status = PaymentTransactionStatus.Success;
+            transaction.GatewayTransactionId = p.transaction_id;
+            transaction.CompletedAt = DateTime.Now;
+
+            // ---- Update bill
+            bill.PaidAmount += paidAmount ?? 0m;
+            bill.OutstandingAmount = bill.BillAmount - bill.PaidAmount;
+
+            bill.LastPaymentDate = DateTime.Now;
+            bill.LastAuthNo = p.transaction_id;
+
+            // ---- Bill status
+            if (bill.OutstandingAmount <= 1)
+            {
+                bill.PaymentStatus = PaymentBillStatus.Paid;
+                bill.OutstandingAmount = 0;
+            }
+            else
+            {
+                bill.PaymentStatus = PaymentBillStatus.PartiallyPaid;
+            }
+        }
+        // =========================
+        // 5️⃣ Save all changes
+        // =========================
+        await _ctx.SaveChangesAsync(ct);
         return entity.Id;
     }
 }

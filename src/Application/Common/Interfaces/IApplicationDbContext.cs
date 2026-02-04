@@ -79,6 +79,7 @@ public interface IApplicationDbContext
     DbSet<UserDeleteRequest> UserDeleteRequests { get; }
     DbSet<UserImages> UserImages { get; }
     DbSet<UserMemberProfile> UserMemberProfiles { get; }
+    DbSet<ClubMembership> ClubMemberships { get; }
 
 
 

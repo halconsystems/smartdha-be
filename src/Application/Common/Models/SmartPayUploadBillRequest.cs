@@ -49,7 +49,7 @@ public class SmartPayBillInquiryResponse
 }
 public class SmartPayBillData
 {
-    public string Consumer_Number { get; set; } = default!;
+    public string Consumer_Number { get; set; } = default!; // FIXED for smartpay and 
     public string Consumer_Detail { get; set; } = default!;
     public string Reference_Info { get; set; } = default!;
     public string Institution { get; set; } = default!;

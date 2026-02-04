@@ -1,4 +1,7 @@
-﻿using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetAllBills;
+﻿using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetAllBills;
+using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetMyBillDetail;
+using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetMyPaidBills;
 using DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.BillInquiry;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,5 +26,21 @@ public class MyBillsController : BaseApiController
         return Ok(result);
     }
 
+    [HttpGet("my-bills/paid")]
+    public async Task<IActionResult> GetMyPaidBills(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetMyPaidBillsQuery(), ct);
+        return Ok(result);
+    }
 
+    [HttpGet("my-bills/{paymentBillId:guid}")]
+    public async Task<IActionResult> GetMyBillDetail(
+    Guid paymentBillId,
+    CancellationToken ct)
+    {
+        var result = await _mediator.Send(
+            new GetMyBillDetailQuery(paymentBillId), ct);
+
+        return Ok(result);
+    }
 }

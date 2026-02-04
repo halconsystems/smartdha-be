@@ -16,7 +16,7 @@ public interface IPaymentDbContext
     DbSet<PayTransaction> PayTransactions { get; }
     DbSet<PaymentIpnLog> PaymentIpnLogs { get; }
     DbSet<PayLateFeePolicy> PayLateFeePolicies { get; }
-
+    DbSet<WebhookCallbackLog> WebhookCallbackLogs { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

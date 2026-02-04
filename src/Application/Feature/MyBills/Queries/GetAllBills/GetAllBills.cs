@@ -38,20 +38,20 @@ public class GetAllBillsHandler : IRequestHandler<GetAllBillsQuery, ApiResult<Li
 
         var getuserInfo = await _userManager.Users
             .Where(u => u.Id == userId).FirstOrDefaultAsync(ct);
-            
-        if(getuserInfo == null)
+
+        if (getuserInfo == null)
             throw new NotFoundException("User not found.");
 
-        if(string.IsNullOrEmpty(getuserInfo.RegisteredMobileNo))
+        if (string.IsNullOrEmpty(getuserInfo.RegisteredMobileNo))
             throw new NotFoundException("Registered MobileNo not found for the user.");
 
-
+        // getuserInfo.RegisteredMobileNo = "923222781985"; // Temporary hardcoded for testing, replace with actual mobile number from user info
         var consumerInquiry = await _smartPayService.ConsumerInquiryAsync(
             getuserInfo.RegisteredMobileNo,
             ct);
 
         var result = new List<SmartPayBillData>();
-       
+
         foreach (var consumer in consumerInquiry.Bills)
         {
             // Call bill inquiry for EACH consumer number
@@ -59,16 +59,17 @@ public class GetAllBillsHandler : IRequestHandler<GetAllBillsQuery, ApiResult<Li
                 consumer.Consumer_Number,
                 ct
             );
-            
+
             if (billInquiry?.BillData == null)
                 continue;
 
             var bill = billInquiry?.BillData;
             if (bill == null)
-               continue;
+                continue;
 
-
-            result.Add(new SmartPayBillData
+            if (bill.PaymentStatus == "Generated" || bill.PaymentStatus == "Pending")
+            {
+                result.Add(new SmartPayBillData
                 {
                     // 🔹 Consumer Info
                     Consumer_Number = consumer.Consumer_Number,
@@ -93,7 +94,7 @@ public class GetAllBillsHandler : IRequestHandler<GetAllBillsQuery, ApiResult<Li
                     Fee_Amount = bill.Fee_Amount,
                     BillGenerateOn = bill.BillGenerateOn
                 });
-            
+            }
         }
 
         var bills = await _billConsumerService
