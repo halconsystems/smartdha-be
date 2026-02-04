@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -17,6 +18,20 @@ public class SecureKeyProtector : ISecureKeyProtector
     }
 
     public string Encrypt(string plain) => _protector.Protect(plain);
-    public string Decrypt(string encrypted) => _protector.Unprotect(encrypted);
+    //public string Decrypt(string encrypted) => _protector.Unprotect(encrypted);
+
+    public string Decrypt(string encrypted)
+    {
+        try
+        {
+            return _protector.Unprotect(encrypted);
+        }
+        catch (CryptographicException ex)
+        {
+            Console.WriteLine($"Decryption failed: {ex.Message}");
+            return ""; // or log + handle gracefully
+        }
+    }
+
 }
 

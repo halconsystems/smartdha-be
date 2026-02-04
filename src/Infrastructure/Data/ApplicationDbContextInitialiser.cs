@@ -334,7 +334,7 @@ public class ApplicationDbContextInitialiser
                 SecureKeyEncrypted = _secureKeyProtector.Encrypt(secureKeyPlain),
                 Gateway = "PAYFAST",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
 
             _db.PayMerchants.Add(merchant);

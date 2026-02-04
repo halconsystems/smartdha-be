@@ -168,15 +168,15 @@ public class SearchFacilityAvailabilityHandler
                         continue;
 
                     var hasConflict = await (
-     from br in _db.BookingDateRanges
-     join b in _db.Bookings on br.BookingId equals b.Id
-     where
-         b.FacilityUnitId == unit.Id &&
-         b.Status != BookingStatus.Cancelled &&
-         request.FromDate < br.ToDate &&
-         request.ToDate > br.FromDate
-     select br.Id
- ).AnyAsync(ct);
+                     from br in _db.BookingDateRanges
+                     join b in _db.Bookings on br.BookingId equals b.Id
+                     where
+                         b.FacilityUnitId == unit.Id &&
+                         b.Status != BookingStatus.Cancelled &&
+                         request.FromDate < br.ToDate &&
+                         request.ToDate > br.FromDate
+                     select br.Id
+                   ).AnyAsync(ct);
 
 
                     if (hasConflict)

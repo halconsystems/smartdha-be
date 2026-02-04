@@ -33,7 +33,7 @@ public class PayFastService : IPayFastService
         using var content = new FormUrlEncodedContent(form);
 
         var response = await _httpClient.PostAsync(
-            "/Transaction/GetAccessToken",
+            "/api/Transaction/GetAccessToken",
             content,
             ct);
 
