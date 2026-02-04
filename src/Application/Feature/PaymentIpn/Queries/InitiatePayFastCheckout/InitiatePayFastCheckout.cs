@@ -62,8 +62,10 @@ public class InitiatePayFastCheckoutHandler
         var merchant = await _db.PayMerchants
             .FirstAsync(x => x.Code == bill.MerchantCode && x.IsActive==true, ct);
 
-        var secureKey = _secureKeyProtector
-            .Decrypt(merchant.SecureKeyEncrypted);
+        //var secureKey = _secureKeyProtector
+        //    .Decrypt(merchant.SecureKeyEncrypted);
+
+        var secureKey = "wZLV_F2VcDmJ9voSHp6t8ND";
 
         var basketId = Random.Shared.Next(100000, 999999).ToString();
 
@@ -84,7 +86,10 @@ public class InitiatePayFastCheckoutHandler
             AccessToken = tokenResponse.AccessToken,
             RedirectUrl = "https://epg.apps.net.pk/api/Transaction/PostTransaction",
             BasketId = basketId,
-            TotalAmount = finalAmount.ToString("0.##")
+            TotalAmount = finalAmount.ToString("0.##"),
+            MarchantId= merchant.MerchantId.ToString(),
+            DisplayName=merchant.DisplayName
+
         });
     }
 
