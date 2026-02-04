@@ -24,6 +24,7 @@ public class CreateMemberShipRequestCommand : IRequest<SuccessResponse<string>>
     public DateTime DOB { get; set; } = default!;
     [Required]
     public string Name { get; set; } = default!;
+    public Ranks? Ranks { get; set; }
     [Required]
     public Gender Gender { get; set; } = default!;
     [Required]
@@ -38,6 +39,15 @@ public class CreateMemberShipRequestCommand : IRequest<SuccessResponse<string>>
     [Required]
     public Nationality Nationality { get; set; } = default!;
     public string? otherNationality { get; set; }
+
+    //Military Service
+    public string? Serving { get; set; }
+    public string? ServiceNo { get; set; }
+    public string? ArmsSvc { get; set; }
+    public CauseRetirement? CauseRetirement { get; set; }
+
+
+
     [Required]
     public IFormFile profilePicture { get; set; } = default!;
 
@@ -46,6 +56,8 @@ public class CreateMemberShipRequestCommand : IRequest<SuccessResponse<string>>
 
     [Required]
     public IFormFile CnicBackPicture { get; set; } = default!;
+    [MaxLength(500)]
+    public IFormFile? NonPassportCopy { get; set; }
 
     public string? Qualification { get; set; }
     public Profession? Profession { get; set; }
@@ -196,6 +208,13 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                 MotherPicturePath = motherprofilePicture,
                 MotherCNICFrontImagePath = motherfrontPath,
                 MotherCNICBackImagePath = motherbackPath,
+
+                Ranks = command.Ranks,
+                Serving = command.Serving,
+                ServiceNo = command.ServiceNo,
+                ArmsSvc = command.ArmsSvc,
+                CauseRetirement = command.CauseRetirement,
+
             };
 
             _context.MemberRequests.Add(entity);

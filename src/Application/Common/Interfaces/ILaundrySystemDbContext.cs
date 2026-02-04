@@ -24,6 +24,7 @@ public interface ILaundrySystemDbContext
     DbSet<ConfirmedOrder> ConfirmedOrders { get; }
     DbSet<OrderPaymentIpnLogs> OrderPaymentIpnLogs { get; }
     DbSet<ShopVehicles> ShopVehicles { get; }
+    DbSet<ShopVehicleAssignmentHistory> ShopVehicleAssignmentHistories { get; }
     DbSet<ShopDrivers> ShopDrivers { get; }
     DbSet<OrderDispatch> OrderDispatches { get; }
 

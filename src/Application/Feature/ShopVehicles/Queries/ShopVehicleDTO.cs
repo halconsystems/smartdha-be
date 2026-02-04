@@ -13,9 +13,11 @@ public class ShopVehicleDTO
     public Guid Id { get; set; }
     public Guid ShopId { get; set; }
     public Domain.Entities.LMS.Shops? Shops { get; set; }
+    public Guid VehicleId { get; set; }
     public string Name { get; set; } = default!;          // "Bike-01", "Ambulance-02"
     public string RegistrationNo { get; set; } = default!; // vehicle number
     public ShopVehicleType VehicleType { get; set; }
+    public string? VehicleTypeString { get; set; }
     // For map icon (front-end will map this to specific image)
     public string? MapIconKey { get; set; }  // e.g. "bike", "ambulance", "firetruck"
     public Guid? DriverUserId { get; set; }   // nullable
@@ -25,7 +27,16 @@ public class ShopVehicleDTO
     public double? LastLatitude { get; set; }
     public double? LastLongitude { get; set; }
     public DateTime? LastLocationAt { get; set; }
-    public ShopVehicleStatus Status { get; set; } = ShopVehicleStatus.Offline;
+    public ShopVehicleStatus Status { get; set; }
+    public string? Statustring { get; set; }
+
+    public bool? IsActive { get; set; }
+    // NEW fields
+    public bool IsDriverAssigned { get; set; }
+    public string? AssignedDriverName { get; set; }
+    public string? AssignedDriverPhone { get; set; }
+    public string? AssignedDriverCnic { get; set; }
+    public DateTime? AssignedAt { get; set; }
 
     public List<Application.Feature.Shops.Queries.ShopQueryDTO>? ShopQuery { get; set; }
 

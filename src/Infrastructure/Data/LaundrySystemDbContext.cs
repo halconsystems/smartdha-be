@@ -36,6 +36,7 @@ public class LaundrySystemDbContext : DbContext ,  ILaundrySystemDbContext
     public DbSet<ShopVehicles> ShopVehicles => Set<ShopVehicles>();
     public DbSet<ShopDrivers> ShopDrivers => Set<ShopDrivers>();
     public DbSet<OrderDispatch> OrderDispatches => Set<OrderDispatch>();
+    public DbSet<ShopVehicleAssignmentHistory> ShopVehicleAssignmentHistories => Set<ShopVehicleAssignmentHistory>();
 
     public override async Task<int> SaveChangesAsync(
        CancellationToken cancellationToken = default)
