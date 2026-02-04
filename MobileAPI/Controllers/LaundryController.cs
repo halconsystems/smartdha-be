@@ -13,12 +13,17 @@ using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.AcceptPanicDispatch;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.DriverLogin;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetMyAssignedPanic;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
+using DHAFacilitationAPIs.Application.Feature.ShopDriver.Queries;
 using DHAFacilitationAPIs.Application.Feature.Shops.Queries;
 using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Command;
+using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MobileAPI.Controllers;
 
@@ -208,4 +213,32 @@ public class LaundryController : BaseApiController
         return Ok(result);
     }
 
+
+
+    [HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
+    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpGet("get-ShopVehicle")]
+    public async Task<ActionResult<ShopVehicleDTO>> GetShopVehicle(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetShopVehiclesforDriverQuery(), ct);
+        return Ok(result);
+    }
+
+    [AllowAnonymous]
+    [EnableRateLimiting("AnonymousLimiter")]
+    [HttpPost("Driver/Login")]
+    public async Task<ActionResult> LoginDriver(DriverLoginCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpGet("Driver/Order/MyAssigned")]
+    public async Task<ActionResult<PanicUpdatedRealtimeDto>> GetMyAssignedPanic(bool Pickup)
+    {
+        var result = await _mediator.Send(new GetMyAssignedOrderQuery(Pickup));
+        return Ok(result);
+    }
 }

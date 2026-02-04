@@ -43,4 +43,18 @@ public class FemugationProcessController : BaseApiController
     public Task<FemugationDashboardSummaryDto> Dashboard([FromQuery] DateTime? from = null, [FromQuery] DateTime? to = null)
         => _med.Send(new GetFemugationDashboardSummaryQuery(from, to));
 
+    [HttpPost("Create-Femugation")]
+    public async Task<ActionResult<string>> CreateFemugation(AddFemugationCommand cmd)
+    {
+        var result = await _med.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpPost("Shop/Femugation/MobileProcess")]
+    public async Task<IActionResult> FemugationMobileProcess(FemugationProcess cmd)
+    {
+        var result = await _med.Send(cmd);
+        return Ok(result);
+    }
+
 }

@@ -24,9 +24,12 @@ public class MemberSpouseDTO
 
     [Required]
     public IFormFile CnicBackImage { get; set; } = default!;
+    public IFormFile? UploadPassport { get; set; }
     
     public Nationality Nationality { get; set; }
     public string? otherNationality { get; set; }
+    public string? PassportNo { get; set; }
+    public DateOnly? PassportExpiryDate { get; set; }
 
     [Required]
     public string Cnic { get; set; } = default!;

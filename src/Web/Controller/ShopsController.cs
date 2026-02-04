@@ -1,6 +1,8 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
+using DHAFacilitationAPIs.Application.Feature.Panic.Commands.RegisterDriver;
+using DHAFacilitationAPIs.Application.Feature.ShopDriver.Command;
 using DHAFacilitationAPIs.Application.Feature.Shops.Command;
 using DHAFacilitationAPIs.Application.Feature.Shops.Queries;
 using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Command;
@@ -46,4 +48,11 @@ public class ShopsController : BaseApiController
     [HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
     public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
       => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPost("Drivers/Register")]
+    public async Task<ActionResult> RegisterDriver(RegisterShopDriverCommand cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
 }

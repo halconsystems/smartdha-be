@@ -37,5 +37,6 @@ public class OrderDTO
     public OrderStatus? OrderStatus {  get; set; }
     public OrderDispatchStatus? OrderDispatchStatus {  get; set; }
     public string? ShopName { get; set; }
+    public DateTime Created {  get; set; }
 
 }
