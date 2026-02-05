@@ -84,6 +84,7 @@
     <Folder Include="Feature\DiscountSetting\Queries\" />
     <Folder Include="Feature\ForgetPassword\Queries\" />
     <Folder Include="Feature\Fumigation\FemugationDashboard\Command\" />
+    <Folder Include="Feature\MemberShipRenewal\Queries\" />
     <Folder Include="Feature\MyBills\Commands\" />
     <Folder Include="Feature\OrderDispatch\Queries\" />
     <Folder Include="Feature\OrderPaymentIpn\Queries\" />

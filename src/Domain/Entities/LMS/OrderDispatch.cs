@@ -14,7 +14,7 @@ public class OrderDispatch :BaseAuditableEntity
     public Guid? DeliverVehicleId {  get; set; }
     public ShopVehicles? DeliverShopVehicles { get; set; }
 
-    public Guid? PickupVehicleId { get; set; }
+    public Guid? PickupVehicleId { get; set; }  
     public ShopVehicles? PickupShopVehicles { get; set; }
     public OrderDispatchStatus Status { get; set; } = OrderDispatchStatus.Confirmed;
 
@@ -32,5 +32,4 @@ public class OrderDispatch :BaseAuditableEntity
     public double? AcceptedAtLongitude { get; set; }
     [MaxLength(300)] public string? AcceptedAtAddress { get; set; }
     public double? DistanceFromOrderKm { get; set; }
-    public DateTime? LastLocationUpdateAt { get; set; }
 }
