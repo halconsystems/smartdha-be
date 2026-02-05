@@ -65,5 +65,25 @@ public class MerchantResolver : IMerchantResolver
 
         return defaultMerchant;
     }
+
+    public async Task<string> ResolveBySmartPayCodeAsync(
+    string smartPayMerchantId,
+    CancellationToken ct)
+    {
+        var merchant = await _db.PayMerchants
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x =>
+                x.IsActive == true &&
+                x.SmartPayMerchantId == smartPayMerchantId,
+                ct);
+
+        if (merchant == null)
+            throw new InvalidOperationException(
+                $"No merchant found for SmartPayMerchantId {smartPayMerchantId}");
+
+        return merchant.Code;
+    }
+
+
 }
 

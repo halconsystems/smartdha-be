@@ -15,11 +15,11 @@ public record GetAllClubByTypeQuery(ClubType ClubType)
 public class GetAllClubByTypeQueryHandler
     : IRequestHandler<GetAllClubByTypeQuery, ApiResult<List<ClubDTO>>>
 {
-    private readonly ICBMSApplicationDbContext _ctx;       // Clubs DbContext
+    private readonly IOLMRSApplicationDbContext _ctx;       // Clubs DbContext
     private readonly IFileStorageService _fileStorageService;
 
     public GetAllClubByTypeQueryHandler(
-       ICBMSApplicationDbContext ctx,
+       IOLMRSApplicationDbContext ctx,
        IFileStorageService fileStorageService)
     {
         _ctx = ctx;

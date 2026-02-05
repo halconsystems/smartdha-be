@@ -9,9 +9,12 @@ public class FacilityUnitService : BaseAuditableEntity
 {
     public Guid FacilityUnitId { get; set; }
     public FacilityUnit FacilityUnit { get; set; } = default!;
-    public Guid FacilityServiceId { get; set; }
-    public FacilityService FacilityService { get; set; } = default!;
-    public decimal? OverridePrice { get; set; }
+
+    public Guid ServiceDefinitionId { get; set; }
+    public ServiceDefinition ServiceDefinition { get; set; } = default!;
+
+    public decimal Price { get; set; }
+    public bool IsComplimentary { get; set; }
     public bool IsEnabled { get; set; } = true;
 }
 

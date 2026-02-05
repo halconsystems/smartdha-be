@@ -27,8 +27,6 @@ public class AddFacilityUnitServiceHandler
         var entity = new Domain.Entities.CBMS.FacilityUnitService
         {
             FacilityUnitId = request.Dto.FacilityUnitId,
-            FacilityServiceId = request.Dto.FacilityServiceId,
-            OverridePrice = request.Dto.OverridePrice,
             IsEnabled=request.Dto.IsEnabled,
         };
 

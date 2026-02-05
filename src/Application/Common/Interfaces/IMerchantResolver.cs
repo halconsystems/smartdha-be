@@ -12,5 +12,9 @@ public interface IMerchantResolver
         string entityType,
         Guid? entityId,
         CancellationToken ct);
+
+    Task<string> ResolveBySmartPayCodeAsync(
+        string smartPayMerchantId,
+        CancellationToken ct);
 }
 

@@ -19,12 +19,12 @@ public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCatego
 
     public async Task<ApiResult<Guid>> Handle(CreateClubCategoryCommand request, CancellationToken ct)
     {
-        var exists = await _db.Set<ClubCategory>()
+        var exists = await _db.Set<ClubServiceCategory>()
             .AnyAsync(x => x.Code == request.Code, ct);
 
         if (exists) return ApiResult<Guid>.Fail("Club Category code already exists.");
 
-        var entity = new ClubCategory
+        var entity = new ClubServiceCategory
         {
             Name = request.Name.Trim(),
             Code = request.Code.Trim().ToUpperInvariant(),
@@ -32,7 +32,7 @@ public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCatego
             Description = request.Description.Trim()
         };
 
-        _db.Set<ClubCategory>().Add(entity);
+        _db.Set<ClubServiceCategory>().Add(entity);
         await _db.SaveChangesAsync(ct);
 
         return ApiResult<Guid>.Ok(entity.Id, "Club Category created.");

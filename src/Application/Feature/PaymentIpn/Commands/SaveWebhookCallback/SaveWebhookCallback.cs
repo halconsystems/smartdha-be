@@ -19,9 +19,9 @@ public record SaveWebhookCallbackCommand(
 public class SaveWebhookCallbackCommandHandler
     : IRequestHandler<SaveWebhookCallbackCommand, Guid>
 {
-    private readonly IApplicationDbContext _ctx;
+    private readonly IPaymentDbContext _ctx;
 
-    public SaveWebhookCallbackCommandHandler(IApplicationDbContext ctx)
+    public SaveWebhookCallbackCommandHandler(IPaymentDbContext ctx)
     {
         _ctx = ctx;
     }

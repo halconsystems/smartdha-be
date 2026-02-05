@@ -19,7 +19,7 @@ public class GetClubCategoriesQueryHandler : IRequestHandler<GetClubWiseCategori
 
     public async Task<ApiResult<List<ClubCategoriesDTO>>> Handle(GetClubWiseCategories request, CancellationToken ct)
     {
-        var list = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
+        var list = await _db.Set<Domain.Entities.CBMS.ClubServiceCategory>()
              .Where(x => x.IsActive == true && x.IsDeleted == false)
             .OrderBy(x => x.Name)
             .Select(x => new ClubCategoriesDTO(x.Id,x.Name, x.Code,x.Description ?? "",x.DisplayName, x.IsActive,x.IsDeleted))

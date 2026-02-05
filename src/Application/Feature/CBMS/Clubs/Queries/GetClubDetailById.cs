@@ -30,14 +30,14 @@ public class GetClubDetailByIdHandler
     {
         var club = await _ctx.Clubs
         .AsNoTracking()
-        .FirstOrDefaultAsync(x => x.Id == request.ClubId, ct);
+        .FirstOrDefaultAsync(x => x.Id == request.ClubId && x.IsActive==true && x.IsDeleted !=true, ct);
 
         if (club == null)
             return ApiResult<ClubDTO>.Fail("Club not found.");
 
         var clubCategories = await _ctx.ClubFacilities
          .AsNoTracking()
-         .Where(x => x.ClubId == request.ClubId && x.IsAvailable)
+         .Where(x => x.ClubId == request.ClubId && x.IsAvailable && x.IsActive == true && x.IsDeleted != true)
          .Select(x => new
          {
              CategoryId = x.Facility.ClubCategory.Id,
@@ -48,7 +48,7 @@ public class GetClubDetailByIdHandler
 
         var clubImages = await _ctx.ClubImages
         .AsNoTracking()
-        .Where(x => x.ClubId == request.ClubId)
+        .Where(x => x.ClubId == request.ClubId && x.IsActive == true && x.IsDeleted != true)
         .ToListAsync(ct);
 
 

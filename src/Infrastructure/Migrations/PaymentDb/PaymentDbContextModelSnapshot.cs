@@ -59,6 +59,9 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSmartPayBill")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastAuthNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -120,7 +123,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
                     b.HasIndex("SourceSystem", "SourceVoucherId")
                         .IsUnique();
 
-                    b.ToTable("PayBills");
+                    b.ToTable("PayBills", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayLateFeePolicy", b =>
@@ -179,7 +182,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("PayLateFeePolicies");
+                    b.ToTable("PayLateFeePolicies", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayMerchant", b =>
@@ -249,7 +252,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("PayMerchants");
+                    b.ToTable("PayMerchants", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayMerchantRule", b =>
@@ -309,7 +312,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasIndex("SourceSystem", "EntityType", "EntityId", "CategoryCode", "IsActive", "Priority");
 
-                    b.ToTable("PayMerchantRules");
+                    b.ToTable("PayMerchantRules", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayTransaction", b =>
@@ -394,7 +397,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasIndex("PayBillId");
 
-                    b.ToTable("PayTransactions");
+                    b.ToTable("PayTransactions", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.PaymentIpnLog", b =>
@@ -504,7 +507,76 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations.PaymentDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentIpnLogs");
+                    b.ToTable("PaymentIpnLogs", (string)null);
+                });
+
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.WebhookCallbackLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("ClientIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Headers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HttpMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Ser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ser"));
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WebhookCallbackLogs", (string)null);
                 });
 
             modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.BillsPayment.PayTransaction", b =>

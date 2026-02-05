@@ -21,7 +21,7 @@ public class PaymentIpnController : BaseApiController
 
     [HttpPost("payments/payfast/initiate")]
     public async Task<IActionResult> InitiatePayFast(
-    [FromBody] Guid billId,
+    [FromBody] string billId,
     CancellationToken ct)
     {
         var result = await _med.Send(

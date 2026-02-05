@@ -50,7 +50,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<GroundBookingSlot> GroundBookingSlots => Set<GroundBookingSlot>();
     public DbSet<GroundImages> GroundImages => Set<GroundImages>();
     public DbSet<GroundPaymentIpnLogs> GroundPaymentIpnLogs => Set<GroundPaymentIpnLogs>();
-    public DbSet<ClubCategory> ClubCategories => Set<ClubCategory>();
+    public DbSet<ClubServiceCategory> ClubCategories => Set<ClubServiceCategory>();
     public DbSet<ClubImages> ClubImages => Set<ClubImages>();
     public DbSet<ClubPrerequisiteDefinitions> ClubPrerequisiteDefinitions => Set<ClubPrerequisiteDefinitions>();
     public DbSet<ClubPrerequisiteOptions> ClubPrerequisiteOptions => Set<ClubPrerequisiteOptions>();
@@ -61,6 +61,7 @@ public class OLMRSApplicationDbContext : DbContext, IOLMRSApplicationDbContext
     public DbSet<Facility> Facilities => Set<Facility>();
     public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>();
 
+    DbSet<ClubCategory> IOLMRSApplicationDbContext.ClubCategories => throw new NotImplementedException();
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class
         => base.Set<TEntity>();

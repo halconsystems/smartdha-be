@@ -30,13 +30,13 @@ public class UpdateClubCategoryCommandHandler
         UpdateClubCategoryCommand request,
         CancellationToken ct)
     {
-        var entity = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
+        var entity = await _db.Set<Domain.Entities.CBMS.ClubServiceCategory>()
             .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
 
         if (entity == null)
             return ApiResult<bool>.Fail("Club Category not found.");
 
-        var codeExists = await _db.Set<Domain.Entities.CBMS.ClubCategory>()
+        var codeExists = await _db.Set<Domain.Entities.CBMS.ClubServiceCategory>()
             .AnyAsync(x => x.Code == request.Code && x.Id != request.Id, ct);
 
         if (codeExists)

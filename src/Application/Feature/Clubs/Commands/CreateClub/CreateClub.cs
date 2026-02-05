@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums;
 using static Dapper.SqlMapper;
 
@@ -22,7 +23,7 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
     {
         try
         {
-            var entity = new Club
+            var entity = new DHAClub
             {
                 Name = request.Name,
                 DisplayName = request.DisplayName,
@@ -31,7 +32,6 @@ public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, Succe
                 ContactNumber = request.ContactNumber,
                 AccountNo = request.AccountNo,
                 AccountNoAccronym = request.AccountNoAccronym,
-                ClubType = request.ClubType,
                 Email = request.Email
             };
             _ctx.Clubs.Add(entity);

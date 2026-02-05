@@ -27,261 +27,247 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
     private readonly IProcedureService _sp;
     private readonly IApplicationDbContext _context;
     private readonly IAuthenticationService _authenticationService;
+    private readonly IMemberLookupService _memberLookupService;
 
-    public LiveMemberRegisterationCommandHandler(UserManager<ApplicationUser> userManager, ISmsService otpService, IProcedureService sp, IApplicationDbContext context, IAuthenticationService authenticationService)
+    public LiveMemberRegisterationCommandHandler(UserManager<ApplicationUser> userManager, ISmsService otpService, IProcedureService sp, IApplicationDbContext context, IAuthenticationService authenticationService, IMemberLookupService memberLookupService)
     {
         _userManager = userManager;
         _otpService = otpService;
         _sp = sp;
         _context = context;
         _authenticationService = authenticationService;
+        _memberLookupService = memberLookupService;
     }
 
-    public async Task<SuccessResponse<RegisterationDto>> Handle(LiveMemberRegisterationCommand request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<RegisterationDto>> Handle(
+    LiveMemberRegisterationCommand request,
+    CancellationToken ct)
     {
-        var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, cancellationToken);
-        if (existingUser != null)
-        {
-            if (existingUser.PasswordHash == null || String.IsNullOrWhiteSpace(existingUser.PasswordHash))
-            {
-                string normalizedMobile = (existingUser.RegisteredMobileNo ?? string.Empty)
-                .Replace("-", "")              // remove dashes
-                .Replace(" ", "")              // remove spaces
-                .Trim();                       // remove leading/trailing whitespace
+        // 1) Normalize CNIC
+        var cnic = request.CNIC?.Trim();
+        if (string.IsNullOrWhiteSpace(cnic))
+            throw new ConflictException("CNIC is required.");
 
-                if (normalizedMobile.StartsWith("0"))
-                {
-                    normalizedMobile = "92" + normalizedMobile.Substring(1);
-                }
+        // 2) Check if user exists (idempotent)
+        var user = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.CNIC == cnic, ct);
 
-                var _rand = new Random();
-                var generateotp = _rand.Next(100000, 999999); // generates a 6-digit number
-
-                string returnmsg = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.";
-                string sentmsg = $"{generateotp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.";
-
-                string result = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, cancellationToken);
-             
-                if (result == "SUCCESSFUL")
-                {
-                    var usernewOtp = new UserOtp
-                    {
-                        UserId = Guid.Parse(existingUser.Id),
-                        CNIC = existingUser.CNIC,
-                        MobileNo = normalizedMobile,
-                        OtpCode = generateotp.ToString(),
-                        SentMessage = sentmsg,
-                        IsVerified = false,
-                        ExpiresAt = DateTime.Now.AddMinutes(5)
-                    };
-                    _context.UserOtps.Add(usernewOtp);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
-                    string verifyToken = await _authenticationService.GenerateTemporaryToken(existingUser, "verify_otp", expiresIn);
-
-                    //return returnmsg;
-                    RegisterationDto _registerationdto = new RegisterationDto
-                    {
-                        isOtpRequired = true,
-                        AccessToken = verifyToken,
-                        MobileNumber = MaskMobile(normalizedMobile),
-                        ResponseMessage = returnmsg
-
-                    };
-
-                    return new SuccessResponse<RegisterationDto>(
-                    _registerationdto,
-                    returnmsg
-                    );
-                }
-            }
-            if (existingUser.IsActive == false)
-            {
-                throw new ConflictException("Account already exists but is inactive. Please contact the administrator for assistance.");
-            }
-            if (existingUser.IsDeleted == true)
-            {
-                throw new ConflictException("Account already exists but has been deleted. Please contact the administrator for assistance.");
-            }
-            if (existingUser.IsVerified == false)
-            {
-                throw new ConflictException("Account already exists but is not verified. Please contact the administrator for assistance.");
-            }
+        // 3) If user exists and fully registered -> reject
+        if (user != null && user.IsVerified == true && !string.IsNullOrWhiteSpace(user.PasswordHash))
             throw new ConflictException("An account with this information already exists.");
 
-        }
+        // 4) Get member info (your existing call)
+        var resultMember = await _memberLookupService.GetMemberByCnicAsync(cnic, ct);
 
-        var p = new DynamicParameters();
-        p.Add("@CNICNO", request.CNIC, DbType.String, size: 150);
+        var memno = resultMember.Member.MemNo ?? "";
+        var staffno = resultMember.Member.StaffNo ?? "";
+        var name = resultMember.Member.Name ?? "";
+        var cellno = NormalizePkMobile(resultMember.Member.CellNo ?? "");
 
-        // Output parameters
-        p.Add("@MEMID", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@MemNo", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@STAFFNO", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@Cat", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@Name", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@ApplicationDate", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@NIC", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@CellNo", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@ALLREPLOT", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@MEMPK", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@Email", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@DOB", dbType: DbType.String, size: 50, direction: ParameterDirection.Output);
-        p.Add("@msg", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
+        if (string.IsNullOrWhiteSpace(cellno) || cellno.Length != 12 || !cellno.All(char.IsDigit))
+            throw new ConflictException("Mobile number not found. Please visit DHA Head Office to update your registered mobile number.");
 
-        //p.Add("@OTP", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        //p.Add("@OutCellNo", dbType: DbType.String, size: 15, direction: ParameterDirection.Output);
-        //p.Add("@Name", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
-        //p.Add("@Email", dbType: DbType.String, size: 150, direction: ParameterDirection.Output);
+        // 5) Generate OTP (use crypto RNG; Random() is weak + repeats under load)
+        var otp = GenerateSecureOtp();
 
-        // Execute stored procedure
-        await _sp.ExecuteAsync(
-            "USP_SelectMemberByCNIC_NEW",
-            p,
-            cancellationToken: cancellationToken,
-            "DefaultConnection"
-        );
-
-        // Read output parameters
-        //string memPk = p.Get<string>("@MEMPK") ?? "0";
-        //string name = p.Get<string>("@Name") ?? "";
-
-        string memid = p.Get<string>("@MEMID") ?? "0";
-        string memno = p.Get<string>("@MemNo") ?? "";
-        string staffno = p.Get<string>("@STAFFNO") ?? "";
-        string cat = p.Get<string>("@Cat") ?? "";
-        string name = p.Get<string>("@Name") ?? "";
-        string appl_date = p.Get<string>("@ApplicationDate") ?? "";
-        string nic = p.Get<string>("@NIC") ?? "";
-        string cellno = p.Get<string>("@CellNo") ?? "";
-        string allreplot = p.Get<string>("@ALLREPLOT") ?? "";
-        string mempk = p.Get<string>("@MEMPK") ?? "";
-        string email = p.Get<string>("@Email") ?? "";
-        string DOB = p.Get<string>("@DOB") ?? "";
-        string message = p.Get<string>("@msg") ?? "No message";
-
-
-        //string userOtp = p.Get<int>("@OTP").ToString();
-        //string outCellNo = p.Get<string>("@OutCellNo") ?? "No Number Found";
-        //string FullName = p.Get<string>("@Name") ?? "No message";
-        //string requestEmail = p.Get<string>("@Email") ?? "No message";
-
-        cellno = (cellno ?? string.Empty)
-                .Replace("-", "")              // remove dashes
-                .Replace(" ", "")              // remove spaces
-                .Trim();                       // remove leading/trailing whitespace
-
-        if (cellno.StartsWith("0"))
+        // 6) Create/Update DB state FAST (no SMS here)
+        //    This part MUST be concurrency-safe -> relies on DB unique constraints
+        try
         {
-            cellno = "92" + cellno.Substring(1);
-        }
-        var random = new Random();
-        var userOtp = random.Next(100000, 999999); // generates a 6-digit number
-        if (!string.IsNullOrWhiteSpace(cellno) && cellno.Length == 12 && !cellno.StartsWith("0") && cellno.All(char.IsDigit))
-        {
-            var newUser = new ApplicationUser
+            if (user == null)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                UserName = request.CNIC,
-                NormalizedUserName = request.CNIC,//email.ToUpper(),
-                Email = email,
-                NormalizedEmail = email.ToUpper(),
-                MobileNo = cellno,
-                CNIC = request.CNIC,
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                TwoFactorEnabled = false,
-                AppType = AppType.Mobile,
-                UserType =
-                     !string.IsNullOrEmpty(memno) && !string.IsNullOrEmpty(staffno)
-                         ? UserType.StaffAndMember
-                         : !string.IsNullOrEmpty(memno)
-                             ? UserType.Member
-                             : !string.IsNullOrEmpty(staffno)
-                                 ? UserType.Employee
-                                 : UserType.NonMember,
-                RegisteredMobileNo = cellno,
-                IsVerified = true,
-                IsOtpRequired = true,
-                MEMPK = mempk//"DHAM-97563"
-
-            };
-            await _userManager.CreateAsync(newUser);
-
-            var profile = new UserMemberProfile
-            {
-                UserId = newUser.Id,
-                MemId = memid,
-                MemNo = memno,
-                StaffNo = staffno,
-                Category = cat,
-                Name = name,
-                ApplicationDate = appl_date,
-                NIC = nic,
-                CellNo = cellno,
-                AllReplot = allreplot,
-                MemPk = mempk,
-                Email = email,
-                DOB = DOB,
-                Message = message
-            };
-
-            _context.Set<UserMemberProfile>().Add(profile);
-            await _context.SaveChangesAsync(cancellationToken);
-
-
-            // Send OTP to MobileNo
-            string sentmsg = $"{userOtp} is your OTP for DHA Karachi Mobile App. Do not share it.";
-            string returnMessage = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.";
-            var result = await _otpService.SendSmsAsync(cellno, sentmsg, cancellationToken);
-            if (result == "SUCCESSFUL")
-            {
-                var usernewOtp = new UserOtp
+                user = new ApplicationUser
                 {
-                    UserId = Guid.Parse(newUser.Id),
-                    CNIC = newUser.CNIC,
+                    Id = Guid.NewGuid().ToString(),
+                    Name = name,
+                    UserName = cnic,
+                    NormalizedUserName = cnic,
+                    Email = (resultMember.Member.Email ?? "").Trim(),
+                    NormalizedEmail = (resultMember.Member.Email ?? "").Trim().ToUpper(),
                     MobileNo = cellno,
-                    OtpCode = userOtp.ToString(),
-                    SentMessage = sentmsg,
+                    RegisteredMobileNo = cellno,
+                    CNIC = cnic,
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    TwoFactorEnabled = false,
+                    AppType = AppType.Mobile,
+                    UserType =
+                        !string.IsNullOrEmpty(memno) && !string.IsNullOrEmpty(staffno)
+                            ? UserType.StaffAndMember
+                            : !string.IsNullOrEmpty(memno)
+                                ? UserType.Member
+                                : !string.IsNullOrEmpty(staffno)
+                                    ? UserType.Employee
+                                    : UserType.NonMember,
+
+                    // OTP gate
+                    RegistrationNo=cellno,
+                    MEMPK= resultMember.Member.MemPk ?? "",
+                    IsVerified = false,     // IMPORTANT: user is NOT verified until OTP
+                    IsOtpRequired = true
+                };
+
+                var createRes = await _userManager.CreateAsync(user);
+                if (!createRes.Succeeded)
+                {
+                    // If concurrent request created it first, re-fetch and continue
+                    user = await _userManager.Users.FirstOrDefaultAsync(u => u.CNIC == cnic, ct);
+                    if (user == null)
+                        throw new ConflictException(string.Join(", ", createRes.Errors.Select(e => e.Description)));
+                }
+            }
+
+            // Profile upsert
+            var existingProfile = await _context.Set<UserMemberProfile>()
+                .FirstOrDefaultAsync(x => x.UserId == user.Id, ct);
+
+            if (existingProfile == null)
+            {
+                _context.Set<UserMemberProfile>().Add(new UserMemberProfile
+                {
+                    UserId = user.Id,
+                    MemId = resultMember.Member.MemId ?? "0",
+                    MemNo = resultMember.Member.MemNo ?? "",
+                    StaffNo = resultMember.Member.StaffNo ?? "",
+                    Category = resultMember.Member.Category ?? "",
+                    Name = resultMember.Member.Name ?? "",
+                    ApplicationDate = resultMember.Member.ApplicationDate ?? "",
+                    NIC = resultMember.Member.NIC ?? "",
+                    CellNo = cellno,
+                    AllReplot = resultMember.Member.AllReplot ?? "",
+                    MemPk = resultMember.Member.MemPk ?? "",
+                    Email = resultMember.Member.Email ?? "",
+                    DOB = resultMember.Member.DOB ?? "",
+                    Message = resultMember.Member.Message ?? "No message"
+                });
+            }
+
+            // Club memberships: ideally upsert or ignore duplicates
+            if (resultMember.Clubs != null && resultMember.Clubs.Any())
+            {
+                var membershipNos = resultMember.Clubs.Select(x => x.MembershipNo).ToList();
+
+                var existing = await _context.ClubMemberships
+                 .Where(x =>
+                     x.CNIC == cnic &&
+                     x.MembershipNo != null &&
+                     membershipNos.Contains(x.MembershipNo) &&
+                     x.IsDeleted != true)
+                 .Select(x => x.MembershipNo!)
+                 .ToListAsync(ct);
+
+                var toAdd = resultMember.Clubs
+                    .Where(c => !existing.Contains(c.MembershipNo))
+                    .Select(c => new ClubMembership
+                    {
+                        UserId = user.Id,
+                        MembershipNo = c.MembershipNo,
+                        Rank = c.Rank,
+                        Name = c.Name,
+                        CNIC = c.CNIC,
+                        MobileNumber = c.MobilNumber,
+                        OneInKid = c.OneInKid,
+                        BillStatus = c.BillStatus,
+                        Clube = c.Clube
+                    }).ToList();
+
+                if (toAdd.Any())
+                    _context.ClubMemberships.AddRange(toAdd);
+            }
+
+            // OTP upsert: ensure single active OTP per CNIC
+            var activeOtp = await _context.UserOtps
+                .Where(x => x.CNIC == cnic && x.IsVerified == false)
+                .OrderByDescending(x => x.Created) // if you have Created
+                .FirstOrDefaultAsync(ct);
+
+            var smsText = $"{otp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.";
+
+            if (activeOtp == null)
+            {
+                _context.UserOtps.Add(new UserOtp
+                {
+                    UserId = Guid.Parse(user.Id),
+                    CNIC = cnic,
+                    MobileNo = cellno,
+                    OtpCode = otp,
+                    SentMessage = smsText,
                     IsVerified = false,
                     ExpiresAt = DateTime.Now.AddMinutes(5)
-                };
-                _context.UserOtps.Add(usernewOtp);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
-                string verifyToken = await _authenticationService.GenerateTemporaryToken(newUser, "verify_otp", expiresIn);
-
-                //return returnmsg;
-                RegisterationDto _registerationdto = new RegisterationDto
-                {
-                    isOtpRequired = true,
-                    AccessToken = verifyToken,
-                    MobileNumber = MaskMobile(cellno),
-                    ResponseMessage = returnMessage
-
-                };
-
-                return new SuccessResponse<RegisterationDto>(
-                _registerationdto,
-                returnMessage
-                );
-
+                });
             }
             else
             {
-                throw new BadRequestException(message);
+                activeOtp.OtpCode = otp;
+                activeOtp.SentMessage = smsText;
+                activeOtp.MobileNo = cellno;
+                activeOtp.ExpiresAt = DateTime.Now.AddMinutes(5);
+                activeOtp.IsVerified = false;
             }
 
+            await _context.SaveChangesAsync(ct);
         }
-        else
+        catch (DbUpdateException)
         {
-            throw new NotFoundException(message);
+            // concurrency: another thread inserted same CNIC/OTP etc.
+            user = await _userManager.Users.FirstOrDefaultAsync(u => u.CNIC == cnic, ct);
+            if (user == null)
+                throw new ConflictException("Unable to process signup at the moment. Please try again.");
         }
+
+        // 7) Send SMS AFTER DB saved (no locks held)
+        var smsSent = await _otpService.SendSmsAsync(cellno,
+            $"{otp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.",
+            ct);
+
+        if (smsSent != "SUCCESSFUL")
+        {
+            // IMPORTANT: we do NOT delete user; user is still NOT verified so cannot register/login.
+            // user can retry via resend OTP endpoint.
+            throw new ConflictException("Unable to send SMS at the moment. Please try again later.");
+        }
+
+        // 8) Issue temporary verify token (short)
+        var verifyToken = await _authenticationService.GenerateTemporaryToken(user, "verify_otp", TimeSpan.FromMinutes(2));
+
+        return new SuccessResponse<RegisterationDto>(
+            new RegisterationDto
+            {
+                isOtpRequired = true,
+                AccessToken = verifyToken,
+                MobileNumber = MaskMobile(cellno),
+                ResponseMessage = "An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application."
+            },
+            "OTP sent successfully"
+        );
     }
+
+    // Helpers
+    private static string NormalizePkMobile(string input)
+    {
+        var cell = (input ?? "")
+            .Replace("-", "")
+            .Replace(" ", "")
+            .Trim();
+
+        if (cell.StartsWith("0"))
+            cell = "92" + cell[1..];
+
+        return cell;
+    }
+
+    private static string GenerateSecureOtp()
+    {
+        // Crypto-secure 6-digit OTP
+        // 100000 - 999999 inclusive
+        using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+        var bytes = new byte[4];
+        rng.GetBytes(bytes);
+        var value = BitConverter.ToUInt32(bytes, 0);
+        var otp = 100000 + (value % 900000);
+        return otp.ToString();
+    }
+
 
     public static string MaskMobile(string normalizedMobile)
     {
