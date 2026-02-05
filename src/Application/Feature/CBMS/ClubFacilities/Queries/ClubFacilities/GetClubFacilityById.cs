@@ -9,24 +9,50 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.Facili
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.ClubFacilities;
 
-public record GetClubFacilityByIdQuery(Guid Id) : IRequest<ApiResult<ClubFacilitiesDTO>>;
+public record GetClubFacilitiesByClubIdQuery(Guid ClubId)
+    : IRequest<ApiResult<List<ClubFacilitiesDTO>>>;
 
-public class GetClubFacilityByIdQueryHandler : IRequestHandler<GetClubFacilityByIdQuery, ApiResult<ClubFacilitiesDTO>>
+
+public class GetClubFacilitiesByClubIdQueryHandler
+    : IRequestHandler<GetClubFacilitiesByClubIdQuery, ApiResult<List<ClubFacilitiesDTO>>>
 {
     private readonly ICBMSApplicationDbContext _db;
-    public GetClubFacilityByIdQueryHandler(ICBMSApplicationDbContext db) => _db = db;
 
-    public async Task<ApiResult<ClubFacilitiesDTO>> Handle(GetClubFacilityByIdQuery request, CancellationToken ct)
+    public GetClubFacilitiesByClubIdQueryHandler(ICBMSApplicationDbContext db)
+        => _db = db;
+
+    public async Task<ApiResult<List<ClubFacilitiesDTO>>> Handle(
+        GetClubFacilitiesByClubIdQuery request,
+        CancellationToken ct)
     {
         var list = await _db.Set<Domain.Entities.CBMS.ClubFacility>()
-            .Where(x => x.Id == request.Id)
+            .AsNoTracking()
+            .Where(x =>
+                x.ClubId == request.ClubId &&
+                x.IsDeleted != true &&
+                x.IsActive  ==true)
             .OrderBy(x => x.Price)
-            .Select(x => new ClubFacilitiesDTO(x.Id, x.FacilityId, x.ClubId, x.Price, x.IsAvailable, x.IsPriceVisible, x.HasAction, x.ActionName, x.ActionType, x.IsActive, x.IsDeleted))
-            .FirstOrDefaultAsync(ct);
+            .Select(x => new ClubFacilitiesDTO(
+                x.Id,
+                x.ClubId,
+                x.FacilityId,
+                x.Facility.Name,                 // FacilityName
+                x.Facility.ClubCategory.Name,    // CategoryName
+                x.Price,
+                x.IsAvailable,
+                x.IsPriceVisible,
+                x.HasAction,
+                x.ActionName,
+                x.ActionType,
+                x.IsActive,
+                x.IsDeleted
+            ))
+            .ToListAsync(ct);
 
-        if (list == null) return ApiResult<ClubFacilitiesDTO>.Fail("Club Facility not found.");
+        if (!list.Any())
+            return ApiResult<List<ClubFacilitiesDTO>>.Fail("No facilities found for this club.");
 
-        return ApiResult<ClubFacilitiesDTO>.Ok(list);
+        return ApiResult<List<ClubFacilitiesDTO>>.Ok(list);
     }
 }
 

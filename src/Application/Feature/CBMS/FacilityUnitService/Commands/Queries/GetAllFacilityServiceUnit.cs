@@ -21,8 +21,7 @@ public class GetAllFacilityUnitBookingConfigQueryHandler : IRequestHandler<GetAl
     public async Task<ApiResult<List<FacilityServiceUnitDTO>>> Handle(GetAllFacilityServiceUnitQuery request, CancellationToken ct)
     {
         var list = await _db.Set<Domain.Entities.CBMS.FacilityUnitService>()
-            .OrderBy(x => x.OverridePrice)
-            .Select(x => new FacilityServiceUnitDTO(x.Id, x.FacilityUnitId, x.FacilityServiceId, x.OverridePrice, x.IsEnabled, x.IsActive, x.IsDeleted))
+            .Select(x => new FacilityServiceUnitDTO(x.Id, x.FacilityUnitId, Guid.NewGuid(), 10, x.IsEnabled, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);
 
         return ApiResult<List<FacilityServiceUnitDTO>>.Ok(list);

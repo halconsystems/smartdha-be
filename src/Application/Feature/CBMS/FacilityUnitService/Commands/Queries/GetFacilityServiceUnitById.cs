@@ -20,8 +20,7 @@ public class GetFacilityServiceUnitByIdQueryHandler : IRequestHandler<GetFacilit
     {
         var list = await _db.Set<Domain.Entities.CBMS.FacilityUnitService>()
             .Where(x => x.Id == request.Id)
-            .OrderBy(x => x.OverridePrice)
-            .Select(x => new FacilityServiceUnitDTO(x.Id, x.FacilityUnitId, x.FacilityServiceId, x.OverridePrice, x.IsEnabled,x.IsActive, x.IsDeleted))
+            .Select(x => new FacilityServiceUnitDTO(x.Id, x.FacilityUnitId, Guid.NewGuid(), 10, x.IsEnabled,x.IsActive, x.IsDeleted))
             .FirstOrDefaultAsync(ct);
 
         if (list == null) return ApiResult<FacilityServiceUnitDTO>.Fail("Service not found.");

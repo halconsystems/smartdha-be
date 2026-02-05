@@ -20,6 +20,7 @@ public class GetAllFacilitiesQueryHandler : IRequestHandler<GetAllFacilitiesQuer
     public async Task<ApiResult<List<FacilitiesDTO>>> Handle(GetAllFacilitiesQuery request, CancellationToken ct)
     {
         var list = await _db.Set<Domain.Entities.CBMS.Facility>()
+            .Where(x=> x.IsDeleted != true && x.IsActive==true)
             .OrderBy(x => x.Name)
             .Select(x => new FacilitiesDTO(x.Id, x.Name, x.DisplayName, x.Code,x.Description ,x.ClubCategoryId,x.ImageURL,new List<string>(),x.FoodType, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);

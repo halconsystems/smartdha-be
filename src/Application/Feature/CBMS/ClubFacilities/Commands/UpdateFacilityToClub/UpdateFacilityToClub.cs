@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityService.Queries;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;

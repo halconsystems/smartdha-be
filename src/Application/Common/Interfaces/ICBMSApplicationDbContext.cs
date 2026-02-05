@@ -11,12 +11,12 @@ namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface ICBMSApplicationDbContext
 {
     DbSet<AuditLog> AuditLogs { get; }
-    DbSet<Club> Clubs { get; }
+    DbSet<DHAClub> Clubs { get; }
     DbSet<ClubImages> ClubImages { get; }
-    DbSet<ClubCategory> ClubCategories { get; }
+    DbSet<ClubServiceCategory> ClubCategories { get; }
     DbSet<Facility> Facilities { get; }
     DbSet<FacilitiesImage> FacilitiesImages { get; }
-    DbSet<FacilityService> FacilityServices { get; }
+    DbSet<ServiceDefinition> ServiceDefinitions { get; }
 
     DbSet<ClubFacility> ClubFacilities { get; }
     DbSet<FacilityUnit> FacilityUnits { get; }

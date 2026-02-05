@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityService.Queries;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig.Queries;
 

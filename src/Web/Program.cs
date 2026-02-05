@@ -24,8 +24,6 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Add services to the container.
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -129,8 +127,6 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<FirebaseSettings>(
     builder.Configuration.GetSection("FirebaseSettings"));
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -150,10 +146,10 @@ else
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
+    c.SwaggerEndpoint("/swagger/CBMS/swagger.json", "CBMS Module");
     c.SwaggerEndpoint("/swagger/property/swagger.json", "Property Module");
     c.SwaggerEndpoint("/swagger/auth/swagger.json", "Auth Module");
     c.SwaggerEndpoint("/swagger/club/swagger.json", "Club Module");
-    c.SwaggerEndpoint("/swagger/CBMS/swagger.json", "CBMS Module");
     c.SwaggerEndpoint("/swagger/panic/swagger.json", "Panic Module");
     c.SwaggerEndpoint("/swagger/laundry/swagger.json", "Laundry Module");
     c.SwaggerEndpoint("/swagger/Ground/swagger.json", "Ground Module");

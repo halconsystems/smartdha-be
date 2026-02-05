@@ -24,7 +24,7 @@ public class GetClubCategoriesQueryHandler
     {
         return await _ctx.ClubFacilities
             .AsNoTracking()
-            .Where(x => x.ClubId == request.ClubId && x.IsAvailable)
+            .Where(x => x.ClubId == request.ClubId && x.IsAvailable && x.IsActive==true)
             .Select(x => new CategoryDTO
             {
                 Id = x.Facility.ClubCategory.Id,

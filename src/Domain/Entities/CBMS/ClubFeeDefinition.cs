@@ -12,7 +12,7 @@ namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
 public class ClubFeeDefinition : BaseAuditableEntity
 {
     public Guid ClubCategoryId { get; set; }
-    public ClubCategory ClubCategory { get; set; } = default!;
+    public ClubServiceCategory ClubCategory { get; set; } = default!;
 
     public FeeType FeeType { get; set; } = FeeType.Fixed;
 

@@ -35,8 +35,6 @@ public class UpdateFacilityUnitServiceCommandHandler
             return ApiResult<Guid>.Fail("Facility Unit Service Not Found");
 
         existServiceUnit.FacilityUnitId = request.Dto.FacilityUnitId;
-        existServiceUnit.FacilityServiceId = request.Dto.FacilityServiceId;
-        existServiceUnit.OverridePrice = request.Dto.OverridePrice;
         existServiceUnit.IsEnabled = request.Dto.IsEnabled;
         await _db.SaveChangesAsync(ct);
 
