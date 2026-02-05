@@ -35,12 +35,9 @@ public class LaundryController : BaseApiController
     private readonly IMediator _mediator;
     public LaundryController(IMediator med) => _mediator = med;
 
-
-    [HttpPost("Create-Order")]
-    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(OrderPlaceCommand cmd, CancellationToken ct)
-       => Ok(await _mediator.Send(cmd, ct));
-
+    #region Laundry Orders Creation Here
     [HttpGet("get-LaundryItems")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryItemsDTO>> GetAllLaundryItems(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllLaundryItemsQuery(), ct);
@@ -48,27 +45,29 @@ public class LaundryController : BaseApiController
     }
 
     [HttpGet("get-LaundryItems-ById")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryItemsDTO>> GetLaundryItemById(Guid CategoryId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetLaundryItemByIdQuery(CategoryId), ct);
         return Ok(result);
     }
 
-
     [HttpGet("get-LaundryItemsAfterHangerPrice")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryItemsDTO>> GetLaundryItemsByPackage(Guid packageID, CancellationToken ct)
     {
         var result = await _mediator.Send(new HangerPriceAdjustmentQuery(packageID), ct);
         return Ok(result);
     }
-
     [HttpGet("get-LaundryServices")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryServiceDTO>> GetAllLaundryServices(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllLaundryServicesQuery(), ct);
         return Ok(result);
     }
     [HttpGet("get-LaundryPackaging")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryPackagingDTO>> GetAllLaundryPackaging(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllLaundryPackagingQuery(), ct);
@@ -76,13 +75,19 @@ public class LaundryController : BaseApiController
     }
 
     [HttpGet("get-LaundryCategory")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryCategoryDTO>> GetAllLaundryCategory(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllLaundryCategoryQuery(), ct);
         return Ok(result);
     }
+    [HttpPost("Create-Order")]
+    [Tags("01 - Laundry-Orders")]
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(OrderPlaceCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd, ct));
 
     [HttpGet("get-AllShops")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryCategoryDTO>> GetAllShops(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllShopQueryQuery(), ct);
@@ -90,6 +95,7 @@ public class LaundryController : BaseApiController
     }
 
     [HttpPost("checkout")]
+    [Tags("01 - Laundry-Orders")]
     [AllowAnonymous] // IPN usually unauthenticated
     public async Task<IActionResult> ReceiveIpn(CancellationToken ct)
     {
@@ -158,8 +164,8 @@ public class LaundryController : BaseApiController
             return Ok(new { status = "Failed", message = dto.err_msg });
         }
     }
-
     [HttpGet("get-OrderList")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<LaundryCategoryDTO>> GetAllOrder(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllOrderListQuery(), ct);
@@ -167,59 +173,49 @@ public class LaundryController : BaseApiController
     }
 
     [HttpGet("get-OrderHsitory-ById")]
+    [Tags("01 - Laundry-Orders")]
     public async Task<ActionResult<OrderHistoryDTO>> GetOrderHisotryById(Guid CategoryId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetOrderHistoryIdQuery(CategoryId), ct);
         return Ok(result);
     }
 
-    [HttpPost("Drivers/AssignDriverToShop")]
-    public async Task<ActionResult> AssignVehicle(AssignDriverToShopCommand cmd)
-    {
-        var result = await _mediator.Send(cmd);
-        return Ok(result);
-    }
-
-    [HttpPost("Drivers/AssignDriverToVehicle")]
-    public async Task<ActionResult> AssignVehicle(AssignedDriverToVehiclesCommand cmd)
-    {
-        var result = await _mediator.Send(cmd);
-        return Ok(result);
-    }
-
-    [HttpPost("Order/Order-Dispatch")]
-    public async Task<ActionResult<string>> AcceptDispatch(AssignOrderDispatchCommand cmd)
-    {
-        var result = await _mediator.Send(cmd);
-        return Ok(result);
-    }
-
-    [HttpPost("Order/RidersTask")]
-    public async Task<ActionResult<string>> AcceptDispatch(RiderPickupOrderDispatch cmd)
-    {
-        var result = await _mediator.Send(cmd);
-        return Ok(result);
-    }
-    [HttpPost("Order/ShopProcess")]
-    public async Task<ActionResult<string>> ShopProcess(OrdersProcessAtShopCommand cmd)
-    {
-        var result = await _mediator.Send(cmd);
-        return Ok(result);
-    }
     [HttpGet("GetOrder-Dsicount-Tax"), AllowAnonymous]
+    [Tags("01 - Laundry-Orders")]
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllOrderDTSetting(), ct);
         return Ok(result);
     }
+    #endregion
 
 
+    #region Laundry Driver Process
+
+
+    //[HttpPost("Drivers/AssignDriverToVehicle")]
+    //[Tags("02 - Laundry-Drivers")]
+    //public async Task<ActionResult> AssignVehicle(AssignedDriverToVehiclesCommand cmd)
+    //{
+    //    var result = await _mediator.Send(cmd);
+    //    return Ok(result);
+    //}
+
+    [HttpPost("Order/RidersTask")]
+    [Tags("02 - Laundry-Drivers")]
+    public async Task<ActionResult<string>> AcceptDispatch(RiderPickupOrderDispatch cmd)
+    {
+        var result = await _mediator.Send(cmd);
+        return Ok(result);
+    }
 
     [HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
+    [Tags("02 - Laundry-Drivers")]
     public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
-        => Ok(await _mediator.Send(cmd, ct));
+       => Ok(await _mediator.Send(cmd, ct));
 
     [HttpGet("get-ShopVehicle")]
+    [Tags("02 - Laundry-Drivers")]
     public async Task<ActionResult<ShopVehicleDTO>> GetShopVehicle(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetShopVehiclesforDriverQuery(), ct);
@@ -229,6 +225,7 @@ public class LaundryController : BaseApiController
     [AllowAnonymous]
     [EnableRateLimiting("AnonymousLimiter")]
     [HttpPost("Driver/Login")]
+    [Tags("02 - Laundry-Drivers")]
     public async Task<ActionResult> LoginDriver(DriverLoginCommand cmd)
     {
         var result = await _mediator.Send(cmd);
@@ -236,9 +233,36 @@ public class LaundryController : BaseApiController
     }
 
     [HttpGet("Driver/Order/MyAssigned")]
+    [Tags("02 - Laundry-Drivers")]
     public async Task<ActionResult<PanicUpdatedRealtimeDto>> GetMyAssignedPanic(bool Pickup)
     {
         var result = await _mediator.Send(new GetMyAssignedOrderQuery(Pickup));
         return Ok(result);
     }
+    #endregion
+
+
+
+    //[HttpPost("Drivers/AssignDriverToShop")]
+    //public async Task<ActionResult> AssignVehicle(AssignDriverToShopCommand cmd)
+    //{
+    //    var result = await _mediator.Send(cmd);
+    //    return Ok(result);
+    //}
+
+
+    //[HttpPost("Order/Order-Dispatch")]
+    //public async Task<ActionResult<string>> AcceptDispatch(AssignOrderDispatchCommand cmd)
+    //{
+    //    var result = await _mediator.Send(cmd);
+    //    return Ok(result);
+    //}
+
+
+    //[HttpPost("Order/ShopProcess")]
+    //public async Task<ActionResult<string>> ShopProcess(OrdersProcessAtShopCommand cmd)
+    //{
+    //    var result = await _mediator.Send(cmd);
+    //    return Ok(result);
+    //}
 }

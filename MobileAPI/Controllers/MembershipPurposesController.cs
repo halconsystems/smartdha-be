@@ -21,25 +21,24 @@ public class MembershipPurposesController : BaseApiController
     private readonly IMediator _mediator;
     public MembershipPurposesController(IMediator med) => _mediator = med;
 
-    [HttpGet("GetMembershipPurposes"), AllowAnonymous]
-    public async Task<IActionResult> GetMembershipPurposes()
-    {
-        return Ok(await Mediator.Send(new GetAllMembershipPurposesQuery()));
-    }
-
+    #region MemberShip Request Moiz Work
     [HttpPost("MemberShip-Request")]
-    public async Task<IActionResult> AddMembershipPurposes([FromForm] CreateMemberShipRequestCommand request,CancellationToken ct)
+    [Tags("01 - MemberShip-Request")]
+    public async Task<IActionResult> AddMembershipPurposes([FromForm] CreateMemberShipRequestCommand request, CancellationToken ct)
     {
         return Ok(await Mediator.Send(request));
     }
 
     [HttpGet("get-MemberShips"), AllowAnonymous]
+    [Tags("01 - MemberShip-Request")]
     public async Task<ActionResult<MemberShipDTO>> GetAllMemberShips(CancellationToken ct)
     {
         var result = await Mediator.Send(new GetAllMemberShipQuery(), ct);
         return Ok(result);
     }
+
     [HttpGet("get-MemberShipCategories"), AllowAnonymous]
+    [Tags("01 - MemberShip-Request")]
     public async Task<ActionResult<MemberShipDTO>> GetAllMemberShipsCategories(CancellationToken ct)
     {
         var result = await Mediator.Send(new GetAllMemberShipCategoryQuery(), ct);
@@ -47,6 +46,7 @@ public class MembershipPurposesController : BaseApiController
     }
 
     [HttpGet("get-MemberShipCategoriesById"), AllowAnonymous]
+    [Tags("01 - MemberShip-Request")]
     public async Task<ActionResult<MemberShipDTO>> GetAllMemberShipsCategoriesById(Guid MemberShipId, CancellationToken ct)
     {
         var result = await Mediator.Send(new GetMemberShipCategoryByIdQuery(MemberShipId), ct);
@@ -54,6 +54,7 @@ public class MembershipPurposesController : BaseApiController
     }
 
     [HttpGet("get-Religons"), AllowAnonymous]
+    [Tags("01 - MemberShip-Request")]
     public async Task<ActionResult<MemberShipDTO>> GetAllReligon(CancellationToken ct)
     {
         var result = await Mediator.Send(new GetAllReligonCategoryQuery(), ct);
@@ -61,12 +62,20 @@ public class MembershipPurposesController : BaseApiController
     }
 
     [HttpGet("get-ReligonSect-ById"), AllowAnonymous]
+    [Tags("01 - MemberShip-Request")]
     public async Task<ActionResult<MemberShipDTO>> GetAllReligonSectById(Guid ReligonId, CancellationToken ct)
     {
         var result = await Mediator.Send(new GetReligonSectByIdQuery(ReligonId), ct);
         return Ok(result);
     }
+    #endregion
 
+
+    [HttpGet("GetMembershipPurposes"), AllowAnonymous]
+    public async Task<IActionResult> GetMembershipPurposes()
+    {
+        return Ok(await Mediator.Send(new GetAllMembershipPurposesQuery()));
+    }
 
     //[HttpPost("AddMembershipPurposes")]
 
