@@ -32,15 +32,15 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>(); //Banquet Hall -> Image1, Image2 etc
     public DbSet<ClubFacility> ClubFacilities => Set<ClubFacility>(); // Club specific facilities with pricing and availability
     public DbSet<FacilityUnit> FacilityUnits => Set<FacilityUnit>(); //Banquet Hall (Banquet Hall 1, Banquet Hall 2), Tennis Court (Tennis Court A, Tennis Court B)
-    public DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs => Set<FacilityUnitBookingConfig>(); // Banquet Hall 1 (Hourly, Daily), Tennis Court A (Hourly)
+    public DbSet<FacilityUnitImage> FacilityUnitImages => Set<FacilityUnitImage>();
     public DbSet<FacilityUnitService> FacilityUnitServices => Set<FacilityUnitService>(); // Banquet Hall 1 -> Catering; Banquet Hall 2 -> Decoration;Banquet Hall 3 -> Catering,Decoration etc
-
+    public DbSet<FacilityUnitBookingConfig> FacilityUnitBookingConfigs => Set<FacilityUnitBookingConfig>(); // Banquet Hall 1 (Hourly, Daily), Tennis Court A (Hourly)
+    
     //Bookings table here 
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<BookingSchedule> BookingSchedules => Set<BookingSchedule>();
     public DbSet<BookingDateRange> BookingDateRanges => Set<BookingDateRange>();
     public DbSet<BookingService> BookingServices => Set<BookingService>();
-    public DbSet<FacilityUnitImage> FacilityUnitImages => Set<FacilityUnitImage>();
     public DbSet<FacilityUnitAvailabilityRule> FacilityUnitAvailabilityRules => Set<FacilityUnitAvailabilityRule>();
     public DbSet<Discount> Discounts => Set<Discount>();
     public DbSet<Tax> Taxes => Set<Tax>();
@@ -116,6 +116,15 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
                 .HasForeignKey(x => x.FacilityUnitId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
+
+        modelBuilder.Entity<Facility>()
+    .HasIndex(x => new { x.ClubCategoryId, x.Code })
+    .IsUnique();
+
+        modelBuilder.Entity<FacilityUnit>()
+    .HasMany(x => x.FacilityUnitServices)
+    .WithOne(x => x.FacilityUnit)
+    .HasForeignKey(x => x.FacilityUnitId);
 
 
         base.OnModelCreating(modelBuilder);

@@ -13,7 +13,7 @@ public record CreateFacilityCommand(
     string Name,
     string DisplayName,
     string Code,
-    Guid ClubCategoryId,
+    Guid ClubServiceCategoryId,
     string? ImageURL,
     string? Description,
     FoodType? FoodType
@@ -36,7 +36,7 @@ public class CreateFacilityCommandHandler : IRequestHandler<CreateFacilityComman
             Name = request.Name,
             DisplayName = request.DisplayName,
             Code = request.Code,
-            ClubCategoryId = request.ClubCategoryId,
+            ClubCategoryId = request.ClubServiceCategoryId,
             ImageURL = request.ImageURL,
             Description = request.Description,
             FoodType = request.FoodType

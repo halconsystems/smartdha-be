@@ -14,41 +14,89 @@ namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnit.Queries;
 
 public record GetFacilityUnitByIdQuery(Guid Id) : IRequest<ApiResult<FacilityUnitDTO>>;
 
-public class GetFacilityUnitByIdQueryHandler : IRequestHandler<GetFacilityUnitByIdQuery, ApiResult<FacilityUnitDTO>>
+public class GetFacilityUnitByIdQueryHandler
+    : IRequestHandler<GetFacilityUnitByIdQuery, ApiResult<FacilityUnitDTO>>
 {
     private readonly ICBMSApplicationDbContext _db;
-    public GetFacilityUnitByIdQueryHandler(ICBMSApplicationDbContext db) => _db = db;
+    private readonly IFileStorageService _fileStorage;
 
-    public async Task<ApiResult<FacilityUnitDTO>> Handle(GetFacilityUnitByIdQuery request, CancellationToken ct)
+    public GetFacilityUnitByIdQueryHandler(ICBMSApplicationDbContext db, IFileStorageService fileStorage)
     {
-        var list = await _db.Set<Domain.Entities.CBMS.FacilityUnit>()
-            .Where(x => x.Id == request.Id)
+        _db = db;
+        _fileStorage = fileStorage;
+    }
+
+    public async Task<ApiResult<FacilityUnitDTO>> Handle(
+     GetFacilityUnitByIdQuery request,
+     CancellationToken ct)
+    {
+        var unit = await _db.FacilityUnits
+            .AsNoTracking()
+            .Where(x => x.Id == request.Id && x.IsDeleted != true)
+            .Select(x => new
+            {
+                Unit = x,
+                Services = x.FacilityUnitServices
+                    .Where(s => s.IsEnabled)
+                    .Select(s => s.ServiceDefinition.Name)
+                    .ToList()
+            })
             .FirstOrDefaultAsync(ct);
 
-        if (list == null) return ApiResult<FacilityUnitDTO>.Fail("Facility Unit not found.");
+        if (unit == null)
+            return ApiResult<FacilityUnitDTO>.Fail("Facility Unit not found.");
 
-        var facilityMainIamges = await _db.FacilityUnitImages
-           .Where(x => x.FacilityUnitId == list.Id && x.Category == Domain.Enums.ImageCategory.Main)
-           .Select(x => x.ImageURL)
-           .FirstOrDefaultAsync(ct);
-
-
-        var facilityIamges = await _db.FacilityUnitImages
-            .Where(x => x.FacilityUnitId == list.Id && x.Category != Domain.Enums.ImageCategory.Main)
-            .Select(x => x.ImageURL)
+        // 🔹 Load images (raw paths)
+        var images = await _db.FacilityUnitImages
+            .Where(x => x.FacilityUnitId == request.Id)
+            .Select(x => new { x.ImageURL, x.Category })
             .ToListAsync(ct);
 
-        var result = await _db.Set<Domain.Entities.CBMS.FacilityUnit>()
-            .Where(x => x.Id == request.Id)
-            .OrderBy(x => x.Name)
-            .Select(x => new FacilityUnitDTO(x.Id, x.ClubId, x.FacilityId, x.Name, x.Code, x.UnitType,facilityMainIamges, facilityIamges,x.IsActive, x.IsDeleted))
-            .FirstOrDefaultAsync(ct);
+        var mainImagePath = images
+            .FirstOrDefault(x => x.Category == Domain.Enums.ImageCategory.Main)
+            ?.ImageURL;
 
-        if (result == null) return ApiResult<FacilityUnitDTO>.Fail("Facility Unit not found.");
+        var bannerImagePaths = images
+            .Where(x => x.Category != Domain.Enums.ImageCategory.Main)
+            .Select(x => x.ImageURL)
+            .ToList();
 
-        return ApiResult<FacilityUnitDTO>.Ok(result);
+        // ✅ Convert to PUBLIC URLs
+        var mainImageUrl = string.IsNullOrWhiteSpace(mainImagePath) ? null  : _fileStorage.GetPublicUrl(mainImagePath);
+
+        var bannerImageUrls = bannerImagePaths
+            .Select(p => _fileStorage.GetPublicUrl(p))
+            .ToList();
+
+        var dto = new FacilityUnitDTO(
+            unit.Unit.Id,
+            unit.Unit.ClubId,
+            unit.Unit.Club.Name,
+
+            unit.Unit.Facility.ClubCategory.Id,
+            unit.Unit.Facility.ClubCategory.Name,
+
+            unit.Unit.FacilityId,
+            unit.Unit.Facility.Name,
+
+            unit.Unit.Name,
+            unit.Unit.Code,
+            unit.Unit.UnitType,
+
+            mainImageUrl,          // ✅ now included
+            bannerImageUrls,       // ✅ now included
+
+            unit.Services,
+
+            unit.Unit.IsActive,
+            unit.Unit.IsDeleted
+        );
+
+        return ApiResult<FacilityUnitDTO>.Ok(dto);
     }
+
 }
+
 
 
 

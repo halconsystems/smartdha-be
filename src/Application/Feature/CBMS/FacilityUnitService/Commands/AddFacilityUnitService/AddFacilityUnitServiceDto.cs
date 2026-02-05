@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.AddFacilityUnitService;
-public record AddFacilityUnitServiceDto(
+public record CreateFacilityUnitServiceDto(
     Guid FacilityUnitId,
-    Guid FacilityServiceId,
-    decimal? OverridePrice,
-    bool IsEnabled
+    Guid ServiceDefinitionId,
+    decimal Price,
+    bool IsComplimentary
 );
+
 

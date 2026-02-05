@@ -8,7 +8,7 @@ using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitService.Commands.AddFacilityUnitService;
 public record AddFacilityUnitServiceCommand(
-    AddFacilityUnitServiceDto Dto
+    CreateFacilityUnitServiceDto Dto
 ) : IRequest<ApiResult<Guid>>;
 public class AddFacilityUnitServiceHandler
     : IRequestHandler<AddFacilityUnitServiceCommand, ApiResult<Guid>>
@@ -27,13 +27,16 @@ public class AddFacilityUnitServiceHandler
         var entity = new Domain.Entities.CBMS.FacilityUnitService
         {
             FacilityUnitId = request.Dto.FacilityUnitId,
-            IsEnabled=request.Dto.IsEnabled,
+            ServiceDefinitionId = request.Dto.ServiceDefinitionId,
+            Price = request.Dto.Price,
+            IsComplimentary = request.Dto.IsComplimentary,
+            IsEnabled = true
         };
 
         _db.FacilityUnitServices.Add(entity);
         await _db.SaveChangesAsync(ct);
 
-        return ApiResult<Guid>.Ok(entity.Id, "Unit service added");
+        return ApiResult<Guid>.Ok(entity.Id);
     }
 }
 

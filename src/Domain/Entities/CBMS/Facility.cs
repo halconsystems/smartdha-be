@@ -9,7 +9,6 @@ using DHAFacilitationAPIs.Domain.Enums.CBMS;
 namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
 public class Facility : BaseAuditableEntity
 {
-
     public Guid ClubCategoryId { get; set; }
     public ClubServiceCategory ClubCategory { get; set; } = default!;
 

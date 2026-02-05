@@ -10,6 +10,7 @@ public record CreateFacilityUnitDto(
     Guid FacilityId,
     string Name,
     string Code,
-    string? UnitType
+    string? UnitType,
+    string? Description
 );
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig.Commands.CreateFacilityUnitBookingConfig;
+using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Enums.CBMS;
 
@@ -14,40 +15,61 @@ namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnitBookingConfig
 
 public record UpdateFacilityUnitBookingConfigCommand(
     Guid Id,
-    CreateFacilityUnitBookingConfigDto Dto
-) : IRequest<ApiResult<Guid>>;
-public class UpdateFacilityUnitBookingConfigCommandHandler
-    : IRequestHandler<UpdateFacilityUnitBookingConfigCommand, ApiResult<Guid>>
+    FacilityUnitBookingConfigDto Dto
+) : IRequest<ApiResult<bool>>;
+
+public class UpdateFacilityUnitBookingConfigHandler
+    : IRequestHandler<UpdateFacilityUnitBookingConfigCommand, ApiResult<bool>>
 {
     private readonly ICBMSApplicationDbContext _db;
 
-    public UpdateFacilityUnitBookingConfigCommandHandler(ICBMSApplicationDbContext db)
-    {
-        _db = db;
-    }
+    public UpdateFacilityUnitBookingConfigHandler(ICBMSApplicationDbContext db)
+        => _db = db;
 
-    public async Task<ApiResult<Guid>> Handle(
+    public async Task<ApiResult<bool>> Handle(
         UpdateFacilityUnitBookingConfigCommand request,
         CancellationToken ct)
     {
-        var existFacilityUnitConfig = await _db.FacilityUnitBookingConfigs
-            .FirstOrDefaultAsync(x => x.Id == request.Id, ct);
+        var entity = await _db.FacilityUnitBookingConfigs
+            .FirstOrDefaultAsync(x =>
+                x.Id == request.Id &&
+                x.IsDeleted != true, ct);
 
-        if (existFacilityUnitConfig == null)
-            return ApiResult<Guid>.Fail("Facility Unit Booking Config Not Found");
+        if (entity == null)
+            throw new DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException("Booking config not found");
 
-        existFacilityUnitConfig.FacilityUnitId = request.Dto.FacilityUnitId;
-        existFacilityUnitConfig.BookingMode = request.Dto.BookingMode;
-        existFacilityUnitConfig.BasePrice = request.Dto.BasePrice;
-        existFacilityUnitConfig.RequiresApproval = request.Dto.RequiresApproval;
-        existFacilityUnitConfig.SlotDurationMinutes = request.Dto.SlotDurationMinutes;
-        existFacilityUnitConfig.OpeningTime = request.Dto.OpeningTime;
-        existFacilityUnitConfig.ClosingTime = request.Dto.ClosingTime;
+        ValidateSlotRules(request.Dto);
+
+        var dto = request.Dto;
+
+        entity.BookingMode = dto.BookingMode;
+        entity.RequiresApproval = dto.RequiresApproval;
+        entity.SlotDurationMinutes = dto.SlotDurationMinutes;
+        entity.OpeningTime = dto.OpeningTime;
+        entity.ClosingTime = dto.ClosingTime;
+        entity.BasePrice = dto.BasePrice;
+        entity.MaxConcurrentBookings = dto.MaxConcurrentBookings;
+        entity.UseAvailabilityRules = dto.UseAvailabilityRules;
 
         await _db.SaveChangesAsync(ct);
+        return ApiResult<bool>.Ok(true);
+    }
 
-        return ApiResult<Guid>.Ok(existFacilityUnitConfig.Id, "Booking config Updated");
+    private static void ValidateSlotRules(FacilityUnitBookingConfigDto dto)
+    {
+        if (dto.BookingMode == BookingMode.SlotBased)
+        {
+            if (!dto.SlotDurationMinutes.HasValue)
+                throw new ValidationException("SlotDurationMinutes is required");
+
+            if (!dto.OpeningTime.HasValue || !dto.ClosingTime.HasValue)
+                throw new ValidationException("OpeningTime and ClosingTime are required");
+
+            if (dto.OpeningTime >= dto.ClosingTime)
+                throw new ValidationException("OpeningTime must be before ClosingTime");
+        }
     }
 }
+
 
 

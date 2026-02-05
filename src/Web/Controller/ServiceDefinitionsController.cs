@@ -20,22 +20,27 @@ public class ServiceDefinitionsController : BaseApiController
         => _mediator = mediator;
 
     [HttpPost]
+    [Tags("03 - Servicedefinitions")]
     public async Task<IActionResult> Create(CreateServiceDefinitionDto dto)
         => Ok(await _mediator.Send(new CreateServiceDefinitionCommand(dto)));
 
     [HttpPut]
+    [Tags("03 - Servicedefinitions")]
     public async Task<IActionResult> Update(UpdateServiceDefinitionDto dto)
         => Ok(await _mediator.Send(new UpdateServiceDefinitionCommand(dto)));
 
     [HttpDelete("{id}")]
+    [Tags("03 - Servicedefinitions")]
     public async Task<IActionResult> Delete(Guid id)
         => Ok(await _mediator.Send(new DeleteServiceDefinitionCommand(id)));
 
     [HttpGet]
+    [Tags("03 - Servicedefinitions")]
     public async Task<IActionResult> GetAll()
         => Ok(await _mediator.Send(new GetAllServiceDefinitionsQuery()));
 
     [HttpGet("{id}")]
+    [Tags("03 - Servicedefinitions")]
     public async Task<IActionResult> GetById(Guid id)
         => Ok(await _mediator.Send(new GetServiceDefinitionByIdQuery(id)));
 }

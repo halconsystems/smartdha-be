@@ -9,46 +9,101 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Queries.ClubFa
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.FacilityUnit.Queries;
 
-public record GetFacilityUniByClubFacQuery(Guid? ClubId, Guid? Facility) : IRequest<ApiResult<List<FacilityUnitDTO>>>;
+public record GetFacilityUnitByClubFacQuery(
+    Guid ClubId,
+    Guid FacilityId
+) : IRequest<ApiResult<List<FacilityUnitDTO>>>;
 
-public class GetFacilityUniByClubFacQueryHandler : IRequestHandler<GetFacilityUniByClubFacQuery, ApiResult<List<FacilityUnitDTO>>>
+public class GetFacilityUnitByClubFacQueryHandler
+    : IRequestHandler<GetFacilityUnitByClubFacQuery, ApiResult<List<FacilityUnitDTO>>>
 {
     private readonly ICBMSApplicationDbContext _db;
-    public GetFacilityUniByClubFacQueryHandler(ICBMSApplicationDbContext db) => _db = db;
+    private readonly IFileStorageService _fileStorage;
 
-    public async Task<ApiResult<List<FacilityUnitDTO>>> Handle(GetFacilityUniByClubFacQuery request, CancellationToken ct)
+    public GetFacilityUnitByClubFacQueryHandler(
+        ICBMSApplicationDbContext db,
+        IFileStorageService fileStorage)
     {
-        List<FacilityUnitDTO> list = new List<FacilityUnitDTO>();
-        if (request.ClubId != null)
-        {
-            list = await _db.Set<Domain.Entities.CBMS.FacilityUnit>()
-            .Where(x => x.ClubId == request.ClubId)
+        _db = db;
+        _fileStorage = fileStorage;
+    }
+
+    public async Task<ApiResult<List<FacilityUnitDTO>>> Handle(
+        GetFacilityUnitByClubFacQuery request,
+        CancellationToken ct)
+    {
+        var units = await _db.FacilityUnits
+            .AsNoTracking()
+            .Where(x =>
+                x.ClubId == request.ClubId &&
+                x.FacilityId == request.FacilityId &&
+                x.IsDeleted != true)
             .OrderBy(x => x.Name)
-            .Select(x => new FacilityUnitDTO(x.Id, x.ClubId, x.FacilityId, x.Name, x.Code, x.UnitType, "", new List<string>(), x.IsActive, x.IsDeleted))
+            .Select(x => new
+            {
+                Unit = x,
+
+                Services = x.FacilityUnitServices
+                    .Where(s => s.IsEnabled)
+                    .Select(s => s.ServiceDefinition.Name)
+                    .ToList(),
+
+                Images = x.FacilityUnitImages
+                    .Select(i => new { i.ImageURL, i.Category })
+                    .ToList()
+            })
             .ToListAsync(ct);
 
-        }
-        else if (request.Facility != null)
+        if (!units.Any())
+            return ApiResult<List<FacilityUnitDTO>>
+                .Fail("No facility units found.");
+
+        var result = units.Select(x =>
         {
-            list = await _db.Set<Domain.Entities.CBMS.FacilityUnit>()
-            .Where(x => x.FacilityId == request.Facility)
-            .OrderBy(x => x.Name)
-            .Select(x => new FacilityUnitDTO(x.Id, x.ClubId, x.FacilityId, x.Name, x.Code, x.UnitType,"",new List<string>(), x.IsActive, x.IsDeleted))
-            .ToListAsync(ct);
-        }
-        else
-        {
-            list = await _db.Set<Domain.Entities.CBMS.FacilityUnit>()
-           .Where(x => x.FacilityId == request.Facility && x.ClubId == request.Facility)
-           .OrderBy(x => x.Name)
-            .Select(x => new FacilityUnitDTO(x.Id, x.ClubId, x.FacilityId, x.Name, x.Code, x.UnitType, "", new List<string>(), x.IsActive, x.IsDeleted))
-           .ToListAsync(ct);
-        }
+            var mainImagePath = x.Images
+                .FirstOrDefault(i => i.Category == Domain.Enums.ImageCategory.Main)
+                ?.ImageURL;
 
+            var bannerImagePaths = x.Images
+                .Where(i => i.Category != Domain.Enums.ImageCategory.Main)
+                .Select(i => i.ImageURL)
+                .ToList();
 
-        if (list == null) return ApiResult<List<FacilityUnitDTO>>.Fail("Facility Unit not found.");
+            var mainImageUrl = string.IsNullOrWhiteSpace(mainImagePath)
+                ? null
+                : _fileStorage.GetPublicUrl(mainImagePath);
 
-        return ApiResult<List<FacilityUnitDTO>>.Ok(list);
+            var bannerImageUrls = bannerImagePaths
+                .Where(p => !string.IsNullOrWhiteSpace(p))
+                .Select(p => _fileStorage.GetPublicUrl(p))
+                .ToList();
+
+            return new FacilityUnitDTO(
+                x.Unit.Id,
+                x.Unit.ClubId,
+                x.Unit.Club.Name,
+
+                x.Unit.Facility.ClubCategory.Id,
+                x.Unit.Facility.ClubCategory.Name,
+
+                x.Unit.FacilityId,
+                x.Unit.Facility.Name,
+
+                x.Unit.Name,
+                x.Unit.Code,
+                x.Unit.UnitType,
+
+                mainImageUrl,
+                bannerImageUrls,
+
+                x.Services,
+
+                x.Unit.IsActive,
+                x.Unit.IsDeleted
+            );
+        }).ToList();
+
+        return ApiResult<List<FacilityUnitDTO>>.Ok(result);
     }
 }
 

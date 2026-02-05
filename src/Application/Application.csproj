@@ -11,7 +11,6 @@
     <Compile Remove="Feature\CBMS\ClubServices\**" />
     <Compile Remove="Feature\CBMS\FacilityService\**" />
     <Compile Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
-    <Compile Remove="Feature\CBMS\FacilityUnit\**" />
     <Compile Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <Compile Remove="Feature\CBMS\FeeDefination\**" />
     <Compile Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -28,7 +27,6 @@
     <EmbeddedResource Remove="Feature\CBMS\ClubServices\**" />
     <EmbeddedResource Remove="Feature\CBMS\FacilityService\**" />
     <EmbeddedResource Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
-    <EmbeddedResource Remove="Feature\CBMS\FacilityUnit\**" />
     <EmbeddedResource Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <EmbeddedResource Remove="Feature\CBMS\FeeDefination\**" />
     <EmbeddedResource Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -45,7 +43,6 @@
     <None Remove="Feature\CBMS\ClubServices\**" />
     <None Remove="Feature\CBMS\FacilityService\**" />
     <None Remove="Feature\CBMS\FacilityUnitService\Queries\**" />
-    <None Remove="Feature\CBMS\FacilityUnit\**" />
     <None Remove="Feature\CBMS\FeeDefinationWithOption\**" />
     <None Remove="Feature\CBMS\FeeDefination\**" />
     <None Remove="Feature\CBMS\PreRequisiteDefination\**" />
@@ -60,7 +57,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Feature\CBMS\FacilityUnit\Queries\FacilityUnitDetail\GetFacilityUnitDetail.cs" />
     <Compile Remove="Feature\PropertyManagement\PMSCase\Commands\MoveCase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Feature\CBMS\FacilityUnitService\Queries\GetAllFacilityServiceUnit.cs" />
+    <Compile Include="Feature\CBMS\FacilityUnitService\Queries\GetFacilityUnitServicesByUnit.cs" />
   </ItemGroup>
 
   <ItemGroup>

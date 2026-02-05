@@ -43,6 +43,7 @@ public class UpdateFacilityUnitCommandHandler
         existFacilityUnit.Name = request.Dto.Name;
         existFacilityUnit.Code = request.Dto.Code;
         existFacilityUnit.UnitType = request.Dto.UnitType;
+        existFacilityUnit.Description = request.Dto.Description;
 
         await _db.SaveChangesAsync(ct);
 

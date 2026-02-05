@@ -30,6 +30,7 @@ public class CreateFacilityUnitHandler
             FacilityId = request.Dto.FacilityId,
             Name = request.Dto.Name,
             Code = request.Dto.Code,
+            Description=request.Dto.Description,
             UnitType = request.Dto.UnitType
         };
 

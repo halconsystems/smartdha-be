@@ -14,6 +14,14 @@ public class FacilityUnit : BaseAuditableEntity
 
     public string Name { get; set; } = default!;   // Room 101, Padel Court A
     public string Code { get; set; } = default!;   // R-101, PC-A
+    public string? Description { get; set; }
     public string? UnitType { get; set; }          // Premium, Standard, VIP
+
+    // 🔴 THIS WAS MISSING
+    public ICollection<FacilityUnitService> FacilityUnitServices { get; set; }
+        = new List<FacilityUnitService>();
+
+    public ICollection<FacilityUnitImage> FacilityUnitImages { get; set; } = new List<FacilityUnitImage>();
+
 }
 
