@@ -212,17 +212,7 @@ public class CBMSController : BaseApiController
         return Ok(list);
     }
 
-    //[HttpPut("Active/InAtive-Facility")]
-    //[Tags("Facility")]
-    //public async Task<ActionResult<SuccessResponse<Guid>>> UpdateFacility(bool Active, ActiveInActiveFaciltityCommand cmd, CancellationToken ct)
-    //{
-    //    var result = await _mediator.Send(cmd, ct);
-    //    return Ok(result);
-    //}
-
-
-
-
+   
     #endregion
 
     [HttpPost("AddFacilityToClub")]
@@ -254,13 +244,7 @@ public class CBMSController : BaseApiController
         return Ok(list);
     }
     
-    //[HttpGet("GetClubFacility")]
-    //public async Task<ActionResult<List<ClubFacilitiesDTO>>> GetAllFacilityToClubByClubFac(Guid ClubId, Guid Facility)
-    //{
-    //    var list = await _mediator.Send(new GetClubFacilityByClubFacQuery(ClubId, Facility));
-    //    return Ok(list);
-    //}
-
+ 
     [HttpPut("UpdateClubFacility")]
     [Tags("ClubFacilities")]
     public async Task<ActionResult<SuccessResponse<Guid>>> UpdateClubFacility([FromBody] UpdateFacilityToClubCommand cmd, CancellationToken ct)
@@ -276,13 +260,6 @@ public class CBMSController : BaseApiController
        CancellationToken ct)
        => Ok(await _mediator.Send(
            new DeleteFacilityClubCommand(id), ct));
-
-    //[HttpPut("Active/InAtive-FacilityToClub"), AllowAnonymous]
-    //public async Task<ActionResult<SuccessResponse<Guid>>> UpdateFacilityToClub(bool Active, ActiveInActiveFacilityClubCommand cmd, CancellationToken ct)
-    //{
-    //    var result = await _mediator.Send(cmd, ct);
-    //    return Ok(result);
-    //}
 
     [HttpPost("Facility/images/add"), AllowAnonymous]
     [Consumes("multipart/form-data")]
@@ -345,262 +322,289 @@ public class CBMSController : BaseApiController
         return Ok(result);
     }
 
-//    [HttpPost("AddFacilityService")]
-//    [Tags("FacilityService")]
-//    public Task<ApiResult<Guid>> AddService(CreateFacilityServiceDto dto)
-//        => _mediator.Send(new CreateFacilityServiceCommand(dto));
+    //    [HttpPost("AddFacilityService")]
+    //    [Tags("FacilityService")]
+    //    public Task<ApiResult<Guid>> AddService(CreateFacilityServiceDto dto)
+    //        => _mediator.Send(new CreateFacilityServiceCommand(dto));
 
-//    [HttpPut("UpdateFacilityService")]
-//    public async Task<ActionResult<SuccessResponse<bool>>> Updateservices([FromBody] UpdateFacilityServiceCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
+    //    [HttpPut("UpdateFacilityService")]
+    //    public async Task<ActionResult<SuccessResponse<bool>>> Updateservices([FromBody] UpdateFacilityServiceCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
 
-//    [HttpDelete("DeleteFacilityService")]
-//    public async Task<IActionResult> Facilityservices(
-//       Guid id,
-//       CancellationToken ct)
-//       => Ok(await _mediator.Send(
-//           new DeleteFacilityServiceCommand(id), ct));
+    //    [HttpDelete("DeleteFacilityService")]
+    //    public async Task<IActionResult> Facilityservices(
+    //       Guid id,
+    //       CancellationToken ct)
+    //       => Ok(await _mediator.Send(
+    //           new DeleteFacilityServiceCommand(id), ct));
 
-//    [HttpPut("Active/InAtive-services"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> Updateservices(bool Active, ActiveinActiveFacilityServiceCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
+    //    [HttpPut("Active/InAtive-services"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> Updateservices(bool Active, ActiveinActiveFacilityServiceCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
 
-//    [HttpGet("Get-services")]
-//    public async Task<ActionResult<List<ClubFacilitiesDTO>>> Getservices()
-//    {
-//        var list = await _mediator.Send(new GetAllFacilityServiceQuery());
-//        return Ok(list);
-//    }
+    //    [HttpGet("Get-services")]
+    //    public async Task<ActionResult<List<ClubFacilitiesDTO>>> Getservices()
+    //    {
+    //        var list = await _mediator.Send(new GetAllFacilityServiceQuery());
+    //        return Ok(list);
+    //    }
 
-//    [HttpGet("Get-services-id")]
-//    public async Task<ActionResult<ClubFacilitiesDTO>> GetservicesById(Guid Id)
-//    {
-//        var list = await _mediator.Send(new GetFacilityServiceByIdQuery(Id));
-//        return Ok(list);
-//    }
-//    [HttpGet("Get-services-By-Fac")]
-//    public async Task<ActionResult<List<ClubFacilitiesDTO>>> GetservicesFac(Guid Facility)
-//    {
-//        var list = await _mediator.Send(new GetFacilityServiceByFacilityQuery(Facility));
-//        return Ok(list);
-//    }
-
-
-//    [HttpPost("units")]
-//    public Task<ApiResult<Guid>> AddUnit(CreateFacilityUnitDto dto)
-//        => _mediator.Send(new CreateFacilityUnitCommand(dto));
-
-//    [HttpPut("Update-units"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunits([FromBody] UpdateFacilityUnitCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-
-//    [HttpDelete("Delete-units")]
-//    public async Task<IActionResult> Facilityunits(
-//       Guid id,
-//       CancellationToken ct)
-//       => Ok(await _mediator.Send(
-//           new DeleteFacilityUnitCommand(id), ct));
-
-//    [HttpPut("Active/InAtive-units"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateunitsConfig(bool Active, ActiveInActiveFacilityUnitCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-//    [HttpGet("Get-units")]
-//    public async Task<ActionResult<List<FacilityUnitDTO>>> Getunits()
-//    {
-//        var list = await _mediator.Send(new GetAllFaciltiUnitQuery());
-//        return Ok(list);
-//    }
-
-//    [HttpGet("Get-units-id")]
-//    public async Task<ActionResult<FacilityUnitDTO>> GetunitsById(Guid Id)
-//    {
-//        var list = await _mediator.Send(new GetFacilityUnitByIdQuery(Id));
-//        return Ok(list);
-//    }
-//    [HttpGet("Get-units-By-Fac")]
-//    public async Task<ActionResult<List<FacilityUnitDTO>>> GetunitsFac(Guid? ClubId,Guid? Facility)
-//    {
-//        var list = await _mediator.Send(new GetFacilityUniByClubFacQuery(ClubId, Facility));
-//        return Ok(list);
-//    }
+    //    [HttpGet("Get-services-id")]
+    //    public async Task<ActionResult<ClubFacilitiesDTO>> GetservicesById(Guid Id)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityServiceByIdQuery(Id));
+    //        return Ok(list);
+    //    }
+    //    [HttpGet("Get-services-By-Fac")]
+    //    public async Task<ActionResult<List<ClubFacilitiesDTO>>> GetservicesFac(Guid Facility)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityServiceByFacilityQuery(Facility));
+    //        return Ok(list);
+    //    }
 
 
+    //    [HttpPost("units")]
+    //    public Task<ApiResult<Guid>> AddUnit(CreateFacilityUnitDto dto)
+    //        => _mediator.Send(new CreateFacilityUnitCommand(dto));
 
-//    [HttpPost("unit-config")]
-//    public async Task<ActionResult<ApiResult<Guid>>> UpsertUnitConfig(
-//    [FromBody] CreateFacilityUnitBookingConfigCommand cmd,
-//    CancellationToken ct
-//)
-//    => Ok(await _mediator.Send(cmd, ct));
+    //    [HttpPut("Update-units"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunits([FromBody] UpdateFacilityUnitCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
+
+    //    [HttpDelete("Delete-units")]
+    //    public async Task<IActionResult> Facilityunits(
+    //       Guid id,
+    //       CancellationToken ct)
+    //       => Ok(await _mediator.Send(
+    //           new DeleteFacilityUnitCommand(id), ct));
+
+    //    [HttpPut("Active/InAtive-units"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateunitsConfig(bool Active, ActiveInActiveFacilityUnitCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
+    //    [HttpGet("Get-units")]
+    //    public async Task<ActionResult<List<FacilityUnitDTO>>> Getunits()
+    //    {
+    //        var list = await _mediator.Send(new GetAllFaciltiUnitQuery());
+    //        return Ok(list);
+    //    }
+
+    //    [HttpGet("Get-units-id")]
+    //    public async Task<ActionResult<FacilityUnitDTO>> GetunitsById(Guid Id)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityUnitByIdQuery(Id));
+    //        return Ok(list);
+    //    }
+    //    [HttpGet("Get-units-By-Fac")]
+    //    public async Task<ActionResult<List<FacilityUnitDTO>>> GetunitsFac(Guid? ClubId,Guid? Facility)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityUniByClubFacQuery(ClubId, Facility));
+    //        return Ok(list);
+    //    }
 
 
 
-
-//    [HttpPut("Update-unit-config"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateunitsConfig([FromBody] UpdateFacilityUnitBookingConfigCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-
-//    [HttpDelete("Delete-unit-config")]
-//    public async Task<IActionResult> FacilityunitsConfig(
-//       Guid id,
-//       CancellationToken ct)
-//       => Ok(await _mediator.Send(
-//           new DeleteFacilityUnitBookingConfigCommand(id), ct));
-
-//    [HttpPut("Active/InAtive-unit-config"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunits(bool Active, ActiveInActiveFacilityUnitBookingConfigCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-
-//    [HttpGet("Get-units-config")]
-//    public async Task<ActionResult<List<ClubFacilitiesDTO>>> Getunitsconfig()
-//    {
-//        var list = await _mediator.Send(new GetAllFacilityUnitBookingConfigQuery());
-//        return Ok(list);
-//    }
-
-//    [HttpGet("Get-units-config-id")]
-//    public async Task<ActionResult<ClubFacilitiesDTO>> GetunitsconfigById(Guid Id)
-//    {
-//        var list = await _mediator.Send(new GetFacilityUnitConfigByIdQuery(Id));
-//        return Ok(list);
-//    }
-   
+    //    [HttpPost("unit-config")]
+    //    public async Task<ActionResult<ApiResult<Guid>>> UpsertUnitConfig(
+    //    [FromBody] CreateFacilityUnitBookingConfigCommand cmd,
+    //    CancellationToken ct
+    //)
+    //    => Ok(await _mediator.Send(cmd, ct));
 
 
-//    [HttpPost("unit-services")]
-//    public Task<ApiResult<Guid>> AddUnitService(AddFacilityUnitServiceDto dto)
-//        => _mediator.Send(new AddFacilityUnitServiceCommand(dto));
-
-//    [HttpPut("Update-unit-services"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunitsservices([FromBody] UpdateFacilityUnitServiceCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-
-//    [HttpDelete("Delete-unit-services")]
-//    public async Task<IActionResult> Facilityunitsservices(
-//       Guid id,
-//       CancellationToken ct)
-//       => Ok(await _mediator.Send(
-//           new DeleteFacilityUnitBookingConfigCommand(id), ct));
-
-//    [HttpPut("Active/InAtive-unit-services"), AllowAnonymous]
-//    public async Task<ActionResult<SuccessResponse<Guid>>> Updateservices(bool Active, ActiveInActiveFaciltityServiceUnitCommand cmd, CancellationToken ct)
-//    {
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
-
-//    [HttpGet("Get-unit-services")]
-//    public async Task<ActionResult<List<FacilityServiceUnitDTO>>> Getunitservice()
-//    {
-//        var list = await _mediator.Send(new GetAllFacilityServiceUnitQuery());
-//        return Ok(list);
-//    }
-
-//    [HttpGet("Get-unit-services-id")]
-//    public async Task<ActionResult<FacilityServiceUnitDTO>> GetunitserviceById(Guid Id)
-//    {
-//        var list = await _mediator.Send(new GetFacilityServiceUnitByIdQuery(Id));
-//        return Ok(list);
-//    }
 
 
-//    [HttpPost("FacilityUnit/images/add"), AllowAnonymous]
-//    [Consumes("multipart/form-data")]
-//    [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
-//    public async Task<IActionResult> AddFacilityUnitImages(
-//    Guid FacilityUnitId,
-//    [FromForm] AddClubImagesFlatForm form,
-//    CancellationToken ct)
-//    {
-//        if (!ModelState.IsValid) return ValidationProblem(ModelState);
-//        if (form.Files == null || form.Files.Count == 0)
-//            return BadRequest("No images uploaded.");
+    //    [HttpPut("Update-unit-config"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateunitsConfig([FromBody] UpdateFacilityUnitBookingConfigCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
 
-//        // Keep parallel arrays aligned (if provided)
-//        int n = form.Files.Count;
-//        if (form.ImageNames.Count != 0 && form.ImageNames.Count != n)
-//            return BadRequest("ImageNames count must match Files count.");
-//        if (form.Descriptions.Count != 0 && form.Descriptions.Count != n)
-//            return BadRequest("Descriptions count must match Files count.");
-//        if (form.Categories.Count != 0 && form.Categories.Count != n)
-//            return BadRequest("Categories count must match Files count.");
+    //    [HttpDelete("Delete-unit-config")]
+    //    public async Task<IActionResult> FacilityunitsConfig(
+    //       Guid id,
+    //       CancellationToken ct)
+    //       => Ok(await _mediator.Send(
+    //           new DeleteFacilityUnitBookingConfigCommand(id), ct));
 
-//        var folder = $"FacilityUnit/{FacilityUnitId}";
-//        var uploaded = new List<AddClubImageDTO>();
+    //    [HttpPut("Active/InAtive-unit-config"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunits(bool Active, ActiveInActiveFacilityUnitBookingConfigCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
 
-//        for (int i = 0; i < n; i++)
-//        {
-//            var file = form.Files[i];
+    //    [HttpGet("Get-units-config")]
+    //    public async Task<ActionResult<List<ClubFacilitiesDTO>>> Getunitsconfig()
+    //    {
+    //        var list = await _mediator.Send(new GetAllFacilityUnitBookingConfigQuery());
+    //        return Ok(list);
+    //    }
 
-//            // Save file (your IFileStorageService validates size/ext & creates folder)
-//            //var relativePath = await _files.SaveFileAsync(file, folder, ct);
-//            var relativePath = await _files.SaveFileAsync(
-//              file,
-//              folder,
-//              ct,
-//              maxBytes: 5 * 1024 * 1024,                       // 5 MB
-//              allowedExtensions: new[] { ".jpg", ".jpeg", ".png" }
-//             );
-
-//            var ext = Path.GetExtension(relativePath);
-
-//            // Pick metadata by index (or defaults)
-//            var name = form.ImageNames.ElementAtOrDefault(i);
-//            var desc = form.Descriptions.ElementAtOrDefault(i);
-//            var cat = form.Categories.ElementAtOrDefault(i);
-
-//            uploaded.Add(new AddClubImageDTO(
-//                ImageURL: relativePath,                 // e.g. /uploads/rooms/{roomId}/{guid}.jpg
-//                ImageExtension: ext,
-//                ImageName: name,
-//                Description: desc,
-//                Category: cat                           // enum value
-//            ));
-//        }
-
-//        // Hand off to your command (enforces “only one Main” etc.)
-//        var cmd = new AddFacilityUnitImagesCommand(FacilityUnitId, uploaded);
-//        var result = await _mediator.Send(cmd, ct);
-//        return Ok(result);
-//    }
+    //    [HttpGet("Get-units-config-id")]
+    //    public async Task<ActionResult<ClubFacilitiesDTO>> GetunitsconfigById(Guid Id)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityUnitConfigByIdQuery(Id));
+    //        return Ok(list);
+    //    }
 
 
-//    [HttpPost("discounts")]
-//    public Task<ApiResult<Guid>> CreateDiscount(CreateDiscountDto dto)
-//        => _mediator.Send(new CreateDiscountCommand(dto));
 
-//    [HttpPost("taxes")]
-//    public Task<ApiResult<Guid>> CreateTax(CreateTaxDto dto)
-//        => _mediator.Send(new CreateTaxCommand(dto));
+    //    [HttpPost("unit-services")]
+    //    public Task<ApiResult<Guid>> AddUnitService(AddFacilityUnitServiceDto dto)
+    //        => _mediator.Send(new AddFacilityUnitServiceCommand(dto));
 
-//    [HttpPost("facility-unit/discount")]
-//    public Task<ApiResult<Guid>> AssignDiscount(AssignFacilityUnitDiscountDto dto)
-//        => _mediator.Send(new AssignFacilityUnitDiscountCommand(dto));
+    //    [HttpPut("Update-unit-services"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> Updateunitsservices([FromBody] UpdateFacilityUnitServiceCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
 
-//    [HttpPost("facility-unit/tax")]
-//    public Task<ApiResult<Guid>> AssignTax(AssignFacilityUnitTaxDto dto)
-//        => _mediator.Send(new AssignFacilityUnitTaxCommand(dto));
+    //    [HttpDelete("Delete-unit-services")]
+    //    public async Task<IActionResult> Facilityunitsservices(
+    //       Guid id,
+    //       CancellationToken ct)
+    //       => Ok(await _mediator.Send(
+    //           new DeleteFacilityUnitBookingConfigCommand(id), ct));
+
+    //    [HttpPut("Active/InAtive-unit-services"), AllowAnonymous]
+    //    public async Task<ActionResult<SuccessResponse<Guid>>> Updateservices(bool Active, ActiveInActiveFaciltityServiceUnitCommand cmd, CancellationToken ct)
+    //    {
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
+
+    //    [HttpGet("Get-unit-services")]
+    //    public async Task<ActionResult<List<FacilityServiceUnitDTO>>> Getunitservice()
+    //    {
+    //        var list = await _mediator.Send(new GetAllFacilityServiceUnitQuery());
+    //        return Ok(list);
+    //    }
+
+    //    [HttpGet("Get-unit-services-id")]
+    //    public async Task<ActionResult<FacilityServiceUnitDTO>> GetunitserviceById(Guid Id)
+    //    {
+    //        var list = await _mediator.Send(new GetFacilityServiceUnitByIdQuery(Id));
+    //        return Ok(list);
+    //    }
+
+
+    //    [HttpPost("FacilityUnit/images/add"), AllowAnonymous]
+    //    [Consumes("multipart/form-data")]
+    //    [RequestSizeLimit(50_000_000)] // optional: 50 MB cap
+    //    public async Task<IActionResult> AddFacilityUnitImages(
+    //    Guid FacilityUnitId,
+    //    [FromForm] AddClubImagesFlatForm form,
+    //    CancellationToken ct)
+    //    {
+    //        if (!ModelState.IsValid) return ValidationProblem(ModelState);
+    //        if (form.Files == null || form.Files.Count == 0)
+    //            return BadRequest("No images uploaded.");
+
+    //        // Keep parallel arrays aligned (if provided)
+    //        int n = form.Files.Count;
+    //        if (form.ImageNames.Count != 0 && form.ImageNames.Count != n)
+    //            return BadRequest("ImageNames count must match Files count.");
+    //        if (form.Descriptions.Count != 0 && form.Descriptions.Count != n)
+    //            return BadRequest("Descriptions count must match Files count.");
+    //        if (form.Categories.Count != 0 && form.Categories.Count != n)
+    //            return BadRequest("Categories count must match Files count.");
+
+    //        var folder = $"FacilityUnit/{FacilityUnitId}";
+    //        var uploaded = new List<AddClubImageDTO>();
+
+    //        for (int i = 0; i < n; i++)
+    //        {
+    //            var file = form.Files[i];
+
+    //            // Save file (your IFileStorageService validates size/ext & creates folder)
+    //            //var relativePath = await _files.SaveFileAsync(file, folder, ct);
+    //            var relativePath = await _files.SaveFileAsync(
+    //              file,
+    //              folder,
+    //              ct,
+    //              maxBytes: 5 * 1024 * 1024,                       // 5 MB
+    //              allowedExtensions: new[] { ".jpg", ".jpeg", ".png" }
+    //             );
+
+    //            var ext = Path.GetExtension(relativePath);
+
+    //            // Pick metadata by index (or defaults)
+    //            var name = form.ImageNames.ElementAtOrDefault(i);
+    //            var desc = form.Descriptions.ElementAtOrDefault(i);
+    //            var cat = form.Categories.ElementAtOrDefault(i);
+
+    //            uploaded.Add(new AddClubImageDTO(
+    //                ImageURL: relativePath,                 // e.g. /uploads/rooms/{roomId}/{guid}.jpg
+    //                ImageExtension: ext,
+    //                ImageName: name,
+    //                Description: desc,
+    //                Category: cat                           // enum value
+    //            ));
+    //        }
+
+    //        // Hand off to your command (enforces “only one Main” etc.)
+    //        var cmd = new AddFacilityUnitImagesCommand(FacilityUnitId, uploaded);
+    //        var result = await _mediator.Send(cmd, ct);
+    //        return Ok(result);
+    //    }
+
+
+    //    [HttpPost("discounts")]
+    //    public Task<ApiResult<Guid>> CreateDiscount(CreateDiscountDto dto)
+    //        => _mediator.Send(new CreateDiscountCommand(dto));
+
+    //    [HttpPost("taxes")]
+    //    public Task<ApiResult<Guid>> CreateTax(CreateTaxDto dto)
+    //        => _mediator.Send(new CreateTaxCommand(dto));
+
+    //    [HttpPost("facility-unit/discount")]
+    //    public Task<ApiResult<Guid>> AssignDiscount(AssignFacilityUnitDiscountDto dto)
+    //        => _mediator.Send(new AssignFacilityUnitDiscountCommand(dto));
+
+    //    [HttpPost("facility-unit/tax")]
+    //    public Task<ApiResult<Guid>> AssignTax(AssignFacilityUnitTaxDto dto)
+    //        => _mediator.Send(new AssignFacilityUnitTaxCommand(dto));
+
+
+    //[HttpGet("GetClubFacility")]
+    //public async Task<ActionResult<List<ClubFacilitiesDTO>>> GetAllFacilityToClubByClubFac(Guid ClubId, Guid Facility)
+    //{
+    //    var list = await _mediator.Send(new GetClubFacilityByClubFacQuery(ClubId, Facility));
+    //    return Ok(list);
+    //}
+
+    //[HttpPut("Active/InAtive-FacilityToClub"), AllowAnonymous]
+    //public async Task<ActionResult<SuccessResponse<Guid>>> UpdateFacilityToClub(bool Active, ActiveInActiveFacilityClubCommand cmd, CancellationToken ct)
+    //{
+    //    var result = await _mediator.Send(cmd, ct);
+    //    return Ok(result);
+    //}
+
+    //[HttpPut("Active/InAtive-Facility")]
+    //[Tags("Facility")]
+    //public async Task<ActionResult<SuccessResponse<Guid>>> UpdateFacility(bool Active, ActiveInActiveFaciltityCommand cmd, CancellationToken ct)
+    //{
+    //    var result = await _mediator.Send(cmd, ct);
+    //    return Ok(result);
+    //}
+
+
+
+
 }
 public record ClubUpdateServiceCategoryRequest(
     Guid ClubId,

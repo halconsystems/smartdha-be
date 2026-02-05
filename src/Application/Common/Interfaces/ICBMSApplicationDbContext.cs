@@ -13,7 +13,7 @@ public interface ICBMSApplicationDbContext
     DbSet<AuditLog> AuditLogs { get; }
     DbSet<DHAClub> Clubs { get; }
     DbSet<ClubImages> ClubImages { get; }
-    DbSet<ClubServiceCategory> ClubCategories { get; }
+    DbSet<ClubServiceCategory> ClubServiceCategories { get; }
     DbSet<Facility> Facilities { get; }
     DbSet<FacilitiesImage> FacilitiesImages { get; }
     DbSet<ServiceDefinition> ServiceDefinitions { get; }

@@ -26,7 +26,7 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<DHAClub> Clubs => Set<DHAClub>();
     public DbSet<ClubImages> ClubImages => Set<ClubImages>();
-    public DbSet<ClubServiceCategory> ClubCategories => Set<ClubServiceCategory>(); // Events, Allaid Facilities, Sports etc
+    public DbSet<ClubServiceCategory> ClubServiceCategories => Set<ClubServiceCategory>(); // Events, Allaid Facilities, Sports etc
     public DbSet<Facility> Facilities => Set<Facility>(); // Events -> Banquet Hall, Sports -> Tennis Court , Padel Courts etc
     public DbSet<ServiceDefinition> ServiceDefinitions => Set<ServiceDefinition>(); //Banquet Hall -> Catering, Decoration etc
     public DbSet<FacilitiesImage> FacilitiesImages => Set<FacilitiesImage>(); //Banquet Hall -> Image1, Image2 etc
