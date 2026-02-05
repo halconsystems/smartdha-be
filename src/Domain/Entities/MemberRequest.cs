@@ -105,6 +105,7 @@ public class MemberRequest : BaseAuditableEntity
 
     public VerificationStatus Status { get; set; } = VerificationStatus.Pending;
 
+    public DateOnly ValidUntil { get; set; }
 
 }
 

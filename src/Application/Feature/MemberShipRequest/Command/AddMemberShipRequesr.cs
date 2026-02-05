@@ -216,7 +216,7 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                 CauseRetirement = command.CauseRetirement,
 
             };
-
+            Dictionary<string, Guid> wifeMap= new Dictionary<string, Guid>();
             _context.MemberRequests.Add(entity);
             await _context.SaveChangesAsync(ct);
             if (command.MemberSpouses != null && command.MaritalStatus == MaritalStatus.Married)
@@ -234,27 +234,53 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                     CnicBackImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicBackImage, "cnic", ct).ToString(),
                     Cnic = x.Cnic,
                     CnicExpiry = x.CnicExpiry,
+                    PassportNo = x.PassportNo,
+                    PassportExpiryDate = x.PassportExpiryDate,
+                    WifeNo = x.WifeNo,
+                    IsChild = x.IsChild,
+                    UploadPassport = x.UploadPassport != null ?  _fileStorage.SaveFileMemeberrequestAsync(x.UploadPassport, "cnic", ct).ToString() : null,
                 }).ToList();
 
                 _context.MemberSpouses.AddRange(memberSpouse);
                 await _context.SaveChangesAsync(ct);
+
+                wifeMap = memberSpouse
+                    .ToDictionary(
+                        w => w.WifeNo,
+                        w => w.Id
+                    );
+
             }
 
             if (command.MemberChildrens != null && command.IsChild)
             {
-                var memberChildrens = command.MemberChildrens.Select(x => new MemberChildren
+                var memberChildrens = command.MemberChildrens.Select(x => 
+                {
+                    if (!wifeMap.ContainsKey(x.WifeNo))
+                    throw new Exception($"Invalid WifeNo: {x.WifeNo}");
+
+                return new MemberChildren
                 {
                     MemberShipId = entity.Id,
+
+                    // 🔑 Correct Wife Guid
+                    SpouseId = wifeMap[x.WifeNo],
+
                     FullName = x.FullName,
                     MobileNo = x.MobileNo,
                     Relation = x.Relation,
                     IsAdult = x.IsAdult,
                     CnicNo = x.CnicNo,
+
                     PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
                     CNICFrontImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICFrontImagePath, "cnic", ct).ToString(),
                     CNICBackImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICBackImagePath, "cnic", ct).ToString(),
                     CnicExpiryDate = x.CnicExpiryDate,
-                }).ToList();
+                    NadraBForm = x.NadraBForm != null
+                        ? _fileStorage.SaveFileMemeberrequestAsync(x.NadraBForm, "cnic", ct).ToString()
+                        : null,
+                };
+            }).ToList();
                 _context.MemberChildrens.AddRange(memberChildrens);
                 await _context.SaveChangesAsync(ct);
 

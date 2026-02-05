@@ -45,6 +45,7 @@ builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
 builder.Services.AddScoped<ISmartPayService, SmartPayService>();
 builder.Services.AddScoped<IPropertyProcedureRepository, PropertyProcedureRepository>();
+builder.Services.AddScoped<IMemberRenewalProcedurerespository, MemberDetailForRenewalProcedureRepository>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>

@@ -31,8 +31,12 @@ public class MemberSpouse : BaseAuditableEntity
     public string? CnicBackImage { get; set; }
     public string Cnic { get; set; } = default!;
     public DateTime CnicExpiry { get; set; } = default!;
+    [Required]
+    public string WifeNo { get; set; } = default!;
+    public bool IsChild { get; set; }
 
-    
+    public ICollection<MemberChildren> Children { get; set; } = new List<MemberChildren>();
+
 
 }
 

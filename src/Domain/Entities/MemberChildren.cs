@@ -32,5 +32,8 @@ public class MemberChildren : BaseAuditableEntity
     public string? NadraBForm { get; set; }
     public string? HusbandName { get; set; }
 
+    public Guid SpouseId { get; set; }
+    public MemberSpouse MemberSpouse { get; set; } = default!;
+
 }
 

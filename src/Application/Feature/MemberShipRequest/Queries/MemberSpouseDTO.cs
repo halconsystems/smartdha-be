@@ -12,7 +12,8 @@ namespace DHAFacilitationAPIs.Application.Feature.MemberShipRequest.Queries;
 
 public class MemberSpouseDTO
 {
-
+    [Required]
+    public string WifeNo { get; set; } = default!;
     [Required]
     public string FullName { get; set; } = default!;
     public string? MobileNo { get; set; }
@@ -36,4 +37,5 @@ public class MemberSpouseDTO
 
     [Required]
     public DateTime CnicExpiry { get; set; } = default!;
+    public bool IsChild { get; set; }
 }

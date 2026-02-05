@@ -9,7 +9,7 @@ namespace DHAFacilitationAPIs.Domain.Entities.LMS;
 public class ShopVehicleAssignmentHistory : BaseAuditableEntity
 {
     public Guid VehicleId { get; set; }
-    public SvVehicle Vehicle { get; set; } = default!;
+    public ShopVehicles Vehicle { get; set; } = default!;
 
     public string DriverUserId { get; set; } = default!;
     public ApplicationUser Driver { get; set; } = default!;
