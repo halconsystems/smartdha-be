@@ -19,7 +19,7 @@ public class MyBillDetailDto
     public DateTime? DueDate { get; set; }
     public DateTime? ExpiryDate { get; set; }
     public PaymentBillStatus PaymentStatus { get; set; }
-    public List<MyBillTransactionDto> Transactions { get; set; } = new();
+    public MyBillTransactionDto Transactions { get; set; } = new();
 }
 public class MyBillTransactionDto
 {
@@ -28,4 +28,6 @@ public class MyBillTransactionDto
     public string? GatewayTransactionId { get; set; }
     public DateTime InitiatedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public string PaymentName { get; set; } = default!;
+    public string IssuerName { get; set; } = default!;
 }

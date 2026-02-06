@@ -85,7 +85,7 @@ public class AuthController : BaseApiController
     [EnableRateLimiting("AnonymousLimiter")]
     [HttpPost("Register")]
    // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    public async Task<IActionResult> RegisterUser(MemberRegisterationCommand request)
     {
         return Ok(await Mediator.Send(request));
     }

@@ -1,6 +1,7 @@
 ﻿
 using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Entities;
 using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotFoundException;
 
 namespace DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetMyBillDetail;
@@ -21,8 +22,8 @@ public class GetMyBillDetailHandler
     }
 
     public async Task<MyBillDetailDto> Handle(
-        GetMyBillDetailQuery request,
-        CancellationToken ct)
+     GetMyBillDetailQuery request,
+     CancellationToken ct)
     {
         var userId = _current.UserId!.ToString();
 
@@ -30,13 +31,50 @@ public class GetMyBillDetailHandler
             .Include(x => x.Transactions)
             .AsNoTracking()
             .FirstOrDefaultAsync(x =>
-                x.PaymentBillId == request.PaymentBillId &&
+                x.Id == request.PaymentBillId &&
                 x.UserId == userId,
                 ct);
 
         if (bill == null)
             throw new NotFoundException("Bill not found.");
 
+        // ----------------------------------------------------
+        // STEP 1: Get latest valid transaction
+        // ----------------------------------------------------
+        var latestTransaction = bill.Transactions?
+            .Where(t => !string.IsNullOrEmpty(t.GatewayTransactionId))
+            .OrderByDescending(t => t.InitiatedAt)
+            .FirstOrDefault();
+
+        // ----------------------------------------------------
+        // STEP 2: Get PaymentName + IssuerName from IPN logs
+        // ----------------------------------------------------
+        string? paymentName = null;
+        string? issuerName = null;
+
+        if (latestTransaction?.GatewayTransactionId != null)
+        {
+            var ipn = await _db.Set<PaymentIpnLog>()
+                .AsNoTracking()
+                .Where(x => x.TransactionId == latestTransaction.GatewayTransactionId)
+                .OrderByDescending(x => x.Created) // latest IPN
+                .Select(x => new
+                {
+                    x.PaymentName,
+                    x.IssuerName
+                })
+                .FirstOrDefaultAsync(ct);
+
+            if (ipn != null)
+            {
+                paymentName = ipn.PaymentName;
+                issuerName = ipn.IssuerName;
+            }
+        }
+
+        // ----------------------------------------------------
+        // STEP 3: Map response DTO
+        // ----------------------------------------------------
         return new MyBillDetailDto
         {
             PaymentBillId = bill.PaymentBillId,
@@ -54,18 +92,20 @@ public class GetMyBillDetailHandler
 
             PaymentStatus = bill.PaymentStatus,
 
-            Transactions = bill.Transactions
-                .OrderByDescending(t => t.InitiatedAt)
-                .Select(t => new MyBillTransactionDto
+            Transactions = latestTransaction == null
+                ? new MyBillTransactionDto()
+                : new MyBillTransactionDto
                 {
-                    Amount = t.AttemptAmount,
-                    Status = t.Status.ToString(),
-                    GatewayTransactionId = t.GatewayTransactionId,
-                    InitiatedAt = t.InitiatedAt,
-                    CompletedAt = t.CompletedAt
-                })
-                .ToList()
+                    Amount = latestTransaction.AttemptAmount,
+                    Status = latestTransaction.Status.ToString(),
+                    GatewayTransactionId = latestTransaction.GatewayTransactionId,
+                    InitiatedAt = latestTransaction.InitiatedAt,
+                    CompletedAt = latestTransaction.CompletedAt,
+                    PaymentName = paymentName ?? string.Empty,
+                    IssuerName = issuerName ?? string.Empty
+                }
         };
     }
+
 }
 

@@ -10,7 +10,7 @@ public class PayFastTokenRequest
     public string MerchantId { get; set; } = default!;
     public string SecuredKey { get; set; } = default!;
     public string BasketId { get; set; } = default!;
-    public decimal TransactionAmount { get; set; }
+    public string TransactionAmount { get; set; } = default!;
     public string CurrencyCode { get; set; } = "PKR";
 }
 

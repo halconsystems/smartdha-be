@@ -64,6 +64,9 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
         var name = resultMember.Member.Name ?? "";
         var cellno = NormalizePkMobile(resultMember.Member.CellNo ?? "");
 
+        if (string.IsNullOrWhiteSpace(resultMember.Member.MemPk) && string.IsNullOrWhiteSpace(resultMember.Member.Name))
+            throw new NotFoundException("");
+
         if (string.IsNullOrWhiteSpace(cellno) || cellno.Length != 12 || !cellno.All(char.IsDigit))
             throw new ConflictException("Mobile number not found. Please visit DHA Head Office to update your registered mobile number.");
 

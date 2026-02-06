@@ -26,7 +26,7 @@ public class PayFastService : IPayFastService
             ["MERCHANT_ID"] = request.MerchantId,
             ["SECURED_KEY"] = request.SecuredKey,
             ["BASKET_ID"] = request.BasketId,
-            ["TXNAMT"] = request.TransactionAmount.ToString("0.00"),
+            ["TXNAMT"] = request.TransactionAmount,
             ["CURRENCY_CODE"] = request.CurrencyCode
         };
 
