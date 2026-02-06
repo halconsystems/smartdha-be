@@ -135,19 +135,28 @@ public class InitiatePayFastCheckoutHandler
 
         var basketId = Random.Shared.Next(100000, 999999).ToString();
 
-        // 4️⃣ INSERT TRANSACTION (🔥 REQUIRED)
+      
         var transaction = new PayTransaction
         {
-            PayBillId = bill.PaymentBillId,
+            PayBillId = bill.Id,
             BasketId = basketId,
             AttemptAmount = finalAmount,
             Status = PaymentTransactionStatus.Initiated,
-            InitiatedAt = DateTime.Now
+            InitiatedAt = DateTime.Now,
+            MerchantCode = merchant.Code ?? string.Empty,
+            MerchantIdUsed = merchant.MerchantId.ToString()
         };
 
         _db.PayTransactions.Add(transaction);
-        await _db.SaveChangesAsync(ct);
-
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw new Exception("Failed to create payment transaction.");
+        }
         // 5️⃣ Call PayFast
         var tokenResponse = await _payFastService.GetAccessTokenAsync(
             new PayFastTokenRequest
@@ -155,13 +164,21 @@ public class InitiatePayFastCheckoutHandler
                 MerchantId = merchant.MerchantId.ToString(),
                 SecuredKey = secureKey,
                 BasketId = basketId,
-                TransactionAmount = finalAmount
+                TransactionAmount = finalAmount.ToString("0.##")
             },
             ct);
 
         // 6️⃣ Update transaction after token
         transaction.Status = PaymentTransactionStatus.TokenIssued;
-        await _db.SaveChangesAsync(ct);
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch (Exception ex) 
+        {
+            Console.WriteLine(ex.Message);
+            // ignore failure to update transaction status
+        }
 
         return ApiResult<PayFastCheckoutResponse>.Ok(new PayFastCheckoutResponse
         {
@@ -169,7 +186,7 @@ public class InitiatePayFastCheckoutHandler
             BasketId = basketId,
             TotalAmount = finalAmount.ToString("0.##"),
             MarchantId = merchant.MerchantId.ToString(),
-            DisplayName = merchant.DisplayName,
+            DisplayName = bill.Title,
             CustomerEmail = user.Email ?? string.Empty,
             CustomerMobileNo =
                 user.RegisteredMobileNo?.StartsWith("92") == true

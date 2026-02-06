@@ -37,7 +37,7 @@ public class GetMyPaidBillsHandler
             .OrderByDescending(x => x.LastPaymentDate)
             .Select(x => new MyPaidBillSummaryDto
             {
-                PaymentBillId = x.PaymentBillId,
+                PaymentBillId = x.Id,
                 Title = x.Title,
                 SourceVoucherNo = x.SourceVoucherNo,
                 SourceSystem = x.SourceSystem,

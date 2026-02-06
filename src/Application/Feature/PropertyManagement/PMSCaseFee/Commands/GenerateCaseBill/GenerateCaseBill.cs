@@ -202,24 +202,55 @@ public class GenerateCaseBillHandler
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == c.CreatedBy);
         if (user != null)
         {
-            UserDevices? getToken = null;
+            List<string> fcmTokens = new();
 
             if (!string.IsNullOrWhiteSpace(c.CreatedBy) &&
                 Guid.TryParse(c.CreatedBy, out var createdByUserId))
             {
-                getToken = await _appDb.Set<UserDevices>()
-                .Where(x => x.UserId == createdByUserId && x.IsActive ==true && x.IsDeleted !=true)
-                .OrderByDescending(x => x.Created)
-                .FirstOrDefaultAsync(ct);
+                fcmTokens = await _appDb.Set<UserDevices>()
+                    .Where(x =>
+                        x.UserId == createdByUserId &&
+                        x.IsActive == true &&
+                        x.IsDeleted != true &&
+                        x.FCMToken != null &&
+                        x.FCMToken != "")
+                    .Select(x => x.FCMToken!)
+                    .Distinct()
+                    .ToListAsync(ct);
+            }
+            var message =
+                        $"Dear {user.Name}, a new bill of amount {totalPayable:C} has been generated " +
+                        $"for your case (ID: {c.Id}). Please proceed to payment in mobile application.";
+            foreach (var token in fcmTokens)
+            {
+                await _notify.SendFirebasePMSNotificationAsync(
+                    token,
+                    "New Bill Generated",
+                    message,
+                    ct
+                );
             }
 
-            if (getToken == null)
-                return ApiResult<Guid>.Fail("User not found.");
-            if (getToken.FCMToken == null)
-                return ApiResult<Guid>.Fail("User Token found.");
 
-            var message = $"Dear {user.Name}, a new bill of amount {totalPayable:C} has been generated for your case (ID: {c.Id}). Please proceed to payment in mobile application.";
-            await _notify.SendFirebasePMSNotificationAsync(getToken.FCMToken, "New Bill Generated", message, ct);
+
+            //UserDevices? getToken = null;
+
+            //if (!string.IsNullOrWhiteSpace(c.CreatedBy) &&
+            //    Guid.TryParse(c.CreatedBy, out var createdByUserId))
+            //{
+            //    getToken = await _appDb.Set<UserDevices>()
+            //    .Where(x => x.UserId == createdByUserId && x.IsActive ==true && x.IsDeleted !=true)
+            //    .OrderByDescending(x => x.Created)
+            //    .FirstOrDefaultAsync(ct);
+            //}
+
+            //if (getToken == null)
+            //    return ApiResult<Guid>.Fail("User not found.");
+            //if (getToken.FCMToken == null)
+            //    return ApiResult<Guid>.Fail("User Token found.");
+
+            //var message = $"Dear {user.Name}, a new bill of amount {totalPayable:C} has been generated for your case (ID: {c.Id}). Please proceed to payment in mobile application.";
+            //await _notify.SendFirebasePMSNotificationAsync(getToken.FCMToken, "New Bill Generated", message, ct);
 
             if(user.RegisteredMobileNo !=null)
                 await _sms.SendSmsAsync(user.RegisteredMobileNo, message, ct);

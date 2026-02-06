@@ -94,7 +94,7 @@ public class SavePaymentIpnCommandHandler
         // 2️⃣ Load bill
         // =========================
         var bill = await _ctx.Set<PayBill>()
-            .FirstOrDefaultAsync(x => x.PaymentBillId == transaction.PayBillId, ct);
+            .FirstOrDefaultAsync(x => x.Id == transaction.PayBillId, ct);
 
         if (bill == null)
         {
