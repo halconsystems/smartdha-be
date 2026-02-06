@@ -87,7 +87,7 @@ public class MemberPersonalDTO
     public Ranks? Ranks { get; set; }
     public Title? Title { get; set; }
     public string? PersonalNo { get; set; }
-    public string? PersonalNo { get; set; }
+    //public string? PersonalNo { get; set; }
     public string? CNIC { get; set; } = default!;
     public bool? LiveTime { get; set; }
     public DateTime? CnicExpiryDate { get; set; }
