@@ -51,4 +51,5 @@ public class FemugationDTO
     public ICollection<FumgationMedia> Media { get; set; } = new List<FumgationMedia>();
     public Guid AssignedBy { get; set; }
     public bool? IsActive {  get; set; }
+    public Dictionary<string, string>? Images {  get; set; }
 }
