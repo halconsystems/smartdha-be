@@ -14,7 +14,7 @@ public class MemberChildrenDTO
 {
     [Required]
     public string WifeNo { get; set; } = default!;
-    public Guid SpouseId { get; set; }
+    //public Guid SpouseId { get; set; }
     [Required]
     public string FullName { get; set; } = default!;
     public Relation Relation { get; set; }

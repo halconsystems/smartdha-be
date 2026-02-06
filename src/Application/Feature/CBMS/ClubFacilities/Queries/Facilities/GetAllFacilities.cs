@@ -32,32 +32,53 @@ public class GetAllFacilitiesQueryHandler : IRequestHandler<GetAllFacilitiesQuer
 
         var facilityMainIamges = await _db.FacilitiesImages
             .Where(x => facility.Select(f => f.Id).Contains(x.FacilityId) && x.Category == Domain.Enums.ImageCategory.Main)
-            .Select(x => x.ImageURL)
-            .FirstOrDefaultAsync(ct);
+            .Select(x => new
+            {
+                x.FacilityId,
+                x.ImageURL
+            })
+            .ToListAsync(ct);
 
-        if(facilityMainIamges != null)
+
+        Dictionary<Guid,string> MainImagepublicUrls = new Dictionary<Guid, string>();
+        if (facilityMainIamges != null)
         {
-            facilityMainIamges = _file.GetPublicUrl(facilityMainIamges);
+            MainImagepublicUrls = facilityMainIamges
+                .Where(g => !string.IsNullOrEmpty(g.ImageURL))
+                .ToDictionary(
+                    img => img.FacilityId,
+                    img => img.ImageURL
+
+                );
+
         }
+
 
         var facilityIamges = await _db.FacilitiesImages
             .Where(x => facility.Select(f => f.Id).Contains(x.FacilityId) && x.Category != Domain.Enums.ImageCategory.Main)
-            .Select(x => x.ImageURL)
+            .Select(x => new
+            {
+                x.FacilityId,
+                x.ImageURL
+            })
             .ToListAsync(ct);
 
-        List<string> publicUrls = new List<string>();
+        Dictionary<Guid, string> ImagespublicUrls = new Dictionary<Guid, string>();
         if (facilityIamges != null)
         {
-            publicUrls = facilityIamges
-                .Select(img => _file.GetPublicUrl(img))
-                .ToList();
+            ImagespublicUrls = facilityIamges
+               .Where(g => !string.IsNullOrEmpty(g.ImageURL))
+               .ToDictionary(
+                   img => img.FacilityId,
+                   img => img.ImageURL
 
+               );
         }
 
         var list = await _db.Set<Domain.Entities.CBMS.Facility>()
             .Where(x=> x.IsDeleted != true && x.IsActive==true)
             .OrderBy(x => x.Name)
-            .Select(x => new FacilitiesDTO(x.Id, x.Name, x.DisplayName, x.Code,x.Description ,x.ClubCategoryId,facilityMainIamges, publicUrls, x.FoodType, x.IsActive, x.IsDeleted))
+            .Select(x => new FacilitiesDTO(x.Id, x.Name, x.DisplayName, x.Code,x.Description ,x.ClubCategoryId, MainImagepublicUrls.FirstOrDefault(i => i.Key == x.Id).Value, ImagespublicUrls.Where(i => i.Key == x.Id).Select(h => h.Value).ToList(), x.FoodType, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);
 
         return ApiResult<List<FacilitiesDTO>>.Ok(list);

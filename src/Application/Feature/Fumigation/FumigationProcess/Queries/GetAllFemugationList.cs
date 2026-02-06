@@ -30,6 +30,10 @@ public class GetAllFemugationListQueryHandler : IRequestHandler<GetAllFemugation
             .AsNoTracking()
             .ToListAsync(ct);
 
+        var tankSize = await _context.TankerSizes
+            .Where(x => tanker.Select(x => x.FemTanker).Contains(x.Id))
+            .ToListAsync(ct);
+
 
         if (tanker == null)
             throw new KeyNotFoundException("Phases Not Found.");
@@ -46,7 +50,7 @@ public class GetAllFemugationListQueryHandler : IRequestHandler<GetAllFemugation
             Total = x.Total,
             SubTotal = x.SubTotal,
             ShopName = x.FemgutionShops?.Name,
-            TankSize = x.TankerSize?.Name,
+            TankSize = tankSize?.FirstOrDefault(t => t.Id == x.FemTanker)?.Name,
             IsActive = x.IsActive,
             Address = x.Address,
             StreetNo = x.StreetNo,

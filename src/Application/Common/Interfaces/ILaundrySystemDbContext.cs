@@ -27,6 +27,7 @@ public interface ILaundrySystemDbContext
     DbSet<ShopVehicleAssignmentHistory> ShopVehicleAssignmentHistories { get; }
     DbSet<ShopDrivers> ShopDrivers { get; }
     DbSet<OrderDispatch> OrderDispatches { get; }
+    DbSet<ShopDTSetting> ShopDTSettings { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

@@ -96,6 +96,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<UserImages> UserImages => Set<UserImages>();
     public DbSet<UserMemberProfile> UserMemberProfiles => Set<UserMemberProfile>();
     public DbSet<ClubMembership> ClubMemberships => Set<ClubMembership>();
+    public DbSet<ShopDTSetting> ShopDTSettings => Set<ShopDTSetting>();
 
 
 

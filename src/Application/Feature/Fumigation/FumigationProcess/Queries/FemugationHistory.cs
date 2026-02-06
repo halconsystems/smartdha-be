@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Domain.Entities.CBMS;
 using DHAFacilitationAPIs.Domain.Entities.FMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.Fumigation.FumigationProcess.Queries;
@@ -15,11 +16,13 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
 {
     private readonly IApplicationDbContext _context;
     private readonly ICurrentUserService _currentUser;
+    private readonly IFileStorageService _file;
 
-    public FemugationHistoryQueryHandler(IApplicationDbContext context, ICurrentUserService currentUser)
+    public FemugationHistoryQueryHandler(IApplicationDbContext context, ICurrentUserService currentUser, IFileStorageService file)
     {
         _context = context;
         _currentUser = currentUser;
+        _file = file;
     }
 
     public async Task<FemugationDTO> Handle(FemugationHistoryQuery request, CancellationToken ct)
@@ -35,13 +38,31 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
         if (femugation == null)
             throw new KeyNotFoundException("Femugation Not Found.");
 
+        var tankSize = await _context.TankerSizes
+            .Where(x => x.Id == femugation.FemTanker)
+            .FirstOrDefaultAsync(ct);
+
         var femMedia = await _context.FumgationMedias
             .Where(x => x.FemugationId == request.Id)
             .AsNoTracking()
             .ToListAsync();
 
+        var imageURL = femMedia
+            .Select(x => new
+            {
+                x.FilePath,
+                x.Caption
+            })
+            .ToList();
 
-        var result = new FemugationDTO
+            Dictionary<string, string> publicUrls = imageURL
+            .Where(img => !string.IsNullOrEmpty(img.FilePath))
+            .ToDictionary(
+                img => img.Caption ?? string.Empty,
+                img => _file.GetPublicUrl(img.FilePath)
+            );
+
+    var result = new FemugationDTO
         {
             Id = femugation.Id,
             UserId = femugation.UserId,
@@ -64,6 +85,14 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
             ResolvedAt = femugation.ResolvedAt,
             CancelledAt = femugation.CancelledAt,
             Media = femMedia == null ? new List<FumgationMedia>() : femMedia,
+            Images = publicUrls == null ? new Dictionary<string, string>() : publicUrls,
+            TankSize = tankSize?.Name,
+            Taxes = femugation.Taxes.ToString(),
+            Discount = femugation.Discount,
+            PhoneNumber = femugation.PhoneNumber,
+            StreetNo = femugation.StreetNo,
+            DateOnly = femugation.DateOnly,
+            TimeOnly = femugation.TimeOnly
         };
 
         return result;

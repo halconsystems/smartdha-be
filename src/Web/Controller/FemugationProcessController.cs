@@ -1,6 +1,8 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.Fumigation.FemigationDT.Command;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FemigationDT.Queries;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationDashboard.Queries;
+using DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationShopDT.Command;
+using DHAFacilitationAPIs.Application.Feature.Fumigation.FemugationShopDT.Queries;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FumationShops.Command;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FumationShops.Queries;
 using DHAFacilitationAPIs.Application.Feature.Fumigation.FumigationProcess.Command;
@@ -331,6 +333,49 @@ public class FemugationProcessController : BaseApiController
         var result = await _med.Send(cmd);
         return Ok(result);
     }
+    #endregion
+
+    #region Femigation Shop Tax Dicount Crud Here
+    [HttpPost("Create-Shop-Discount/Tax")]
+    [Tags("8 - Shop-Tax-Discount")]
+    public async Task<ActionResult<string>> CreateShopTaxDiscounr(CreateAddFemShopDTCommand cmd)
+    {
+        var result = await _med.Send(cmd);
+        return Ok(result);
+    }
+
+    [HttpGet("Get-Shop-Discount/Tax")]
+    [Tags("8 - Shop-Tax-Discount")]
+    public async Task<List<FemDTSettingDTO>> ShopTaxDiscount()
+    {
+        var list = await _med.Send(new GetAllFemShopDTQuery());
+        return list.ToList();
+    }
+    [HttpGet("Get-Shop-Discount/Tax-ByShopId")]
+    [Tags("8 - Shop-Tax-Discount")]
+    public async Task<List<FemDTSettingDTO>> ShopTaxDiscountByShopid(Guid ShopId)
+    {
+        var list = await _med.Send(new GetFemDTBYShopIdQuery(ShopId));
+        return list.ToList();
+    }
+
+    [HttpGet("Get-Shop-Discount/Tax-id")]
+    [Tags("8 - Shop-Tax-Discount")]
+    public async Task<ActionResult<FemDTSettingDTO>> ShopTaxDiscountById(Guid Id)
+    {
+        var list = await _med.Send(new GetFemShopDTbyIdQuery(Id));
+        return Ok(list);
+    }
+    [HttpPut("Update-Shop-Discount/Tax"), AllowAnonymous]
+    [Tags("8 - Shop-Tax-Discount")]
+    public async Task<ActionResult<SuccessResponse<Guid>>> UpdateShopPhase([FromBody] UpdateFemigationShopDTCommand cmd, CancellationToken ct)
+    {
+        var result = await _med.Send(cmd, ct);
+        return StatusCode(result.Status, result);
+    }
+
+  
+
     #endregion
 
 
