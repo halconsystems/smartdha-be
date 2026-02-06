@@ -84,10 +84,10 @@ public class MemberRequestHistoryDTO
 }
 public class MemberPersonalDTO
 {
-    public Guid Id { get; set; }
-    public string? MemberShipCategory { get; set; }
-    public string? Purpose { get; set; }
-
+    public Ranks? Ranks { get; set; }
+    public Title? Title { get; set; }
+    public string? PersonalNo { get; set; }
+    //public string? PersonalNo { get; set; }
     public string? CNIC { get; set; } = default!;
     public bool? LiveTime { get; set; }
     public DateTime? CnicExpiryDate { get; set; }
