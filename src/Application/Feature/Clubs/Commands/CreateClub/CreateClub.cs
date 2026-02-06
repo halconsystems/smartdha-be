@@ -11,7 +11,7 @@ using DHAFacilitationAPIs.Domain.Enums;
 using static Dapper.SqlMapper;
 
 namespace DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
-public record CreateClubCommand(string Name,string DisplayName, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, ClubType ClubType, string Email)
+public record CreateClubCommand(string Name,string DisplayName, string? Description, string? Location, string? ContactNumber, string? AccountNo, string? AccountNoAccronym, string Email)
     : IRequest<SuccessResponse<string>>;
 
 public class CreateClubCommandHandler : IRequestHandler<CreateClubCommand, SuccessResponse<string>>
