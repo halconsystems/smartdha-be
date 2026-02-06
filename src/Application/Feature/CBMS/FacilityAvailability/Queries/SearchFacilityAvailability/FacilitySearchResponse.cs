@@ -19,10 +19,19 @@ public record FacilityUnitAvailabilityDto(
     Guid FacilityUnitId,
     string UnitName,
     string? UnitType,
+    string? UnitDescription,                 // ✅ NEW
     decimal BasePrice,
     bool IsAvailable,
     List<SlotAvailabilityDto>? Slots,
-    string? MainImageUrl
+    string? MainImageUrl,
+    List<UnitServiceDto> Services             // ✅ NEW
+);
+public record UnitServiceDto(
+    Guid ServiceDefinitionId,
+    string ServiceName,
+    decimal Price,
+    bool IsComplimentary,
+    bool IsQuantityBased
 );
 
 public record SlotAvailabilityDto(

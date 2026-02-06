@@ -3,7 +3,11 @@
   <PropertyGroup>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
+<<<<<<< HEAD
+    <NameOfLastUsedPublishProfile>F:\Dev\DHA Projects\DHA Facilitation APIs\src\Web\Properties\PublishProfiles\FolderProfile3.pubxml</NameOfLastUsedPublishProfile>
+=======
     <NameOfLastUsedPublishProfile>C:\Users\muhammad.moiz\source\repos\DHAFacilitationAPIs\src\Web\Properties\PublishProfiles\FolderProfile1.pubxml</NameOfLastUsedPublishProfile>
+>>>>>>> a96824973acd34f69a023a15d737831df51a55ea
     <ActiveDebugProfile>DHAFacilitationAPIs.Web</ActiveDebugProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -22,7 +22,7 @@ public class PropertyProcedureRepository : IPropertyProcedureRepository
         string cnic,
         CancellationToken ct)
     {
-        cnic = "4220125641462";
+        
         var param = new DynamicParameters();
         param.Add("@memCNIC", cnic, DbType.String, size: 150);
 

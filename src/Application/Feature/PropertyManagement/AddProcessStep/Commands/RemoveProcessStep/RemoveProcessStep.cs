@@ -10,8 +10,10 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.AddProcessStep.Commands.RemoveProcessStep;
 
 public record RemoveProcessStepCommand(
-    Guid ProcessId
+    Guid ProcessId,
+    Guid StepId
 ) : IRequest<ApiResult<bool>>;
+
 public class RemoveProcessStepHandler
     : IRequestHandler<RemoveProcessStepCommand, ApiResult<bool>>
 {
@@ -28,9 +30,10 @@ public class RemoveProcessStepHandler
     {
         using var trx = await _db.Database.BeginTransactionAsync(ct);
 
-        // 1️⃣ Validate step
+        // 1️⃣ Load step
         var step = await _db.Set<ProcessStep>()
             .FirstOrDefaultAsync(x =>
+                x.Id == r.StepId &&
                 x.ProcessId == r.ProcessId &&
                 x.IsDeleted != true,
                 ct);
@@ -38,14 +41,31 @@ public class RemoveProcessStepHandler
         if (step == null)
             return ApiResult<bool>.Fail("Process step not found.");
 
+        // 🚫 Do not allow removing step 1
+        if (step.StepNo == 1)
+            return ApiResult<bool>.Fail("First step cannot be removed.");
+
+        // 🚫 Block removal if active cases already passed this step
+        var hasBlockingCases = await _db.Set<PropertyCase>()
+            .AnyAsync(c =>
+                c.ProcessId == r.ProcessId &&
+                c.IsDeleted != true &&
+                c.CurrentStepNo >= step.StepNo,
+                ct);
+
+        if (hasBlockingCases)
+            return ApiResult<bool>.Fail(
+                "Cannot remove this step because active cases have already reached or passed it."
+            );
+
         var removedStepNo = step.StepNo;
 
-        // 2️⃣ Soft delete (recommended)
+        // 2️⃣ Soft delete step
         step.IsDeleted = true;
         step.IsActive = false;
 
         // 3️⃣ Reorder remaining steps
-        var stepsToUpdate = await _db.Set<ProcessStep>()
+        var stepsToReorder = await _db.Set<ProcessStep>()
             .Where(x =>
                 x.ProcessId == r.ProcessId &&
                 x.IsDeleted != true &&
@@ -53,7 +73,7 @@ public class RemoveProcessStepHandler
             .OrderBy(x => x.StepNo)
             .ToListAsync(ct);
 
-        foreach (var s in stepsToUpdate)
+        foreach (var s in stepsToReorder)
         {
             s.StepNo -= 1;
         }
@@ -61,7 +81,8 @@ public class RemoveProcessStepHandler
         await _db.SaveChangesAsync(ct);
         await trx.CommitAsync(ct);
 
-        return ApiResult<bool>.Ok(true, "Process step removed and reordered.");
+        return ApiResult<bool>.Ok(true, "Process step removed and reordered successfully.");
     }
 }
+
 

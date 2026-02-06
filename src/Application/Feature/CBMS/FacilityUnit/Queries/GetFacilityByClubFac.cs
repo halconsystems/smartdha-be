@@ -29,8 +29,8 @@ public class GetFacilityUnitByClubFacQueryHandler
     }
 
     public async Task<ApiResult<List<FacilityUnitDTO>>> Handle(
-        GetFacilityUnitByClubFacQuery request,
-        CancellationToken ct)
+         GetFacilityUnitByClubFacQuery request,
+         CancellationToken ct)
     {
         var units = await _db.FacilityUnits
             .AsNoTracking()
@@ -41,13 +41,33 @@ public class GetFacilityUnitByClubFacQueryHandler
             .OrderBy(x => x.Name)
             .Select(x => new
             {
-                Unit = x,
+                // Unit core
+                x.Id,
+                x.ClubId,
+                x.FacilityId,
+                x.Name,
+                x.Code,
+                x.UnitType,
+                x.IsActive,
+                x.IsDeleted,
 
+                // Club
+                ClubName = x.Club.Name,
+
+                // Facility
+                FacilityName = x.Facility.Name,
+
+                // Category
+                CategoryId = x.Facility.ClubCategory.Id,
+                CategoryName = x.Facility.ClubCategory.Name,
+
+                // Services
                 Services = x.FacilityUnitServices
-                    .Where(s => s.IsEnabled)
+                    .Where(s => s.IsEnabled && x.IsActive==true && x.IsDeleted !=true)
                     .Select(s => s.ServiceDefinition.Name)
                     .ToList(),
 
+                // Images (raw paths only)
                 Images = x.FacilityUnitImages
                     .Select(i => new { i.ImageURL, i.Category })
                     .ToList()
@@ -79,27 +99,27 @@ public class GetFacilityUnitByClubFacQueryHandler
                 .ToList();
 
             return new FacilityUnitDTO(
-                x.Unit.Id,
-                x.Unit.ClubId,
-                x.Unit.Club.Name,
+                x.Id,
+                x.ClubId,
+                x.ClubName,
 
-                x.Unit.Facility.ClubCategory.Id,
-                x.Unit.Facility.ClubCategory.Name,
+                x.CategoryId,
+                x.CategoryName,
 
-                x.Unit.FacilityId,
-                x.Unit.Facility.Name,
+                x.FacilityId,
+                x.FacilityName,
 
-                x.Unit.Name,
-                x.Unit.Code,
-                x.Unit.UnitType,
+                x.Name,
+                x.Code,
+                x.UnitType,
 
                 mainImageUrl,
                 bannerImageUrls,
 
                 x.Services,
 
-                x.Unit.IsActive,
-                x.Unit.IsDeleted
+                x.IsActive,
+                x.IsDeleted
             );
         }).ToList();
 
