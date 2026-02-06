@@ -8,7 +8,7 @@ namespace DHAFacilitationAPIs.Domain.Entities.CBMS;
 public class FacilityUnit : BaseAuditableEntity
 {
     public Guid ClubId { get; set; }
-    public Club Club { get; set; } = default!;
+    public DHAClub Club { get; set; } = default!;
     public Guid FacilityId { get; set; }
     public Facility Facility { get; set; } = default!;
 

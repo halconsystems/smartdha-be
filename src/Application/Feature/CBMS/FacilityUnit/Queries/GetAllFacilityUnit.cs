@@ -46,28 +46,50 @@ public class GetAllFaciltiUnitQueryHandler
         _fileStorage = fileStorage;
     }
     public async Task<ApiResult<List<FacilityUnitDTO>>> Handle(
-     GetAllFaciltiUnitQuery request,
-     CancellationToken ct)
+        GetAllFaciltiUnitQuery request,
+        CancellationToken ct)
     {
+        // 🔹 Single SQL query with explicit projection (NO Include)
         var units = await _db.FacilityUnits
             .AsNoTracking()
             .Where(x => x.IsDeleted != true)
             .OrderBy(x => x.Name)
             .Select(x => new
             {
-                Unit = x,
+                // Unit core
+                x.Id,
+                x.ClubId,
+                x.FacilityId,
+                x.Name,
+                x.Code,
+                x.UnitType,
+                x.IsActive,
+                x.IsDeleted,
 
+                // Club
+                ClubName = x.Club.Name,
+
+                // Facility
+                FacilityName = x.Facility.Name,
+
+                // Category
+                CategoryId = x.Facility.ClubCategory.Id,
+                CategoryName = x.Facility.ClubCategory.Name,
+
+                // Services
                 Services = x.FacilityUnitServices
                     .Where(s => s.IsEnabled)
                     .Select(s => s.ServiceDefinition.Name)
                     .ToList(),
 
+                // Images (raw paths)
                 Images = x.FacilityUnitImages
                     .Select(i => new { i.ImageURL, i.Category })
                     .ToList()
             })
             .ToListAsync(ct);
 
+        // 🔹 In-memory mapping (safe place for GetPublicUrl)
         var result = units.Select(x =>
         {
             var mainImagePath = x.Images
@@ -79,7 +101,6 @@ public class GetAllFaciltiUnitQueryHandler
                 .Select(i => i.ImageURL)
                 .ToList();
 
-            // ✅ Explicit null handling (clean DTO)
             var mainImageUrl = string.IsNullOrWhiteSpace(mainImagePath)
                 ? null
                 : _fileStorage.GetPublicUrl(mainImagePath);
@@ -90,30 +111,29 @@ public class GetAllFaciltiUnitQueryHandler
                 .ToList();
 
             return new FacilityUnitDTO(
-                x.Unit.Id,
-                x.Unit.ClubId,
-                x.Unit.Club.Name,
+                x.Id,
+                x.ClubId,
+                x.ClubName,
 
-                x.Unit.Facility.ClubCategory.Id,
-                x.Unit.Facility.ClubCategory.Name,
+                x.CategoryId,
+                x.CategoryName,
 
-                x.Unit.FacilityId,
-                x.Unit.Facility.Name,
+                x.FacilityId,
+                x.FacilityName,
 
-                x.Unit.Name,
-                x.Unit.Code,
-                x.Unit.UnitType,
+                x.Name,
+                x.Code,
+                x.UnitType,
 
-                mainImageUrl,        // ✅ null if not present
-                bannerImageUrls,     // ✅ clean list
+                mainImageUrl,
+                bannerImageUrls,
 
                 x.Services,
 
-                x.Unit.IsActive,
-                x.Unit.IsDeleted
+                x.IsActive,
+                x.IsDeleted
             );
         }).ToList();
-
 
         return ApiResult<List<FacilityUnitDTO>>.Ok(result);
     }

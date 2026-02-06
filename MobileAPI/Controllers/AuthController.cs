@@ -1,15 +1,7 @@
 ﻿using System.Security.Claims;
-using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
-using DHAFacilitationAPIs.Application.Feature.Grounds.Command.GroundImages.Command;
-using DHAFacilitationAPIs.Application.Feature.Grounds.Queries;
-using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryItems;
-using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
-using DHAFacilitationAPIs.Application.Feature.PMS.Commands.AddCaseAttachment;
 using DHAFacilitationAPIs.Application.Feature.Profile.Queries;
-using DHAFacilitationAPIs.Application.Feature.Room.Commands.AddRoomImages;
-using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.LiveMemberRegisteration;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
@@ -21,10 +13,6 @@ using DHAFacilitationAPIs.Application.Feature.User.Commands.SubmitUserDeleteRequ
 using DHAFacilitationAPIs.Application.Feature.User.Commands.UserImage;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAllNonMemberPurposes;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.VerifyOtp;
-using DHAFacilitationAPIs.Application.ViewModels;
-using DHAFacilitationAPIs.Domain.Enums;
-using DHAFacilitationAPIs.Domain.Enums.GBMS;
-using DHAFacilitationAPIs.Infrastructure.Data.SQLite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -85,7 +73,16 @@ public class AuthController : BaseApiController
     [EnableRateLimiting("AnonymousLimiter")]
     [HttpPost("Register")]
    // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    public async Task<IActionResult> RegisterUser(MemberRegisterationCommand request)
+    public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    {
+        return Ok(await Mediator.Send(request));
+    }
+
+    [AllowAnonymous]
+    [EnableRateLimiting("AnonymousLimiter")]
+    [HttpPost("Test-Register")]
+    // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    public async Task<IActionResult> TestRegisterUser(MemberRegisterationCommand request)
     {
         return Ok(await Mediator.Send(request));
     }
