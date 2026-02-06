@@ -71,6 +71,14 @@ public class FemugationProcessController : BaseApiController
         return StatusCode(result.Status, result);
     }
 
+    [HttpPut("Active/InAtive-Phase"), AllowAnonymous]
+    [Tags("01 - Phase")]
+    public async Task<ActionResult<SuccessResponse<Guid>>> UpdatePhase(bool Active, ActiveInActivePhasesCommand cmd, CancellationToken ct)
+    {
+        var result = await _med.Send(cmd, ct);
+        return StatusCode(result.Status, result);
+    }
+
     #endregion
 
     #region Femugation Service Crud Here
