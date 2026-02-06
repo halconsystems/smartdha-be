@@ -17,8 +17,7 @@ public record RegisterShopDriverCommand(
     string Name,
     string MobileNo,
     string Password,
-    string CNIC,
-    Guid Shop
+    string CNIC
 ) : IRequest<SuccessResponse<Guid>>;
 public class RegisterShopDriverCommandHandler
     : IRequestHandler<RegisterShopDriverCommand, SuccessResponse<Guid>>

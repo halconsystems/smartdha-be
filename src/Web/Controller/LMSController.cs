@@ -22,17 +22,21 @@ using DHAFacilitationAPIs.Application.Feature.Orders.Queries;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Command;
 using DHAFacilitationAPIs.Application.Feature.OrderTaxDiscount.Queries;
 using DHAFacilitationAPIs.Application.Feature.Panic.Commands.RegisterDriver;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllDrivers;
 using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetAllPanicRequests;
+using DHAFacilitationAPIs.Application.Feature.Panic.Queries.GetDriverById;
 using DHAFacilitationAPIs.Application.Feature.PaymentIpn.Commands.SavePaymentIpn;
 using DHAFacilitationAPIs.Application.Feature.Religion.Command;
 using DHAFacilitationAPIs.Application.Feature.Religion.Queries;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Command;
 using DHAFacilitationAPIs.Application.Feature.ReligonSect.Queries;
 using DHAFacilitationAPIs.Application.Feature.ShopDriver.Command;
+using DHAFacilitationAPIs.Application.Feature.ShopDriver.Queries;
 using DHAFacilitationAPIs.Application.Feature.Shops.Command;
 using DHAFacilitationAPIs.Application.Feature.Shops.Queries;
 using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Command;
 using DHAFacilitationAPIs.Application.Feature.ShopVehicles.Queries;
+using DHAFacilitationAPIs.Application.Feature.User.Commands.UpdateDriverInfo;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -419,6 +423,38 @@ public class LMSController : BaseApiController
     [Tags("08 - Laundry-Shop")]
     public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToShops(AssignDriverToShopCommand cmd, CancellationToken ct)
       => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpGet("GetAll-Shop-Drivers")]
+    [Tags("08 - Laundry-Shop")]
+    public async Task<IActionResult> GetDrivers()
+    {
+        var result = await _mediator.Send(new GetAllShopDriversQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("Shop-Drivers/{id:guid}")]
+    [Tags("08 - Laundry-Shop")]
+    public async Task<IActionResult> GetDriver(Guid id)
+    {
+        var result = await _mediator.Send(new GetShopDriverByIdQuery(id));
+        return Ok(result);
+    }
+
+    [HttpPut("Shop-Drivers/{id:guid}")]
+    [Tags("08 - Laundry-Shop")]
+    public async Task<IActionResult> UpdateDriver(Guid id, UpdateShopDriverInfoCommand cmd)
+    {
+        var updated = await _mediator.Send(cmd with { DriverId = id });
+        return Ok(new { message = "Driver updated successfully" });
+    }
+
+    [HttpDelete("Shop-Drivers/{id:guid}")]
+    [Tags("08 - Laundry-Shop")]
+    public async Task<IActionResult> DeleteDriver(Guid id)
+    {
+        await _mediator.Send(new DeleteShopDriverCommand(id));
+        return Ok(new { message = "Driver deleted successfully." });
+    }
 
     //[HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
     //[Tags("08 - Laundry-Shop")]
