@@ -126,6 +126,17 @@ public class CBMSApplicationDbContext : DbContext, ICBMSApplicationDbContext
     .WithOne(x => x.FacilityUnit)
     .HasForeignKey(x => x.FacilityUnitId);
 
+        modelBuilder.Entity<DHAClub>()
+    .ToTable("Clubs");
+        modelBuilder.Entity<FacilityUnit>()
+     .HasOne(x => x.Club)
+     .WithMany()
+     .HasForeignKey(x => x.ClubId)
+     .HasConstraintName("FK_FacilityUnits_Clubs_ClubId")
+     .OnDelete(DeleteBehavior.Restrict);
+
+
+
 
         base.OnModelCreating(modelBuilder);
 

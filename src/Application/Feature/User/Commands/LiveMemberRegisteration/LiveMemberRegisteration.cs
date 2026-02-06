@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using DHAFacilitationAPIs.Application.Common.Exceptions;
@@ -50,11 +51,77 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
 
         // 2) Check if user exists (idempotent)
         var user = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CNIC == cnic, ct);
+           .FirstOrDefaultAsync(u => u.CNIC == request.CNIC, ct);
+        if (user != null)
+        {
+            if (user.PasswordHash == null || String.IsNullOrWhiteSpace(user.PasswordHash))
+            {
+                string normalizedMobile = (user.RegisteredMobileNo ?? string.Empty)
+                .Replace("-", "")              // remove dashes
+                .Replace(" ", "")              // remove spaces
+                .Trim();                       // remove leading/trailing whitespace
 
-        // 3) If user exists and fully registered -> reject
-        if (user != null && user.IsVerified == true && !string.IsNullOrWhiteSpace(user.PasswordHash))
+                if (normalizedMobile.StartsWith("0"))
+                {
+                    normalizedMobile = "92" + normalizedMobile.Substring(1);
+                }
+
+                var random = new Random();
+                var generateotp = random.Next(100000, 999999); // generates a 6-digit number
+
+                string returnmsg = $"An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application.{generateotp}";
+                string sentmsg = $"{generateotp} is your One-Time Password (OTP) to verify your account on the DHA Karachi Mobile Application. Do not share this code with anyone.";
+
+                string result = await _otpService.SendSmsAsync(normalizedMobile, sentmsg, ct);
+                if (result == "SUCCESSFUL")
+                {
+                    var usernewOtp = new UserOtp
+                    {
+                        UserId = Guid.Parse(user.Id),
+                        CNIC = user.CNIC,
+                        MobileNo = normalizedMobile,
+                        OtpCode = generateotp.ToString(),
+                        SentMessage = sentmsg,
+                        IsVerified = false,
+                        ExpiresAt = DateTime.Now.AddMinutes(5)
+                    };
+                    _context.UserOtps.Add(usernewOtp);
+                    await _context.SaveChangesAsync(ct);
+
+                    TimeSpan expiresIn = TimeSpan.FromMinutes(2); // 2-minute validity
+                    string verifyuserToken = await _authenticationService.GenerateTemporaryToken(user, "verify_otp", expiresIn);
+
+                    //return returnmsg;
+                    RegisterationDto _registerationdto = new RegisterationDto
+                    {
+                        isOtpRequired = true,
+                        AccessToken = verifyuserToken,
+                        MobileNumber = MaskMobile(normalizedMobile),
+                        ResponseMessage = returnmsg
+
+                    };
+
+                    return new SuccessResponse<RegisterationDto>(
+                    _registerationdto,
+                    returnmsg
+                    );
+                }
+            }
+            if (user.IsActive == false)
+            {
+                throw new ConflictException("Account already exists but is inactive. Please contact the administrator for assistance.");
+            }
+            if (user.IsDeleted == true)
+            {
+                throw new ConflictException("Account already exists but has been deleted. Please contact the administrator for assistance.");
+            }
+            if (user.IsVerified == false)
+            {
+                throw new ConflictException("Account already exists but is not verified. Please contact the administrator for assistance.");
+            }
             throw new ConflictException("An account with this information already exists.");
+
+        }
 
         // 4) Get member info (your existing call)
         var resultMember = await _memberLookupService.GetMemberByCnicAsync(cnic, ct);
@@ -63,9 +130,10 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
         var staffno = resultMember.Member.StaffNo ?? "";
         var name = resultMember.Member.Name ?? "";
         var cellno = NormalizePkMobile(resultMember.Member.CellNo ?? "");
+        string message = resultMember.Member.Message ?? "No message";
 
-        if (string.IsNullOrWhiteSpace(resultMember.Member.MemPk) && string.IsNullOrWhiteSpace(resultMember.Member.Name))
-            throw new NotFoundException("");
+        if (string.IsNullOrWhiteSpace(resultMember.Member.Name))
+            throw new NotFoundException(message);
 
         if (string.IsNullOrWhiteSpace(cellno) || cellno.Length != 12 || !cellno.All(char.IsDigit))
             throw new ConflictException("Mobile number not found. Please visit DHA Head Office to update your registered mobile number.");
@@ -233,16 +301,30 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
         // 8) Issue temporary verify token (short)
         var verifyToken = await _authenticationService.GenerateTemporaryToken(user, "verify_otp", TimeSpan.FromMinutes(2));
 
+        //return new SuccessResponse<RegisterationDto>(
+        //    new RegisterationDto
+        //    {
+        //        isOtpRequired = true,
+        //        AccessToken = verifyToken,
+        //        MobileNumber = MaskMobile(cellno),
+        //        ResponseMessage = "An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application."
+        //    },
+        //    "OTP sent successfully"
+        //);
+
+        var _registerationfinaldto = new RegisterationDto
+        {
+            isOtpRequired = true,
+            AccessToken = verifyToken,
+            MobileNumber = MaskMobile(cellno),
+            ResponseMessage = "An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application."
+        };
+
         return new SuccessResponse<RegisterationDto>(
-            new RegisterationDto
-            {
-                isOtpRequired = true,
-                AccessToken = verifyToken,
-                MobileNumber = MaskMobile(cellno),
-                ResponseMessage = "An OTP has been sent to your registered mobile number. Please use it to complete your sign-up for the DHA Karachi Mobile Application."
-            },
-            "OTP sent successfully"
+            _registerationfinaldto,
+            message
         );
+
     }
 
     // Helpers

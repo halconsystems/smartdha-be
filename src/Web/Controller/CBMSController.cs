@@ -541,6 +541,20 @@ public class CBMSController : BaseApiController
         CancellationToken ct)
         => Ok(await _mediator.Send(new GetClubsDropdownQuery(), ct));
 
+    // 🔹 All facilities
+    [HttpGet("dropdown/Allfacilities")]
+    [Tags("09 - Dropdowns")]
+    public async Task<ActionResult<List<DropdownDto>>> GetAllDropdown()
+        => Ok(await _mediator.Send(new GetAllFacilitiesDropdownQuery()));
+
+    // 🔹 Facilities by category
+    [HttpGet("dropdown/by-category")]
+    [Tags("09 - Dropdowns")]
+    public async Task<ActionResult<List<DropdownDto>>> GetByCategory(
+        [FromQuery] Guid categoryId)
+        => Ok(await _mediator.Send(
+            new GetFacilitiesDropdownByCategoryQuery(categoryId)));
+
 
     [HttpGet("dropdown/facilities")]
     [Tags("09 - Dropdowns")]
@@ -574,13 +588,6 @@ public class CBMSController : BaseApiController
         => Ok(DropdownEnumHelper.GetBookingModes());
 
     #endregion
-
-
-
-
-
-
-
 
 
     //    [HttpPost("AddFacilityService")]
