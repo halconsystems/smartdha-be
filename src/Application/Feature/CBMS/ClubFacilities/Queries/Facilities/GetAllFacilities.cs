@@ -47,7 +47,7 @@ public class GetAllFacilitiesQueryHandler : IRequestHandler<GetAllFacilitiesQuer
                 .Where(g => !string.IsNullOrEmpty(g.ImageURL))
                 .ToDictionary(
                     img => img.FacilityId,
-                    img => img.ImageURL
+                    img => _file.GetPublicUrl(img.ImageURL)
 
                 );
 
@@ -70,16 +70,40 @@ public class GetAllFacilitiesQueryHandler : IRequestHandler<GetAllFacilitiesQuer
                .Where(g => !string.IsNullOrEmpty(g.ImageURL))
                .ToDictionary(
                    img => img.FacilityId,
-                   img => img.ImageURL
+                   img => _file.GetPublicUrl(img.ImageURL)
 
                );
         }
 
-        var list = await _db.Set<Domain.Entities.CBMS.Facility>()
-            .Where(x=> x.IsDeleted != true && x.IsActive==true)
+        var facilities = await _db.Set<Domain.Entities.CBMS.Facility>()
+            .Where(x => x.IsDeleted != true && x.IsActive == true)
             .OrderBy(x => x.Name)
-            .Select(x => new FacilitiesDTO(x.Id, x.Name, x.DisplayName, x.Code,x.Description ,x.ClubCategoryId, MainImagepublicUrls.FirstOrDefault(i => i.Key == x.Id).Value, ImagespublicUrls.Where(i => i.Key == x.Id).Select(h => h.Value).ToList(), x.FoodType, x.IsActive, x.IsDeleted))
             .ToListAsync(ct);
+
+        var list = facilities.Select(x => new FacilitiesDTO(
+            x.Id,
+            x.Name,
+            x.DisplayName,
+            x.Code,
+            x.Description,
+            x.ClubCategoryId,
+
+            // Main Image (single)
+            MainImagepublicUrls.TryGetValue(x.Id, out var mainImg)
+                ? mainImg
+                : null,
+
+            // Other Images (multiple)
+            ImagespublicUrls
+                .Where(i => i.Key == x.Id)
+                .Select(i => i.Value)
+                .ToList(),
+
+            x.FoodType,
+            x.IsActive,
+            x.IsDeleted
+        )).ToList();
+
 
         return ApiResult<List<FacilitiesDTO>>.Ok(list);
     }
