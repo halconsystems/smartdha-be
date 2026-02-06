@@ -174,7 +174,7 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
                     // OTP gate
                     RegistrationNo=cellno,
                     MEMPK= resultMember.Member.MemPk ?? "",
-                    IsVerified = false,     // IMPORTANT: user is NOT verified until OTP
+                    IsVerified = true,     // IMPORTANT: user is NOT verified until OTP
                     IsOtpRequired = true
                 };
 

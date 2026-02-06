@@ -45,6 +45,8 @@ public class SearchFacilityAvailabilityHandler
             .Include(f => f.ClubCategory)
             .ToListAsync(ct);
 
+
+
         var result = new List<FacilitySearchResponse>();
 
         foreach (var facility in facilities)
@@ -62,6 +64,21 @@ public class SearchFacilityAvailabilityHandler
 
             foreach (var unit in units)
             {
+                var unitServices = await _db.FacilityUnitServices
+                 .Where(s =>
+                     s.FacilityUnitId == unit.Id &&
+                     s.IsEnabled &&
+                     s.IsDeleted != true)
+                 .Select(s => new UnitServiceDto(
+                     s.ServiceDefinitionId,
+                     s.ServiceDefinition.Name,
+                     s.Price,
+                     s.IsComplimentary,
+                     s.ServiceDefinition.IsQuantityBased
+                 ))
+                 .ToListAsync(ct);
+
+
 
                 var unitMainImagePath = await _db.FacilityUnitImages
                 .Where(x =>
@@ -145,10 +162,12 @@ public class SearchFacilityAvailabilityHandler
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
+                         unit.Description,
                         config.BasePrice,
                         true,
                         availableSlots,
-                        unitMainImageUrl
+                        unitMainImageUrl,
+                        unitServices
                     ));
                 }
                 // =========================
@@ -186,10 +205,12 @@ public class SearchFacilityAvailabilityHandler
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
+                        unit.Description,
                         config.BasePrice,
                         true,
                         null,
-                        unitMainImageUrl
+                        unitMainImageUrl,
+                        unitServices
                     ));
                 }
             }

@@ -82,8 +82,8 @@ public class ClubController : BaseApiController
             toDate
         ));
     }
-    [HttpGet("{facilityUnitId}/GetFacilityUnitDetail")]
-   
+
+    //[HttpGet("{facilityUnitId}/GetFacilityUnitDetail")]
     //public Task<ApiResult<FacilityUnitDetailResponse>> GetDetail(
     //    Guid facilityUnitId)
     //    => _mediator.Send(new GetFacilityUnitDetailQuery(facilityUnitId));

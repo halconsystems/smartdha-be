@@ -22,12 +22,20 @@ public class WorkflowStepsController : BaseApiController
     public async Task<IActionResult> ByProcess(Guid processId, CancellationToken ct)
         => Ok(await _mediator.Send(new GetStepsByProcessQuery(processId), ct));
 
-    [HttpDelete("{processId:guid}/steps")]
-    public async Task<IActionResult> RemoveStep(Guid processId)
+    [HttpDelete("{processId:guid}/steps/{stepId:guid}")]
+    public async Task<IActionResult> RemoveStep(
+    Guid processId,
+    Guid stepId,
+    CancellationToken ct)
     {
         var result = await _mediator.Send(
-            new RemoveProcessStepCommand(processId));
+            new RemoveProcessStepCommand(
+                processId,
+                stepId
+            ),
+            ct);
 
         return Ok(result);
     }
+
 }

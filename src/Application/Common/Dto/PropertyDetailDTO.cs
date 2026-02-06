@@ -26,4 +26,6 @@ public class PropertyDetailDTO
     public string? NIC { get; set; }
     public string? CELLNO { get; set; }
     public string? ALLRESPLOT { get; set; }
+    public string? FILENO { get; set; }
+    public string? PROPERTY_ADDRESS { get; set; }
 }

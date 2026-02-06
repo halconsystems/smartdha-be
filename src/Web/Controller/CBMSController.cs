@@ -497,6 +497,7 @@ public class CBMSController : BaseApiController
         => Ok(await _mediator.Send(
             new GetFacilityUnitServicesByUnitQuery(facilityUnitId)));
 
+
     #endregion
 
     #region Facility Unit Booking Config
@@ -597,6 +598,18 @@ public class CBMSController : BaseApiController
     [Tags("09 - Dropdowns")]
     public IActionResult BookingModesDropdown()
         => Ok(DropdownEnumHelper.GetBookingModes());
+
+    [HttpGet("dropdown/facility-units/{facilityUnitId}/services/dropdown")]
+    [Tags("09 - Dropdowns")]
+    public async Task<ActionResult<ApiResult<List<DropdownDto>>>>
+    GetAvailableServicesForUnit(Guid facilityUnitId)
+    {
+        var result = await _mediator.Send(
+            new GetServiceDefinitionsByFacilityUnitQuery(facilityUnitId));
+
+        return Ok(result);
+    }
+
 
     #endregion
 

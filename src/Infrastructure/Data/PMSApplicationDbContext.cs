@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
@@ -160,6 +161,24 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
             .HasIndex(x => x.CaseId)
             .IsUnique(); // one fee snapshot per case
 
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(BaseAuditableEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                var method = typeof(ApplicationDbContext)
+                    .GetMethod(nameof(ApplyGlobalFilters),
+                        BindingFlags.NonPublic | BindingFlags.Static)
+                    ?.MakeGenericMethod(entityType.ClrType);
+
+                method?.Invoke(null, new object[] { modelBuilder });
+            }
+        }
         base.OnModelCreating(modelBuilder);
+    }
+    private static void ApplyGlobalFilters<TEntity>(ModelBuilder modelBuilder)
+    where TEntity : BaseAuditableEntity
+    {
+        modelBuilder.Entity<TEntity>()
+            .HasQueryFilter(e => e.IsActive==true && !e.IsDeleted !=true);
     }
 }

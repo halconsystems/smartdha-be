@@ -78,14 +78,14 @@ public class AuthController : BaseApiController
         return Ok(await Mediator.Send(request));
     }
 
-    [AllowAnonymous]
-    [EnableRateLimiting("AnonymousLimiter")]
-    [HttpPost("Test-Register")]
-    // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    public async Task<IActionResult> TestRegisterUser(MemberRegisterationCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+    //[AllowAnonymous]
+    //[EnableRateLimiting("AnonymousLimiter")]
+    //[HttpPost("Test-Register")]
+    //// public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    //public async Task<IActionResult> TestRegisterUser(MemberRegisterationCommand request)
+    //{
+    //    return Ok(await Mediator.Send(request));
+    //}
 
     [AllowAnonymous]
     [EnableRateLimiting("AnonymousLimiter")]

@@ -63,7 +63,7 @@ public class GetFacilityUnitByClubFacQueryHandler
 
                 // Services
                 Services = x.FacilityUnitServices
-                    .Where(s => s.IsEnabled)
+                    .Where(s => s.IsEnabled && x.IsActive==true && x.IsDeleted !=true)
                     .Select(s => s.ServiceDefinition.Name)
                     .ToList(),
 
