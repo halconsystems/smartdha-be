@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Feature.DiscountSetting.Command;
+using DHAFacilitationAPIs.Application.Feature.Fumigation.FumationShops.Command;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryPackaging;
@@ -215,6 +216,8 @@ public class LMSController : BaseApiController
        => Ok(await _mediator.Send(cmd with { Id = id }, ct));
     #endregion
 
+    
+
 
     #region Laundry Tax-Dicount Crud Here
     [HttpPost("Create-Discount-Tax"), AllowAnonymous]
@@ -388,6 +391,14 @@ public class LMSController : BaseApiController
     public async Task<ActionResult<SuccessResponse<string>>> UpdateShops(Guid id, UpdateShopCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd with { ShopId = id }, ct));
 
+    [HttpDelete("Delete-Shops"), AllowAnonymous]
+    [Tags("08 - Laundry-Shop")]
+    public async Task<ActionResult<SuccessResponse<string>>> DeleteShop([FromQuery] DeleteFMShopsCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
     [HttpGet("get-AllShops"), AllowAnonymous]
     [Tags("08 - Laundry-Shop")]
     public async Task<ActionResult<MemberShipDTO>> GetAllShops(CancellationToken ct)
@@ -409,10 +420,10 @@ public class LMSController : BaseApiController
     public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToShops(AssignDriverToShopCommand cmd, CancellationToken ct)
       => Ok(await _mediator.Send(cmd, ct));
 
-    [HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
-    [Tags("08 - Laundry-Shop")]
-    public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
-      => Ok(await _mediator.Send(cmd, ct));
+    //[HttpPost("Assign-Driver-Vehicle"), AllowAnonymous]
+    //[Tags("08 - Laundry-Shop")]
+    //public async Task<ActionResult<SuccessResponse<Guid>>> AssignDriversToVehicle(AssignedDriverToVehiclesCommand cmd, CancellationToken ct)
+    //  => Ok(await _mediator.Send(cmd, ct));
 
     [HttpPost("Drivers/Register")]
     [Tags("08 - Laundry-Shop")]
@@ -437,6 +448,39 @@ public class LMSController : BaseApiController
         var result = await _mediator.Send(new GetShopVehiclesQuery(), ct);
         return Ok(result);
     }
+    #endregion
+
+    #region Laundry Package Crud Here
+    [HttpPost("Create-LaundryPackage"), AllowAnonymous]
+    [Tags("10 - LaundryPackage")]
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreatePackage(CreateLaundryPackagingCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPut("Modify-LaundryPackage-{id:guid}")]
+    [Tags("10 - LaundryPackage")]
+    public async Task<ActionResult<SuccessResponse<string>>> UpdatePackage(Guid id, ModifyLaundryPackagingCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd with { Id = id }, ct));
+
+    [HttpGet("get-LaundryPackage"), AllowAnonymous]
+    [Tags("10 - LaundryPackage")]
+    public async Task<ActionResult<MemberShipDTO>> GetAllLaundryPackage(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllLaundryPackagingQuery(), ct);
+        return Ok(result);
+    }
+
+    [HttpDelete("Delete-LaundryPackage"), AllowAnonymous]
+    [Tags("10 - LaundryPackage")]
+    public async Task<ActionResult<SuccessResponse<string>>> DeletePackage([FromQuery] DeleteLaundryPackageCommand command, CancellationToken ct)
+    {
+        var result = await _mediator.Send(command, ct);
+        return Ok(result);
+    }
+
+    [HttpPut("Active-Inactive-LaundryPackage")]
+    [Tags("10 - LaundryPackage")]
+    public async Task<ActionResult<SuccessResponse<string>>> UpdateLaundryPackage(Guid id, bool Active, ActiveInActiveLaundryPackagingCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd with { Id = id }, ct));
     #endregion
 
     //[HttpPost("Order/Order-Dispatch")]

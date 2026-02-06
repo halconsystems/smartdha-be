@@ -34,8 +34,10 @@ using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.CreateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.DeleteClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Commands.UpdateClub;
 using DHAFacilitationAPIs.Application.Feature.Clubs.Queries.GetAllClubs;
+using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Queries;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums.CBMS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -194,7 +196,16 @@ public class CBMSController : BaseApiController
         var result = await _mediator.Send(command, ct);
         return Ok(result);
     }
-   
+
+    [HttpPut("updatefacility/{id:guid}")]
+    [Tags("04 - Facility")]
+    public async Task<IActionResult> UpdateFacility(
+       Guid id,
+       [FromBody] ClubUpdateFacilityRequest body,
+       CancellationToken ct)
+       => Ok(await _mediator.Send(
+           new UpdateFacilityCommand(id, body.Name,body.Code,body.DisplayName,body.Description,body.ClubServiceCategoryId, body.FoodType), ct));
+
     [HttpGet("GetFacilities")]
     [Tags("04 - Facility")]
     public async Task<ActionResult<List<FacilitiesDTO>>> GetFacilities()
@@ -878,4 +889,13 @@ public record ClubUpdateServiceCategoryRequest(
    string Code,
    string DisplayName,
    string Descriptio
+);
+public record ClubUpdateFacilityRequest(
+    Guid FacilityId,
+   string Name,
+   string Code,
+   string DisplayName,
+   string Description,
+   Guid ClubServiceCategoryId,
+   FoodType FoodType
 );

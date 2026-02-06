@@ -39,6 +39,7 @@ public class MemberRequest : BaseAuditableEntity
     public string? ServiceNo { get; set; }
     public string? ArmsSvc { get; set; }
     public CauseRetirement? CauseRetirement { get; set; }
+    public Title? Title { get; set; }
 
     [Required]
     [MaxLength(500)]

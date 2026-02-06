@@ -31,8 +31,18 @@ public enum Ranks
 
 public enum CauseRetirement
 {
-    Normam = 0,
+    Normal = 0,
     Medical = 1,
     Resigned = 2,
     Dismissed = 3
+}
+
+
+public enum Title
+{
+    Mr = 0,
+    Mrs = 1,
+    Miss = 2,
+    Dr = 3,
+    Engr = 4
 }

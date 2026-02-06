@@ -25,6 +25,7 @@ public class CreateMemberShipRequestCommand : IRequest<SuccessResponse<string>>
     [Required]
     public string Name { get; set; } = default!;
     public Ranks? Ranks { get; set; }
+    public Title? Title { get; set; }
     [Required]
     public Gender Gender { get; set; } = default!;
     [Required]
@@ -134,22 +135,22 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
             var motherfrontPath = string.Empty;
             var motherbackPath = string.Empty;
             var motherprofilePicture = string.Empty;
-            var frontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicFrontPicture, "cnic", ct);
-            var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CnicBackPicture, "cnic", ct);
-            var profilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.profilePicture, "cnic", ct);
+            var frontPath = await _fileStorage.SaveFileAsync(command.CnicFrontPicture, "cnic", ct);
+            var backPath = await _fileStorage.SaveFileAsync(command.CnicBackPicture, "cnic", ct);
+            var profilePicture = await _fileStorage.SaveFileAsync(command.profilePicture, "cnic", ct);
 
             if (command.FatherPicturePath != null && command.FatherCNICFrontImagePath != null && command.FatherCNICBackImagePath != null)
             {
-                FatherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICFrontImagePath, "cnic", ct);
-                FatherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherCNICBackImagePath, "cnic", ct);
-                FatherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.FatherPicturePath, "cnic", ct);
+                FatherfrontPath = await _fileStorage.SaveFileAsync(command.FatherCNICFrontImagePath, "cnic", ct);
+                FatherbackPath = await _fileStorage.SaveFileAsync(command.FatherCNICBackImagePath, "cnic", ct);
+                FatherprofilePicture = await _fileStorage.SaveFileAsync(command.FatherPicturePath, "cnic", ct);
             }
 
             if (command.MotherPicturePath != null && command.MotherCNICFrontImagePath != null && command.MotherCNICBackImagePath != null)
             {
-                motherfrontPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICFrontImagePath, "cnic", ct);
-                motherbackPath = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherCNICBackImagePath, "cnic", ct);
-                motherprofilePicture = await _fileStorage.SaveFileMemeberrequestAsync(command.MotherPicturePath, "cnic", ct);
+                motherfrontPath = await _fileStorage.SaveFileAsync(command.MotherCNICFrontImagePath, "cnic", ct);
+                motherbackPath = await _fileStorage.SaveFileAsync(command.MotherCNICBackImagePath, "cnic", ct);
+                motherprofilePicture = await _fileStorage.SaveFileAsync(command.MotherPicturePath, "cnic", ct);
             }
             //var backPath = await _fileStorage.SaveFileMemeberrequestAsync(command.CNICBackImage, "cnic", ct);
 
@@ -214,6 +215,7 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                 ServiceNo = command.ServiceNo,
                 ArmsSvc = command.ArmsSvc,
                 CauseRetirement = command.CauseRetirement,
+                Title = command.Title,
 
             };
             Dictionary<string, Guid> wifeMap= new Dictionary<string, Guid>();
@@ -229,16 +231,16 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                     Email = x.Email,
                     Nationality = x.Nationality,
                     otherNationality = x.otherNationality,
-                    PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
-                    CnicFrontImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicFrontImage, "cnic", ct).ToString(),
-                    CnicBackImage = _fileStorage.SaveFileMemeberrequestAsync(x.CnicBackImage, "cnic", ct).ToString(),
+                    PicturePath = _fileStorage.SaveFileAsync(x.PicturePath, "cnic", ct).ToString(),
+                    CnicFrontImage = _fileStorage.SaveFileAsync(x.CnicFrontImage, "cnic", ct).ToString(),
+                    CnicBackImage = _fileStorage.SaveFileAsync(x.CnicBackImage, "cnic", ct).ToString(),
                     Cnic = x.Cnic,
                     CnicExpiry = x.CnicExpiry,
                     PassportNo = x.PassportNo,
                     PassportExpiryDate = x.PassportExpiryDate,
                     WifeNo = x.WifeNo,
                     IsChild = x.IsChild,
-                    UploadPassport = x.UploadPassport != null ?  _fileStorage.SaveFileMemeberrequestAsync(x.UploadPassport, "cnic", ct).ToString() : null,
+                    UploadPassport = x.UploadPassport != null ?  _fileStorage.SaveFileAsync(x.UploadPassport, "cnic", ct).ToString() : null,
                 }).ToList();
 
                 _context.MemberSpouses.AddRange(memberSpouse);
@@ -272,12 +274,12 @@ public class CreateMemberShipRequestCommandHandler : IRequestHandler<CreateMembe
                     IsAdult = x.IsAdult,
                     CnicNo = x.CnicNo,
 
-                    PicturePath = _fileStorage.SaveFileMemeberrequestAsync(x.PicturePath, "cnic", ct).ToString(),
-                    CNICFrontImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICFrontImagePath, "cnic", ct).ToString(),
-                    CNICBackImagePath = _fileStorage.SaveFileMemeberrequestAsync(x.CNICBackImagePath, "cnic", ct).ToString(),
+                    PicturePath = _fileStorage.SaveFileAsync(x.PicturePath, "cnic", ct).ToString(),
+                    CNICFrontImagePath = _fileStorage.SaveFileAsync(x.CNICFrontImagePath, "cnic", ct).ToString(),
+                    CNICBackImagePath = _fileStorage.SaveFileAsync(x.CNICBackImagePath, "cnic", ct).ToString(),
                     CnicExpiryDate = x.CnicExpiryDate,
                     NadraBForm = x.NadraBForm != null
-                        ? _fileStorage.SaveFileMemeberrequestAsync(x.NadraBForm, "cnic", ct).ToString()
+                        ? _fileStorage.SaveFileAsync(x.NadraBForm, "cnic", ct).ToString()
                         : null,
                 };
             }).ToList();

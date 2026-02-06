@@ -14,7 +14,6 @@ public record CreateFacilityCommand(
     string DisplayName,
     string Code,
     Guid ClubServiceCategoryId,
-    string? ImageURL,
     string? Description,
     FoodType? FoodType
 ) : IRequest<ApiResult<Guid>>;
@@ -37,7 +36,6 @@ public class CreateFacilityCommandHandler : IRequestHandler<CreateFacilityComman
             DisplayName = request.DisplayName,
             Code = request.Code,
             ClubCategoryId = request.ClubServiceCategoryId,
-            ImageURL = request.ImageURL,
             Description = request.Description,
             FoodType = request.FoodType
         };
