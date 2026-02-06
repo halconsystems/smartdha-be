@@ -14,3 +14,20 @@ public enum MaritalStatus
     Widow = 4,
     Widower = 5,
 }
+
+
+public enum OgranizationType
+{
+    Business = 0,
+    NGO = 1,
+    Diplomat = 2,
+    Trust = 3,
+    Other = 99
+}
+
+public enum CompanyType
+{
+    Limited = 0,
+    Unlimited = 1,
+    PatnerSHip = 2
+}

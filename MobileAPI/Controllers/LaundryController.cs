@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryPackaging;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryService;
+using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryShopDT;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.Delivery;
 using DHAFacilitationAPIs.Application.Feature.OrderDispatch.Command.PickUp;
@@ -182,9 +183,9 @@ public class LaundryController : BaseApiController
 
     [HttpGet("GetOrder-Dsicount-Tax"), AllowAnonymous]
     [Tags("01 - Laundry-Orders")]
-    public async Task<IActionResult> GetAll(CancellationToken ct)
+    public async Task<IActionResult> GetAll(Guid ShopId,CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetAllOrderDTSetting(), ct);
+        var result = await _mediator.Send(new GetShopDTByShopIdQuery(ShopId), ct);
         return Ok(result);
     }
     #endregion

@@ -18,4 +18,6 @@ public class OrderDTSetting : BaseAuditableEntity
     public string? DTCode { get; set; }
     public bool IsDiscount { get; set; }
     public string? Value { get; set; }
+
 }
+

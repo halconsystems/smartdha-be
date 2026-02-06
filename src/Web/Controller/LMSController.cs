@@ -6,10 +6,12 @@ using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryPackaging;
 using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryServices;
+using DHAFacilitationAPIs.Application.Feature.LMS.Command.LaundryShopDT;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryCategory;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryItems;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryPackaging;
 using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryService;
+using DHAFacilitationAPIs.Application.Feature.LMS.Queries.LaundryShopDT;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Command;
 using DHAFacilitationAPIs.Application.Feature.MemberShip.Queries;
 using DHAFacilitationAPIs.Application.Feature.MemberShipCategory.Command;
@@ -470,6 +472,7 @@ public class LMSController : BaseApiController
     }
     #endregion
 
+
     #region Laundry Shop Vehicle Crud Here
 
     [HttpPost("Create-ShopVehicle")]
@@ -517,6 +520,55 @@ public class LMSController : BaseApiController
     [Tags("10 - LaundryPackage")]
     public async Task<ActionResult<SuccessResponse<string>>> UpdateLaundryPackage(Guid id, bool Active, ActiveInActiveLaundryPackagingCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd with { Id = id }, ct));
+    #endregion
+
+
+    #region Laundry Shop Discount CRUD Here
+
+    [HttpPost("Create-Shop-Discount-Tax"), AllowAnonymous]
+    [Tags("11 - LaundryShopDiscountTax")]
+    public async Task<ActionResult<SuccessResponse<Guid>>> CreateShopDiscounttax(CreateAddLaundryShopDTCommand cmd, CancellationToken ct)
+      => Ok(await _mediator.Send(cmd, ct));
+
+    [HttpPut("Modify-Shop-Discount-Tax/{id:guid}")]
+    [Tags("11 - LaundryShopDiscountTax")]
+    public async Task<ActionResult<SuccessResponse<string>>> UpdateShopDiscounttax(Guid id, UpdateLaundryShopDTCommand cmd, CancellationToken ct)
+       => Ok(await _mediator.Send(cmd with { Id = id }, ct));
+
+    [HttpGet("get-Shop-Discount-Tax"), AllowAnonymous]
+    [Tags("11 - LaundryShopDiscountTax")]
+    public async Task<ActionResult<ShopDTdto>> GetAllShopDTDiscount(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetAllShopDTQuery(), ct);
+        return Ok(result);
+    }
+    [HttpGet("get-Shop-Discount-Tax-Id"), AllowAnonymous]
+    [Tags("11 - LaundryShopDiscountTax")]
+    public async Task<ActionResult<ShopDTdto>> GetShopDTDiscount(Guid Id, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetShopDTSettingByIdQuery(Id), ct);
+        return Ok(result);
+    }
+    [HttpGet("get-Shop-Discount-Tax-ShopId"), AllowAnonymous]
+    [Tags("11 - LaundryShopDiscountTax")]
+    public async Task<ActionResult<ShopDTdto>> GetShopDTDiscountbySHopId(Guid ShopId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetShopDTByShopIdQuery(ShopId), ct);
+        return Ok(result);
+    }
+
+    //[HttpDelete("Delete-LaundryPackage"), AllowAnonymous]
+    //[Tags("10 - LaundryPackage")]
+    //public async Task<ActionResult<SuccessResponse<string>>> DeletePackage([FromQuery] DeleteLaundryPackageCommand command, CancellationToken ct)
+    //{
+    //    var result = await _mediator.Send(command, ct);
+    //    return Ok(result);
+    //}
+
+    //[HttpPut("Active-Inactive-LaundryPackage")]
+    //[Tags("10 - LaundryPackage")]
+    //public async Task<ActionResult<SuccessResponse<string>>> UpdateLaundryPackage(Guid id, bool Active, ActiveInActiveLaundryPackagingCommand cmd, CancellationToken ct)
+    //   => Ok(await _mediator.Send(cmd with { Id = id }, ct));
     #endregion
 
     //[HttpPost("Order/Order-Dispatch")]
