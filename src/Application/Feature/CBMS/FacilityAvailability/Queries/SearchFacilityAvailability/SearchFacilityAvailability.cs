@@ -220,7 +220,7 @@ public class SearchFacilityAvailabilityHandler
 
             result.Add(new FacilitySearchResponse(
                 facility.Id,
-                facility.DisplayName,
+                facility.Name,
                 facility.ClubCategory.Name,
                 _db.FacilitiesImages
                     .Where(x =>
