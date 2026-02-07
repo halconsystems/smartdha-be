@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.AddFacilityToClub;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.CBMS;
+using DHAFacilitationAPIs.Domain.Enums.CBMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubFacilities.Commands.UpdateFacilityToClub;
@@ -20,8 +22,8 @@ public record UpdateFacilityToClubCommand(
     bool IsAvailable,
     bool IsPriceVisible,
     bool HasAction,
-    string? ActionName,
-    string? ActionType
+    FacilityActionType FacilityActionType,
+    BookingMode BookingMode
 ) : IRequest<ApiResult<Guid>>;
 public class UpdateFacilityToClubCommandHandler
     : IRequestHandler<UpdateFacilityToClubCommand, ApiResult<Guid>>
@@ -41,14 +43,18 @@ public class UpdateFacilityToClubCommandHandler
 
         if (existClubFacility == null) return ApiResult<Guid>.Fail("Club Facility not found.");
 
+        var (actionName, actionType) = FacilityActionMapper.ToUiAndType(request.FacilityActionType);
+
         existClubFacility.ClubId = request.ClubId;
         existClubFacility.FacilityId = request.FacilityId;
         existClubFacility.Price = request.Price;
         existClubFacility.IsAvailable = request.IsAvailable;
         existClubFacility.IsPriceVisible = request.IsPriceVisible;
         existClubFacility.HasAction = request.HasAction;
-        existClubFacility.ActionName = request.ActionName;
-        existClubFacility.ActionType = request.ActionType;
+        existClubFacility.FacilityActionType = request.FacilityActionType;
+        existClubFacility.BookingMode = request.BookingMode;
+        existClubFacility.ActionName = actionName;
+        existClubFacility.ActionType = actionType;
 
         try
         {

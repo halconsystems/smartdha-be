@@ -21,7 +21,7 @@ public class GetStepsByProcessHandler : IRequestHandler<GetStepsByProcessQuery, 
     public async Task<ApiResult<List<StepInfoDto>>> Handle(GetStepsByProcessQuery q, CancellationToken ct)
     {
         var list = await _db.Set<ProcessStep>()
-            .Where(x => x.ProcessId == q.ProcessId)
+            .Where(x => x.ProcessId == q.ProcessId && x.IsActive==true && x.IsDeleted !=true)
             .OrderBy(x => x.StepNo)
             .Select(x => new StepInfoDto(x.Id, x.StepNo, x.Name, x.DirectorateId,x.Directorate.Name ,x.RequiresVoucher, x.RequiresPaymentBeforeNext))
             .ToListAsync(ct);
