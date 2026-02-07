@@ -110,7 +110,7 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
 
             if(sizePrice == null) throw new KeyNotFoundException("Size Price Not Found.");
 
-            totalAmount = Convert.ToDecimal(sizePrice.Price) - taxex + discount;
+            totalAmount = Convert.ToDecimal(sizePrice.Price) + taxex - discount;
 
             var entity = new Domain.Entities.FMS.Fumigation
             {
