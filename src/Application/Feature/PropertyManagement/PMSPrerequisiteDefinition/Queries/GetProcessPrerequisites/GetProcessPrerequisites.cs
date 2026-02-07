@@ -17,10 +17,11 @@ using Microsoft.AspNetCore.Identity;
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 
 public record UserPropertyDto(
-    Guid PropertyId,
-    string PropertyNo,
+    string? PropertyId,
+    string? PropertyNo,
     string? Sector,
-    string? Phase
+    string? Phase,
+    string? Address
 );
 
 public record ProcessPrerequisiteResponseDto
@@ -44,24 +45,19 @@ public class GetProcessPrerequisitesHandler
 {
     private readonly IPMSApplicationDbContext _db;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IProcedureService _procedureService;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IPropertyProcedureRepository _repo;
-
-
+    private readonly IPropertyInfoService _propertyInfoService;
     public GetProcessPrerequisitesHandler(
         IPMSApplicationDbContext db,
         ICurrentUserService currentUserService,
-        IProcedureService procedureService,
         UserManager<ApplicationUser> userManager,
-    IPropertyProcedureRepository repo
+        IPropertyInfoService propertyInfoService
 )
     {
         _db = db;
         _currentUserService = currentUserService;
-        _procedureService = procedureService;
         _userManager = userManager;
-        _repo = repo;
+        _propertyInfoService = propertyInfoService;
     }
 
     public async Task<ApiResult<ProcessPrerequisiteResponseDto>> Handle(
@@ -75,119 +71,92 @@ public class GetProcessPrerequisitesHandler
         {
             throw new UnAuthorizedException("Invalid CNIC. Please verify and try again.");
         }
-
-        // 1️⃣ Get properties from Stored Procedure
-        //var spProperties =
-        //    await _repo.GetPropertiesByCnicAsync(user.CNIC, ct);
-
-        //if (!spProperties.Any())
-        //    throw new Exception("No Propertties Found.");
-
-        // 2️⃣ Deactivate existing properties
-        //var existing = await _db.Properties
-        //    .Where(x =>
-        //        x.OwnerCnic == user.CNIC &&
-        //        x.IsActive == true && x.IsDeleted != true)
-        //    .ToListAsync(ct);
-
-        //foreach (var prop in existing)
-        //{
-        //    prop.IsActive = false;
-        //    prop.IsDeleted = true;
-        //}
-
-        // 3️⃣ Insert fresh properties
-        //var newEntities = spProperties.Select(x => new UserProperty
-        //{
-        //    PropertyNo = x.PLOT_NO ?? x.PLTNO!,
-        //    PlotNo = x.PLOT_NO ?? x.PLTNO!,
-        //    Sector = x.STNAME ?? x.SUBDIV,
-        //    Phase = x.PHASE,
-        //    Area = x.ACTUAL_SIZE,
-        //    OwnerCnic = x.NIC,
-        //    PropertyPk = x.PLOTPK,
-        //    MemberPk = x.MEMPK,
-        //    MemberNo = x.MEMNO,
-        //    CellNo = x.CELLNO,
-        //    IsActive = true,
-        //    IsDeleted = false
-        //});
-
-        //await _db.Properties.AddRangeAsync(newEntities, ct);
-        //await _db.SaveChangesAsync(ct);
-
         // 1️⃣ Validate process
         var process = await _db.Set<ServiceProcess>()
-    .Where(x => x.Id == request.ProcessId && x.IsActive==true && x.IsDeleted==false)
-    .Select(x => new
-    {
-        x.IsFeeRequired,
-        x.IsFeeAtSubmission,
-        x.IsVoucherPossible,
-        x.IsfeeSubmit,
-        x.IsInstructionAtStart,
-        x.IsNadraVerificationRequired,
-        x.Instruction
-    })
-    .FirstOrDefaultAsync(ct);
+         .Where(x => x.Id == request.ProcessId && x.IsActive==true && x.IsDeleted==false)
+         .Select(x => new
+         {
+             x.IsFeeRequired,
+             x.IsFeeAtSubmission,
+             x.IsVoucherPossible,
+             x.IsfeeSubmit,
+             x.IsInstructionAtStart,
+             x.IsNadraVerificationRequired,
+             x.Instruction
+         })
+         .FirstOrDefaultAsync(ct);
 
         if (process == null)
             return ApiResult<ProcessPrerequisiteResponseDto>.Fail("Process not found.");
 
-        // 2️⃣ Load USER PROPERTIES
-        var properties = await _db.Set<UserProperty>()
-            .AsNoTracking()
-            .Where(x => x.OwnerCnic == user.CNIC && x.IsActive==true && x.IsDeleted==false)
-            .OrderByDescending(x=> x.Created)
+        var spProperties = await _propertyInfoService.GetPropertiesByCnicAsync(user.CNIC, ct);
+
+        if (spProperties == null || !spProperties.Any())
+        {
+            throw new Exception("No property found.");
+        }
+
+        var properties = spProperties
             .Select(x => new UserPropertyDto(
-                x.Id,
-                x.PlotNo ?? "",
-                x.SubDivision,
-                x.Phase
+                PropertyId: x.PLOTPK,              // No local DB Id yet
+                PropertyNo: x.PLOT_NO ?? x.PLTNO ?? string.Empty,
+                Sector: x.SUBDIV,
+                Phase: x.PHASE,
+                Address:x.PROPERTY_ADDRESS
             ))
-            .ToListAsync(ct);
+            .ToList();
+
+        // 2️⃣ Load USER PROPERTIES
+        //var properties = await _db.Set<UserProperty>()
+        //    .AsNoTracking()
+        //    .Where(x => x.OwnerCnic == user.CNIC && x.IsActive==true && x.IsDeleted==false)
+        //    .OrderByDescending(x=> x.Created)
+        //    .Select(x => new UserPropertyDto(
+        //        x.Id,
+        //        x.PlotNo ?? "",
+        //        x.SubDivision,
+        //        x.Phase
+        //    ))
+        //    .ToListAsync(ct);
 
         // 3️⃣ Load prerequisites
         var prerequisites = await _db.Set<ProcessPrerequisite>()
-    .AsNoTracking()
-    .Where(x => x.ProcessId == request.ProcessId && x.IsActive == true && x.IsDeleted == false)
-    .OrderBy(x => x.RequiredByStepNo)
-    .Select(x => new ProcessPrerequisiteDto(
-        x.Id,
-        x.ProcessId,
-        x.PrerequisiteDefinitionId,
-        x.PrerequisiteDefinition.Code,
-        x.PrerequisiteDefinition.Name,
-        x.PrerequisiteDefinition.Type,
-        x.IsRequired,
-        x.RequiredByStepNo,
-        x.PrerequisiteDefinition.MinLength,
-        x.PrerequisiteDefinition.MaxLength,
-        x.PrerequisiteDefinition.AllowedExtensions,
-
-        // ✅ Load options correctly
-        x.PrerequisiteDefinition.Type == PrerequisiteType.Dropdown ||
-        x.PrerequisiteDefinition.Type == PrerequisiteType.MultiSelect ||
-        x.PrerequisiteDefinition.Type == PrerequisiteType.CheckboxGroup ||
-        x.PrerequisiteDefinition.Type == PrerequisiteType.RadioGroup
-            ? _db.Set<PrerequisiteOption>()
-                .Where(o =>
-                    o.PrerequisiteDefinitionId == x.PrerequisiteDefinitionId && x.IsActive==true &&
-                    o.IsDeleted == false)
-                .OrderBy(o => o.SortOrder)
-                .Select(o => new PrerequisiteOptionDto(
-                    o.Id,
-                    o.Label,
-                    o.Value,
-                    o.SortOrder
-                ))
-                .ToList()
-            : new List<PrerequisiteOptionDto>()
-    ))
-    .ToListAsync(ct);
-
-
-
+       .AsNoTracking()
+       .Where(x => x.ProcessId == request.ProcessId && x.IsActive == true && x.IsDeleted == false)
+       .OrderBy(x => x.RequiredByStepNo)
+       .Select(x => new ProcessPrerequisiteDto(
+           x.Id,
+           x.ProcessId,
+           x.PrerequisiteDefinitionId,
+           x.PrerequisiteDefinition.Code,
+           x.PrerequisiteDefinition.Name,
+           x.PrerequisiteDefinition.Type,
+           x.IsRequired,
+           x.RequiredByStepNo,
+           x.PrerequisiteDefinition.MinLength,
+           x.PrerequisiteDefinition.MaxLength,
+           x.PrerequisiteDefinition.AllowedExtensions,
+       
+           // ✅ Load options correctly
+           x.PrerequisiteDefinition.Type == PrerequisiteType.Dropdown ||
+           x.PrerequisiteDefinition.Type == PrerequisiteType.MultiSelect ||
+           x.PrerequisiteDefinition.Type == PrerequisiteType.CheckboxGroup ||
+           x.PrerequisiteDefinition.Type == PrerequisiteType.RadioGroup
+               ? _db.Set<PrerequisiteOption>()
+                   .Where(o =>
+                       o.PrerequisiteDefinitionId == x.PrerequisiteDefinitionId && x.IsActive==true &&
+                       o.IsDeleted == false)
+                   .OrderBy(o => o.SortOrder)
+                   .Select(o => new PrerequisiteOptionDto(
+                       o.Id,
+                       o.Label,
+                       o.Value,
+                       o.SortOrder
+                   ))
+                   .ToList()
+               : new List<PrerequisiteOptionDto>()
+       ))
+       .ToListAsync(ct);
 
         // 6️⃣ Final response
         var response = new ProcessPrerequisiteResponseDto(

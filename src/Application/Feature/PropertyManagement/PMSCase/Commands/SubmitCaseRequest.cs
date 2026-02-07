@@ -9,7 +9,7 @@ namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Com
 public class SubmitCaseRequest
 {
     // Case
-    public Guid UserPropertyId { get; set; }
+    public string UserPropertyId { get; set; } = default!;
     public Guid ProcessId { get; set; }
     public string? ApplicantRemarks { get; set; }
 

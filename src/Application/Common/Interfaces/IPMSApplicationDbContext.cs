@@ -39,7 +39,7 @@ public interface IPMSApplicationDbContext
     DbSet<CaseRejectRequirement> CaseRejectRequirements { get; }
     DbSet<MessageTemplate> MessageTemplates { get; }
     DbSet<CaseMessageLog> CaseMessageLogs { get; }
-
+    DbSet<NumberSequence> NumberSequences { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

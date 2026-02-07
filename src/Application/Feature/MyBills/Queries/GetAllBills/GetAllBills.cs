@@ -16,7 +16,6 @@ using NotFoundException = DHAFacilitationAPIs.Application.Common.Exceptions.NotF
 
 namespace DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetAllBills;
 public record GetAllBillsQuery() : IRequest<ApiResult<List<SmartPayBillData>>>;
-
 public class GetAllBillsHandler : IRequestHandler<GetAllBillsQuery, ApiResult<List<SmartPayBillData>>>
 {
     private readonly ISmartPayService _smartPayService;

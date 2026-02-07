@@ -218,16 +218,20 @@ public class SearchFacilityAvailabilityHandler
             if (!unitResponses.Any())
                 continue;
 
+            var mainImagePath = _db.FacilitiesImages
+    .Where(x =>
+        x.FacilityId == facility.Id &&
+        x.Category == ImageCategory.Main)
+    .Select(x => x.ImageURL)
+    .FirstOrDefault();
+
             result.Add(new FacilitySearchResponse(
                 facility.Id,
                 facility.Name,
                 facility.ClubCategory.Name,
-                _db.FacilitiesImages
-                    .Where(x =>
-                        x.FacilityId == facility.Id &&
-                        x.Category == ImageCategory.Main)
-                    .Select(x => x.ImageURL)
-                    .FirstOrDefault(),
+                mainImagePath != null
+        ? _fileStorageService.GetPublicUrl(mainImagePath)
+        : null,
                 unitResponses.First().Slots != null
                     ? BookingMode.SlotBased
                     : BookingMode.DayBased,

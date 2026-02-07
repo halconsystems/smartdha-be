@@ -19,4 +19,10 @@ public interface IPropertyInfoService
        CancellationToken cancellationToken
    );
 
+    Task<PropertyDetailDTO?> GetPropertyByPlotPkAsync(
+        string cnic,
+        string plotPk,
+        CancellationToken ct
+    );
+
 }

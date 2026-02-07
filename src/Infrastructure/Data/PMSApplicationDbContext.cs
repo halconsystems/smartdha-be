@@ -45,6 +45,7 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<CaseRejectRequirement> CaseRejectRequirements => Set<CaseRejectRequirement>();
     public DbSet<MessageTemplate> MessageTemplates => Set<MessageTemplate>();
     public DbSet<CaseMessageLog> CaseMessageLogs => Set<CaseMessageLog>();
+    public DbSet<NumberSequence> NumberSequences => Set<NumberSequence>();
 
 
     /* =========================
@@ -173,6 +174,27 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
                 method?.Invoke(null, new object[] { modelBuilder });
             }
         }
+
+        modelBuilder.Entity<NumberSequence>(entity =>
+        {
+            entity.ToTable("NumberSequences");
+
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.Prefix)
+                .IsRequired()
+                .HasMaxLength(10);
+
+            entity.Property(x => x.SequenceDate)
+                .IsRequired();
+
+            entity.Property(x => x.LastNumber)
+                .IsRequired();
+
+            entity.HasIndex(x => new { x.Prefix, x.SequenceDate })
+                .IsUnique();
+        });
+
         base.OnModelCreating(modelBuilder);
     }
     private static void ApplyGlobalFilters<TEntity>(ModelBuilder modelBuilder)
