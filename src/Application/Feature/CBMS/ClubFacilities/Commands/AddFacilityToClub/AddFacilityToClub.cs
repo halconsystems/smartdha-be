@@ -16,9 +16,8 @@ public record AddFacilityToClubCommand(
     bool IsAvailable,
     bool IsPriceVisible,
     bool HasAction,
-    string? ActionName,
-    string? ActionType,
-    FacilityActionType FacilityActionType
+    FacilityActionType FacilityActionType,
+    BookingMode BookingMode
 ) : IRequest<ApiResult<Guid>>;
 public class AddFacilityToClubCommandHandler
     : IRequestHandler<AddFacilityToClubCommand, ApiResult<Guid>>
@@ -34,6 +33,9 @@ public class AddFacilityToClubCommandHandler
         AddFacilityToClubCommand request,
         CancellationToken ct)
     {
+
+        var (actionName, actionType) = FacilityActionMapper.ToUiAndType(request.FacilityActionType);
+
         var clubFacility = new ClubFacility
         {
             ClubId = request.ClubId,
@@ -42,9 +44,10 @@ public class AddFacilityToClubCommandHandler
             IsAvailable = request.IsAvailable,
             IsPriceVisible = request.IsPriceVisible,
             HasAction = request.HasAction,
-            ActionName = request.ActionName,
-            ActionType = request.ActionType,
-            FacilityActionType = request.FacilityActionType
+            ActionName = actionName,
+            ActionType = actionType,
+            FacilityActionType = request.FacilityActionType,
+            BookingMode = request.BookingMode,
         };
 
         _ctx.ClubFacilities.Add(clubFacility);
@@ -57,6 +60,29 @@ public class AddFacilityToClubCommandHandler
             return ApiResult<Guid>.Fail($"Error adding facility to club: {ex.Message}");
         }
         return ApiResult<Guid>.Ok(clubFacility.Id);
+    }
+}
+
+public static class FacilityActionMapper
+{
+    private static readonly Dictionary<FacilityActionType, (string Name, string Type)> Map =
+    new()
+    {
+            { FacilityActionType.Book,        ("Book Now", "Book") },
+            { FacilityActionType.Reserve,     ("Reserve", "Reserve") },
+            { FacilityActionType.ContactUs,   ("Contact Us", "ContactUs") },
+            { FacilityActionType.ViewDetails, ("View Detail", "ViewDetails") }
+    };
+
+    public static (string? ActionName, string? ActionType) ToUiAndType(
+        FacilityActionType actionType)
+    {
+        if (actionType == FacilityActionType.None)
+            return (null, null);
+
+        return Map.TryGetValue(actionType, out var result)
+            ? result
+            : (null, null);
     }
 }
 

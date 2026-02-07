@@ -68,31 +68,29 @@ public class GetFacilityUnitDetailHandler
                 ))
                 .ToList();
 
-            // =========================
-            // SERVICES
-            // =========================
-            var services = await (
-                from us in _db.FacilityUnitServices
-                join s in _db.FacilityServices
-                    on us.FacilityServiceId equals s.Id
-                where
-                    us.FacilityUnitId == unit.Id &&
-                    us.IsEnabled
-                select new FacilityUnitServiceDto(
-                    s.Id,
-                    s.Name,
-                    s.Code,
-                    s.IsComplimentary,
-                    s.IsQuantityBased,
-                    us.OverridePrice ?? s.Price,
-                    us.IsEnabled
-                )
-            ).ToListAsync(ct);
+        // =========================
+        // SERVICES
+        // =========================
+        var services = await _db.FacilityUnitServices
+ .Where(us =>
+     us.FacilityUnitId == unit.Id &&
+     us.IsEnabled &&
+     us.IsDeleted != true)
+ .Select(us => new FacilityUnitServiceDto(
+     us.ServiceDefinitionId,                 // ✅ ServiceDefinitionId
+     us.ServiceDefinition.Name,              // ✅ Service name
+     us.ServiceDefinition.Code,              // ✅ Service code
+     us.IsComplimentary,                     // ✅ unit-level flag
+     us.ServiceDefinition.IsQuantityBased,   // ✅ definition-level flag
+     us.Price,                               // ✅ unit-level price
+     us.IsEnabled
+ ))
+ .ToListAsync(ct);
 
-            // =========================
-            // BASE AMOUNT (PREVIEW)
-            // =========================
-            var config = await _db.FacilityUnitBookingConfigs
+        // =========================
+        // BASE AMOUNT (PREVIEW)
+        // =========================
+        var config = await _db.FacilityUnitBookingConfigs
                 .FirstOrDefaultAsync(x => x.FacilityUnitId == unit.Id, ct);
 
             var baseAmount = config?.BasePrice ?? 0;

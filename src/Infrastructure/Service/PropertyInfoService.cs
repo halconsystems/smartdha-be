@@ -109,7 +109,7 @@ public class PropertyInfoService : IPropertyInfoService
     {
         var parameters = new DynamicParameters();
 
-        cnic = "3220384127171";
+        cnic = "4220125641462";
         //parameters.Add("@memCNIC", cnic, DbType.String, size: 150);
         parameters.Add("@memCNIC", cnic, DbType.String, size: 150);
         parameters.Add("@msg", dbType: DbType.String, size: 500, direction: ParameterDirection.Output);
