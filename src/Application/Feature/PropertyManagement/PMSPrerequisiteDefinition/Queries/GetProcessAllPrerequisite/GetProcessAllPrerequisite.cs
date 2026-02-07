@@ -63,10 +63,11 @@ public class GetProcessAllPrerequisitesHandler
             .AsNoTracking()
             .Where(x => x.CreatedBy == _currentUser.Id)
             .Select(x => new UserPropertyDto(
-                x.Id,
+                x.PropertyPk,
                 x.PlotNo ?? "",
                 x.SubDivision,
-                x.Phase
+                x.Phase,
+                x.PROPERTY_ADDRESS
             ))
             .ToListAsync(ct);
 

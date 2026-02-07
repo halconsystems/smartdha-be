@@ -141,7 +141,20 @@ public class PropertyInfoService : IPropertyInfoService
             NIC = x.NIC,
             CELLNO = x.CELLNO,
             ALLRESPLOT = x.ALLRESPLOT,
+            FILENO=x.FILENO,
+            PROPERTY_ADDRESS = x.PROPERTY_ADDRESS
+
         }).ToList();
+    }
+
+    public async Task<PropertyDetailDTO?> GetPropertyByPlotPkAsync(
+    string cnic,
+    string plotPk,
+    CancellationToken ct)
+    {
+        var all = await GetPropertiesByCnicAsync(cnic, ct);
+
+        return all.FirstOrDefault(x => x.PLOTPK == plotPk);
     }
 
 

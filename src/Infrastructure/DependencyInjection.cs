@@ -239,6 +239,8 @@ public static class DependencyInjection
         services.AddScoped<IPaymentBillService, PaymentBillService>();
         services.AddScoped<ILateFeePolicyResolver, LateFeePolicyResolver>();
         services.AddScoped<IMemberLookupService, MemberLookupService>();
+        services.AddScoped<IClubAccessService, ClubAccessService>();
+
 
 
 

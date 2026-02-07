@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSCase.Commands.SubmitCase_V1;
 public record SubmitCase_V1Command(
-    Guid UserPropertyId,
+    string UserPropertyId,
     Guid ProcessId,
     string? ApplicantRemarks,
     List<PrerequisiteValueInput> PrerequisiteValues,
@@ -39,19 +39,22 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
     private readonly IApplicationDbContext _applicationDbContext;
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IPropertyInfoService _propertyInfoService;
 
     public SubmitCase_V1Handler(
         IPMSApplicationDbContext db,
         IFileStorageService fileStorage,
         IApplicationDbContext applicationDbContext,
         ICurrentUserService currentUserService,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IPropertyInfoService propertyInfoService)
     {
         _db = db;
         _fileStorage = fileStorage;
         _applicationDbContext = applicationDbContext;
         _currentUserService = currentUserService;
         _userManager = userManager;
+        _propertyInfoService = propertyInfoService;
     }
 
     public async Task<ApiResult<SubmitCaseResponse>> Handle(
@@ -93,11 +96,82 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         Guid getModuleId = getDirect.ModuleId;
 
         var random = Random.Shared.Next(100, 999);
-        var caseNo = $"PMS-{DateTime.Now:yyMMdd}-{random}";
+        //var caseNo = $"PMS-{DateTime.Now:yyMMdd}-{random}";
         //var caseNo = $"PMS-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
+        var caseNo = await GenerateNumberAsync("P");
+        Guid userPropertyId;
+
+        // 1️⃣ Check if property already exists in PMS DB
+        var existing = await _db.Properties
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x =>
+                x.PropertyPk == r.UserPropertyId &&
+                x.IsDeleted != true,
+                ct);
+
+        if (existing == null)
+        {
+            var spProperty = await _propertyInfoService.GetPropertyByPlotPkAsync(
+           user.CNIC,
+           r.UserPropertyId,
+           ct);
+
+            if (spProperty == null)
+                throw new Exception("Property not found in DHA record.");
+
+            // 3️⃣ Map → UserProperty
+            var entity = new UserProperty
+            {
+                PlotNo = spProperty.PLOT_NO,
+                PlotNoAlt = spProperty.PLTNO,
+                StreetName = spProperty.STNAME,
+                SubDivision = spProperty.SUBDIV,
+                PropertyType = spProperty.PTYPE,
+                Phase = spProperty.PHASE,
+                Extension = spProperty.EXT,
+                NominalArea = spProperty.NOMEAEA,
+                ActualSize = spProperty.ACTUAL_SIZE,
+                StreetCode = spProperty.STREET1COD,
+
+                PropertyPk = spProperty.PLOTPK,
+                MemberPk = spProperty.MEMPK,
+                MemberNo = spProperty.MEMNO,
+                Category = spProperty.CAT,
+                MemberName = spProperty.NAME,
+                ApplicationDate = DateTime.TryParse(
+                spProperty.APPLIDATE?.ToString(),
+                    out var appDate
+                )
+                ? appDate
+                : DateTime.Now,
+                
+
+                OwnerCnic = spProperty.NIC,
+                CellNo = spProperty.CELLNO,
+                FILENO = spProperty.FILENO,
+                PROPERTY_ADDRESS = spProperty.PROPERTY_ADDRESS,
+                AllResidentialPlot =
+                spProperty.ALLRESPLOT == null
+                    ? null
+                    : spProperty.ALLRESPLOT.ToString() == "1"
+                      || spProperty.ALLRESPLOT.ToString()?.ToUpper() == "Y"
+
+                        };
+
+            // 4️⃣ Insert
+            _db.Properties.Add(entity);
+            await _db.SaveChangesAsync(ct);
+
+            userPropertyId = entity.Id;
+        }
+        else
+        {
+            userPropertyId = existing.Id; // ✅ existing property
+        }
+
         var c = new PropertyCase
         {
-            UserPropertyId = r.UserPropertyId,
+            UserPropertyId = userPropertyId,
             ProcessId = r.ProcessId,
             CaseNo = caseNo,
             Status = CaseStatus.Draft,
@@ -416,4 +490,40 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         type == PrerequisiteType.MultiSelect ||
         type == PrerequisiteType.CheckboxGroup ||
         type == PrerequisiteType.RadioGroup;
+
+    public async Task<string> GenerateNumberAsync(
+    string prefix,
+    int digits = 3,
+    CancellationToken ct = default)
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now);
+
+        using var tx = await _db.Database.BeginTransactionAsync(ct);
+
+        var seq = await _db.NumberSequences
+            .SingleOrDefaultAsync(x =>
+                x.SequenceDate == today &&
+                x.Prefix == prefix, ct);
+
+        if (seq == null)
+        {
+            seq = new NumberSequence
+            {
+                Prefix = prefix,
+                SequenceDate = today,
+                LastNumber = 1
+            };
+            _db.NumberSequences.Add(seq);
+        }
+        else
+        {
+            seq.LastNumber++;
+        }
+
+        await _db.SaveChangesAsync(ct);
+        await tx.CommitAsync(ct);
+
+        return $"{prefix}{today:yyMMdd}{seq.LastNumber.ToString($"D{digits}")}";
+    }
+
 }

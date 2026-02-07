@@ -10,14 +10,11 @@ public class MyBillDetailDto
 {
     public Guid PaymentBillId { get; set; }
     public string Title { get; set; } = default!;
-    public string SourceSystem { get; set; } = default!;
-    public string? EntityName { get; set; }
     public decimal BillAmount { get; set; }
     public decimal PaidAmount { get; set; }
     public decimal OutstandingAmount { get; set; }
     public DateTime BillGeneratedOn { get; set; }
     public DateTime? DueDate { get; set; }
-    public DateTime? ExpiryDate { get; set; }
     public PaymentBillStatus PaymentStatus { get; set; }
     public MyBillTransactionDto Transactions { get; set; } = new();
 }

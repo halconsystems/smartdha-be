@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetAllBills;
+using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetAllBillsByConsumerId;
 using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetMyBillDetail;
 using DHAFacilitationAPIs.Application.Feature.MyBills.Queries.GetMyPaidBills;
 using DHAFacilitationAPIs.Application.Feature.SmartPay.Queries.BillInquiry;
@@ -22,6 +23,14 @@ public class MyBillsController : BaseApiController
     public async Task<IActionResult> BillInquiry()
     {
         var query = new GetAllBillsQuery();
+        var result = await _mediator.Send(query);
+        return Ok(result);
+    }
+
+    [HttpGet("BillInquiry/{consumerNo}")]
+    public async Task<IActionResult> BillInquiry(string consumerNo)
+    {
+        var query = new GetAllBillsByConsumerId(consumerNo);
         var result = await _mediator.Send(query);
         return Ok(result);
     }

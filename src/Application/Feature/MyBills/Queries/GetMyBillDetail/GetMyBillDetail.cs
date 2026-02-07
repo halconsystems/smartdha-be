@@ -79,8 +79,6 @@ public class GetMyBillDetailHandler
         {
             PaymentBillId = bill.PaymentBillId,
             Title = bill.Title,
-            SourceSystem = bill.SourceSystem,
-            EntityName = bill.EntityName,
 
             BillAmount = bill.BillAmount,
             PaidAmount = bill.PaidAmount,
@@ -88,7 +86,6 @@ public class GetMyBillDetailHandler
 
             BillGeneratedOn = bill.BillGeneratedOn,
             DueDate = bill.DueDate,
-            ExpiryDate = bill.ExpiryDate,
 
             PaymentStatus = bill.PaymentStatus,
 

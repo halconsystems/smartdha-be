@@ -59,6 +59,9 @@ public class UserProperty : BaseAuditableEntity
 
     [MaxLength(20)]
     public string? CellNo { get; set; }            // CELLNO
+    public string? FILENO { get; set; }            // CELLNO
+    public string? PROPERTY_ADDRESS { get; set; }            // CELLNO
+    
 
     public bool? AllResidentialPlot { get; set; } // ALLRESPLOT
 }
