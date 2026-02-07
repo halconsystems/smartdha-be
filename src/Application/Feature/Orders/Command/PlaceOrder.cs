@@ -99,13 +99,6 @@ public class OrderPlaceCommandHandler : IRequestHandler<OrderPlaceCommand, Succe
                 .ToList();
 
 
-            taxex = orderDTDetails.Where(x => x.IsDiscount == false && x.DTCode != "HAN").Sum(x => Convert.ToInt32(x.Value));
-
-
-            discount = orderDTDetails.Where(x => x.IsDiscount).Sum(x => Convert.ToInt32(x.Value));
-
-            totalAmount = totalAmount + taxex - discount;
-
             //Orders Items Details
             var itemsDetails = _context.LaundryItems
                 .Where(x => command.ItemsId.Select(i => i.ItemId).Contains(x.Id))
@@ -173,6 +166,33 @@ public class OrderPlaceCommandHandler : IRequestHandler<OrderPlaceCommand, Succe
                 };
             }).ToList();
 
+
+            foreach (var item in orderDTDetails.Where(x => x.IsDiscount == false && x.DTCode == "HAN"))
+            {
+                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+                {
+                    // Apply percentage on totalAmount
+                    taxex += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+                }
+                else
+                {
+                    // Fixed amount, just add directly
+                    taxex += Convert.ToDecimal(item.Value);
+                }
+            }
+            foreach (var item in orderDTDetails.Where(x => x.IsDiscount == true  && x.DTCode == "HAN"))
+            {
+                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+                {
+                    // Apply percentage on totalAmount
+                    discount += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+                }
+                else
+                {
+                    // Fixed amount, just add directly
+                    discount += Convert.ToDecimal(item.Value);
+                }
+            }
 
 
             var entity = new Domain.Entities.LMS.Orders
