@@ -246,6 +246,11 @@ public class LMSController : BaseApiController
     public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(AssignOrderDispatchCommand cmd, CancellationToken ct)
        => Ok(await _mediator.Send(cmd, ct));
 
+    [HttpPost("Order-Disptach-Bulk")]
+    [Tags("05 - OrderProcessFromWeb")]
+    public async Task<ActionResult<SuccessResponse<List<DisptachDTO>>>> CreateOrder(AssignBulkOrderDispatchCommand cmd, CancellationToken ct)
+        => Ok(await _mediator.Send(cmd, ct));
+
     [HttpPost("Order-Process"), AllowAnonymous]
     [Tags("05 - OrderProcessFromWeb")]
     public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(OrdersProcessAtShopCommand cmd, CancellationToken ct)
@@ -278,6 +283,7 @@ public class LMSController : BaseApiController
     [Tags("06 - LaundryOrder-From-Web")]
     public async Task<ActionResult<SuccessResponse<Guid>>> CreateOrder(OrderPlaceCommand cmd, CancellationToken ct)
       => Ok(await _mediator.Send(cmd, ct));
+
 
     [HttpGet("get-LaundryItems-After-Hanger-Adjustment")]
     [Tags("06 - LaundryOrder-From-Web")]
