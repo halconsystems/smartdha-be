@@ -21,7 +21,7 @@ public class GetOrderDashboardSummaryQueryHandler : IRequestHandler<GetOrderDash
     public async Task<OrderDashboardSummaryDto> Handle(GetOrderDashboardSummaryQuery r, CancellationToken ct)
     {
         var to = r.ToDateTime ?? DateTime.Now;
-        var from = r.FromDateTime ?? to.AddDays(-7);
+        var from = r.FromDateTime;
 
         var baseQ = _ctx.Orders.AsNoTracking()
                       .Where(x => x.Created >= from && x.Created < to);

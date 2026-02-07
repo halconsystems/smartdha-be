@@ -22,7 +22,7 @@ public class GetFemugationDashboardSummaryQueryHandler : IRequestHandler<GetFemu
     public async Task<FemugationDashboardSummaryDto> Handle(GetFemugationDashboardSummaryQuery r, CancellationToken ct)
     {
         var to = r.ToDateTime ?? DateTime.Now;
-        var from = r.FromDateTime ?? to.AddDays(-7);
+        var from = r.FromDateTime;
 
         var baseQ = _ctx.Fumigations.AsNoTracking()
                       .Where(x => x.Created >= from && x.Created < to);

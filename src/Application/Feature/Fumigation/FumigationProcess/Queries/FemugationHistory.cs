@@ -35,8 +35,13 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.Id,ct);
 
+
+
         if (femugation == null)
             throw new KeyNotFoundException("Femugation Not Found.");
+
+        var shop = await _context.FemgutionShops
+            .FirstOrDefaultAsync(x => x.Id == femugation.ShopId, ct);
 
         var tankSize = await _context.TankerSizes
             .Where(x => x.Id == femugation.FemTanker)
@@ -72,14 +77,14 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
             FemService = femugation.FemService,
             FemTanker = femugation.FemTanker,
             TankerSize = femugation.TankerSize,
-            FemgutionShops = femugation.FemgutionShops,
+            FemgutionShops = shop,
             DriverRemarksAudioPath = femugation.DriverRemarksAudioPath,
             CaseNo = femugation.CaseNo,
             CreatedAt = femugation.Created,
             FemStatus = femugation.FemStatus,
             Total = femugation.Total,
             SubTotal = femugation.SubTotal,
-            ShopName = femugation.FemgutionShops?.Name,
+            ShopName = shop?.Name,
             AssginedAt = femugation.AssginedAt,
             AcknowledgedAt = femugation.AcknowledgedAt,
             ResolvedAt = femugation.ResolvedAt,
@@ -92,7 +97,10 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
             PhoneNumber = femugation.PhoneNumber,
             StreetNo = femugation.StreetNo,
             DateOnly = femugation.DateOnly,
-            TimeOnly = femugation.TimeOnly
+            TimeOnly = femugation.TimeOnly,
+            AmountToCollect = femugation.AmountToCollect,
+            CollectedAmount = femugation.CollectedAmount,
+            PaymentMethod = femugation.PaymentMethod,
         };
 
         return result;
