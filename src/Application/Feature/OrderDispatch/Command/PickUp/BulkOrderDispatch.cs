@@ -63,7 +63,7 @@ public class AssignBulkOrderDispatchCommandHandler
     {
 
         List<Domain.Entities.LMS.OrderDispatch>? existingDispatch = null;
-        if (request.bulkOrders.Select(x=> x.Pickup).Equals(true))
+        if (request.bulkOrders.Any(x => x.Pickup == true))
         {
             existingDispatch = await _laundrySystemDb.OrderDispatches
                .Where(x => request.bulkOrders.Select(r => r.OrderId).Contains(x.OrdersId) &&
@@ -82,7 +82,7 @@ public class AssignBulkOrderDispatchCommandHandler
                .ToListAsync(ct);
         }
 
-        if (existingDispatch != null)
+        if (existingDispatch.Any())
         {
             // Return existing dispatch (NO transaction, NO update)
             return Success.Empty<List<DisptachDTO>>("Order Already Dispatched");
@@ -120,7 +120,7 @@ public class AssignBulkOrderDispatchCommandHandler
                 throw new InvalidOperationException("Vehicle is not available for dispatch.");
 
             List<Domain.Entities.LMS.OrderDispatch>? dispatch = null;
-            if (request.bulkOrders.Select(x => x.Pickup).Equals(true))
+            if (request.bulkOrders.Any(x => x.Pickup == true))
             {
                 dispatch = request.bulkOrders.Select(x => new Domain.Entities.LMS.OrderDispatch
                 {

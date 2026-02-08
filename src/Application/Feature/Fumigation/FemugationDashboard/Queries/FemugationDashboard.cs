@@ -21,11 +21,18 @@ public class GetFemugationDashboardSummaryQueryHandler : IRequestHandler<GetFemu
 
     public async Task<FemugationDashboardSummaryDto> Handle(GetFemugationDashboardSummaryQuery r, CancellationToken ct)
     {
-        var to = r.ToDateTime ?? DateTime.Now;
         var from = r.FromDateTime;
+        var to = r.ToDateTime ?? DateTime.Now;
+        DateTime? fromdate = r.FromDateTime;
+        DateTime? todate = r.ToDateTime;
 
         var baseQ = _ctx.Fumigations.AsNoTracking()
-                      .Where(x => x.Created >= from && x.Created < to);
+                     .Where(x =>
+                         (!fromdate.HasValue || x.Created >= fromdate.Value) &&
+                         (!todate.HasValue || x.Created < todate.Value)
+                     );
+
+
 
         //var deliverybaseQ = _ctx.DeliveryDetails.AsNoTracking()
         //              .Where(x => baseQ.Select(x => x.Id).Contains(x.OrderId));

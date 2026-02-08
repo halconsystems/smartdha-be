@@ -101,7 +101,8 @@ public class FemugationHistoryQueryHandler : IRequestHandler<FemugationHistoryQu
             AmountToCollect = femugation.AmountToCollect,
             CollectedAmount = femugation.CollectedAmount,
             PaymentMethod = femugation.PaymentMethod,
-        };
+            Address = femugation.Address,
+    };
 
         return result;
     }

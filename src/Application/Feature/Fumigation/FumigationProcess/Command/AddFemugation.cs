@@ -64,17 +64,32 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
                 .AsNoTracking()
                 .ToList();
 
-
-            taxex = FMDTDetails.Where(x => x.IsDiscount == false).Sum(x => Convert.ToInt32(x.Value));
-
-
-            discount = FMDTDetails.Where(x => x.IsDiscount).Sum(x => Convert.ToInt32(x.Value));
-
-            totalAmount = totalAmount + taxex - discount;
-
-            
-
-
+            //foreach (var item in FMDTDetails.Where(x => x.IsDiscount == false))
+            //{
+            //    if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+            //    {
+            //        // Apply percentage on totalAmount
+            //        taxex += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+            //    }
+            //    else
+            //    {
+            //        // Fixed amount, just add directly
+            //        taxex += Convert.ToDecimal(item.Value);
+            //    }
+            //}
+            //foreach (var item in FMDTDetails.Where(x => x.IsDiscount == true))
+            //{
+            //    if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+            //    {
+            //        // Apply percentage on totalAmount
+            //        discount += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+            //    }
+            //    else
+            //    {
+            //        // Fixed amount, just add directly
+            //        discount += Convert.ToDecimal(item.Value);
+            //    }
+            //}
             //Order Unique Number
             var lastOrder = await _context.Fumigations
             .Where(x => x.CaseNo.StartsWith($"FM-{today}"))
@@ -110,7 +125,34 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
 
             if(sizePrice == null) throw new KeyNotFoundException("Size Price Not Found.");
 
-            totalAmount = Convert.ToDecimal(sizePrice.Price) - taxex + discount;
+            totalAmount = Convert.ToDecimal(sizePrice.Price);
+
+            foreach (var item in FMDTDetails.Where(x => x.IsDiscount == false))
+            {
+                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+                {
+                    // Apply percentage on totalAmount
+                    taxex += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+                }
+                else
+                {
+                    // Fixed amount, just add directly
+                    taxex += Convert.ToDecimal(item.Value);
+                }
+            }
+            foreach (var item in FMDTDetails.Where(x => x.IsDiscount == true))
+            {
+                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+                {
+                    // Apply percentage on totalAmount
+                    discount += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+                }
+                else
+                {
+                    // Fixed amount, just add directly
+                    discount += Convert.ToDecimal(item.Value);
+                }
+            }
 
             var entity = new Domain.Entities.FMS.Fumigation
             {
@@ -125,12 +167,12 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
                 ShopId = command.ShopId,
                 DateOnly = command.DateOnly,
                 TimeOnly = command.TimeOnly,
-                AmountToCollect = command.PaymentMethod == PaymentMethod.Cash ? totalAmount : 0,
+                AmountToCollect = command.PaymentMethod == PaymentMethod.Cash ? totalAmount + taxex - discount : 0,
                 CollectedAmount = command.PaymentMethod == PaymentMethod.Cash ? 0 : OnlinePaymentLogs?.TransactionAmount,
                 SubTotal = Convert.ToDecimal(sizePrice.Price),
                 Taxes = taxex,
                 Discount = discount,
-                Total = totalAmount,
+                Total = totalAmount + taxex - discount,
                 PaymentMethod = command.PaymentMethod
             };
 

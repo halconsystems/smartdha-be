@@ -54,7 +54,9 @@ public class GetAllFemugationListQueryHandler : IRequestHandler<GetAllFemugation
             IsActive = x.IsActive,
             Address = x.Address,
             StreetNo = x.StreetNo,
-            PhoneNumber = x.PhoneNumber
+            PhoneNumber = x.PhoneNumber,
+            DateOnly = x.DateOnly,
+            TimeOnly = x.TimeOnly,
         }).ToList();
 
         return result;

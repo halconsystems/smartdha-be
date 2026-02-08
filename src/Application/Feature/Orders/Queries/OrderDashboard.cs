@@ -23,8 +23,15 @@ public class GetOrderDashboardSummaryQueryHandler : IRequestHandler<GetOrderDash
         var to = r.ToDateTime ?? DateTime.Now;
         var from = r.FromDateTime;
 
+
+        DateTime? fromdate = r.FromDateTime;
+        DateTime? todate = r.ToDateTime;
+
         var baseQ = _ctx.Orders.AsNoTracking()
-                      .Where(x => x.Created >= from && x.Created < to);
+                     .Where(x =>
+                         (!fromdate.HasValue || x.Created >= fromdate.Value) &&
+                         (!todate.HasValue || x.Created < todate.Value)
+                     );
 
         var deliverybaseQ = _ctx.DeliveryDetails.AsNoTracking()
                       .Where(x => baseQ.Select(x => x.Id).Contains(x.OrderId));
