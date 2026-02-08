@@ -64,32 +64,32 @@ public class AddFemugationCommandHandler : IRequestHandler<AddFemugationCommand,
                 .AsNoTracking()
                 .ToList();
 
-            foreach (var item in FMDTDetails.Where(x => x.IsDiscount == false))
-            {
-                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
-                {
-                    // Apply percentage on totalAmount
-                    taxex += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
-                }
-                else
-                {
-                    // Fixed amount, just add directly
-                    taxex += Convert.ToDecimal(item.Value);
-                }
-            }
-            foreach (var item in FMDTDetails.Where(x => x.IsDiscount == true))
-            {
-                if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
-                {
-                    // Apply percentage on totalAmount
-                    discount += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
-                }
-                else
-                {
-                    // Fixed amount, just add directly
-                    discount += Convert.ToDecimal(item.Value);
-                }
-            }
+            //foreach (var item in FMDTDetails.Where(x => x.IsDiscount == false))
+            //{
+            //    if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+            //    {
+            //        // Apply percentage on totalAmount
+            //        taxex += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+            //    }
+            //    else
+            //    {
+            //        // Fixed amount, just add directly
+            //        taxex += Convert.ToDecimal(item.Value);
+            //    }
+            //}
+            //foreach (var item in FMDTDetails.Where(x => x.IsDiscount == true))
+            //{
+            //    if (item.ValueType == Domain.Enums.ValueType.Percent) // Assuming ValueType stores strings like "Percent", "Decimal"
+            //    {
+            //        // Apply percentage on totalAmount
+            //        discount += totalAmount * (Convert.ToDecimal(item.Value) / 100m);
+            //    }
+            //    else
+            //    {
+            //        // Fixed amount, just add directly
+            //        discount += Convert.ToDecimal(item.Value);
+            //    }
+            //}
             //Order Unique Number
             var lastOrder = await _context.Fumigations
             .Where(x => x.CaseNo.StartsWith($"FM-{today}"))
