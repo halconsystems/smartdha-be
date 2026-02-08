@@ -10,7 +10,7 @@ using DHAFacilitationAPIs.Domain.Entities.PMS;
 
 namespace DHAFacilitationAPIs.Application.Feature.CBMS.ClubCategories.Command;
 
-public record CreateClubCategoryCommand(string Name, string Code,string DisplayName,string Description) : IRequest<ApiResult<Guid>>;
+public record CreateClubCategoryCommand(string Name, string Code,string DisplayName,string Description,int? OrderNo) : IRequest<ApiResult<Guid>>;
 
 public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCategoryCommand, ApiResult<Guid>>
 {
@@ -29,7 +29,8 @@ public class CreateClubCategoryCommandHandler : IRequestHandler<CreateClubCatego
             Name = request.Name.Trim(),
             Code = request.Code.Trim().ToUpperInvariant(),
             DisplayName= request.DisplayName.Trim(),
-            Description = request.Description.Trim()
+            Description = request.Description.Trim(),
+            OrderNo = request.OrderNo ?? 1,
         };
 
         _db.Set<ClubServiceCategory>().Add(entity);

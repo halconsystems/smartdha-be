@@ -18,4 +18,5 @@ public class ClubServiceCategory : BaseAuditableEntity
     [Required, MaxLength(30)]
     public string Code { get; set; } = default!;
     public string? Description { get; set; }
+    public int? OrderNo { get; set; } = 1;
 }

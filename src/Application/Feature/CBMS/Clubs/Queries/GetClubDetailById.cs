@@ -36,15 +36,37 @@ public class GetClubDetailByIdHandler
             return ApiResult<ClubDTO>.Fail("Club not found.");
 
         var clubCategories = await _ctx.ClubFacilities
-         .AsNoTracking()
-         .Where(x => x.ClubId == request.ClubId && x.IsAvailable && x.IsActive == true && x.IsDeleted != true)
-         .Select(x => new
-         {
-             CategoryId = x.Facility.ClubCategory.Id,
-             CategoryName = x.Facility.ClubCategory.DisplayName
-         })
-         .Distinct()
-         .ToListAsync(ct);
+    .AsNoTracking()
+    .Where(x =>
+        x.ClubId == request.ClubId &&
+        x.IsAvailable   ==true &&
+        x.IsActive == true &&
+        x.IsDeleted != true &&
+        x.Facility.ClubCategory.IsActive == true &&
+        x.Facility.ClubCategory.IsDeleted != true
+    )
+    .Select(x => x.Facility.ClubCategory)
+    .GroupBy(c => c.Id)
+    .Select(g => new
+    {
+        CategoryId = g.Key,
+        CategoryName = g.First().DisplayName,
+        OrderNo = g.First().OrderNo ?? int.MaxValue // 🔥 handle null orders
+    })
+    .OrderBy(x => x.OrderNo) // ✅ ORDER BY CATEGORY ORDER
+    .ToListAsync(ct);
+
+        //var clubCategories = await _ctx.ClubFacilities
+        // .AsNoTracking()
+        // .Where(x => x.ClubId == request.ClubId && x.IsAvailable && x.IsActive == true && x.IsDeleted != true)
+        // .Select(x => new
+        // {
+        //     CategoryId = x.Facility.ClubCategory.Id,
+        //     CategoryName = x.Facility.ClubCategory.DisplayName,
+        //     OrderNo = g.First().OrderNo ?? int.MaxValue // 🔥 handle null orders
+        // })
+        // .Distinct()
+        // .ToListAsync(ct);
 
         var clubImages = await _ctx.ClubImages
         .AsNoTracking()

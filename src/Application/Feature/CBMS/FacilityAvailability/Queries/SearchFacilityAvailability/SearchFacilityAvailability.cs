@@ -28,9 +28,9 @@ public class SearchFacilityAvailabilityHandler
         _fileStorageService = fileStorageService;
     }
 
-        public async Task<ApiResult<List<FacilitySearchResponse>>> Handle(
-        SearchFacilityAvailabilityQuery request,
-        CancellationToken ct)
+    public async Task<ApiResult<List<FacilitySearchResponse>>> Handle(
+    SearchFacilityAvailabilityQuery request,
+    CancellationToken ct)
     {
         var facilitiesQuery =
             from f in _db.Facilities
@@ -45,8 +45,6 @@ public class SearchFacilityAvailabilityHandler
             .Include(f => f.ClubCategory)
             .ToListAsync(ct);
 
-
-
         var result = new List<FacilitySearchResponse>();
 
         foreach (var facility in facilities)
@@ -55,7 +53,7 @@ public class SearchFacilityAvailabilityHandler
                 .Where(u =>
                     u.ClubId == request.ClubId &&
                     u.FacilityId == facility.Id &&
-                    u.IsActive==true && u.IsDeleted !=true)
+                    u.IsActive == true && u.IsDeleted != true)
                 .ToListAsync(ct);
 
 
@@ -64,21 +62,6 @@ public class SearchFacilityAvailabilityHandler
 
             foreach (var unit in units)
             {
-                var unitServices = await _db.FacilityUnitServices
-                 .Where(s =>
-                     s.FacilityUnitId == unit.Id &&
-                     s.IsEnabled &&
-                     s.IsDeleted != true)
-                 .Select(s => new UnitServiceDto(
-                     s.ServiceDefinitionId,
-                     s.ServiceDefinition.Name,
-                     s.Price,
-                     s.IsComplimentary,
-                     s.ServiceDefinition.IsQuantityBased
-                 ))
-                 .ToListAsync(ct);
-
-
 
                 var unitMainImagePath = await _db.FacilityUnitImages
                 .Where(x =>
@@ -135,7 +118,7 @@ public class SearchFacilityAvailabilityHandler
                          b.FacilityUnitId == unit.Id &&
                          b.Status != BookingStatus.Cancelled
                      select bs).ToListAsync(ct);
-                
+
                     var availableSlots = slots
                         .Where(s =>
                             IsSlotAllowed(
@@ -162,12 +145,10 @@ public class SearchFacilityAvailabilityHandler
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
-                         unit.Description,
                         config.BasePrice,
                         true,
                         availableSlots,
-                        unitMainImageUrl,
-                        unitServices
+                        unitMainImageUrl
                     ));
                 }
                 // =========================
@@ -205,12 +186,10 @@ public class SearchFacilityAvailabilityHandler
                         unit.Id,
                         unit.Name,
                         unit.UnitType,
-                        unit.Description,
                         config.BasePrice,
                         true,
                         null,
-                        unitMainImageUrl,
-                        unitServices
+                        unitMainImageUrl
                     ));
                 }
             }
@@ -218,20 +197,16 @@ public class SearchFacilityAvailabilityHandler
             if (!unitResponses.Any())
                 continue;
 
-            var mainImagePath = _db.FacilitiesImages
-    .Where(x =>
-        x.FacilityId == facility.Id &&
-        x.Category == ImageCategory.Main)
-    .Select(x => x.ImageURL)
-    .FirstOrDefault();
-
             result.Add(new FacilitySearchResponse(
                 facility.Id,
-                facility.Name,
+                facility.DisplayName,
                 facility.ClubCategory.Name,
-                mainImagePath != null
-        ? _fileStorageService.GetPublicUrl(mainImagePath)
-        : null,
+                _db.FacilitiesImages
+                    .Where(x =>
+                        x.FacilityId == facility.Id &&
+                        x.Category == ImageCategory.Main)
+                    .Select(x => x.ImageURL)
+                    .FirstOrDefault(),
                 unitResponses.First().Slots != null
                     ? BookingMode.SlotBased
                     : BookingMode.DayBased,

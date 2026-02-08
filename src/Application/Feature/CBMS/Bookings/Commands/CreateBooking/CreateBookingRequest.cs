@@ -17,4 +17,7 @@ public class CreateBookingRequest
     // Date-range
     public DateRangeBookingRequest? DateRangeRequest { get; set; }
     public decimal? DiscountPercent { get; set; }
+    public string? Name { get; set; }
+    public string? RegisteredMobileNo { get; set; }
+    public string? Email  { get; set; }
 }

@@ -14,7 +14,8 @@ public record UpdateClubCategoryCommand(
     string Name,
     string Code,
     string DisplayName, 
-    string Descriptio
+    string Descriptio,
+    int? OrderNo
 ) : IRequest<ApiResult<bool>>;
 public class UpdateClubCategoryCommandHandler
     : IRequestHandler<UpdateClubCategoryCommand, ApiResult<bool>>
@@ -46,6 +47,7 @@ public class UpdateClubCategoryCommandHandler
         entity.Code = request.Code.Trim().ToUpperInvariant();
         entity.DisplayName = request.DisplayName.Trim();
         entity.Description = request.Descriptio.Trim();
+        entity.OrderNo = request.OrderNo ?? entity.OrderNo;
 
         await _db.SaveChangesAsync(ct);
 

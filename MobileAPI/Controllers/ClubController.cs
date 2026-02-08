@@ -104,7 +104,10 @@ public class ClubController : BaseApiController
             request.SlotRequest,
             request.DateRangeRequest,
 
-            request.DiscountPercent
+            request.DiscountPercent,
+            request.Name,
+            request.RegisteredMobileNo,
+            request.Email
         );
         var result = await _mediator.Send(command, ct);
         return result.Success

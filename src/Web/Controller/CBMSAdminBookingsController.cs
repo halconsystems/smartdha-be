@@ -3,6 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.CBMS.Admin.Queries;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Admin.Queries.AdminBookingDashboard;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Admin.Queries.CategoryRevenue;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Admin.Queries.GetAdminBookings;
+using DHAFacilitationAPIs.Application.Feature.CBMS.Admin.Queries.GetAllAdminBookings;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Commands.CreateBooking;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Queries.GetBookingDetail;
 using DHAFacilitationAPIs.Application.Feature.CBMS.Bookings.Queries.MyBookings;
@@ -100,7 +101,10 @@ public class CBMSAdminBookingsController : BaseApiController
             request.SlotRequest,
             request.DateRangeRequest,
 
-            request.DiscountPercent
+            request.DiscountPercent,
+            request.Name,   
+            request.RegisteredMobileNo,
+            request.Email
         );
         var result = await _mediator.Send(command, ct);
         return result.Success
@@ -127,6 +131,11 @@ public class CBMSAdminBookingsController : BaseApiController
             ? Ok(result)
             : NotFound(result);
     }
+
+    [HttpGet("all")]
+    public Task<ApiResult<List<AdminBookingListDto>>> GetAllBookings()
+    => _mediator.Send(new GetAllAdminBookingsQuery());
+
 
     [HttpGet]
     public Task<ApiResult<List<AdminBookingListDto>>> GetBookings(

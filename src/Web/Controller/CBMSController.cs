@@ -173,7 +173,7 @@ public class CBMSController : BaseApiController
         [FromBody] ClubUpdateServiceCategoryRequest body,
         CancellationToken ct)
         => Ok(await _mediator.Send(
-            new UpdateClubCategoryCommand(id, body.Name, body.Code,body.DisplayName,body.Descriptio), ct));
+            new UpdateClubCategoryCommand(id, body.Name, body.Code,body.DisplayName,body.Descriptio,body.OrderNo), ct));
 
     [HttpDelete("Category/{id:guid}")]
     [Tags("02 - ClubServiceCategory")]
@@ -613,7 +613,6 @@ public class CBMSController : BaseApiController
 
     #endregion
 
-
     //    [HttpPost("AddFacilityService")]
     //    [Tags("FacilityService")]
     //    public Task<ApiResult<Guid>> AddService(CreateFacilityServiceDto dto)
@@ -908,7 +907,8 @@ public record ClubUpdateServiceCategoryRequest(
    string Name,
    string Code,
    string DisplayName,
-   string Descriptio
+   string Descriptio,
+   int? OrderNo
 );
 public record ClubUpdateFacilityRequest(
     Guid FacilityId,

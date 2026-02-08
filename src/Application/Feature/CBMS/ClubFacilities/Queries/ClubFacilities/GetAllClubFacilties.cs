@@ -21,8 +21,8 @@ public record ClubFacilitiesDTO(
     bool HasAction,
     string? ActionName,
     string? ActionTypes,
-    bool? IsActive,
-    bool? IsDeleted
+    FacilityActionType FacilityActionType,
+    BookingMode BookingMode
 );
 
 public record GetAllClubFaciltiesQuery() : IRequest<ApiResult<List<ClubFacilitiesDTO>>>;
@@ -55,8 +55,8 @@ public class GetAllClubFaciltiesQueryHandler
                 x.HasAction,
                 x.ActionName,
                 x.ActionType,
-                x.IsActive,
-                x.IsDeleted
+                x.FacilityActionType,
+                x.BookingMode
             ))
             .ToListAsync(ct);
 

@@ -34,7 +34,10 @@ public record CreateBookingCommand(
     BookingMode BookingMode,
     SlotBookingRequest? SlotRequest,
     DateRangeBookingRequest? DateRangeRequest,
-    decimal? DiscountPercent
+    decimal? DiscountPercent,
+    string? Name,
+    string? RegisteredMobileNo,
+    string? Email
 ) : IRequest<ApiResult<Guid>>;
 public class CreateBookingCommandHandler
     : IRequestHandler<CreateBookingCommand, ApiResult<Guid>>
@@ -159,9 +162,9 @@ public class CreateBookingCommandHandler
                 BookingMode = request.BookingMode,
 
                 MembershipdetailId = currentUserId,
-                UserName = user.Name,
-                UserContact = user.RegisteredMobileNo,
-                Email = user.Email,
+                UserName = request.Name ?? user.Name,
+                UserContact =request.RegisteredMobileNo ?? user.RegisteredMobileNo,
+                Email = request.Email ?? user.Email,
 
                 ClubId = request.ClubId,
                 FacilityId = request.FacilityId,

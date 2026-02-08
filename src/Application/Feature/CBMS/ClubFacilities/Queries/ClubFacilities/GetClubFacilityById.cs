@@ -44,8 +44,8 @@ public class GetClubFacilitiesByClubIdQueryHandler
                 x.HasAction,
                 x.ActionName,
                 x.ActionType,
-                x.IsActive,
-                x.IsDeleted
+                x.FacilityActionType,
+                x.BookingMode
             ))
             .ToListAsync(ct);
 
