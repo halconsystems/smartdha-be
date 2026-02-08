@@ -90,6 +90,7 @@ public class GetAllOrderListQueryHandler : IRequestHandler<GetAllOrderListQuery,
             OrderDate = x.Created,
             TotalPrice = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.Total.ToString(),
             ItemCount = ordersumarries
+                .Where(o => o.OrderId == x.Id)
                 .Sum(x => decimal.TryParse(x.ItemCount, out var val) ? val : 0)
                 .ToString(),
             PaymentMethod = DeliveryDetails.FirstOrDefault(d => d.OrderId == x.Id)?.PaymentMethod,
