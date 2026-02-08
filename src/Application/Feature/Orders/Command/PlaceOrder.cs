@@ -206,7 +206,7 @@ public class OrderPlaceCommandHandler : IRequestHandler<OrderPlaceCommand, Succe
                 DeliverAddress = command.DeliverAddress,
                 ShopId = command.ShopId,
                 OrderStatus = command.OrderStatus,
-                AmountToCollect = command.PaymentMethod == PaymentMethod.Cash ? totalAmount : 0,
+                AmountToCollect = command.PaymentMethod == PaymentMethod.Cash ? totalAmount + taxex - discount : 0,
                 CollectedAmount = command.PaymentMethod == PaymentMethod.Cash ? 0 : OnlinePaymentLogs?.TransactionAmount,
             };
 
@@ -250,12 +250,12 @@ public class OrderPlaceCommandHandler : IRequestHandler<OrderPlaceCommand, Succe
                 PhoneNumber = command.PhoneNumber,
                 DeliveryInstruction = command.DeliveryInstruction,
                 subTotal = subtotal,
-                Total = totalAmount,
+                Total = totalAmount + taxex - discount,
                 Taxes = taxex,
                 Discount = discount,
                 PaymentMethod = command.PaymentMethod,
                 paidAmount = command.PaymentMethod == PaymentMethod.Cash ? entity.CollectedAmount : totalAmount,
-                RemainingBalance = totalAmount - (command.PaymentMethod == PaymentMethod.Cash ? entity.CollectedAmount : totalAmount),
+                RemainingBalance = (totalAmount + taxex - discount) - (command.PaymentMethod == PaymentMethod.Cash ? entity.CollectedAmount : totalAmount + taxex - discount),
             };
 
             _context.DeliveryDetails.Add(deliveryEntity);
