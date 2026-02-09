@@ -14,7 +14,8 @@ namespace DHAFacilitationAPIs.Application.Feature.Fumigation.Tanker.Command;
 public record AddTankerCommand(
     [Required] string Name,
      [Required] string DisplayName,
-     [Required] string Price
+     [Required] string Price,
+     string? ServiceId 
 ) : IRequest<SuccessResponse<Guid>>;
 public class AddTankerCommandHandler
     : IRequestHandler<AddTankerCommand, SuccessResponse<Guid>>
@@ -49,6 +50,7 @@ public class AddTankerCommandHandler
                 DisplayName = request.DisplayName,
                 Code = request.Name.ToString().Substring(0, request.Name.ToString().Length / 2).ToUpper(),
                 Price = request.Price,  
+                FemServiceId = string.IsNullOrEmpty(request.ServiceId) ? null : Guid.Parse(request.ServiceId)
             };
 
             _context.TankerSizes.Add(tanker);

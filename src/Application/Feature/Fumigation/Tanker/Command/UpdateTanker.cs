@@ -15,7 +15,8 @@ public record UpdateTankerCommand(
     [Required] Guid Id,
     [Required] string Name,
     [Required] string DisplayName,
-    [Required] string Price
+    [Required] string Price,
+    string? ServiceId
 ) : IRequest<SuccessResponse<Guid>>;
 public class UpdateTankerCommandHandler
     : IRequestHandler<UpdateTankerCommand, SuccessResponse<Guid>>
@@ -46,6 +47,7 @@ public class UpdateTankerCommandHandler
             existingTanker.DisplayName = request.DisplayName;
             existingTanker.Code = request.Name.ToString().Substring(0, request.Name.ToString().Length / 2).ToUpper();
             existingTanker.Price = request.Price;
+            existingTanker.FemServiceId = string.IsNullOrEmpty(request.ServiceId) ? null : Guid.Parse(request.ServiceId);
 
             await _context.SaveChangesAsync(ct);
 

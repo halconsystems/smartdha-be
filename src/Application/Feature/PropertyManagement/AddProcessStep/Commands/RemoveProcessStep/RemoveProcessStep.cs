@@ -60,7 +60,8 @@ public class RemoveProcessStepHandler
 
         var removedStepNo = step.StepNo;
 
-        // 2️⃣ Soft delete step
+        // 2️⃣ Soft delete step7
+        step.StepNo = 0; // Temporarily set to 0 to free up the step number for reordering
         step.IsDeleted = true;
         step.IsActive = false;
 

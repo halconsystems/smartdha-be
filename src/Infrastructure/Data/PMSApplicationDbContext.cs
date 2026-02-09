@@ -10,6 +10,7 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Entities.PMS;
 using DHAFacilitationAPIs.Domain.Enums.PMS;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DHAFacilitationAPIs.Infrastructure.Data;
@@ -46,6 +47,7 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
     public DbSet<MessageTemplate> MessageTemplates => Set<MessageTemplate>();
     public DbSet<CaseMessageLog> CaseMessageLogs => Set<CaseMessageLog>();
     public DbSet<NumberSequence> NumberSequences => Set<NumberSequence>();
+    public DbSet<ProcessStepAudit> ProcessStepAudits => Set<ProcessStepAudit>();
 
 
     /* =========================
@@ -175,6 +177,8 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
             }
         }
 
+
+
         modelBuilder.Entity<NumberSequence>(entity =>
         {
             entity.ToTable("NumberSequences");
@@ -194,6 +198,9 @@ public class PMSApplicationDbContext : DbContext, IPMSApplicationDbContext
             entity.HasIndex(x => new { x.Prefix, x.SequenceDate })
                 .IsUnique();
         });
+
+       
+
 
         base.OnModelCreating(modelBuilder);
     }

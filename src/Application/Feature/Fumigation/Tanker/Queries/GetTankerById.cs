@@ -24,7 +24,9 @@ public class GetTankerByIdQueryHandler : IRequestHandler<GetTankerByIdQuery, Tan
     {
         var tanker = await _context.TankerSizes
            .FirstOrDefaultAsync(x => x.Id == request.Id);
-
+        var FemServices = await _context.FemServices
+         .AsNoTracking()
+         .ToListAsync(ct);
 
         if (tanker == null)
             throw new KeyNotFoundException("Service Not Found.");
@@ -37,6 +39,9 @@ public class GetTankerByIdQueryHandler : IRequestHandler<GetTankerByIdQuery, Tan
             DisplayName = tanker.DisplayName,
             Code = tanker.Code,
             Price = tanker.Price,
+            IsActive = tanker.IsActive,
+            ServiceId= tanker.FemServiceId.ToString(),
+            ServiceName = FemServices.FirstOrDefault(y => y.Id == tanker.FemServiceId)?.Name
         };
 
         return result;

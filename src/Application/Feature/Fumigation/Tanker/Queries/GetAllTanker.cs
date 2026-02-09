@@ -26,6 +26,10 @@ public class GetAllTankerQueryHandler : IRequestHandler<GetAllTankerQuery, List<
             .AsNoTracking()
             .ToListAsync(ct);
 
+        var FemServices = await _context.FemServices
+            .AsNoTracking()
+            .ToListAsync(ct);
+
 
         if (tanker == null)
             throw new KeyNotFoundException("Phases Not Found.");
@@ -38,7 +42,9 @@ public class GetAllTankerQueryHandler : IRequestHandler<GetAllTankerQuery, List<
             DisplayName = x.DisplayName,
             Code = x.Code,
             Price = x.Price,
-            IsActive = x.IsActive
+            IsActive = x.IsActive,
+            ServiceId=x.FemServiceId.ToString(),
+            ServiceName = FemServices.FirstOrDefault(y=>y.Id== x.FemServiceId)?.Name
         }).ToList();
 
         return result;

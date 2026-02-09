@@ -16,6 +16,9 @@ public class TankerSize :BaseAuditableEntity
     public string? Code { get; set; }
     [Required]
     public string Price { get; set; } = default!;
+    public Guid? FemServiceId { get; set; }
+    public FemService? FemService { get; set; }
+   
 
 
 }

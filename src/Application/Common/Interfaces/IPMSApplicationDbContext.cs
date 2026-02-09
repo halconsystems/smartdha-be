@@ -40,6 +40,7 @@ public interface IPMSApplicationDbContext
     DbSet<MessageTemplate> MessageTemplates { get; }
     DbSet<CaseMessageLog> CaseMessageLogs { get; }
     DbSet<NumberSequence> NumberSequences { get; }
+    DbSet<ProcessStepAudit> ProcessStepAudits { get; }
 
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;

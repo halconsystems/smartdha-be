@@ -47,8 +47,22 @@ public class AddProcessStepHandler : IRequestHandler<AddProcessStepCommand, ApiR
         };
 
         _db.Set<ProcessStep>().Add(step);
-        await _db.SaveChangesAsync(ct);
-
+        try
+        {
+            await _db.SaveChangesAsync(ct);
+        }
+        catch(DbUpdateException ex)
+        {
+            // Check if it's a unique constraint violation on (ProcessId, StepNo)
+            if (ex.InnerException != null && ex.InnerException.Message.Contains("UNIQUE") && ex.InnerException.Message.Contains("ProcessId") && ex.InnerException.Message.Contains("StepNo"))
+            {
+                return ApiResult<Guid>.Fail("StepNo already exists for this process.");
+            }
+            else
+            {
+                throw; // rethrow if it's a different exception
+            }
+        }
         return ApiResult<Guid>.Ok(step.Id, "Step added.");
     }
 }

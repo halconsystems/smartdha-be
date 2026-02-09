@@ -49,6 +49,14 @@ public class FemugationController : BaseApiController
         return list.Where(x => x.IsActive == true).ToList();
     }
 
+    [HttpGet("Get-By-Service/{serviceId}")]
+    public async Task<List<TankerDTO>> GetByService(Guid serviceId)
+    {
+        var list = await _med.Send(new GetTankerByServiceQuery(serviceId));
+        return list.Where(x => x.IsActive == true).ToList();
+    }
+
+
     [HttpGet("Get-Shops")]
     public async Task<List<FMShopsDTO>> Shops()
     {

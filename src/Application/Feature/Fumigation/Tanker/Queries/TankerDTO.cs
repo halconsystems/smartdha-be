@@ -14,4 +14,6 @@ public class TankerDTO
     public string? Code { get; set; }
     public string? Price { get; set; }
     public bool? IsActive { get; set; }
+    public string? ServiceId { get; set; }
+    public string? ServiceName { get; set; }
 }

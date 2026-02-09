@@ -96,8 +96,8 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         Guid getModuleId = getDirect.ModuleId;
 
         var random = Random.Shared.Next(100, 999);
-        //var caseNo = $"PMS-{DateTime.Now:yyMMdd}-{random}";
-        //var caseNo = $"PMS-{DateTime.UtcNow:yyyyMMddHHmmssfff}";
+        //var caseNo = $"P{DateTime.Now:yyMMdd}{random}";
+        //var caseNo = $"PMS{DateTime.UtcNow:yyyyMMddHHmmssfff}";
         var caseNo = await GenerateNumberAsync("P");
         Guid userPropertyId;
 
@@ -112,9 +112,14 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         if (existing == null)
         {
             var spProperty = await _propertyInfoService.GetPropertyByPlotPkAsync(
-           user.CNIC,
-           r.UserPropertyId,
-           ct);
+          user.CNIC,
+          r.UserPropertyId,
+          ct);
+
+           // var spProperty = await _propertyInfoService.GetPropertyByPlotPkAsync(
+           //user.CNIC,
+           //r.UserPropertyId,
+           //ct);
 
             if (spProperty == null)
                 throw new Exception("Property not found in DHA record.");
@@ -498,8 +503,7 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
     {
         var today = DateOnly.FromDateTime(DateTime.Now);
 
-        using var tx = await _db.Database.BeginTransactionAsync(ct);
-
+       
         var seq = await _db.NumberSequences
             .SingleOrDefaultAsync(x =>
                 x.SequenceDate == today &&
@@ -521,7 +525,6 @@ public class SubmitCase_V1Handler: IRequestHandler<SubmitCase_V1Command, ApiResu
         }
 
         await _db.SaveChangesAsync(ct);
-        await tx.CommitAsync(ct);
 
         return $"{prefix}{today:yyMMdd}{seq.LastNumber.ToString($"D{digits}")}";
     }
