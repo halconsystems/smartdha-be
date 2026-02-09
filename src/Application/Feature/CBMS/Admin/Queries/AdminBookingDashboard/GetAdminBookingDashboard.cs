@@ -16,12 +16,14 @@ public class GetAdminBookingDashboardHandler
     private readonly ICBMSApplicationDbContext _db;
     private readonly IClubAccessService _clubAccess;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ISmartPayService _smartPayService;
 
-    public GetAdminBookingDashboardHandler(ICBMSApplicationDbContext db, IClubAccessService clubAccess, ICurrentUserService currentUserService)
+    public GetAdminBookingDashboardHandler(ICBMSApplicationDbContext db, IClubAccessService clubAccess, ICurrentUserService currentUserService, ISmartPayService smartPayService)
     {
         _db = db;
         _clubAccess = clubAccess;
         _currentUserService = currentUserService;
+        _smartPayService = smartPayService;
     }
     public async Task<ApiResult<AdminBookingDashboardDto>> Handle(
         GetAdminBookingDashboardQuery request,
@@ -44,6 +46,7 @@ public class GetAdminBookingDashboardHandler
             .AsNoTracking()
             .Where(b => b.PaymentStatus == PaymentStatus.Paid)
             .AsQueryable();
+
 
         // 🔒 Apply club restriction if not SuperAdmin
         if (allowedClubIds != null)

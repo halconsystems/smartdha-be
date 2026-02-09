@@ -7,7 +7,7 @@ public class Payment : BaseAuditableEntity
     public PaymentIntent PaymentIntent { get; set; } = default!;
 
     [Column(TypeName = "decimal(18,2)")] public decimal Amount { get; set; }
-    public PaymentStatus Status { get; set; } = PaymentStatus.Authorized;
+    public PaymentStatus Status { get; set; } = PaymentStatus.Initiated;
     public DateTime? PaidAt { get; set; }
 
     public PaymentMethod Method { get; set; }

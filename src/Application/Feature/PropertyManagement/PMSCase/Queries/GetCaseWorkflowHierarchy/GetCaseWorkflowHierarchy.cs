@@ -97,18 +97,18 @@ public class GetCaseWorkflowHierarchyHandler
         // 2️⃣ Load workflow steps (definition)
         var steps = await _db.Set<ProcessStep>()
             .Include(s => s.Directorate)
-            .Where(s => s.ProcessId == c.ProcessId && s.IsDeleted != true)
+            .Where(s => s.ProcessId == c.ProcessId && c.IsActive==true && s.IsDeleted != true)
             .OrderBy(s => s.StepNo)
             .ToListAsync(ct);
 
         // 3️⃣ Load step history
         var history = await _db.Set<CaseStepHistory>()
-            .Where(h => h.CaseId == c.Id && h.IsDeleted != true)
+            .Where(h => h.CaseId == c.Id && c.IsActive == true && h.IsDeleted != true)
             .ToListAsync(ct);
 
         // 4️⃣ Load fee receipt (latest)
         var fee = await _db.Set<CaseFeeReceipt>()
-         .Where(x => x.CaseId == c.Id && x.IsDeleted != true)
+         .Where(x => x.CaseId == c.Id && c.IsActive == true && x.IsDeleted != true)
          .OrderByDescending(x => x.Created)
          .FirstOrDefaultAsync(ct);
 

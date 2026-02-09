@@ -186,7 +186,108 @@ namespace DHAFacilitationAPIs.Infrastructure.Service;
                 throw;
             }
         }
+        // ========= 5) I Stats of Prefix =========
+        public async Task<SmartPayStatsBillResponse> IStats(string Prefix, string Since, CancellationToken cancellationToken = default)
+    {
+        const string apiName = "IStats";
+
+        try
+        {
+            var requestTime = DateTime.Now;
+
+            var url = $"{_options.BaseUrl}/api/IStats/{Prefix}/{Since}";
+            var response = await _httpClient.GetAsync(url, cancellationToken);
+
+            var json = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            var responseTime = DateTime.Now;
+
+            await LogAsync(
+                requestTime,
+                responseTime,
+                apiName,
+                new { Prefix, Since },
+                json,
+                response.IsSuccessStatusCode,
+                cancellationToken);
+
+            response.EnsureSuccessStatusCode();
+
+            return SafeDeserialize<SmartPayStatsBillResponse>(json);
+        }
+        catch (Exception ex)
+        {
+            await LogAsync(
+                DateTime.Now,
+                DateTime.Now,
+                apiName,
+                new { Prefix, Since },
+                ex.ToString(),
+                false,
+                cancellationToken);
+
+            throw;
+        }
     }
+
+        // ========= 6) Update Bill =========       
+        public async Task<SmartPayPayAtInsResponse> PayAtInsAsync(
+        SmartPayPayAtInsRequest request,
+        CancellationToken cancellationToken = default)
+        {
+            const string apiName = "PayAtIns";
+    
+            try
+            {
+                var requestTime = DateTime.Now;
+    
+                var url = $"{_options.BaseUrl}/api/PayAtIns";
+    
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post, url);
+    
+                // 🔑 API Key header
+                httpRequest.Headers.Add("APIKey", _options.ApiKey);
+    
+                // 📦 Body
+                httpRequest.Content = new StringContent(
+                    JsonSerializer.Serialize(request),
+                    Encoding.UTF8,
+                    "application/json");
+    
+                var response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+                var json = await response.Content.ReadAsStringAsync(cancellationToken);
+    
+                var responseTime = DateTime.Now;
+    
+                await LogAsync(
+                    requestTime,
+                    responseTime,
+                    apiName,
+                    request,
+                    json,
+                    response.IsSuccessStatusCode,
+                    cancellationToken);
+    
+                response.EnsureSuccessStatusCode();
+    
+                return SafeDeserialize<SmartPayPayAtInsResponse>(json);
+            }
+            catch (Exception ex)
+            {
+                await LogAsync(
+                    DateTime.Now,
+                    DateTime.Now,
+                    apiName,
+                    request,
+                    ex.ToString(),
+                    false,
+                    cancellationToken);
+    
+                throw;
+            }
+        }
+
+}
 
 
 

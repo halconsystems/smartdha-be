@@ -39,4 +39,12 @@ public interface ISmartPayService
     Task<SmartPayUploadBillResponse> UploadBillAsync(
         SmartPayUploadBillRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<SmartPayStatsBillResponse> IStats(
+       string Prefix,string Since,
+       CancellationToken cancellationToken = default);
+
+    Task<SmartPayPayAtInsResponse> PayAtInsAsync(
+        SmartPayPayAtInsRequest request,
+        CancellationToken cancellationToken = default);
 }

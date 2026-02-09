@@ -28,7 +28,7 @@ public class RoomBooking : BaseAuditableEntity
     [Required]
     public DateTime? BookingDate { get; set; } = DateTime.Now;
 
-    public BookingStatus Status { get; set; } = BookingStatus.Provisional;
+    public BookingStatus Status { get; set; } = BookingStatus.Pending;
 
     [Required]
     public DateTime? CheckInDate { get; set; }

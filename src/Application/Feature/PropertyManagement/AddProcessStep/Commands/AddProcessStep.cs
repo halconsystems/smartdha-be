@@ -25,14 +25,14 @@ public class AddProcessStepHandler : IRequestHandler<AddProcessStepCommand, ApiR
 
     public async Task<ApiResult<Guid>> Handle(AddProcessStepCommand r, CancellationToken ct)
     {
-        var processExists = await _db.Set<ServiceProcess>().AnyAsync(x => x.Id == r.ProcessId, ct);
+        var processExists = await _db.Set<ServiceProcess>().AnyAsync(x => x.Id == r.ProcessId && x.IsDeleted != true, ct);
         if (!processExists) return ApiResult<Guid>.Fail("Process not found.");
 
-        var dirExists = await _db.Set<Directorate>().AnyAsync(x => x.Id == r.DirectorateId, ct);
+        var dirExists = await _db.Set<Directorate>().AnyAsync(x => x.Id == r.DirectorateId && x.IsDeleted != true, ct);
         if (!dirExists) return ApiResult<Guid>.Fail("Directorate not found.");
 
         var dup = await _db.Set<ProcessStep>()
-            .AnyAsync(x => x.ProcessId == r.ProcessId && x.StepNo == r.StepNo, ct);
+            .AnyAsync(x => x.ProcessId == r.ProcessId && x.StepNo == r.StepNo && x.IsDeleted != true, ct);
         if (dup) return ApiResult<Guid>.Fail("StepNo already exists for this process.");
 
         var step = new ProcessStep

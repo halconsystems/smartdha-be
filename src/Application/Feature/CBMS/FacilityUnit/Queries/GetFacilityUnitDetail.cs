@@ -72,20 +72,20 @@ public class GetFacilityUnitDetailHandler
         // SERVICES
         // =========================
         var services = await _db.FacilityUnitServices
- .Where(us =>
-     us.FacilityUnitId == unit.Id &&
-     us.IsEnabled &&
-     us.IsDeleted != true)
- .Select(us => new FacilityUnitServiceDto(
-     us.ServiceDefinitionId,                 // ✅ ServiceDefinitionId
-     us.ServiceDefinition.Name,              // ✅ Service name
-     us.ServiceDefinition.Code,              // ✅ Service code
-     us.IsComplimentary,                     // ✅ unit-level flag
-     us.ServiceDefinition.IsQuantityBased,   // ✅ definition-level flag
-     us.Price,                               // ✅ unit-level price
-     us.IsEnabled
- ))
- .ToListAsync(ct);
+         .Where(us =>
+             us.FacilityUnitId == unit.Id &&
+             us.IsEnabled &&
+             us.IsDeleted != true)
+         .Select(us => new FacilityUnitServiceDto(
+             us.ServiceDefinitionId,                 // ✅ ServiceDefinitionId
+             us.ServiceDefinition.Name,              // ✅ Service name
+             us.ServiceDefinition.Code,              // ✅ Service code
+             us.IsComplimentary,                     // ✅ unit-level flag
+             us.ServiceDefinition.IsQuantityBased,   // ✅ definition-level flag
+             us.Price,                               // ✅ unit-level price
+             us.IsEnabled
+         ))
+         .ToListAsync(ct);
 
         // =========================
         // BASE AMOUNT (PREVIEW)

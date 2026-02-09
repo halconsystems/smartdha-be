@@ -6,50 +6,58 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using DHAFacilitationAPIs.Application.Common.Exceptions;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSPrerequisiteDefinition.Queries.GetProcessPrerequisites;
 using DHAFacilitationAPIs.Application.ViewModels;
+using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace DHAFacilitationAPIs.Application.Feature.Proeperty.Queries.GetPropertyByMemPK;
-public class GetMyPropertiesQuery : IRequest<SuccessResponse<List<PlotDto>>>{}
+public class GetMyPropertiesQuery : IRequest<SuccessResponse<List<PlotInfoDto>>>{}
 
-public class GetMyPropertiesQueryHandler : IRequestHandler<GetMyPropertiesQuery, SuccessResponse<List<PlotDto>>>
+public class GetMyPropertiesQueryHandler : IRequestHandler<GetMyPropertiesQuery, SuccessResponse<List<PlotInfoDto>>>
 {
-    private readonly IProcedureService _procedureService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IPropertyInfoService _propertyInfoService;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public GetMyPropertiesQueryHandler(IProcedureService procedureService, IHttpContextAccessor httpContextAccessor)
+    public GetMyPropertiesQueryHandler(ICurrentUserService currentUserService,IPropertyInfoService propertyInfoService, UserManager<ApplicationUser> userManager)
     {
-        _procedureService = procedureService;
-        _httpContextAccessor = httpContextAccessor;
+        _currentUserService=currentUserService;
+        _propertyInfoService=propertyInfoService;
+        _userManager=userManager;
+
     }
 
-    public async Task<SuccessResponse<List<PlotDto>>> Handle(GetMyPropertiesQuery request, CancellationToken cancellationToken)
+    public async Task<SuccessResponse<List<PlotInfoDto>>> Handle(GetMyPropertiesQuery request, CancellationToken cancellationToken)
     {
-        // Extract MemPK from claims
-        var memPK = _httpContextAccessor.HttpContext?.User?.FindFirst("MemPK")?.Value;
-        memPK = string.IsNullOrEmpty(memPK) ? "DHAM-97563" : memPK;
-
-
-        var OwnerName = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
-
-        if (string.IsNullOrEmpty(memPK))
-            throw new UnauthorizedAccessException("MemPK not found in token.");
-
-        var parameters = new DynamicParameters();
-        parameters.Add("@memPK", memPK, DbType.String, size: 120);
-
-        var (outputParams, result) = await _procedureService
-            .ExecuteWithListAsync<PlotDto>("USP_GetPropertyByMemPK", parameters, cancellationToken);
-
-        foreach (var plot in result)
+        var userId = _currentUserService.UserId.ToString() ?? throw new UnauthorizedAccessException("Invalid user.");
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
         {
-            plot.OwnerName = OwnerName ?? string.Empty;
-            plot.Address = $"Plot No. {plot.PLTNO}, Street {plot.STNAME}, Phase {plot.PHASE}";
-            plot.Type = plot.PTYPE == "R" ? "Residential" : "Commercial";
+            throw new UnAuthorizedException("Invalid CNIC. Please verify and try again.");
         }
 
+        var spProperties = await _propertyInfoService.GetPropertiesByCnicAsync(user.CNIC, cancellationToken);
 
-        return new SuccessResponse<List<PlotDto>>(result, "Properties fetched successfully.");
+        if (spProperties == null || !spProperties.Any())
+        {
+            throw new Exception("No property found.");
+        }
+
+        var properties = spProperties
+            .Select(x => new PlotInfoDto(            
+                PropertyNo: x.PLOT_NO ?? x.PLTNO ?? string.Empty,
+                Sector: x.SUBDIV,
+                Phase: x.PHASE,
+                Address: x.PROPERTY_ADDRESS,
+                Name: user.Name,
+                CNIC: user.CNIC
+            ))
+            .ToList();
+
+        return new SuccessResponse<List<PlotInfoDto>>(properties, "Properties fetched successfully.");
     }
 }

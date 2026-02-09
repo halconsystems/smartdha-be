@@ -15,7 +15,7 @@ public class OrderPayment :BaseAuditableEntity
     public Guid orderPaymentIntentId { get; set; }
     public OrderPaymentIntents OrderPaymentIntents { get; set; } = default!;
     [Column(TypeName = "decimal(18,2)")] public decimal Amount { get; set; }
-    public PaymentStatus Status { get; set; } = PaymentStatus.Authorized;
+    public PaymentStatus Status { get; set; } = PaymentStatus.Initiated;
     public DateTime? PaidAt { get; set; }
     public PaymentProvider Provider { get; set; } = PaymentProvider.None;
     [MaxLength(100)] public string? ProviderTransactionId { get; set; }

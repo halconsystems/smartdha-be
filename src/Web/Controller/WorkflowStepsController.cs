@@ -1,5 +1,6 @@
 ﻿using DHAFacilitationAPIs.Application.Feature.PropertyManagement.AddProcessStep.Commands;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.AddProcessStep.Commands.RemoveProcessStep;
+using DHAFacilitationAPIs.Application.Feature.PropertyManagement.AddProcessStep.Commands.UpdateProcessStep;
 using DHAFacilitationAPIs.Application.Feature.PropertyManagement.AddProcessStep.Queries.GetStepsByProcess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,20 @@ public class WorkflowStepsController : BaseApiController
     [HttpGet("by-process/{processId:guid}")]
     public async Task<IActionResult> ByProcess(Guid processId, CancellationToken ct)
         => Ok(await _mediator.Send(new GetStepsByProcessQuery(processId), ct));
+
+    [HttpPut("steps/{stepId:guid}")]
+    public async Task<IActionResult> UpdateStep(
+    Guid stepId,
+    UpdateProcessStepCommand command)
+    {
+        if (stepId != command.StepId)
+            return BadRequest();
+
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+
 
     [HttpDelete("{processId:guid}/steps/{stepId:guid}")]
     public async Task<IActionResult> RemoveStep(

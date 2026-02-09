@@ -17,12 +17,12 @@ public class PropertyController : BaseApiController
         return Ok(await Mediator.Send(new GetMyPropertiesQuery()));
         
     }
-    [HttpGet("Get-propertiesDetails")]
-    public async Task<IActionResult> GetMyProperties(string Cnic)
-    {
-        return Ok(await Mediator.Send(new GetAllProperyByCnicQuery(Cnic)));
+    //[HttpGet("Get-propertiesDetails")]
+    //public async Task<IActionResult> GetMyProperties(string Cnic)
+    //{
+    //    return Ok(await Mediator.Send(new GetAllProperyByCnicQuery(Cnic)));
         
-    }
+    //}
    
 
 }

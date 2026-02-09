@@ -28,11 +28,11 @@ public class CreateServiceProcessHandler : IRequestHandler<CreateServiceProcessC
 
     public async Task<ApiResult<Guid>> Handle(CreateServiceProcessCommand r, CancellationToken ct)
     {
-        var categoryExists = await _db.Set<ServiceCategory>().AnyAsync(x => x.Id == r.CategoryId, ct);
+        var categoryExists = await _db.Set<ServiceCategory>().AnyAsync(x => x.Id == r.CategoryId && x.IsDeleted !=true, ct);
         if (!categoryExists) return ApiResult<Guid>.Fail("Category not found.");
 
         var exists = await _db.Set<ServiceProcess>()
-            .AnyAsync(x => x.CategoryId == r.CategoryId && x.Code == r.Code, ct);
+            .AnyAsync(x => x.CategoryId == r.CategoryId && x.Code == r.Code && x.IsDeleted !=true, ct);
 
         if (exists) return ApiResult<Guid>.Fail("Process code already exists for this category.");
 

@@ -103,3 +103,33 @@ public class SmartPayOptions
     public string BaseUrl { get; set; } = default!;
     public string ApiKey { get; set; } = default!;
 }
+
+public class SmartPayStatsBillResponse
+{
+    public string ResponseCode { get; set; } = default!;
+    public string ResponseMsg { get; set; } = default!;
+    public SmartPayBillStats Stats { get; set; } = default!;
+}
+
+public class SmartPayBillStats
+{
+    public string TotalBills { get; set; } = default!;
+    public string PaidBills { get; set; } = default!;
+    public string TotalAmount { get; set; } = default!;
+    public string PaidAmount { get; set; } = default!;
+}
+
+public class SmartPayPayAtInsResponse
+{
+    public string ResponseCode { get; set; } = default!;
+    public string ResponseMsg { get; set; } = default!;
+}
+public class SmartPayPayAtInsRequest
+{
+    public string Consumer_Number { get; set; } = default!;
+    public string BillingMonth { get; set; } = default!;   // yyMM
+    public string AmountPaid { get; set; } = default!;     // xxxxx.xx
+    public string DatePaid { get; set; } = default!;       // MM/dd/yyyy
+    public string TimePaid { get; set; } = default!;       // hh:mm:ss
+}
+
