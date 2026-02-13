@@ -150,6 +150,11 @@ namespace MobileAPI.Infrastructure
                     Title = "Payments",
                     Version = "v1"
                 });
+                o.SwaggerDoc("smartdha", new OpenApiInfo
+                {
+                    Title = "Smart DHA",
+                    Version = "v1"
+                });
                 o.SwaggerDoc("other", new OpenApiInfo
                 {
                     Title = "Other Module",

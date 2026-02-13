@@ -12,7 +12,7 @@ public interface ISmartdhaDbContext
 {
     DbSet<Vehicle> Vehicles { get; }
     DbSet<UserFamily> UserFamilies { get; }
-
+    DbSet<ResidentProperty> ResidentProperties { get; set; }
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     DatabaseFacade Database { get; }

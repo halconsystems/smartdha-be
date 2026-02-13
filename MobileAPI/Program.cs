@@ -214,6 +214,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/Femugation/swagger.json", "Femugation Module");
     c.SwaggerEndpoint("/swagger/mybills/swagger.json", "My Bills");
     c.SwaggerEndpoint("/swagger/payment/swagger.json", "Payment");
+    c.SwaggerEndpoint("/swagger/smartdha/swagger.json", "Smart DHA");
     c.SwaggerEndpoint("/swagger/other/swagger.json", "Other Module");
 });
 

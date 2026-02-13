@@ -159,6 +159,11 @@ namespace DHAFacilitationAPIs.Web.Infrastructure
                     Title = "Payment Bills",
                     Version = "v1"
                 });
+                o.SwaggerDoc("smartdha", new OpenApiInfo
+                {
+                    Title = "Smart DHA",
+                    Version = "v1"
+                });
 
                 // 🔹 FILTER APIs BY GROUP NAME
                 o.DocInclusionPredicate((docName, apiDesc) =>

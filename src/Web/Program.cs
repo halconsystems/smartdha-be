@@ -152,6 +152,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/Non-Member/swagger.json", "Non Member");
     c.SwaggerEndpoint("/swagger/MemberShip/swagger.json", "MemberShip");
     c.SwaggerEndpoint("/swagger/payment/swagger.json", "Payment Bills");
+    c.SwaggerEndpoint("/swagger/smartdha/swagger.json", "Smart DHA");
 });
 
 //app.UseHealthChecks("/health");
