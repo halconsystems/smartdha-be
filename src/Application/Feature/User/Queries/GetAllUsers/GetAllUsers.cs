@@ -63,41 +63,41 @@ public class GetAllUsersHandler
             List<string> accessibleUserIds = new();
 
             // 3️⃣ Normal user → filter to users assigned to the same clubs
-            var myClubIds = await _context.UserClubAssignments
-                .Where(uca => uca.UserId == currentUserId && (uca.IsDeleted == false && uca.IsActive == true))
-                .Select(uca => uca.ClubId)
-                .ToListAsync(cancellationToken);
+            //var myClubIds = await _context.UserClubAssignments
+            //    .Where(uca => uca.UserId == currentUserId && (uca.IsDeleted == false && uca.IsActive == true))
+            //    .Select(uca => uca.ClubId)
+            //    .ToListAsync(cancellationToken);
 
-            if (myClubIds.Any())
-            {
-                accessibleUserIds = await _context.UserClubAssignments
-                .Where(uca => myClubIds.Contains(uca.ClubId) && (uca.IsDeleted == false && uca.IsActive == true))
-                .Select(uca => uca.UserId)
-                .Distinct()
-                .ToListAsync(cancellationToken);
-            }
-            else
-            {
-                // --- ✅ Module-based filtering (excluding "UserManagement") ---
-                var myModuleIds = await _context.UserModuleAssignments
-                    .Include(uma => uma.Module)
-                    .Where(uma => uma.UserId == currentUserId && uma.Module.Value != "UserManagement" && (uma.IsDeleted == false && uma.IsActive == true))
-                    .Select(uma => uma.ModuleId)
-                    .ToListAsync(cancellationToken);
+            //if (myClubIds.Any())
+            //{
+            //    //accessibleUserIds = await _context.UserClubAssignments
+            //    //.Where(uca => myClubIds.Contains(uca.ClubId) && (uca.IsDeleted == false && uca.IsActive == true))
+            //    //.Select(uca => uca.UserId)
+            //    //.Distinct()
+            //    //.ToListAsync(cancellationToken);
+            //}
+            //else
+            //{
+            //    // --- ✅ Module-based filtering (excluding "UserManagement") ---
+            //    var myModuleIds = await _context.UserModuleAssignments
+            //        .Include(uma => uma.Module)
+            //        .Where(uma => uma.UserId == currentUserId && uma.Module.Value != "UserManagement" && (uma.IsDeleted == false && uma.IsActive == true))
+            //        .Select(uma => uma.ModuleId)
+            //        .ToListAsync(cancellationToken);
 
-                if (myModuleIds.Any())
-                {
-                    accessibleUserIds = await _context.UserModuleAssignments
-                        .Include(uma => uma.Module)
-                        .Where(uma => myModuleIds.Contains(uma.ModuleId) &&
-                                      uma.Module.Value.ToLower() != "usermanagement" &&
-                                      uma.UserId != SuperAdminId
-                                      && (uma.IsDeleted == false && uma.IsActive == true))
-                        .Select(uma => uma.UserId)
-                        .Distinct()
-                        .ToListAsync(cancellationToken);
-                }
-            }
+            //    if (myModuleIds.Any())
+            //    {
+            //        accessibleUserIds = await _context.UserModuleAssignments
+            //            .Include(uma => uma.Module)
+            //            .Where(uma => myModuleIds.Contains(uma.ModuleId) &&
+            //                          uma.Module.Value.ToLower() != "usermanagement" &&
+            //                          uma.UserId != SuperAdminId
+            //                          && (uma.IsDeleted == false && uma.IsActive == true))
+            //            .Select(uma => uma.UserId)
+            //            .Distinct()
+            //            .ToListAsync(cancellationToken);
+            //    }
+            //}
 
             if (accessibleUserIds.Any())
                 usersQuery = usersQuery.Where(u => accessibleUserIds.Contains(u.Id));

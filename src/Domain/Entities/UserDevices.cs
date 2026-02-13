@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
-
 public class UserDevices : BaseAuditableEntity
 {
-    public Guid UserId {  get; set; }
+    public Guid UserId { get; set; }
     public string? DeviceId { get; set; }
-    public string? FCMToken {  get; set; }
+    public string? FCMToken { get; set; }
     public DateTime LoginAt { get; set; }
 }

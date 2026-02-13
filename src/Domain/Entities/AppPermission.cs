@@ -16,4 +16,3 @@ public class AppPermission : BaseAuditableEntity
     public Guid SubModuleId { get; set; }
     public SubModule SubModule { get; set; } = default!;
 }
-

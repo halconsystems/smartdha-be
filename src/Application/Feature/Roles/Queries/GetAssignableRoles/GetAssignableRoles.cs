@@ -30,15 +30,15 @@ public class GetAssignableRolesHandler : IRequestHandler<GetAssignableRolesQuery
         var currentRoles = await _userManager.GetRolesAsync(user);
         var assignableRoles = new List<string>();
 
-        foreach (var role in currentRoles)
-        {
-            var childRoles = await _context.RoleAssignments
-                .Where(x => x.ParentRole == role)
-                .Select(x => x.ChildRole)
-                .ToListAsync(cancellationToken);
+        //foreach (var role in currentRoles)
+        //{
+        //    var childRoles = await _context.RoleAssignments
+        //        .Where(x => x.ParentRole == role)
+        //        .Select(x => x.ChildRole)
+        //        .ToListAsync(cancellationToken);
 
-            assignableRoles.AddRange(childRoles);
-        }
+        //    assignableRoles.AddRange(childRoles);
+        //}
 
         return assignableRoles.Distinct().ToList();
     }

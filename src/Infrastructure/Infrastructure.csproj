@@ -6,9 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Configurations\PMS\**" />
     <Compile Remove="Data\Migrations\**" />
+    <Compile Remove="Migrations\**" />
+    <Compile Remove="Notifications\**" />
+    <Compile Remove="Service\Geocoding\**" />
+    <EmbeddedResource Remove="Data\Configurations\PMS\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Notifications\**" />
+    <EmbeddedResource Remove="Service\Geocoding\**" />
+    <None Remove="Data\Configurations\PMS\**" />
     <None Remove="Data\Migrations\**" />
+    <None Remove="Migrations\**" />
+    <None Remove="Notifications\**" />
+    <None Remove="Service\Geocoding\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +30,7 @@
     <Compile Remove="Data\Configurations\TodoListConfiguration.cs" />
     <Compile Remove="Repository\TodoListRepository.cs" />
     <Compile Remove="Repository\UnitOfWork.cs" />
+    <Compile Remove="Service\RedisCaseNoGenerator.cs" />
   </ItemGroup>
 
   <!--#if ('True' == 'False')-->

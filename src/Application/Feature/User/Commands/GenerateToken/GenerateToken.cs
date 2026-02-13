@@ -28,7 +28,6 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IAuthenticationService _authenticationService;
     private readonly IApplicationDbContext _context;
-    private readonly IPermissionCache _permissionCache;   // 🔹 Injected Redis cache
     private readonly ILogger<GenerateTokenCommand> _logger;
     private readonly IActivityLogger _activityLogger;
 
@@ -37,7 +36,6 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
         SignInManager<ApplicationUser> signInManager,
         IAuthenticationService authenticationService,
         IApplicationDbContext context,
-        IPermissionCache permissionCache,
         ILogger<GenerateTokenCommand> logger,
         IActivityLogger activityLogger)
     {
@@ -45,7 +43,6 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
         _signInManager = signInManager;
         _authenticationService = authenticationService;
         _context = context;
-        _permissionCache = permissionCache;
         _logger = logger;
         _activityLogger = activityLogger;
     }
@@ -270,14 +267,14 @@ public class GenerateTokenHandler : IRequestHandler<GenerateTokenCommand, Authen
             }
         }
 
-        try
-        {
-            await _permissionCache.SetPermissionsAsync(user.Id, flatPermissions);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, $"Redis unavailable for user {user.Id}, skipping cache.");
-        }
+        //try
+        //{
+        //    await _permissionCache.SetPermissionsAsync(user.Id, flatPermissions);
+        //}
+        //catch (Exception ex)
+        //{
+        //    _logger.LogWarning(ex, $"Redis unavailable for user {user.Id}, skipping cache.");
+        //}
 
         await _activityLogger.LogAsync("LoginSuccess", userId: user.Id, email: user.Email, cnic: user.CNIC, description: "User logged in successfully", appType: AppType.Web);
 

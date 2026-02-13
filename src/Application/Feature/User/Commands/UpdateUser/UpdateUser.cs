@@ -94,9 +94,9 @@ public class UpdateUserCommandHandler
                 .Where(x => x.UserId == user.Id)
                 .ToListAsync();
 
-            var oldClubs = await _context.UserClubAssignments
-                .Where(x => x.UserId == user.Id)
-                .ToListAsync();
+            //var oldClubs = await _context.UserClubAssignments
+            //    .Where(x => x.UserId == user.Id)
+            //    .ToListAsync();
 
             // Remove only the assignment rows
             // Soft delete instead of RemoveRange
@@ -112,9 +112,9 @@ public class UpdateUserCommandHandler
                 .Where(x => x.UserId == user.Id)
                 .ExecuteUpdateAsync(s => s.SetProperty(p => p.IsDeleted, true), cancellationToken);
 
-            await _context.UserClubAssignments
-                .Where(x => x.UserId == user.Id)
-                .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
+            //await _context.UserClubAssignments
+            //    .Where(x => x.UserId == user.Id)
+            //    .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
 
 
             // 5️⃣ Reassign Modules + SubModules + Permissions + Clubs
@@ -140,14 +140,14 @@ public class UpdateUserCommandHandler
                         if (moduleSel.AssignedClubIds == null || !moduleSel.AssignedClubIds.Any())
                             throw new DBOperationException("At least one Club must be assigned for Club module.");
 
-                        foreach (var clubId in moduleSel.AssignedClubIds)
-                        {
-                            _context.UserClubAssignments.Add(new UserClubAssignment
-                            {
-                                UserId = user.Id,
-                                ClubId = clubId
-                            });
-                        }
+                        //foreach (var clubId in moduleSel.AssignedClubIds)
+                        //{
+                        //    _context.UserClubAssignments.Add(new UserClubAssignment
+                        //    {
+                        //        UserId = user.Id,
+                        //        ClubId = clubId
+                        //    });
+                        //}
                     }
 
                     // SubModules + Permissions

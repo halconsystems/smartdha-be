@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DHAFacilitationAPIs.Domain.Entities;
-
 public class UserImages : BaseAuditableEntity
 {
     [Required]
@@ -24,3 +23,4 @@ public class UserImages : BaseAuditableEntity
     [Required]
     public ImageCategory Category { get; set; } = ImageCategory.Main; // default to Main
 }
+

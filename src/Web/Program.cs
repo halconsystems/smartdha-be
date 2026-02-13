@@ -10,7 +10,6 @@ using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Service;
 using DHAFacilitationAPIs.Web;
 using DHAFacilitationAPIs.Web.Infrastructure;
-using DHAFacilitationAPIs.Web.RealTime;
 using DHAFacilitationAPIs.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
@@ -43,9 +42,6 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
-builder.Services.AddScoped<ISmartPayService, SmartPayService>();
-builder.Services.AddScoped<IPropertyProcedureRepository, PropertyProcedureRepository>();
-builder.Services.AddScoped<IMemberRenewalProcedurerespository, MemberDetailForRenewalProcedureRepository>();
 
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -61,7 +57,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 builder.Services.AddMemoryCache(); // backup fallback
 builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
-builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
 
 
 // *** ADD: SignalR + Redis backplane
@@ -93,9 +88,7 @@ builder.Services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.Authenticatio
 });
 
 // *** ADD: Host-specific realtime adapter (overrides any previous IPanicRealtime registration)
-builder.Services.AddScoped<IPanicRealtime, PanicRealtimeWebAdapter>();
-builder.Services.AddScoped<IOrderRealTime, OrderRealtimeWebAdapter>();
-builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
+
 
 //builder.Services.AddCors(options =>
 //{
@@ -133,7 +126,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    await app.InitialiseDatabaseAsync();
+    //await app.InitialiseDatabaseAsync();
     
 }
 else
@@ -194,8 +187,7 @@ app.UseAuthorization();
 app.MapControllers().RequireAuthorization();
 
 // *** ADD: Map the hub (path must match MobileApi)
-app.MapHub<PanicHub>("/hubs/panic").RequireAuthorization();
-app.MapHub<OrderHub>("/hubs/order").RequireAuthorization();
+
 
 app.UseMiddleware<CustomExceptionMiddleware>();
 

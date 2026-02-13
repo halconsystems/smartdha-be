@@ -5,8 +5,6 @@ using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Domain.Common;
 using DHAFacilitationAPIs.Domain.Entities;
-using DHAFacilitationAPIs.Domain.Entities.FMS;
-using DHAFacilitationAPIs.Domain.Entities.PMS;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,16 +28,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ApplicationLog> ApplicationLogs => Set<ApplicationLog>();
     public DbSet<AppRolePermission> AppRolePermissions => Set<AppRolePermission>();
     public DbSet<RoleAssignment> RoleAssignments => Set<RoleAssignment>();
-    public DbSet<Membershipdetail> Membershipdetails => Set<Membershipdetail>();
-    public DbSet<SMSLog> SMSLogs => Set<SMSLog>();
+
     public DbSet<UserOtp> UserOtps => Set<UserOtp>();
     public DbSet<MembershipPurpose> MembershipPurposes => Set<MembershipPurpose>();
     public DbSet<NonMemberVerification> NonMemberVerifications => Set<NonMemberVerification>();
-    public DbSet<NonMemberVerificationDocument> NonMemberVerificationDocuments => Set<NonMemberVerificationDocument>();
-    public DbSet<MemberTypeModuleAssignment> MemberTypeModuleAssignments => Set<MemberTypeModuleAssignment>();
-    public DbSet<Announcement> Announcements => Set<Announcement>();
-    public DbSet<RequestTracking> RequestTrackings => Set<RequestTracking>();
-    public DbSet<RequestProcessStep> RequestProcessSteps => Set<RequestProcessStep>();
+   
     public DbSet<UserMembershipPurpose> UserMembershipPurposes => Set<UserMembershipPurpose>();
     public DbSet<AppPermission> AppPermissions => Set<AppPermission>();
     public DbSet<AppRole> AppRoles => Set<AppRole>();
@@ -47,60 +40,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<AppRoleModule> AppRoleModules => Set<AppRoleModule>();
     public DbSet<UserSubModuleAssignment> UserSubModuleAssignments => Set<UserSubModuleAssignment>();
     public DbSet<UserPermissionAssignment> UserPermissionAssignments => Set<UserPermissionAssignment>();
-    public DbSet<UserClubAssignment> UserClubAssignments => Set<UserClubAssignment>();
-    public DbSet<ShopAssignment> UserShopAssignments => Set<ShopAssignment>();
+   
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<UserActivityLog> UserActivityLogs => Set<UserActivityLog>();
     //Panic Button
-    public DbSet<EmergencyType> EmergencyTypes => Set<EmergencyType>();
-    public DbSet<PanicRequest> PanicRequests => Set<PanicRequest>();
-    public DbSet<PanicActionLog> PanicActionLogs => Set<PanicActionLog>();
-    public DbSet<PanicLocationUpdate> PanicLocationUpdates => Set<PanicLocationUpdate>();
-    public DbSet<PanicResponder> PanicResponders => Set<PanicResponder>();
-    public DbSet<SvPoint> SvPoints => Set<SvPoint>();
-    public DbSet<SvVehicle> SvVehicles => Set<SvVehicle>();
-    public DbSet<PanicDispatch> PanicDispatches => Set<PanicDispatch>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-    public DbSet<Complaint> Complaints => Set<Complaint>();
-    public DbSet<ComplaintAttachment> ComplaintAttachments => Set<ComplaintAttachment>();
-    public DbSet<ComplaintCategory> ComplaintCategories => Set<ComplaintCategory>();
-    public DbSet<ComplaintHistory> ComplaintHistories => Set<ComplaintHistory>();
-    public DbSet<ComplaintPriority> ComplaintPriorities => Set<ComplaintPriority>();
-    public DbSet<SmartPayLog> SmartPayLogs => Set<SmartPayLog>();
-    public DbSet<Configuration> Configurations => Set<Configuration>();
-    public DbSet<GoogleApiLog> GoogleApiLogs => Set<GoogleApiLog>();
-    public DbSet<SvVehicleAssignmentHistory> SvVehicleAssignmentHistories => Set<SvVehicleAssignmentHistory>();
-    public DbSet<UserLoginAudit> UserLoginAudits => Set<UserLoginAudit>();
-    public DbSet<FirebaseApiLog> FirebaseApiLogs => Set<FirebaseApiLog>();
-    public DbSet<PanicDispatchMedia> PanicDispatchMedias => Set<PanicDispatchMedia>();
-    public DbSet<PanicReview> PanicReviews => Set<PanicReview>();
-    public DbSet<PaymentIpnLog> PaymentIpnLogs => Set<PaymentIpnLog>();
+   
     public DbSet<WebhookCallbackLog> WebhookCallbackLogs => Set<WebhookCallbackLog>();
-    public DbSet<MemberShips> MemberShips => Set<MemberShips>();
-    public DbSet<Religion> Religions => Set<Religion>();
-    public DbSet<ReligonSect> ReligonSects => Set<ReligonSect>();
-    public DbSet<MemberShipCatergories> MemberShipCatergories => Set<MemberShipCatergories>();
-    public DbSet<MemberRequest> MemberRequests => Set<MemberRequest>();
-    public DbSet<MemberChildren> MemberChildrens => Set<MemberChildren>();
-    public DbSet<MemberSpouse> MemberSpouses => Set<MemberSpouse>();
-    public DbSet<FemDTSetting> FemDTSettings => Set<FemDTSetting>();
-    public DbSet<FemPaymentIpnLogs> FemPaymentIpnLogs => Set<FemPaymentIpnLogs>();
-    public DbSet<FemPhase> FemPhases => Set<FemPhase>();
-    public DbSet<FemService> FemServices => Set<FemService>();
-    public DbSet<TankerSize> TankerSizes => Set<TankerSize>();
-    public DbSet<Fumigation> Fumigations => Set<Fumigation>();
-    public DbSet<FemgutionShops> FemgutionShops => Set<FemgutionShops>();
-    public DbSet<FumgationMedia> FumgationMedias => Set<FumgationMedia>();
+    
     public DbSet<UserDevices> UserDevices => Set<UserDevices>();
     public DbSet<UserDeleteRequest> UserDeleteRequests => Set<UserDeleteRequest>();
     public DbSet<UserImages> UserImages => Set<UserImages>();
     public DbSet<UserMemberProfile> UserMemberProfiles => Set<UserMemberProfile>();
-    public DbSet<ClubMembership> ClubMemberships => Set<ClubMembership>();
-    public DbSet<ShopDTSetting> ShopDTSettings => Set<ShopDTSetting>();
 
-
-
-
+    public DbSet<UserLoginAudit> UserLoginAudits => throw new NotImplementedException();
 
     public new DbSet<TEntity> Set<TEntity>() where TEntity : class => base.Set<TEntity>();
     protected override void OnModelCreating(ModelBuilder builder)
@@ -123,11 +75,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         IdentityBuilder(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        builder.Entity<UserClubAssignment>()
-            .HasOne(u => u.User)
-            .WithMany()
-            .HasForeignKey(u => u.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+      
 
         // ✅ GLOBAL FIX: Restrict all cascading relationships
         foreach (var relationship in builder.Model
@@ -269,12 +217,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             .WithMany(m => m.SubModules)
             .HasForeignKey(s => s.ModuleId);
 
-        // Example other relation (yours)
-        builder.Entity<RequestProcessStep>()
-            .HasOne(p => p.RequestTracking)
-            .WithMany(t => t.ProcessSteps)
-            .HasForeignKey(p => p.RequestTrackingId)
-            .OnDelete(DeleteBehavior.Cascade);
+     
 
         builder.Entity<UserModuleAssignment>()
        .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
@@ -282,22 +225,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         builder.Entity<UserSubModuleAssignment>()
             .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
 
-        builder.Entity<UserClubAssignment>()
-            .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
+      
 
         builder.Entity<UserPermissionAssignment>()
             .HasQueryFilter(x => x.IsDeleted == null || x.IsDeleted == false);
 
-        //Panic Button Module
-        builder.Entity<EmergencyType>()
-        .HasQueryFilter(e => e.IsDeleted != true);
-
-        builder.Entity<PanicDispatchMedia>()
-        .HasOne(x => x.PanicDispatch)
-        .WithMany(d => d.Media)
-        .HasForeignKey(x => x.PanicDispatchId)
-        .OnDelete(DeleteBehavior.Cascade);
-
+     
        
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

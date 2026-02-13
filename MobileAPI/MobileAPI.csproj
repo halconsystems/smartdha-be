@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Hubs\**" />
     <Compile Remove="RealTime\**" />
+    <Content Remove="Hubs\**" />
     <Content Remove="RealTime\**" />
+    <EmbeddedResource Remove="Hubs\**" />
     <EmbeddedResource Remove="RealTime\**" />
+    <None Remove="Hubs\**" />
     <None Remove="RealTime\**" />
   </ItemGroup>
 

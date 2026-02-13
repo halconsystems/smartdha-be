@@ -50,19 +50,19 @@ public class GetUserDashboardQueryHandler
 
         if (!isSuperAdmin)
         {
-            // 3️⃣ Normal user → filter users assigned to same clubs
-            var myClubIds = await _context.UserClubAssignments
-                .Where(uca => uca.UserId == currentUserId)
-                .Select(uca => uca.ClubId)
-                .ToListAsync(ct);
+            //// 3️⃣ Normal user → filter users assigned to same clubs
+            //var myClubIds = await _context.UserClubAssignments
+            //    .Where(uca => uca.UserId == currentUserId)
+            //    .Select(uca => uca.ClubId)
+            //    .ToListAsync(ct);
 
-            visibleUserIds = await _context.UserClubAssignments
-                .Where(uca => myClubIds.Contains(uca.ClubId))
-                .Select(uca => uca.UserId)
-                .Distinct()
-                .ToListAsync(ct);
+            //visibleUserIds = await _context.UserClubAssignments
+            //    .Where(uca => myClubIds.Contains(uca.ClubId))
+            //    .Select(uca => uca.UserId)
+            //    .Distinct()
+            //    .ToListAsync(ct);
 
-            usersQuery = usersQuery.Where(u => visibleUserIds.Contains(u.Id));
+            //usersQuery = usersQuery.Where(u => visibleUserIds.Contains(u.Id));
         }
         else
         {
@@ -121,7 +121,7 @@ public class GetUserDashboardQueryHandler
             .Select(r => new RoleUserCountDto
             {
                 RoleName = r.Name,
-                UserCount = r.UserRoles.Count(ur => visibleUserIds.Contains(ur.UserId) && !ur.User.IsDeleted)
+                UserCount = r.UserRoles.Count
             })
             .Where(r => r.UserCount > 0)
             .OrderByDescending(r => r.UserCount)

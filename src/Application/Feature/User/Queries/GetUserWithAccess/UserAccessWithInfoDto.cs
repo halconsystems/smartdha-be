@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 
 namespace DHAFacilitationAPIs.Application.Feature.User.Queries.GetUserWithAccess;

@@ -3,8 +3,6 @@ using DHAFacilitationAPIs.Application;
 using DHAFacilitationAPIs.Application.Common.Behaviours;
 using DHAFacilitationAPIs.Application.Common.DependencyResolver;
 using DHAFacilitationAPIs.Application.Common.Settings;
-using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
-using DHAFacilitationAPIs.Application.Feature.PropertyManagement.PMSDirectorate.Commands.CreateDirectorate;
 using DHAFacilitationAPIs.Application.Interface;
 using DHAFacilitationAPIs.Domain.Entities;
 using Microsoft.Extensions.Configuration;
@@ -28,21 +26,13 @@ public static class DependencyInjection
             //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-            cfg.RegisterServicesFromAssembly(typeof(GetDropdownQueryHandler<>).Assembly);
             cfg.AddOpenBehavior(typeof(PerformanceBehavior<,>));
-            cfg.RegisterServicesFromAssembly(typeof(CreateDirectorateHandler).Assembly);
 
 
         });
 
 
-        // 🔒 Explicitly register closed generics for each entity you need as a dropdown
-        RegisterDropdown<Club>(services);
-        RegisterDropdown<RoomCategory>(services);
-        RegisterDropdown<ResidenceType>(services);
-        RegisterDropdown<Services>(services);
-        // ...add more here
-
+     
 
         services.AutoDependencyResolverServices();
 
@@ -59,13 +49,5 @@ public static class DependencyInjection
         return services;
     }
 
-    private static void RegisterDropdown<TEntity>(IServiceCollection services) where TEntity : class
-    {
-        var requestType = typeof(GetDropdownQuery<>).MakeGenericType(typeof(TEntity));
-        var responseType = typeof(List<DropdownDto>);
-        var serviceType = typeof(IRequestHandler<,>).MakeGenericType(requestType, responseType);
-        var implType = typeof(GetDropdownQueryHandler<>).MakeGenericType(typeof(TEntity));
-
-        services.AddTransient(serviceType, implType);
-    }
+   
 }

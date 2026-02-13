@@ -10,3 +10,4 @@ public class RoleAssignment : BaseAuditableEntity
     public string ParentRole { get; set; } = default!;   // e.g. "Super Administrator"
     public string ChildRole { get; set; } = default!;    // e.g. "Administrator"
 }
+

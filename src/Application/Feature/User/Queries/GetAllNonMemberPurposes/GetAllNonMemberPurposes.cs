@@ -13,12 +13,10 @@ public record GetAllNonMemberPurposesQuery : IRequest<SuccessResponse<List<Membe
 public class GetAllNonMemberPurposesQueryHandler : IRequestHandler<GetAllNonMemberPurposesQuery, SuccessResponse<List<MembershipPurposeDto>>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IOLMRSApplicationDbContext _appContext;
 
-    public GetAllNonMemberPurposesQueryHandler(IApplicationDbContext context, IOLMRSApplicationDbContext appContext)
+    public GetAllNonMemberPurposesQueryHandler(IApplicationDbContext context)
     {
         _context = context;
-        _appContext = appContext;
     }
 
     public async Task<SuccessResponse<List<MembershipPurposeDto>>> Handle(GetAllNonMemberPurposesQuery request, CancellationToken cancellationToken)

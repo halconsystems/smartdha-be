@@ -15,3 +15,4 @@ public class UserOtp : BaseAuditableEntity
     public bool IsVerified { get; set; } = false;
     public DateTime ExpiresAt { get; set; }
 }
+

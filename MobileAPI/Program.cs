@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.Dropdown.Queries.GetDropdown;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure.Data;
@@ -16,7 +15,6 @@ using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using MobileAPI;
-using MobileAPI.Hubs;
 using MobileAPI.Infrastructure;
 using MobileAPI.Middlewares;
 using MobileAPI.Services;
@@ -81,9 +79,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
-builder.Services.AddScoped<ISmartPayService, SmartPayService>();
-builder.Services.AddScoped<IPropertyProcedureRepository, PropertyProcedureRepository>();
-builder.Services.AddScoped<IMemberRenewalProcedurerespository, MemberDetailForRenewalProcedureRepository>();
+
 
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -92,7 +88,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "RBAC_";
 });
 builder.Services.AddMemoryCache(); // backup fallback
-builder.Services.AddScoped<IPermissionCache, RedisPermissionCache>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -133,9 +128,7 @@ builder.Services
 builder.Services.AddSignalR(o => o.EnableDetailedErrors = true);
 
 // (F) Host-specific realtime adapter (Mobile)
-builder.Services.AddScoped<IPanicRealtime, PanicRealtimeMobileAdapter>();
-builder.Services.AddScoped<IOrderRealTime, OrderRealtimeMobileAdapter>();
-builder.Services.AddScoped<ICaseNoGenerator, DbCaseNoGenerator>();
+
 
 
 builder.Services.AddCors(options =>
@@ -147,25 +140,6 @@ builder.Services.AddCors(options =>
         .AllowCredentials());
 });
 
-builder.Services.AddHttpClient<IPanicRealtime, PanicRealtimeMobileAdapter>((sp, client) =>
-{
-    var cfg = sp.GetRequiredService<IConfiguration>();
-    var baseUrl = cfg["Realtime:BaseUrl"]
-        ?? throw new InvalidOperationException("Realtime:BaseUrl missing");
-    client.BaseAddress = new Uri(baseUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-});
-
-builder.Services.AddHttpClient<IOrderRealTime, OrderRealtimeMobileAdapter>((sp, client) =>
-{
-    var cfg = sp.GetRequiredService<IConfiguration>();
-    var baseUrl = cfg["Realtime:BaseUrl"]
-        ?? throw new InvalidOperationException("Realtime:BaseUrl missing");
-    client.BaseAddress = new Uri(baseUrl);
-    client.Timeout = TimeSpan.FromSeconds(10);
-    client.DefaultRequestHeaders.Accept.ParseAdd("application/json");
-});
 
 //Rate Limiting
 builder.Services.AddRateLimiter(options =>
@@ -226,10 +200,7 @@ builder.Services.AddRateLimiter(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    await app.InitialiseDatabaseAsync();
-}
+
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -278,7 +249,7 @@ app.MapControllers().RequireAuthorization();
 app.MapControllers().RequireRateLimiting("GlobalFixed");
 
 
-app.MapHub<VehicleLocationHub>("/hubs/vehicle-location");
+
 
 
 //app.MapHub<PanicHub>("/hubs/panic");

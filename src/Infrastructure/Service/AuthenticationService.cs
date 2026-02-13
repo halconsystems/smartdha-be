@@ -71,47 +71,47 @@ public class AuthenticationService : IAuthenticationService
         claims.AddRange(userClaims);
         claims.AddRange(roleClaims);
 
-        if (user.UserType == UserType.NonMember)
-        {
-            var assignedModuleIds = await _context.UserModuleAssignments
-                .Where(x => x.UserId == user.Id && x.IsActive == true && x.IsDeleted != true && x.Module != null)
-                .Select(x => x.ModuleId.ToString())
-                .ToListAsync();
-            if (assignedModuleIds != null && assignedModuleIds.Count > 0)
-            {
-                foreach (var modId in assignedModuleIds)
-                {
-                    if (modId != null)
-                        claims.Add(new Claim("ModuleAccess", modId));
-                }
-            }
-            else
-            {
-                var nonassignedModuleIds = await _context.MemberTypeModuleAssignments
-               .Where(x => x.UserType == user.UserType)
-               .Select(x => x.ModuleId.ToString())
-               .ToListAsync();
+        //if (user.UserType == UserType.NonMember)
+        //{
+        //    var assignedModuleIds = await _context.UserModuleAssignments
+        //        .Where(x => x.UserId == user.Id && x.IsActive == true && x.IsDeleted != true && x.Module != null)
+        //        .Select(x => x.ModuleId.ToString())
+        //        .ToListAsync();
+        //    if (assignedModuleIds != null && assignedModuleIds.Count > 0)
+        //    {
+        //        foreach (var modId in assignedModuleIds)
+        //        {
+        //            if (modId != null)
+        //                claims.Add(new Claim("ModuleAccess", modId));
+        //        }
+        //    }
+        //    else
+        //    {
+        //       // var nonassignedModuleIds = await _context.MemberTypeModuleAssignments
+        //       //.Where(x => x.UserType == user.UserType)
+        //       //.Select(x => x.ModuleId.ToString())
+        //       //.ToListAsync();
 
-                foreach (var modId in nonassignedModuleIds)
-                {
-                    if (modId != null)
-                        claims.Add(new Claim("ModuleAccess", modId));
-                }
-            }
-        }
-        else
-        {
-            var assignedModuleIds = await _context.MemberTypeModuleAssignments
-                .Where(x => x.UserType == user.UserType)
-                .Select(x => x.ModuleId.ToString())
-                .ToListAsync();
+        //       // foreach (var modId in nonassignedModuleIds)
+        //       // {
+        //       //     if (modId != null)
+        //       //         claims.Add(new Claim("ModuleAccess", modId));
+        //       // }
+        //    }
+        //}
+        //else
+        //{
+        //    var assignedModuleIds = await _context.MemberTypeModuleAssignments
+        //        .Where(x => x.UserType == user.UserType)
+        //        .Select(x => x.ModuleId.ToString())
+        //        .ToListAsync();
 
-            foreach (var modId in assignedModuleIds)
-            {
-                if (modId != null)
-                    claims.Add(new Claim("ModuleAccess", modId));
-            }
-        }
+        //    foreach (var modId in assignedModuleIds)
+        //    {
+        //        if (modId != null)
+        //            claims.Add(new Claim("ModuleAccess", modId));
+        //    }
+        //}
 
         return GenerateAccessToken(claims);
     }

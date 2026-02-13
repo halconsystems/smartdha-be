@@ -1,12 +1,8 @@
 ﻿using System.Security.Claims;
 using DHAFacilitationAPIs.Application.Common.Models;
-using DHAFacilitationAPIs.Application.Feature.ForgetPassword.Command;
-using DHAFacilitationAPIs.Application.Feature.Profile.Queries;
-using DHAFacilitationAPIs.Application.Feature.User.Commands.LiveMemberRegisteration;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.Login;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.MemberRegisteration;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.RefreshToken;
-using DHAFacilitationAPIs.Application.Feature.User.Commands.RegisterNonMember;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.ResendOtp;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.SetPassword;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.SubmitUserDeleteRequest;
@@ -69,14 +65,14 @@ public class AuthController : BaseApiController
     }
 
 
-    [AllowAnonymous]
-    [EnableRateLimiting("AnonymousLimiter")]
-    [HttpPost("Register")]
+   // [AllowAnonymous]
+   // [EnableRateLimiting("AnonymousLimiter")]
+   // [HttpPost("Register")]
+   //// public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
    // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+   // {
+   //     return Ok(await Mediator.Send(request));
+   // }
 
     //[AllowAnonymous]
     //[EnableRateLimiting("AnonymousLimiter")]
@@ -95,22 +91,22 @@ public class AuthController : BaseApiController
         return Ok(await Mediator.Send(new GetAllNonMemberPurposesQuery()));
     }
 
-    [AllowAnonymous]
-    [EnableRateLimiting("AnonymousLimiter")]
-    [HttpPost("Register-NonMember")]
-    public async Task<IActionResult> RegisterUser([FromForm] RegisterNonMemberCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+    //[AllowAnonymous]
+    //[EnableRateLimiting("AnonymousLimiter")]
+    //[HttpPost("Register-NonMember")]
+    //public async Task<IActionResult> RegisterUser([FromForm] RegisterNonMemberCommand request)
+    //{
+    //    return Ok(await Mediator.Send(request));
+    //}
 
-    [AllowAnonymous]
-    [EnableRateLimiting("AnonymousLimiter")]
-    [HttpPost("refresh-token")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
-    {
-        var result = await Mediator.Send(command);
-        return Ok(result);
-    }
+    //[AllowAnonymous]
+    //[EnableRateLimiting("AnonymousLimiter")]
+    //[HttpPost("refresh-token")]
+    //public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+    //{
+    //    var result = await Mediator.Send(command);
+    //    return Ok(result);
+    //}
     //[Authorize(Policy = "SetPasswordPolicy")]
     //[HttpPost("Forget-Password")]
     //public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
@@ -126,66 +122,66 @@ public class AuthController : BaseApiController
     //{
     //    return Ok(await Mediator.Send(request));
     //}
-    [AllowAnonymous]
-    [HttpPost("Reset-Password")]
-    public async Task<IActionResult> ResetPassword(OTPSendCommand request)
-    {
-        return Ok(await Mediator.Send(request));
-    }
+    //[AllowAnonymous]
+    //[HttpPost("Reset-Password")]
+    //public async Task<IActionResult> ResetPassword(OTPSendCommand request)
+    //{
+    //    return Ok(await Mediator.Send(request));
+    //}
 
-    [Authorize(Policy = "SetOTPPolicy")]
-    [HttpPost("Verify-FrogetPassword-OTP")]
-    public async Task<IActionResult> VerifyOTPFrogetPassword(VerifyOtpForPasswordResetCommand request)
-    {
-        var purpose = User.FindFirstValue("purpose");
+    //[Authorize(Policy = "SetOTPPolicy")]
+    //[HttpPost("Verify-FrogetPassword-OTP")]
+    //public async Task<IActionResult> VerifyOTPFrogetPassword(VerifyOtpForPasswordResetCommand request)
+    //{
+    //    var purpose = User.FindFirstValue("purpose");
 
-        if (purpose != "verify_otp")
-            return Forbid(); // extra defense in depth
+    //    if (purpose != "verify_otp")
+    //        return Forbid(); // extra defense in depth
 
-        return Ok(await Mediator.Send(request));
-    }
+    //    return Ok(await Mediator.Send(request));
+    //}
 
-    [Authorize]
-    [HttpPost("users/delete-request")]
-    public async Task<IActionResult> SubmitDeleteRequest(
-    [FromBody] SubmitUserDeleteRequestDto dto,
-    CancellationToken ct)
-    {
-        ApiResult<Guid> result =
-            await Mediator.Send(
-                new SubmitUserDeleteRequestCommand(dto.Reason),
-                ct);
+    //[Authorize]
+    //[HttpPost("users/delete-request")]
+    //public async Task<IActionResult> SubmitDeleteRequest(
+    //[FromBody] SubmitUserDeleteRequestDto dto,
+    //CancellationToken ct)
+    //{
+    //    ApiResult<Guid> result =
+    //        await Mediator.Send(
+    //            new SubmitUserDeleteRequestCommand(dto.Reason),
+    //            ct);
 
-        return Ok(result);
-    }
+    //    return Ok(result);
+    //}
 
-    [Authorize]
-    [HttpGet("GetProfileDetail")]
-    public async Task<IActionResult> GetRoomDetails()
-    {
-        var result = await Mediator.Send(new GetProfileDetailsQuery());
-        return Ok(result);
-    }
+    //[Authorize]
+    //[HttpGet("GetProfileDetail")]
+    //public async Task<IActionResult> GetRoomDetails()
+    //{
+    //    var result = await Mediator.Send(new GetProfileDetailsQuery());
+    //    return Ok(result);
+    //}
 
-    [Authorize]
-    [HttpPost("User/Profileimages/add")]
-    [Consumes("multipart/form-data")]
-    [RequestSizeLimit(50_000_000)]
-    public async Task<IActionResult> AddCaseAttachments(
-         [FromForm] AddUserImagesFlatForm form,
-         CancellationToken ct)
-    {
-        var cmd = new AddUserImagesCommand(
-        File: form.Files,
-        ImageName: form.ImageNames,
-        Description: form.Descriptions,
-        Category: form.Categories
-    );
+    //[Authorize]
+    //[HttpPost("User/Profileimages/add")]
+    //[Consumes("multipart/form-data")]
+    //[RequestSizeLimit(50_000_000)]
+    //public async Task<IActionResult> AddCaseAttachments(
+    //     [FromForm] AddUserImagesFlatForm form,
+    //     CancellationToken ct)
+    //{
+    //    var cmd = new AddUserImagesCommand(
+    //    File: form.Files,
+    //    ImageName: form.ImageNames,
+    //    Description: form.Descriptions,
+    //    Category: form.Categories
+    //);
 
-        var result = await Mediator.Send(cmd, ct);
-        return Ok(result);
+    //    var result = await Mediator.Send(cmd, ct);
+    //    return Ok(result);
 
-    }
+    //}
 }
 public class SubmitUserDeleteRequestDto
 {

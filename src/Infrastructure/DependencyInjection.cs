@@ -6,9 +6,6 @@ using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Infrastructure.Data;
 using DHAFacilitationAPIs.Infrastructure.Data.Interceptors;
 using DHAFacilitationAPIs.Infrastructure.Identity;
-using DHAFacilitationAPIs.Infrastructure.Notifications;
-using DHAFacilitationAPIs.Infrastructure.Service;
-using DHAFacilitationAPIs.Infrastructure.Service.Geocoding;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -47,87 +44,24 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-        //OLMRS Database
 
-        var olmrConnection = configuration.GetConnectionString("OLMRSConnection");
-        Guard.Against.Null(olmrConnection, message: "Connection string 'OlmrConnection' not found.");
+        //SmartDHA
 
-        services.AddDbContext<OLMRSApplicationDbContext>((sp, options) =>
+        var smartdha = configuration.GetConnectionString("SmartConnection");
+        Guard.Against.Null(smartdha, message: "Connection string 'SmartConnection' not found.");
+        services.AddDbContext<SmartdhaDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(olmrConnection);
-        });
-
-        services.AddScoped<IOLMRSApplicationDbContext>(provider =>
-            provider.GetRequiredService<OLMRSApplicationDbContext>());
-
-        //OLH Database
-        var olhCon = configuration.GetConnectionString("OLHConnection");
-        Guard.Against.Null(olhCon, message: "Connection string 'OLHConnection' not found.");
-        services.AddDbContext<OLHApplicationDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(olhCon);
+            options.UseSqlServer(smartdha);
 
         });
-        services.AddScoped<IOLHApplicationDbContext>(provider =>
-        provider.GetRequiredService<OLHApplicationDbContext>());
-
-        //PMS
-
-        var pms = configuration.GetConnectionString("PMSConnection");
-        Guard.Against.Null(pms, message: "Connection string 'PMSConnection' not found.");
-        services.AddDbContext<PMSApplicationDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(pms);
-
-        });
-        services.AddScoped<IPMSApplicationDbContext>(provider =>
-        provider.GetRequiredService<PMSApplicationDbContext>());
-
-        //CBMS
-
-        var CBMS = configuration.GetConnectionString("CMSConnection");
-        Guard.Against.Null(CBMS, message: "Connection string 'CMSConnection' not found.");
-        services.AddDbContext<CBMSApplicationDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(CBMS);
-
-        });
-        services.AddScoped<ICBMSApplicationDbContext>(provider =>
-        provider.GetRequiredService<CBMSApplicationDbContext>());
-
-        //DFPBills
-
-        var bills = configuration.GetConnectionString("BillsConnection");
-        Guard.Against.Null(bills, message: "Connection string 'BillsConnection' not found.");
-        services.AddDbContext<PaymentDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(bills);
-
-        });
-        services.AddScoped<IPaymentDbContext>(provider =>
-        provider.GetRequiredService<PaymentDbContext>());
+        services.AddScoped<ISmartdhaDbContext>(provider =>
+        provider.GetRequiredService<SmartdhaDbContext>());
 
 
-        //LMS
-
-        var lms = configuration.GetConnectionString("LMSConnection");
-        Guard.Against.Null(lms, message: "Connection string 'LMSConnection' not found.");
-        services.AddDbContext<LaundrySystemDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseSqlServer(lms);
-
-        });
-        services.AddScoped<ILaundrySystemDbContext>(provider =>
-        provider.GetRequiredService<LaundrySystemDbContext>());
 
 
-        services.AddScoped<ApplicationDbContextInitialiser>();
+        //services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IProcedureService, StoredProcedures>();
 
@@ -213,34 +147,11 @@ public static class DependencyInjection
         services
             .Configure<DatabaseSettings>(configuration.GetSection(nameof(DatabaseSettings)));
 
-        services.Configure<GoogleMapsOptions>(
-            configuration.GetSection(GoogleMapsOptions.SectionName));
+        //services.Configure<GoogleMapsOptions>(
+        //    configuration.GetSection(GoogleMapsOptions.SectionName));
 
-        // HttpClient-based Google Geocoding Service
-        services.AddHttpClient<IGeocodingService, GoogleGeocodingService>();
 
-        services.AddHttpClient<INotificationService, FirebaseNotificationService>();
-
-        services.AddScoped<IFirebaseTokenProvider, FirebaseTokenProvider>();
-
-        services.AddSingleton<IVehicleLocationStore, VehicleLocationStore>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IPropertyInfoService, PropertyInfoService>();
-
-        services.AddHttpClient<IPayFastService, PayFastService>(client =>
-        {
-            client.BaseAddress = new Uri("https://epg.apps.net.pk/api");
-        });
-
-        services.AddDataProtection();
-        services.AddScoped<ISecureKeyProtector, SecureKeyProtector>();
-        services.AddSingleton<IBasketIdGenerator, BasketIdGenerator>();
-        services.AddScoped<IMerchantResolver, MerchantResolver>();
-        services.AddScoped<IPaymentBillService, PaymentBillService>();
-        services.AddScoped<ILateFeePolicyResolver, LateFeePolicyResolver>();
-        services.AddScoped<IMemberLookupService, MemberLookupService>();
-        services.AddScoped<IClubAccessService, ClubAccessService>();
-
+      
 
 
 

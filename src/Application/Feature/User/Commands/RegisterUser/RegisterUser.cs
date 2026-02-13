@@ -137,35 +137,35 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, S
                     });
 
                     // ✅ Special Case: ClubManagement requires club assignment
-                    if (module.Value == "Club")
-                    {
-                        if (moduleSel.AssignedClubIds == null || !moduleSel.AssignedClubIds.Any())
-                            throw new DBOperationException("At least one Club must be assigned for ClubManagement module.");
+                    //if (module.Value == "Club")
+                    //{
+                    //    if (moduleSel.AssignedClubIds == null || !moduleSel.AssignedClubIds.Any())
+                    //        throw new DBOperationException("At least one Club must be assigned for ClubManagement module.");
 
-                        foreach (var clubId in moduleSel.AssignedClubIds)
-                        {
-                            _context.UserClubAssignments.Add(new UserClubAssignment
-                            {
-                                UserId = newUser.Id,
-                                ClubId = clubId
-                            });
-                        }
-                    }
+                    //    foreach (var clubId in moduleSel.AssignedClubIds)
+                    //    {
+                    //        _context.UserClubAssignments.Add(new UserClubAssignment
+                    //        {
+                    //            UserId = newUser.Id,
+                    //            ClubId = clubId
+                    //        });
+                    //    }
+                    //}
 
-                    if (module.Value == "Shop")
-                    {
-                        if (moduleSel.AssignedShopIds == null || !moduleSel.AssignedShopIds.Any())
-                            throw new DBOperationException("At least one Shop must be assigned for ClubManagement module.");
+                    //if (module.Value == "Shop")
+                    //{
+                    //    if (moduleSel.AssignedShopIds == null || !moduleSel.AssignedShopIds.Any())
+                    //        throw new DBOperationException("At least one Shop must be assigned for ClubManagement module.");
 
-                        foreach (var shopId in moduleSel.AssignedShopIds)
-                        {
-                            _context.UserShopAssignments.Add(new Domain.Entities.FMS.ShopAssignment
-                            {
-                                UserId = newUser.Id,
-                                ShopId = shopId
-                            });
-                        }
-                    }
+                    //    foreach (var shopId in moduleSel.AssignedShopIds)
+                    //    {
+                    //        _context.UserShopAssignments.Add(new Domain.Entities.FMS.ShopAssignment
+                    //        {
+                    //            UserId = newUser.Id,
+                    //            ShopId = shopId
+                    //        });
+                    //    }
+                    //}
 
                     // SubModules + Permissions
                     if (moduleSel.SubModules != null)

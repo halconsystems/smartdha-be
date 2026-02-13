@@ -218,32 +218,32 @@ public class LiveMemberRegisterationCommandHandler : IRequestHandler<LiveMemberR
             {
                 var membershipNos = resultMember.Clubs.Select(x => x.MembershipNo).ToList();
 
-                var existing = await _context.ClubMemberships
-                 .Where(x =>
-                     x.CNIC == cnic &&
-                     x.MembershipNo != null &&
-                     membershipNos.Contains(x.MembershipNo) &&
-                     x.IsDeleted != true)
-                 .Select(x => x.MembershipNo!)
-                 .ToListAsync(ct);
+                //var existing = await _context.ClubMemberships
+                // .Where(x =>
+                //     x.CNIC == cnic &&
+                //     x.MembershipNo != null &&
+                //     membershipNos.Contains(x.MembershipNo) &&
+                //     x.IsDeleted != true)
+                // .Select(x => x.MembershipNo!)
+                // .ToListAsync(ct);
 
-                var toAdd = resultMember.Clubs
-                    .Where(c => !existing.Contains(c.MembershipNo))
-                    .Select(c => new ClubMembership
-                    {
-                        UserId = user.Id,
-                        MembershipNo = c.MembershipNo,
-                        Rank = c.Rank,
-                        Name = c.Name,
-                        CNIC = c.CNIC,
-                        MobileNumber = c.MobilNumber,
-                        OneInKid = c.OneInKid,
-                        BillStatus = c.BillStatus,
-                        Clube = c.Clube
-                    }).ToList();
+                //var toAdd = resultMember.Clubs
+                //    .Where(c => !existing.Contains(c.MembershipNo))
+                //    .Select(c => new ClubMembership
+                //    {
+                //        UserId = user.Id,
+                //        MembershipNo = c.MembershipNo,
+                //        Rank = c.Rank,
+                //        Name = c.Name,
+                //        CNIC = c.CNIC,
+                //        MobileNumber = c.MobilNumber,
+                //        OneInKid = c.OneInKid,
+                //        BillStatus = c.BillStatus,
+                //        Clube = c.Clube
+                //    }).ToList();
 
-                if (toAdd.Any())
-                    _context.ClubMemberships.AddRange(toAdd);
+                //if (toAdd.Any())
+                //    _context.ClubMemberships.AddRange(toAdd);
             }
 
             // OTP upsert: ensure single active OTP per CNIC

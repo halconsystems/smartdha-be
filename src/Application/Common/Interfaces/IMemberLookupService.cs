@@ -11,4 +11,3 @@ public interface IMemberLookupService
     Task<(MemberLookupResult Member, List<ClubMembershipDto> Clubs)>
         GetMemberByCnicAsync(string cnic, CancellationToken ct);
 }
-

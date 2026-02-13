@@ -20,4 +20,3 @@ public class UserModuleAssignment : BaseAuditableEntity
     public Module Module { get; set; } = default!;
 }
 
-

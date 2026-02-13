@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.Clubs.Queries;
 using DHAFacilitationAPIs.Application.Feature.User.Queries.GetAccessTree;
 using DHAFacilitationAPIs.Application.ViewModels;
 using DHAFacilitationAPIs.Domain.Entities;
@@ -19,20 +18,17 @@ public class GetUserWithAccessQueryHandler
     : IRequestHandler<GetUserWithAccessQuery, SuccessResponse<UserAccessWithInfoDto>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IOLMRSApplicationDbContext _olmrcontext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICurrentUserService _currentUser;
 
     public GetUserWithAccessQueryHandler(
         IApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
-        ICurrentUserService currentUser,
-        IOLMRSApplicationDbContext olmrcontext)
+        ICurrentUserService currentUser)
     {
         _context = context;
         _userManager = userManager;
         _currentUser = currentUser;
-        _olmrcontext = olmrcontext;
     }
 
     public async Task<SuccessResponse<UserAccessWithInfoDto>> Handle(GetUserWithAccessQuery request, CancellationToken ct)
@@ -90,7 +86,7 @@ public class GetUserWithAccessQueryHandler
         bool isClickedUserIsSuperAdmin = ClickedUser.Contains("SuperAdministrator");
 
         List<Module> availableModules;
-        List<ClubsDto> assignedClubs;
+        //List<ClubsDto> assignedClubs;
 
         if (isSuperAdmin)
         {
@@ -139,35 +135,35 @@ public class GetUserWithAccessQueryHandler
 
         }
 
-        if (isClickedUserIsSuperAdmin)
-        {
-            // ✅ All clubs
-            assignedClubs = await _olmrcontext.Clubs
-               .Select(c => new ClubsDto
-               {
-                   ClubId = c.Id,
-                   ClubName = c.Name
-               })
-               .ToListAsync(ct);
-        }
-        else
-        {
-            // 1. Get assigned ClubIds for this user
-            var assignedClubIds = await _context.UserClubAssignments
-                .Where(uca => uca.UserId == clickedUser.Id)
-                .Select(uca => uca.ClubId)
-                .ToListAsync(ct);
+        //if (isClickedUserIsSuperAdmin)
+        //{
+        //    // ✅ All clubs
+        //    assignedClubs = await _olmrcontext.Clubs
+        //       .Select(c => new ClubsDto
+        //       {
+        //           ClubId = c.Id,
+        //           ClubName = c.Name
+        //       })
+        //       .ToListAsync(ct);
+        //}
+        //else
+        //{
+        //    // 1. Get assigned ClubIds for this user
+        //    var assignedClubIds = await _context.UserClubAssignments
+        //        .Where(uca => uca.UserId == clickedUser.Id)
+        //        .Select(uca => uca.ClubId)
+        //        .ToListAsync(ct);
 
-            // 2. Query Clubs from the other DbContext
-            assignedClubs = await _olmrcontext.Clubs
-               .Where(c => assignedClubIds.Contains(c.Id))
-               .Select(c => new ClubsDto
-               {
-                   ClubId = c.Id,
-                   ClubName = c.Name
-               })
-               .ToListAsync(ct);
-        }
+        //    // 2. Query Clubs from the other DbContext
+        //    assignedClubs = await _olmrcontext.Clubs
+        //       .Where(c => assignedClubIds.Contains(c.Id))
+        //       .Select(c => new ClubsDto
+        //       {
+        //           ClubId = c.Id,
+        //           ClubName = c.Name
+        //       })
+        //       .ToListAsync(ct);
+        //}
 
         // 5️⃣ Build tree: mark AlreadyAccess = true if clicked user already has it
         var moduleTree = availableModules.Select(m => new ModuleTreeDto
@@ -209,7 +205,7 @@ public class GetUserWithAccessQueryHandler
             Role = clickedUserRole ?? "User",
             RoleId = clickedUserRoleId.ToString(),
             Modules = moduleTree,
-            Clubs= assignedClubs
+           // Clubs= assignedClubs
         };
 
         return new SuccessResponse<UserAccessWithInfoDto>(result);
