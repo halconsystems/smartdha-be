@@ -31,7 +31,7 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.
                 throw new Exception("No Record Found!");
 
             entity.Name = request.Name;
-            entity.Relation = (Relation)request.Relation;
+            entity.Relation = (RelationUserFamily)request.Relation;
             entity.DateOfBirth = request.DOB;
 
             await _context.SaveChangesAsync(cancellationToken);

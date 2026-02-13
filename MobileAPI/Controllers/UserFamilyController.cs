@@ -19,9 +19,23 @@ public class UserFamilyController : BaseApiController
         _mediator = mediator;
     }
 
+    //[HttpPost("add-user-family"), AllowAnonymous]
+    //public async Task<IActionResult> AddUserFamily([FromBody]AddUserFamilyCommand request)
+    //{
+    //    return Ok(await _mediator.Send(request));
+    //}
+
     [HttpPost("add-user-family"), AllowAnonymous]
-    public async Task<IActionResult> GetToken(AddUserFamilyCommand request)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> AddUserFamily([FromForm] AddUserFamilyCommand request)
     {
-        return Ok(await _mediator.Send(request));
+        // optional: set UserId from currently logged in user (if available and you want it populated)
+        if (!string.IsNullOrWhiteSpace(_loggedInUser?.Id) && Guid.TryParse(_loggedInUser.Id, out var uid))
+        {
+            request.UserId = uid;
+        }
+
+        var result = await _mediator.Send(request);
+        return Ok(result);
     }
 }

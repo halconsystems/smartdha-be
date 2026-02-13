@@ -65,23 +65,23 @@ public class AuthController : BaseApiController
     }
 
 
-   // [AllowAnonymous]
-   // [EnableRateLimiting("AnonymousLimiter")]
-   // [HttpPost("Register")]
-   //// public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-   // public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-   // {
-   //     return Ok(await Mediator.Send(request));
-   // }
-
-    //[AllowAnonymous]
-    //[EnableRateLimiting("AnonymousLimiter")]
-    //[HttpPost("Test-Register")]
-    //// public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
-    //public async Task<IActionResult> TestRegisterUser(MemberRegisterationCommand request)
+    // [AllowAnonymous]
+    // [EnableRateLimiting("AnonymousLimiter")]
+    // [HttpPost("Register")]
+    //public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    //public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
     //{
     //    return Ok(await Mediator.Send(request));
     //}
+
+    [AllowAnonymous]
+    //[EnableRateLimiting("AnonymousLimiter")]
+    [HttpPost("Test-Register")]
+    //// public async Task<IActionResult> RegisterUser(LiveMemberRegisterationCommand request)
+    public async Task<IActionResult> TestRegisterUser(MemberRegisterationCommand request)
+    {
+        return Ok(await Mediator.Send(request));
+    }
 
     [AllowAnonymous]
     [EnableRateLimiting("AnonymousLimiter")]
@@ -117,7 +117,7 @@ public class AuthController : BaseApiController
     //        return Forbid(); // extra defense in depth
     //    return Ok(await Mediator.Send(request));
     //}
-    
+
     //public async Task<IActionResult> forgetPassword(ForgetPasswordCommand request)
     //{
     //    return Ok(await Mediator.Send(request));

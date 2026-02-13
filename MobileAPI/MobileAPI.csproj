@@ -49,6 +49,7 @@
   <ItemGroup>
     <Folder Include="NonMemberData\" />
     <Folder Include="wwwroot\MemberShipRequestFiles\" />
+    <Folder Include="wwwroot\uploads\smartdha\userfamily\" />
     <Folder Include="wwwroot\UserProfile\" />
   </ItemGroup>
 

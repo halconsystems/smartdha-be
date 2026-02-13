@@ -15,7 +15,7 @@ public class UpdateUserFamilyCommand : IRequest<UpdateUserFamilyResponse>
         public Guid UserId { get; set; }  
         public string Name { get; set; } = string.Empty;
         public int Relation { get; set; }
-        public DateTime DOB { get; set; }
+        public DateOnly DOB { get; set; }
     
     }
 
