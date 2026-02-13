@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartdhaDbContext))]
-    [Migration("20260213093630_smart-dha-creation")]
-    partial class smartdhacreation
+    [Migration("20260213103145_Smart-dha-dbcreation")]
+    partial class Smartdhadbcreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

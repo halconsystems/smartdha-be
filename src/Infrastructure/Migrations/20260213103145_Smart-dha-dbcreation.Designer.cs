@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DHAFacilitationAPIs.Infrastructure.Migrations
 {
     [DbContext(typeof(SmartdhaDbContext))]
-    [Migration("20260213072709_Initialdbstarteded")]
-    partial class Initialdbstarteded
+    [Migration("20260213103145_Smart-dha-dbcreation")]
+    partial class Smartdhadbcreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.UserFamily", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Smartdha.UserFamily", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
@@ -87,7 +87,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.ToTable("UserFamilies");
                 });
 
-            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Vehicle", b =>
+            modelBuilder.Entity("DHAFacilitationAPIs.Domain.Entities.Smartdha.Vehicle", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,7 +116,7 @@ namespace DHAFacilitationAPIs.Infrastructure.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
