@@ -2,6 +2,8 @@
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,22 @@ public class UserFamilyController : BaseApiController
     public async Task<IActionResult> UpdateUserFamily([FromForm] UpdateUserFamilyCommand request)
     {
         var result = await _mediator.Send(request);
+        return Ok(result);
+    }
+    [HttpGet("get-all-users")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _mediator.Send(new GetAllUserFamilyQuery());
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var query = new GetUserFamilyByIdQuery { Id = id };
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 }
