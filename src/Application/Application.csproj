@@ -45,6 +45,7 @@
     <Folder Include="Common\AutoMapper\" />
     <Folder Include="Feature\User\Commands\ForgetPassword\" />
     <Folder Include="Feature\User\Commands\RegisterUser\" />
+    <Folder Include="Feature\Worker\Queries\" />
   </ItemGroup>
 
 </Project>

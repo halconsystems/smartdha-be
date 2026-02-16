@@ -59,3 +59,22 @@ public enum PropertyTypeResidantial
     Office = 2,
     Building = 3,
 }
+public enum JobType
+{
+    Driver = 1,
+    Cook = 2,
+    Guard = 3,
+    Peon = 4,
+    Gardener = 5,
+}
+public enum WorkerCardDeliveryType
+{
+    OwnerOrEmployeerAddress = 1,
+    SelfPickUp = 2,
+}
+public enum QuickPickType
+{
+    DayPass = 1,
+    LongDay = 2,
+}
+

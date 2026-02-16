@@ -1,0 +1,123 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
+using DHAFacilitationAPIs.Domain.Enums;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
+
+namespace DHAFacilitationAPIs.Application.Feature.Worker.Commands.UpdateWorker;
+public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, Result<UpdateWorkerResponse>>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly ISmartdhaDbContext _smartdhaDbContext;
+    private readonly IFileStorageService _fileStorage;
+    public UpdateWorkerCommandHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext, IFileStorageService fileStorageService)
+    {
+        _smartdhaDbContext = smartdhaDbContext;
+        _fileStorage = fileStorageService;
+        _context = context;
+    }
+    public async Task<Result<UpdateWorkerResponse>> Handle(UpdateWorkerCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var response = new UpdateWorkerResponse();
+            var entity = await _smartdhaDbContext.Workers
+                        .FirstOrDefaultAsync(x => x.Id == request.WorkerId, cancellationToken);
+
+            if (entity == null)
+                throw new Exception("No Record Found!");
+
+            // If a new profile picture is provided, delete the old file (if any) and save the new one
+            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(entity.ProfilePicture))
+                    {
+                        await _fileStorage.DeleteFileAsync(entity.ProfilePicture, cancellationToken);
+                    }
+                }
+                catch
+                {
+                }
+
+                var newImagePath = await _fileStorage.SaveFileAsync(
+                    request.ProfilePicture,
+                    "uploads/smartdha/workers/profile",
+                    cancellationToken);
+
+                entity.ProfilePicture = newImagePath;
+            }
+            if (request.CnicBack != null && request.CnicBack.Length > 0)
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(entity.CnicBack))
+                    {
+                        await _fileStorage.DeleteFileAsync(entity.CnicBack, cancellationToken);
+                    }
+                }
+                catch
+                {
+                }
+
+                var newCnicBackImagePath = await _fileStorage.SaveFileAsync(
+                    request.CnicBack,
+                    "uploads/smartdha/workers/cnic/back",
+                    cancellationToken);
+
+                entity.CnicBack = newCnicBackImagePath;
+            }
+            if (request.CnicFront != null && request.CnicFront.Length > 0)
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(entity.CnicFront))
+                    {
+                        await _fileStorage.DeleteFileAsync(entity.CnicFront, cancellationToken);
+                    }
+                }
+                catch
+                {
+                }
+
+                var newCnicFrontImagePath = await _fileStorage.SaveFileAsync(
+                    request.CnicFront,
+                    "uploads/smartdha/workers/cnic/front",
+                    cancellationToken);
+
+                entity.CnicBack = newCnicFrontImagePath;
+            }
+            entity.Name = request.Name!;
+            entity.FatherOrHusbandName = request.FatherHusbandName!;
+            entity.JobType = (JobType)request.JobType!;
+            entity.PhoneNumber = request.PhoneNo!;
+            entity.CNIC = request.CNIC!;
+            entity.DateOfBirth = request.DOB.Date;
+            entity.PoliceVerification = request.PoliceVerification;
+            await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
+
+            response.WorkerId = entity.Id;
+            response.Name = entity.Name;
+            response.CNIC = entity.CNIC ?? "";
+            response.PhoneNo = entity.PhoneNumber ?? "";
+            response.DOB = entity.DateOfBirth;
+            response.JobType = entity.JobType;
+            response.ProfilePicture = entity.ProfilePicture;
+            response.ProfilePicture = entity.CnicFront;
+            response.ProfilePicture = entity.CnicBack;
+            return Result<UpdateWorkerResponse>.Success(response);
+        }
+
+        catch (Exception ex)
+        {
+            return Result<UpdateWorkerResponse>.Failure(new[] { ex.Message});
+        }
+    }
+
+}

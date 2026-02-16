@@ -22,6 +22,8 @@ public class SmartdhaDbContext : DbContext, ISmartdhaDbContext
     public DbSet<Vehicle> Vehicles { get; set; }
     public DbSet<UserFamily> UserFamilies { get; set; }
     public DbSet<ResidentProperty> ResidentProperties { get; set; }
+    public DbSet<Worker> Workers { get; set; }
+    public DbSet<VisitorPass> VisitorPasses { get; set; }
 
     public override async Task<int> SaveChangesAsync(
       CancellationToken cancellationToken = default)
