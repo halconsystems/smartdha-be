@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
 
-public class AddUserFamilyCommand : IRequest<AddUserFamilyResponse>
+public class AddUserFamilyCommand : IRequest<Result<Guid>>
 {
     public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -7,10 +7,11 @@ using MediatR;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 
+using DHAFacilitationAPIs.Application.Common.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-public class UpdateUserFamilyCommand : IRequest<UpdateUserFamilyResponse>
+public class UpdateUserFamilyCommand : IRequest<Result<UpdateUserFamilyResponse>>
     {
         public Guid Id { get; set; }  
         public string? Name { get; set; } 

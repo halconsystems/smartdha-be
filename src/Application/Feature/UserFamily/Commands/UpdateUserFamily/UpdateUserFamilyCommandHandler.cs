@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.UpdateUserFamilyCommandHandler
 {
     public class UpdateUserFamilyCommandHandler
-        : IRequestHandler<UpdateUserFamilyCommand, UpdateUserFamilyResponse>
+        : IRequestHandler<UpdateUserFamilyCommand, Result<UpdateUserFamilyResponse>>
     {
         private readonly IApplicationDbContext _context;
         private readonly ISmartdhaDbContext _smartDhaContext;
@@ -28,51 +29,58 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.
             _fileStorage = fileStorage;
         }
 
-        public async Task<UpdateUserFamilyResponse> Handle(UpdateUserFamilyCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UpdateUserFamilyResponse>> Handle(UpdateUserFamilyCommand request, CancellationToken cancellationToken)
         {
-            var response = new UpdateUserFamilyResponse();
-            var entity = await _smartDhaContext.UserFamilies
-                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-
-            if (entity == null)
-                throw new Exception("No Record Found!");
-
-            // If a new profile picture is provided, delete the old file (if any) and save the new one
-            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
+            try
             {
-                try
+                var response = new UpdateUserFamilyResponse();
+                var entity = await _smartDhaContext.UserFamilies
+                    .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
+                if (entity == null)
+                    throw new Exception("No Record Found!");
+
+                // If a new profile picture is provided, delete the old file (if any) and save the new one
+                if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
                 {
-                    if (!string.IsNullOrWhiteSpace(entity.ProfilePicture))
+                    try
                     {
-                        await _fileStorage.DeleteFileAsync(entity.ProfilePicture, cancellationToken);
+                        if (!string.IsNullOrWhiteSpace(entity.ProfilePicture))
+                        {
+                            await _fileStorage.DeleteFileAsync(entity.ProfilePicture, cancellationToken);
+                        }
                     }
-                }
-                catch
-                {
+                    catch
+                    {
+                    }
+
+                    var newImagePath = await _fileStorage.SaveFileAsync(
+                        request.ProfilePicture,
+                        "uploads/smartdha/userfamily",
+                        cancellationToken);
+
+                    entity.ProfilePicture = newImagePath;
                 }
 
-                var newImagePath = await _fileStorage.SaveFileAsync(
-                    request.ProfilePicture,
-                    "uploads/smartdha/userfamily",
-                    cancellationToken);
+                entity.Name = request.Name ?? "";
+                entity.Relation = (RelationUserFamily)request.Relation;
+                entity.PhoneNumber = request.PhoneNo;
+                entity.Cnic = request.CNIC;
+                entity.DateOfBirth = request.DOB.Date;
+                await _smartDhaContext.SaveChangesAsync(cancellationToken);
 
-                entity.ProfilePicture = newImagePath;
+                response.Name = entity.Name;
+                response.CNIC = entity.Cnic ?? "";
+                response.PhoneNo = entity.PhoneNumber ?? "";
+                response.DOB = entity.DateOfBirth;
+                response.Relation = entity.Relation;
+                response.ProfilePicture = entity.ProfilePicture;
+                return Result<UpdateUserFamilyResponse>.Success(response);
             }
-
-            entity.Name = request.Name ?? "";
-            entity.Relation = (RelationUserFamily)request.Relation;
-            entity.PhoneNumber = request.PhoneNo;
-            entity.Cnic = request.CNIC;
-            entity.DateOfBirth = request.DOB.Date;
-            await _smartDhaContext.SaveChangesAsync(cancellationToken);
-
-            response.Name = entity.Name;
-            response.CNIC = entity.Cnic ?? "";
-            response.PhoneNo = entity.PhoneNumber ?? "";
-            response.DOB = entity.DateOfBirth;
-            response.Relation = entity.Relation;
-            response.ProfilePicture = entity.ProfilePicture;
-            return response;
+            catch (Exception ex)
+            {
+                return Result<UpdateUserFamilyResponse>.Failure(new[] { ex.Message });
+            }
         }
     }
 }

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
+using DHAFacilitationAPIs.Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily
 {
-    public class GetAllUserFamilyQueryHandler : IRequestHandler<GetAllUserFamilyQuery, List<GetAllUserFamilyQueryResponse>>
+    public class GetAllUserFamilyQueryHandler : IRequestHandler<GetAllUserFamilyQuery, Result<List<GetAllUserFamilyQueryResponse>>>
     {
         private readonly IApplicationDbContext _context;
         private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -20,22 +22,26 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFami
             _smartdhaDbContext = smartdhaDbContext;
         }
 
-        public async Task<List<GetAllUserFamilyQueryResponse>> Handle(
-    GetAllUserFamilyQuery request,
-    CancellationToken cancellationToken)
+        public async Task<Result<List<GetAllUserFamilyQueryResponse>>> Handle(GetAllUserFamilyQuery request,CancellationToken cancellationToken)
         {
-            return await _smartdhaDbContext.UserFamilies
-                .Select(x => new GetAllUserFamilyQueryResponse
-                {
-                    DOB = x.DateOfBirth,
-                    Name = x.Name,
-                    Phone = x.PhoneNumber!,
-                    Relation = (int)x.Relation,
-                    CNIC = x.Cnic!,
-                    Image = x.ProfilePicture ?? string.Empty,
-                    ResidentCardNumber = x.ResidentCardNumber!
-                })
-                .ToListAsync(cancellationToken);
+            var users = await _smartdhaDbContext.UserFamilies.ToListAsync(cancellationToken);
+
+            if (!users.Any())
+                return Result<List<GetAllUserFamilyQueryResponse>>
+                    .Failure(new[] { "No users found" });
+
+            var response = users.Select(user => new GetAllUserFamilyQueryResponse
+            {
+                DOB = user.DateOfBirth,
+                Name = user.Name,
+                Phone = user.PhoneNumber!,
+                Relation = (int)user.Relation,
+                CNIC = user.Cnic!,
+                Image = user.ProfilePicture ?? string.Empty,
+                ResidentCardNumber = user.ResidentCardNumber!
+            }).ToList();
+
+            return Result<List<GetAllUserFamilyQueryResponse>>.Success(response);
         }
 
     }

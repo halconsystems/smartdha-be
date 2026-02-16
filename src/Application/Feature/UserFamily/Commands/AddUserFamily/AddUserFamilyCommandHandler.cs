@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.AddUserFamilyCommandHandler;
 
-public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand, AddUserFamilyResponse>
+public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand, Result<Guid>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartDhaContext;
@@ -25,43 +26,47 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
         _userManager = userManager;
     }
 
-    public async Task<AddUserFamilyResponse> Handle(AddUserFamilyCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(AddUserFamilyCommand request, CancellationToken cancellationToken)
     {
-        var response = new AddUserFamilyResponse();
-        string? profileImagePath = null;
-        if (request.ProfilePicture != null)
+        try
         {
-            profileImagePath = await _fileStorage.SaveFileAsync(
-                request.ProfilePicture,
-                "uploads/smartdha/userfamily",
-                cancellationToken);
-        }
-        string? createdBy = null;
-        if (request.UserId != Guid.Empty)
-        {
-            var appUser = await _userManager.FindByIdAsync(request.UserId.ToString());
-            if (appUser != null)
-                createdBy = appUser.Id;
-        }
-        var entity = new Domain.Entities.Smartdha.UserFamily
-        {
-            Name = request.Name,
-            Relation = (RelationUserFamily)request.Relation,
-            DateOfBirth = request.DOB.Date,
-            Cnic = request.CNIC,
-            FatherOrHusbandName = request.FatherName,
-            ProfilePicture = profileImagePath,
-            PhoneNumber = request.PhoneNo,
-            Created = DateTime.UtcNow,
-            CreatedBy = createdBy,
-        };
+            var response = new AddUserFamilyResponse();
+            string? profileImagePath = null;
+            if (request.ProfilePicture != null)
+            {
+                profileImagePath = await _fileStorage.SaveFileAsync(
+                    request.ProfilePicture,
+                    "uploads/smartdha/userfamily",
+                    cancellationToken);
+            }
+            string? createdBy = null;
+            if (request.UserId != Guid.Empty)
+            {
+                var appUser = await _userManager.FindByIdAsync(request.UserId.ToString());
+                if (appUser != null)
+                    createdBy = appUser.Id;
+            }
+            var entity = new Domain.Entities.Smartdha.UserFamily
+            {
+                Name = request.Name,
+                Relation = (RelationUserFamily)request.Relation,
+                DateOfBirth = request.DOB.Date,
+                Cnic = request.CNIC,
+                FatherOrHusbandName = request.FatherName,
+                ProfilePicture = profileImagePath,
+                PhoneNumber = request.PhoneNo,
+                Created = DateTime.UtcNow,
+                CreatedBy = createdBy,
+            };
 
-        await _smartDhaContext.UserFamilies.AddAsync(entity, cancellationToken);
-        await _smartDhaContext.SaveChangesAsync(cancellationToken);
+            await _smartDhaContext.UserFamilies.AddAsync(entity, cancellationToken);
+            await _smartDhaContext.SaveChangesAsync(cancellationToken);
 
-        response.Success = true;
-        response.Message = "Family member added successfully.";
-        response.Id = entity.Id;
-        return response;
+            return Result<Guid>.Success(entity.Id);
+        }
+        catch (Exception ex)
+        {
+            return Result<Guid>.Failure(new[] { ex.Message });
+        }
     }
 }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
 
-public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQuery, GetUserFamilybyIdQueryResponse>
+public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQuery, Result<GetUserFamilybyIdQueryResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -18,7 +19,7 @@ public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQue
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<GetUserFamilybyIdQueryResponse> Handle(
+    public async Task<Result<GetUserFamilybyIdQueryResponse>> Handle(
      GetUserFamilyByIdQuery request,
      CancellationToken cancellationToken)
     {
@@ -26,7 +27,8 @@ public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQue
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (userData == null)
-            throw new Exception("User family not found");   
+            return Result<GetUserFamilybyIdQueryResponse>
+                .Failure(new[] { "User family not found" });
 
         var userResponse = new GetUserFamilybyIdQueryResponse
         {
@@ -39,7 +41,7 @@ public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQue
             ResidentCardNumber = userData.ResidentCardNumber!   
         };
 
-        return userResponse;
+        return Result<GetUserFamilybyIdQueryResponse>.Success(userResponse);
     }
 
 }

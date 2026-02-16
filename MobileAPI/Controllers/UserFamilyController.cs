@@ -1,4 +1,5 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
@@ -22,24 +23,17 @@ public class UserFamilyController : BaseApiController
         _mediator = mediator;
     }
 
-    //[HttpPost("add-user-family"), AllowAnonymous]
-    //public async Task<IActionResult> AddUserFamily([FromBody]AddUserFamilyCommand request)
-    //{
-    //    return Ok(await _mediator.Send(request));
-    //}
-
     [HttpPost("add-user-family"), AllowAnonymous]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddUserFamily([FromForm] AddUserFamilyCommand request)
     {
-        // optional: set UserId from currently logged in user (if available and you want it populated)
         if (!string.IsNullOrWhiteSpace(_loggedInUser?.Id) && Guid.TryParse(_loggedInUser.Id, out var uid))
         {
             request.UserId = uid;
         }
 
         var result = await _mediator.Send(request);
-        return Ok(result);
+        return Ok(ApiResult<Guid>.Ok(result.Data, "Family member added successfully"));
     }
 
     [HttpPost("update-user-family"), AllowAnonymous]
@@ -47,14 +41,14 @@ public class UserFamilyController : BaseApiController
     public async Task<IActionResult> UpdateUserFamily([FromForm] UpdateUserFamilyCommand request)
     {
         var result = await _mediator.Send(request);
-        return Ok(result);
+        return Ok(ApiResult<UpdateUserFamilyResponse>.Ok(result.Data!, "Family member updated successfully"));
     }
     [HttpGet("get-all-users")]
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
         var result = await _mediator.Send(new GetAllUserFamilyQuery());
-        return Ok(result);
+        return Ok(ApiResult<List<GetAllUserFamilyQueryResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 
     [HttpGet("{id:guid}")]
@@ -63,6 +57,9 @@ public class UserFamilyController : BaseApiController
     {
         var query = new GetUserFamilyByIdQuery { Id = id };
         var result = await _mediator.Send(query);
-        return Ok(result);
+        if (!result.Succeeded)
+            return BadRequest(ApiResult<string>.Fail(result.Errors.First()));
+
+        return Ok(ApiResult<GetUserFamilybyIdQueryResponse>.Ok(result.Data!, "Record fetched successfully"));
     }
 }
