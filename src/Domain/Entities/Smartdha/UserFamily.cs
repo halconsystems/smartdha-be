@@ -14,7 +14,6 @@ public class UserFamily : BaseAuditableEntity
     public string? PhoneNumber { get; set; }
     public string? FatherOrHusbandName { get; set; }
     public RelationUserFamily Relation { get; set; }
-    public DateOnly DateOfBirth { get; set; }
-
+    public DateTime DateOfBirth { get; set; }
 }
 

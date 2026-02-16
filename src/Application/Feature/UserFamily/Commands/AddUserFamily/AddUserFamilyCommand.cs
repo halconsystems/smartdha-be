@@ -12,7 +12,7 @@ public class AddUserFamilyCommand : IRequest<AddUserFamilyResponse>
     public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Relation { get; set; }
-    public DateOnly DOB { get; set; }
+    public DateTime DOB { get; set; }
     public string CNIC { get; set; } = string.Empty;
     public string FatherName { get; set; } = string.Empty;
     public IFormFile? ProfilePicture { get; set; }

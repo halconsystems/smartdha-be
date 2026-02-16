@@ -47,7 +47,7 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
         {
             Name = request.Name,
             Relation = (RelationUserFamily)request.Relation,
-            DateOfBirth = request.DOB,
+            DateOfBirth = request.DOB.Date,
             Cnic = request.CNIC,
             FatherOrHusbandName = request.FatherName,
             ProfilePicture = profileImagePath,
