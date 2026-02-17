@@ -22,4 +22,6 @@ public class Worker : BaseAuditableEntity
     public string? PoliceVerificationAttachment { get; set; } 
     public string? WorkerCardNumber { get; set; } 
     public WorkerCardDeliveryType WorkerCardDeliveryType { get; set; } 
+    public DateTime ValidTo { get; set; } 
+    public DateTime ValidFrom { get; set; } 
 }

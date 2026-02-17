@@ -14,6 +14,7 @@ public class VisitorPass : BaseAuditableEntity
     public required QuickPickType QuickPickType { get; set; } 
     public  DateTime FromDate { get; set; } 
     public DateTime  ToDate { get; set; } 
-    public DateTime  ValidTill { get; set; } 
+    public DateTime  ValidTo { get; set; } 
+    public DateTime  ValidFrom { get; set; } 
     public string?  QRCode { get; set; } 
 }

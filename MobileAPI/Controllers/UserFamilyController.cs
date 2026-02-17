@@ -1,13 +1,17 @@
-﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+﻿using System.Data;
+using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.User.Commands.GenerateToken;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
+using DHAFacilitationAPIs.Domain.Constants;
+using DHAFacilitationAPIs.Infrastructure.Data.SQLite;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
@@ -23,7 +27,7 @@ public class UserFamilyController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpPost("add-user-family"), AllowAnonymous]
+    [HttpPost("add-user-family"), Authorize(Roles = AllRoles.Member)]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddUserFamily([FromForm] AddUserFamilyCommand request)
     {
@@ -36,7 +40,7 @@ public class UserFamilyController : BaseApiController
         return Ok(ApiResult<Guid>.Ok(result.Data, "Family member added successfully"));
     }
 
-    [HttpPost("update-user-family"), AllowAnonymous]
+    [HttpPost("update-user-family"), Authorize(Roles = AllRoles.Member)]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> UpdateUserFamily([FromForm] UpdateUserFamilyCommand request)
     {
@@ -44,7 +48,7 @@ public class UserFamilyController : BaseApiController
         return Ok(ApiResult<UpdateUserFamilyResponse>.Ok(result.Data!, "Family member updated successfully"));
     }
     [HttpGet("get-all-users")]
-    [AllowAnonymous]
+    [Authorize(Roles = AllRoles.Member)]
     public async Task<IActionResult> GetAll()
     {
         var result = await _mediator.Send(new GetAllUserFamilyQuery());
@@ -52,7 +56,7 @@ public class UserFamilyController : BaseApiController
     }
 
     [HttpGet("{id:guid}")]
-    [AllowAnonymous]
+    [Authorize(Roles = AllRoles.Member)]
     public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetUserFamilyByIdQuery { Id = id };
