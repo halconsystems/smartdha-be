@@ -13,7 +13,8 @@ public interface IFileStorageService
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct);
     Task<string> SaveFileAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
     Task<string> SaveAudioAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
-    Task<string> SavePMSDocumentAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
+    //Task<string> SavePMSDocumentAsync(IFormFile file, string folderName, CancellationToken ct, long maxBytes, string[]? allowedExtensions);
+    Task<string> SavePMSDocumentAsync(IFormFile file, string folderName, CancellationToken ct);
     Task<List<string>> SaveFilesAsync(IEnumerable<IFormFile> files, string folderName, CancellationToken ct, long maxBytes = 10 * 1024 * 1024, string[]? allowedExtensions = null);
     // Save single complaint image
     Task<string> SaveComplaintFileAsync(
@@ -30,6 +31,14 @@ public interface IFileStorageService
         CancellationToken ct,
         long maxBytes = 10 * 1024 * 1024,
         string[]? allowedExtensions = null);
+    Task<string> SaveFileInternalAsync(
+     IFormFile file,
+     string moduleFolder,
+     string? subFolder,
+     CancellationToken ct,
+     long maxBytes,
+     string[] allowedExtensions,
+     Dictionary<string, string[]> allowedMimeTypes);
     Task<bool> DeleteFileAsync(string relativePath, CancellationToken ct);
     string GetPublicUrl(string relativePath, string? baseUrl = null);
     string GetPublicUrlOfComplaint(string relativePath, string? baseUrl = null);

@@ -19,10 +19,12 @@ public class FileStorageService : IFileStorageService
     private readonly IWebHostEnvironment _env;   // <-- add this
     private readonly FileStorageOptions _opt;
     private readonly FileExtensionContentTypeProvider _mime = new();
-    public FileStorageService(IWebHostEnvironment env, IOptions<FileStorageOptions> opt) // <-- inject here
+
+
+    public FileStorageService(IWebHostEnvironment env, IOptionsSnapshot<FileStorageOptions> options) // <-- inject here
     {
         _env = env;
-        _opt = opt.Value;
+        _opt = options.Value;
     }
 
     // Simple overload → validated overload with defaults
@@ -35,112 +37,83 @@ public class FileStorageService : IFileStorageService
      long maxBytes = 10 * 1024 * 1024,           // default 10 MB (adjust as you like)
      string[]? allowedExtensions = null)         // e.g. new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" }
     {
-        // Basic validations
-        if (file is null || file.Length == 0)
-            throw new ArgumentException("Empty file.");
+        // Default extensions (keep your existing list)
+        var extensions = allowedExtensions ?? DefaultAllowedExt;
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        if (extensions == null || extensions.Length == 0)
+            throw new InvalidOperationException("No allowed extensions configured.");
 
-        // Extension checks
-        var ext = Path.GetExtension(file.FileName);
-        var allowed = allowedExtensions ?? DefaultAllowedExt; // keep your existing default list
-        if (allowed is not null && !allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
-            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        // Build MIME map dynamically for images
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        // MIME check (based on filename mapping)
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        foreach (var ext in extensions)
         {
-            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+            if (_mime.TryGetContentType("file" + ext, out var mime))
+            {
+                allowedMimeTypes[ext.ToLowerInvariant()] = new[] { mime };
+            }
         }
 
-        // Base physical path: <WebRoot>\uploads
-        var webRoot = _env.WebRootPath;
-        if (string.IsNullOrWhiteSpace(webRoot))
-            throw new InvalidOperationException("WebRootPath is not configured.");
+        // IMPORTANT:
+        // moduleFolder → "uploads"
+        // subFolder → folderName
+        // because SaveFileInternalAsync handles root path itself
 
-        var baseUploads = Path.Combine(webRoot, "uploads");
-        Directory.CreateDirectory(baseUploads);
+        var relativeUrl = await SaveFileInternalAsync(
+            file,
+            moduleFolder: "uploads",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: extensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
 
-        // Normalize/sanitize folderName (prevent traversal)
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        if (relFolder.Contains("..", StringComparison.Ordinal))
-            throw new InvalidOperationException("Invalid folder name.");
-
-        var absFolder = string.IsNullOrEmpty(relFolder) ? baseUploads : Path.Combine(baseUploads, relFolder);
-        Directory.CreateDirectory(absFolder);
-
-        // Generate a unique file name and save
-        var safeExt = ext.ToLowerInvariant();
-        var fileName = $"{Guid.NewGuid():N}{safeExt}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
-            await file.CopyToAsync(stream, ct);
-
-        // Return a web-relative path like: "uploads/{folder}/{file}"
-        var relPath = string.IsNullOrEmpty(relFolder)
-            ? Path.Combine("uploads", fileName)
-            : Path.Combine("uploads", relFolder, fileName);
-
-        // Normalize to URL-style slashes
-        relPath = relPath.Replace('\\', '/').Replace("//", "/");
-        return relPath;
+        return relativeUrl;
     }
 
     public async Task<string> SaveFileAsync(
-    IFormFile file,
-    string folderName,
-    CancellationToken ct,
-    long maxBytes,
-    string[]? allowedExtensions)
+     IFormFile file,
+     string folderName,
+     CancellationToken ct,
+     long maxBytes,
+     string[]? allowedExtensions)
     {
         if (file is null || file.Length == 0)
             throw new ArgumentException("Empty file.");
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
 
-        var ext = Path.GetExtension(file.FileName);
-        var allowed = allowedExtensions ?? DefaultAllowedExt;
-        if (!allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
-            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        var extensions = allowedExtensions ?? DefaultAllowedExt;
 
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        if (extensions == null || extensions.Length == 0)
+            throw new InvalidOperationException("No allowed extensions configured.");
+
+        // Build MIME dictionary for images only (same logic as before)
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var ext in extensions)
         {
-            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+            if (_mime.TryGetContentType("file" + ext, out var mime))
+            {
+                if (!mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                allowedMimeTypes[ext.ToLowerInvariant()] = new[] { mime };
+            }
         }
 
-        // Physical base = <ContentRoot>\{RequestPathTrimmed}  e.g., C:\...\YourApp\CBMS
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid image MIME types resolved.");
 
-        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
-            ? "CBMS"
-            : _opt.RequestPath.Trim('/', '\\'); // "CBMS"
-
-        var basePhysical = Path.Combine(baseDir, requestFolder);
-        Directory.CreateDirectory(basePhysical);
-
-        // Subfolder under CBMS (e.g., rooms/{roomId})
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        var absFolder = string.IsNullOrEmpty(relFolder) ? basePhysical : Path.Combine(basePhysical, relFolder);
-        Directory.CreateDirectory(absFolder);
-
-        // Save file
-        var fileName = $"{Guid.NewGuid():N}{ext.ToLowerInvariant()}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
-            await file.CopyToAsync(stream, ct);
-
-        // Public relative URL under /CBMS
-        var relUrl = $"/{requestFolder}/{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}{fileName}";
-        // collapse any accidental double slashes
-        relUrl = relUrl.Replace("//", "/");
-        return relUrl;
+        // Delegate everything to centralized secure storage
+        return await SaveFileInternalAsync(
+            file,
+            moduleFolder: _opt.RequestPath ?? "Uploads",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: extensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
     }
 
     public async Task<string> SaveAudioAsync(
@@ -153,60 +126,41 @@ public class FileStorageService : IFileStorageService
         if (file == null || file.Length == 0)
             throw new ArgumentException("Empty audio file.");
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException($"Audio file exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        // Default allowed extensions
+        var extensions = allowedExtensions ?? new[] { ".mp3", ".aac" };
 
-        // ✅ Allow only mp3 & aac
-        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        var allowed = allowedExtensions ?? new[] { ".mp3", ".aac" };
+        if (extensions.Length == 0)
+            throw new InvalidOperationException("No allowed audio extensions configured.");
 
-        if (!allowed.Contains(ext))
-            throw new InvalidOperationException($"Audio extension '{ext}' not allowed.");
+        // Build MIME mapping for allowed audio extensions
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        // ✅ Validate MIME is audio/*
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        foreach (var ext in extensions)
         {
-            if (!mappedType.StartsWith("audio/", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException($"Only audio uploads allowed. Detected: {mappedType}");
+            if (_mime.TryGetContentType("file" + ext, out var mime))
+            {
+                if (!mime.StartsWith("audio/", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                allowedMimeTypes[ext.ToLowerInvariant()] = new[] { mime };
+            }
         }
 
-        // ===== SAME STORAGE LOGIC AS IMAGE =====
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid audio MIME types resolved.");
 
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
-
-        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
-            ? "CBMS"
-            : _opt.RequestPath.Trim('/', '\\');
-
-        var basePhysical = Path.Combine(baseDir, requestFolder);
-        Directory.CreateDirectory(basePhysical);
-
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        var absFolder = string.IsNullOrEmpty(relFolder)
-            ? basePhysical
-            : Path.Combine(basePhysical, relFolder);
-
-        Directory.CreateDirectory(absFolder);
-
-        var fileName = $"{Guid.NewGuid():N}{ext}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(
-            absPath,
-            FileMode.CreateNew,
-            FileAccess.Write,
-            FileShare.None,
-            64 * 1024,
-            useAsync: true))
-        {
-            await file.CopyToAsync(stream, ct);
-        }
-
-        var relUrl = $"/{requestFolder}/{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}{fileName}";
-        return relUrl.Replace("//", "/");
+        // Delegate to centralized storage logic
+        return await SaveFileInternalAsync(
+            file,
+            moduleFolder: _opt.RequestPath ?? "Uploads",   // keeps your previous behavior
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: extensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
     }
+
 
     public async Task<List<string>> SaveFilesAsync(
         IEnumerable<IFormFile> files,
@@ -223,73 +177,90 @@ public class FileStorageService : IFileStorageService
 
     // ✅ Save single complaint file
     public async Task<string> SaveComplaintFileAsync(
-    IFormFile file,
-    Guid complaintId, // still passed for naming, if needed
-    CancellationToken ct,
-    long maxBytes = 10 * 1024 * 1024,
-    string[]? allowedExtensions = null)
+      IFormFile file,
+      Guid complaintId,
+      CancellationToken ct,
+      long maxBytes = 10 * 1024 * 1024,
+      string[]? allowedExtensions = null)
     {
-        // 🧩 Basic validation
         if (file is null || file.Length == 0)
             throw new ArgumentException("Empty file.");
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        var extensions = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".webp" };
 
-        // 🧩 Validate extension
-        var ext = Path.GetExtension(file.FileName);
-        var allowed = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".webp" };
-        if (!allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
-            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        if (extensions.Length == 0)
+            throw new InvalidOperationException("No allowed extensions configured.");
 
-        // 🧩 Validate MIME type (must be image)
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        // Build MIME dictionary (image only)
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var ext in extensions)
         {
-            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+            if (_mime.TryGetContentType("file" + ext, out var mime))
+            {
+                if (!mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                allowedMimeTypes[ext.ToLowerInvariant()] = new[] { mime };
+            }
         }
 
-        // 🧩 Base folder: wwwroot/uploads/complaints/
-        var webRoot = _env.WebRootPath ?? throw new InvalidOperationException("WebRootPath is not configured.");
-        var absFolder = Path.Combine(webRoot, "uploads", "complaints");
-        Directory.CreateDirectory(absFolder);
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid image MIME types resolved.");
 
-        // 🧩 Unique file name (optionally prefix complaint ID)
-        var safeExt = ext.ToLowerInvariant();
-        var fileName = $"{complaintId:N}_{Guid.NewGuid():N}{safeExt}";
+        // We want: uploads/complaints
+        var moduleFolder = "complaints";
+        var subFolder = "complaints";
 
-        var absPath = Path.Combine(absFolder, fileName);
+        var relativeUrl = await SaveFileInternalAsync(
+            file,
+            moduleFolder: moduleFolder,
+            subFolder: subFolder,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: extensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
 
-        // 🧩 Save asynchronously
-        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
-            await file.CopyToAsync(stream, ct);
-
-        // 🧩 Return relative path like: "uploads/complaints/filename.jpg"
-        var relPath = Path.Combine("uploads", "complaints", fileName)
-            .Replace("\\", "/");
-
-        return relPath;
+        return relativeUrl;
     }
+
 
     // ✅ Save multiple complaint files
     public async Task<List<string>> SaveComplaintFilesAsync(
-        IEnumerable<IFormFile> files,
-        Guid complaintId,
-        CancellationToken ct,
-        long maxBytes = 10 * 1024 * 1024,
-        string[]? allowedExtensions = null)
+     IEnumerable<IFormFile> files,
+     Guid complaintId,
+     CancellationToken ct,
+     long maxBytes = 10 * 1024 * 1024,
+     string[]? allowedExtensions = null)
     {
-        if (files is null || !files.Any())
+        if (files is null)
             throw new ArgumentException("No files provided.");
 
-        var results = new List<string>();
-        foreach (var file in files)
+        var fileList = files as IList<IFormFile> ?? files.ToList();
+
+        if (fileList.Count == 0)
+            throw new ArgumentException("No files provided.");
+
+        var results = new List<string>(fileList.Count);
+
+        foreach (var file in fileList)
         {
-            var path = await SaveComplaintFileAsync(file, complaintId, ct, maxBytes, allowedExtensions);
+            ct.ThrowIfCancellationRequested();
+
+            var path = await SaveComplaintFileAsync(
+                file,
+                complaintId,
+                ct,
+                maxBytes,
+                allowedExtensions);
+
             results.Add(path);
         }
+
         return results;
     }
+
 
     public async Task<bool> DeleteFileAsync(string relativePath, CancellationToken ct)
     {
@@ -316,15 +287,7 @@ public class FileStorageService : IFileStorageService
         try { File.Delete(full); await Task.CompletedTask; return true; }
         catch { return false; }
     }
-    public string GetPublicUrl(string relativePath, string? baseUrl = null)
-    {
-        if (string.IsNullOrWhiteSpace(relativePath)) return string.Empty;
-        var urlPath = relativePath.Replace('\\', '/');
-        if (!urlPath.StartsWith("/")) urlPath = "/" + urlPath;
 
-        var host = baseUrl ?? _opt.PublicBaseUrl;
-        return string.IsNullOrWhiteSpace(host) ? urlPath : $"{host.TrimEnd('/')}{urlPath}";
-    }
     public string GetPublicUrlOfComplaint(string relativePath, string? baseUrl = null)
     {
         if (string.IsNullOrWhiteSpace(relativePath))
@@ -353,12 +316,11 @@ public class FileStorageService : IFileStorageService
         return fullUrl;
     }
     public async Task<(string Path, PanicDispatchMediaType MediaType)> SaveImageOrVideoAsync(
-     IFormFile file,
-     string folderName,
-     CancellationToken ct,
-     long maxImageBytes = 10 * 1024 * 1024,   // 10 MB
-     long maxVideoBytes = 50 * 1024 * 1024    // 50 MB
- )
+      IFormFile file,
+      string folderName,
+      CancellationToken ct,
+      long maxImageBytes = 10 * 1024 * 1024,
+      long maxVideoBytes = 50 * 1024 * 1024)
     {
         if (file is null || file.Length == 0)
             throw new ArgumentException("Empty file.");
@@ -370,150 +332,114 @@ public class FileStorageService : IFileStorageService
 
         PanicDispatchMediaType mediaType;
         long maxBytes;
+        string[] allowedExtensions;
 
         if (imageExts.Contains(ext))
         {
             mediaType = PanicDispatchMediaType.Image;
             maxBytes = maxImageBytes;
+            allowedExtensions = imageExts;
         }
         else if (videoExts.Contains(ext))
         {
             mediaType = PanicDispatchMediaType.Video;
             maxBytes = maxVideoBytes;
+            allowedExtensions = videoExts;
         }
         else
         {
             throw new InvalidOperationException($"Extension '{ext}' not allowed.");
         }
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException(
-                $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        // Build MIME dictionary based on type
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        // ✅ MIME validation
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        foreach (var extension in allowedExtensions)
         {
-            if (mediaType == PanicDispatchMediaType.Image &&
-                !mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            if (_mime.TryGetContentType("file" + extension, out var mime))
             {
-                throw new InvalidOperationException($"Only image uploads allowed. Detected: {mappedType}");
-            }
+                if (mediaType == PanicDispatchMediaType.Image &&
+                    mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
 
-            if (mediaType == PanicDispatchMediaType.Video &&
-                !mappedType.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new InvalidOperationException($"Only video uploads allowed. Detected: {mappedType}");
+                if (mediaType == PanicDispatchMediaType.Video &&
+                    mime.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
             }
         }
 
-        // ===== SAME STORAGE LOGIC (UNCHANGED) =====
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid MIME types resolved.");
 
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
+        // Delegate to centralized storage
+        var relativeUrl = await SaveFileInternalAsync(
+            file,
+            moduleFolder: _opt.RequestPath ?? "Uploads",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: allowedExtensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
 
-        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
-            ? "CBMS"
-            : _opt.RequestPath.Trim('/', '\\');
-
-        var basePhysical = Path.Combine(baseDir, requestFolder);
-        Directory.CreateDirectory(basePhysical);
-
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        var absFolder = string.IsNullOrEmpty(relFolder)
-            ? basePhysical
-            : Path.Combine(basePhysical, relFolder);
-
-        Directory.CreateDirectory(absFolder);
-
-        var fileName = $"{Guid.NewGuid():N}{ext}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(
-            absPath,
-            FileMode.CreateNew,
-            FileAccess.Write,
-            FileShare.None,
-            64 * 1024,
-            useAsync: true))
-        {
-            await file.CopyToAsync(stream, ct);
-        }
-
-        var relUrl =
-            $"/{requestFolder}/{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}{fileName}";
-
-        return (relUrl.Replace("//", "/"), mediaType);
+        return (relativeUrl, mediaType);
     }
 
     public async Task<string> SaveFileMemeberrequestAsync(
-    IFormFile file,
-    string folderName,
-    CancellationToken ct,
-    long maxBytes = 10 * 1024 * 1024,           // default 10 MB (adjust as you like)
-    string[]? allowedExtensions = null)         // e.g. new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" }
+      IFormFile file,
+      string folderName,
+      CancellationToken ct,
+      long maxBytes = 10 * 1024 * 1024,
+      string[]? allowedExtensions = null)
     {
-        // Basic validations
         if (file is null || file.Length == 0)
             throw new ArgumentException("Empty file.");
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException($"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        var extensions = allowedExtensions ?? DefaultAllowedExt;
 
-        // Extension checks
-        var ext = Path.GetExtension(file.FileName);
-        var allowed = allowedExtensions ?? DefaultAllowedExt; // keep your existing default list
-        if (allowed is not null && !allowed.Contains(ext, StringComparer.OrdinalIgnoreCase))
-            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        if (extensions == null || extensions.Length == 0)
+            throw new InvalidOperationException("No allowed extensions configured.");
 
-        // MIME check (based on filename mapping)
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        // Build MIME dictionary (image only)
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var ext in extensions)
         {
-            if (!mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException($"Only image uploads are allowed. Detected: {mappedType}");
+            if (_mime.TryGetContentType("file" + ext, out var mime))
+            {
+                if (!mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                allowedMimeTypes[ext.ToLowerInvariant()] = new[] { mime };
+            }
         }
 
-        // Base physical path: <WebRoot>\uploads
-        var webRoot = _env.WebRootPath;
-        if (string.IsNullOrWhiteSpace(webRoot))
-            throw new InvalidOperationException("WebRootPath is not configured.");
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid image MIME types resolved.");
 
-        var baseUploads = Path.Combine(webRoot, "MemberShipRequestFiles");
-        Directory.CreateDirectory(baseUploads);
-
-        // Normalize/sanitize folderName (prevent traversal)
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        if (relFolder.Contains("..", StringComparison.Ordinal))
-            throw new InvalidOperationException("Invalid folder name.");
-
-        var absFolder = string.IsNullOrEmpty(relFolder) ? baseUploads : Path.Combine(baseUploads, relFolder);
-        Directory.CreateDirectory(absFolder);
-
-        // Generate a unique file name and save
-        var safeExt = ext.ToLowerInvariant();
-        var fileName = $"{Guid.NewGuid():N}{safeExt}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(absPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 64 * 1024, useAsync: true))
-            await file.CopyToAsync(stream, ct);
-
-        // Return a web-relative path like: "uploads/{folder}/{file}"
-        var relPath = string.IsNullOrEmpty(relFolder)
-            ? Path.Combine("uploads", fileName)
-            : Path.Combine("uploads", relFolder, fileName);
-
-        // Normalize to URL-style slashes
-        relPath = relPath.Replace('\\', '/').Replace("//", "/");
-        return relPath;
+        // Delegate to centralized storage
+        return await SaveFileInternalAsync(
+            file,
+            moduleFolder: "membership",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: extensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
     }
+
 
     public async Task<(string Path, FMType MediaType)> FemugationSaveImageOrVideoAsync(
      IFormFile file,
      string folderName,
      CancellationToken ct,
-     long maxImageBytes = 10 * 1024 * 1024,   // 10 MB
-     long maxVideoBytes = 50 * 1024 * 1024    // 50 MB
- )
+     long maxImageBytes = 10 * 1024 * 1024,
+     long maxVideoBytes = 50 * 1024 * 1024)
     {
         if (file is null || file.Length == 0)
             throw new ArgumentException("Empty file.");
@@ -525,88 +451,172 @@ public class FileStorageService : IFileStorageService
 
         FMType mediaType;
         long maxBytes;
+        string[] allowedExtensions;
 
         if (imageExts.Contains(ext))
         {
             mediaType = FMType.Image;
             maxBytes = maxImageBytes;
+            allowedExtensions = imageExts;
         }
         else if (videoExts.Contains(ext))
         {
             mediaType = FMType.Video;
             maxBytes = maxVideoBytes;
+            allowedExtensions = videoExts;
         }
         else
         {
             throw new InvalidOperationException($"Extension '{ext}' not allowed.");
         }
 
-        if (file.Length > maxBytes)
-            throw new InvalidOperationException(
-                $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+        // Build MIME dictionary dynamically
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
 
-        // ✅ MIME validation
-        if (_mime.TryGetContentType(file.FileName, out var mappedType))
+        foreach (var extension in allowedExtensions)
         {
-            if (mediaType == FMType.Image &&
-                !mappedType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            if (_mime.TryGetContentType("file" + extension, out var mime))
             {
-                throw new InvalidOperationException($"Only image uploads allowed. Detected: {mappedType}");
-            }
+                if (mediaType == FMType.Image &&
+                    mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
 
-            if (mediaType == FMType.Video &&
-                !mappedType.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new InvalidOperationException($"Only video uploads allowed. Detected: {mappedType}");
+                if (mediaType == FMType.Video &&
+                    mime.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
             }
         }
 
-        // ===== SAME STORAGE LOGIC (UNCHANGED) =====
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid MIME types resolved.");
 
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
+        var relativeUrl = await SaveFileInternalAsync(
+            file,
+            moduleFolder: "fumigation",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: allowedExtensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
 
-        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
-            ? "CBMS"
-            : _opt.RequestPath.Trim('/', '\\');
-
-        var basePhysical = Path.Combine(baseDir, requestFolder);
-        Directory.CreateDirectory(basePhysical);
-
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        var absFolder = string.IsNullOrEmpty(relFolder)
-            ? basePhysical
-            : Path.Combine(basePhysical, relFolder);
-
-        Directory.CreateDirectory(absFolder);
-
-        var fileName = $"{Guid.NewGuid():N}{ext}";
-        var absPath = Path.Combine(absFolder, fileName);
-
-        await using (var stream = new FileStream(
-            absPath,
-            FileMode.CreateNew,
-            FileAccess.Write,
-            FileShare.None,
-            64 * 1024,
-            useAsync: true))
-        {
-            await file.CopyToAsync(stream, ct);
-        }
-
-        var relUrl =
-            $"/{requestFolder}/{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}{fileName}";
-
-        return (relUrl.Replace("//", "/"), mediaType);
+        return (relativeUrl, mediaType);
     }
 
-    public async Task<string> SavePMSDocumentAsync(
+    public async Task<(string Path, FMType MediaType)> HomeCareSaveImageOrVideoAsync(
     IFormFile file,
     string folderName,
     CancellationToken ct,
-    long maxBytes,
-    string[]? allowedExtensions)
+    long maxImageBytes = 10 * 1024 * 1024,
+    long maxVideoBytes = 50 * 1024 * 1024)
+    {
+        if (file is null || file.Length == 0)
+            throw new ArgumentException("Empty file.");
+
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        var imageExts = new[] { ".jpg", ".jpeg", ".png" };
+        var videoExts = new[] { ".mp4" };
+
+        FMType mediaType;
+        long maxBytes;
+        string[] allowedExtensions;
+
+        if (imageExts.Contains(ext))
+        {
+            mediaType = FMType.Image;
+            maxBytes = maxImageBytes;
+            allowedExtensions = imageExts;
+        }
+        else if (videoExts.Contains(ext))
+        {
+            mediaType = FMType.Video;
+            maxBytes = maxVideoBytes;
+            allowedExtensions = videoExts;
+        }
+        else
+        {
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+        }
+
+        // Build MIME dictionary dynamically
+        var allowedMimeTypes = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var extension in allowedExtensions)
+        {
+            if (_mime.TryGetContentType("file" + extension, out var mime))
+            {
+                if (mediaType == FMType.Image &&
+                    mime.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
+
+                if (mediaType == FMType.Video &&
+                    mime.StartsWith("video/", StringComparison.OrdinalIgnoreCase))
+                {
+                    allowedMimeTypes[extension] = new[] { mime };
+                }
+            }
+        }
+
+        if (allowedMimeTypes.Count == 0)
+            throw new InvalidOperationException("No valid MIME types resolved.");
+
+        var relativeUrl = await SaveFileInternalAsync(
+            file,
+            moduleFolder: _opt.RequestPath ?? "Uploads",
+            subFolder: folderName,
+            ct: ct,
+            maxBytes: maxBytes,
+            allowedExtensions: allowedExtensions,
+            allowedMimeTypes: allowedMimeTypes
+        );
+
+        return (relativeUrl, mediaType);
+    }
+
+
+    public Task<string> SavePMSDocumentAsync(
+    IFormFile file,
+    string folderName,
+    CancellationToken ct)
+    {
+        var allowed = new[] { ".jpg", ".jpeg", ".png", ".pdf" };
+
+        var mimeMap = new Dictionary<string, string[]>
+        {
+            [".jpg"] = new[] { "image/jpeg" },
+            [".jpeg"] = new[] { "image/jpeg" },
+            [".png"] = new[] { "image/png" },
+            [".pdf"] = new[] { "application/pdf" }
+        };
+
+        return SaveFileInternalAsync(
+            file,
+            moduleFolder: "pms",          // module fixed here
+            subFolder: folderName,        // only subfolder from caller
+            ct: ct,
+            maxBytes: 10 * 1024 * 1024,   // fixed limit
+            allowedExtensions: allowed,
+            allowedMimeTypes: mimeMap);
+    }
+
+
+
+    // Centralized secure file saving logic with all validations
+    public async Task<string> SaveFileInternalAsync(
+     IFormFile file,
+     string moduleFolder,
+     string? subFolder,
+     CancellationToken ct,
+     long maxBytes,
+     string[] allowedExtensions,
+     Dictionary<string, string[]> allowedMimeTypes)
     {
         if (file == null || file.Length == 0)
             throw new ArgumentException("Empty file.");
@@ -615,21 +625,10 @@ public class FileStorageService : IFileStorageService
             throw new InvalidOperationException(
                 $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
 
-        // ✅ Allowed extensions
-        var allowed = allowedExtensions ?? new[] { ".jpg", ".jpeg", ".png", ".pdf" };
-
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!allowed.Contains(ext))
-            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
 
-        // ✅ Allowed MIME types mapped to extensions
-        var allowedMimeTypes = new Dictionary<string, string[]>
-        {
-            [".jpg"] = new[] { "image/jpeg" },
-            [".jpeg"] = new[] { "image/jpeg" },
-            [".png"] = new[] { "image/png" },
-            [".pdf"] = new[] { "application/pdf" }
-        };
+        if (!allowedExtensions.Contains(ext))
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
 
         if (_mime.TryGetContentType(file.FileName, out var mappedType))
         {
@@ -641,23 +640,35 @@ public class FileStorageService : IFileStorageService
             }
         }
 
-        // ================= STORAGE =================
+        if (string.IsNullOrWhiteSpace(_opt.RootPath))
+            throw new InvalidOperationException("Storage RootPath not configured.");
 
-        var baseDir = _env.ContentRootPath;
-        if (string.IsNullOrWhiteSpace(baseDir))
-            baseDir = AppContext.BaseDirectory;
+        // ========================
+        // PHYSICAL STORAGE
+        // ========================
 
-        var requestFolder = string.IsNullOrWhiteSpace(_opt.RequestPath)
-            ? "PMS"
-            : _opt.RequestPath.Trim('/', '\\');
+        var safeModule = moduleFolder.Trim().ToLowerInvariant();
 
-        var basePhysical = Path.Combine(baseDir, requestFolder);
+        var basePhysical = Path.Combine(_opt.RootPath, safeModule);
         Directory.CreateDirectory(basePhysical);
 
-        var relFolder = (folderName ?? string.Empty).Trim().TrimStart('/', '\\');
-        var absFolder = string.IsNullOrEmpty(relFolder)
-            ? basePhysical
-            : Path.Combine(basePhysical, relFolder);
+        // Sanitize subfolder
+        var safeSubFolder = (subFolder ?? string.Empty)
+            .Trim()
+            .TrimStart('/', '\\');
+
+        if (safeSubFolder.Contains("..", StringComparison.Ordinal))
+            throw new InvalidOperationException("Invalid folder name.");
+
+        string absFolder = basePhysical;
+
+        if (!string.IsNullOrWhiteSpace(safeSubFolder))
+        {
+            var subParts = safeSubFolder
+                .Split('/', '\\', StringSplitOptions.RemoveEmptyEntries);
+
+            absFolder = Path.Combine(basePhysical, Path.Combine(subParts));
+        }
 
         Directory.CreateDirectory(absFolder);
 
@@ -675,12 +686,84 @@ public class FileStorageService : IFileStorageService
             await file.CopyToAsync(stream, ct);
         }
 
-        var relUrl =
-            $"/{requestFolder}/" +
-            $"{(string.IsNullOrEmpty(relFolder) ? "" : relFolder.Replace('\\', '/') + "/")}" +
-            $"{fileName}";
+        // ========================
+        // RELATIVE URL (STORE IN DB)
+        // ========================
 
-        return relUrl.Replace("//", "/");
+        var urlSegments = new List<string>
+    {
+        safeModule
+    };
+
+        if (!string.IsNullOrWhiteSpace(safeSubFolder))
+        {
+            urlSegments.AddRange(
+                safeSubFolder
+                    .Split('/', '\\', StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        urlSegments.Add(fileName);
+
+        var relativeUrl = "/" + string.Join("/", urlSegments);
+
+        return relativeUrl;
     }
+    public string GetPublicUrl(string relativePath, string? baseUrl = null)
+    {
 
+        Console.WriteLine(" called with relativePath: " + relativePath + " and baseUrl: " + baseUrl);
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return string.Empty;
+
+        //if (Uri.TryCreate(relativePath, UriKind.Absolute, out _))
+        //    return relativePath;
+
+        var urlPath = relativePath.Replace('\\', '/').Trim();
+
+        if (!urlPath.StartsWith("/"))
+            urlPath = "/" + urlPath;
+
+        var host = !string.IsNullOrWhiteSpace(baseUrl)
+    ? baseUrl
+    : _opt.PublicBaseUrl;
+
+        Console.WriteLine("Configured PublicBaseUrl: " + _opt.PublicBaseUrl);
+
+
+        Console.WriteLine("Host url:" + host);
+        if (string.IsNullOrWhiteSpace(host))
+            throw new InvalidOperationException(
+                "PublicBaseUrl is not configured in FileStorage section.");
+
+        return $"{host.TrimEnd('/')}{urlPath}";
+    }
+    public string GetPublicUrl(string relativePath)
+    {
+
+        Console.WriteLine(" called with relativePath: " + relativePath);
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return string.Empty;
+
+        //if (Uri.TryCreate(relativePath, UriKind.Absolute, out _))
+        //    return relativePath;
+
+        var urlPath = relativePath.Replace('\\', '/').Trim();
+
+        if (!urlPath.StartsWith("/"))
+            urlPath = "/" + urlPath;
+
+        var host = _opt.PublicBaseUrl;
+
+        Console.WriteLine("Configured PublicBaseUrl: " + _opt.PublicBaseUrl);
+
+
+        Console.WriteLine("Host url:" + host);
+        if (string.IsNullOrWhiteSpace(host))
+            throw new InvalidOperationException(
+                "PublicBaseUrl is not configured in FileStorage section.");
+
+        //return $"{host.TrimEnd('/')}{urlPath}";
+        return $"{host.TrimEnd('/')}{urlPath}";
+
+    }
 }

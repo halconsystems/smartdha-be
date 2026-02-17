@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyCommandHandler;
+using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Domain.Entities;
 using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
@@ -34,10 +35,18 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
             string? profileImagePath = null;
             if (request.ProfilePicture != null)
             {
-                profileImagePath = await _fileStorage.SaveFileAsync(
-                    request.ProfilePicture,
-                    "uploads/smartdha/userfamily",
-                    cancellationToken);
+                //profileImagePath = await _fileStorage.SaveFileAsync(
+                //    request.ProfilePicture,
+                //    "uploads/smartdha/userfamily",
+                //    cancellationToken);
+                profileImagePath = await _fileStorage.SaveFileInternalAsync(
+                file: request.ProfilePicture,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "userfamily",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
             }
             string? createdBy = null;
             if (request.UserId != Guid.Empty)
