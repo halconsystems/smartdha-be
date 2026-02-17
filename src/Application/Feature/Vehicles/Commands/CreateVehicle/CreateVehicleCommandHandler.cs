@@ -51,7 +51,7 @@ public class CreateVehicleCommandHandler : IRequestHandler<CreateVehicleCommand,
             Model = request.Model,
             Attachment = attachmentPath,
             ETagId = request.ETagId,
-            ValidUpTo = request.ValidUpTo,
+            ValidTo = request.ValidTo,
         };
 
         await _smartdhaDbContext.Vehicles.AddAsync(entity, cancellationToken);

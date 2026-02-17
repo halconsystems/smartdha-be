@@ -30,10 +30,9 @@ public class UpdateVisitorPassCommandHandler
         entity.CNIC = request.CNIC;
         entity.VehicleLicensePlate = request.VehicleLicensePlate;
         entity.VehicleLicenseNo = request.VehicleLicenseNo;
-        entity.QuickPickType = request.QuickPickType;
-        entity.FromDate = request.FromDate;
-        entity.ToDate = request.ToDate;
-        entity.ValidTill = request.ValidTill;
+        entity.VisitorPassType = request.VisitorPassType;
+        entity.ValidFrom = request.ValidFrom;
+        entity.ValidTo = request.ValidTo;
 
         await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 

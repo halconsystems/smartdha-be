@@ -29,10 +29,9 @@ public class GetAllVisitorPassQueryHandler
                 CNIC = x.CNIC,
                 VehicleLicensePlate = x.VehicleLicensePlate,
                 VehicleLicenseNo = x.VehicleLicenseNo,
-                QuickPickType = x.QuickPickType,
-                FromDate = x.FromDate,
-                ToDate = x.ToDate,
-                ValidTill = x.ValidTill,
+                VisitorPassType = x.VisitorPassType,
+                FromDate = x.ValidFrom,
+                ToDate = x.ValidTo,
                 QRCode = x.QRCode
             })
             .ToListAsync(cancellationToken);

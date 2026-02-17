@@ -15,6 +15,7 @@ public class Vehicle : BaseAuditableEntity
     public string Model { get; set; } = string.Empty;
     public string? Attachment { get; set; }
     public string? ETagId { get; set; }
-    public DateTime? ValidUpTo { get; set; }
+    public DateTime? ValidTo { get; set; }
+    public DateTime? ValidFrom { get; set; }
 }
 

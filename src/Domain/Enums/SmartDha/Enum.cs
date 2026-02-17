@@ -8,7 +8,17 @@ namespace DHAFacilitationAPIs.Domain.Enums;
 public enum CategoryType
 {
     Residential = 1,
-    Commercial = 1,
+    Commercial = 2,
+}
+public enum MemberType
+{
+    Residential = 1,
+    Commercial = 2,
+    EducationalVisitor = 3,
+    CommercialEmployee = 4,
+    HouseHelp = 5,
+    Visitor = 6,
+    Other = 7,
 }
 public enum Zone
 {
@@ -53,11 +63,11 @@ public enum PropertyTypeCommercial {
    Office = 2,
    Building = 3,
 }
-public enum PropertyTypeResidantial
+public enum PropertyTypeResidential
 {
-    Shop = 1,
-    Office = 2,
-    Building = 3,
+    Bunglow = 1,
+    Flat = 2,
+    Portion = 3,
 }
 public enum JobType
 {
@@ -72,7 +82,7 @@ public enum WorkerCardDeliveryType
     OwnerOrEmployeerAddress = 1,
     SelfPickUp = 2,
 }
-public enum QuickPickType
+public enum VisitorPassType
 {
     DayPass = 1,
     LongDay = 2,

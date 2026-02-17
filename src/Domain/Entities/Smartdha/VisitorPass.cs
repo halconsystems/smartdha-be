@@ -11,9 +11,7 @@ public class VisitorPass : BaseAuditableEntity
     public required string CNIC { get; set; }
     public string VehicleLicensePlate { get; set; } = string.Empty;
     public int VehicleLicenseNo { get; set; } 
-    public required QuickPickType QuickPickType { get; set; } 
-    public  DateTime FromDate { get; set; } 
-    public DateTime  ToDate { get; set; } 
+    public required VisitorPassType VisitorPassType { get; set; } 
     public DateTime  ValidTo { get; set; } 
     public DateTime  ValidFrom { get; set; } 
     public string?  QRCode { get; set; } 

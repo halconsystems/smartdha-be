@@ -33,10 +33,9 @@ public class GetVisitorPassByIdQueryHandler
             CNIC = entity.CNIC,
             VehicleLicensePlate = entity.VehicleLicensePlate,
             VehicleLicenseNo = entity.VehicleLicenseNo,
-            QuickPickType = entity.QuickPickType,
-            FromDate = entity.FromDate,
-            ToDate = entity.ToDate,
-            ValidTill = entity.ValidTill,
+            VisitorPassType = entity.VisitorPassType,
+            FromDate = entity.ValidFrom,
+            ToDate = entity.ValidTo,
             QRCode = entity.QRCode
         };
     }

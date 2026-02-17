@@ -28,10 +28,9 @@ public class CreateVisitorPassCommandHandler
             CNIC = request.CNIC,
             VehicleLicensePlate = request.VehicleLicensePlate,
             VehicleLicenseNo = request.VehicleLicenseNo,
-            QuickPickType = request.QuickPickType,
-            FromDate = request.FromDate,
-            ToDate = request.ToDate,
-            ValidTill = request.ValidTill,
+            VisitorPassType = request.VisitorPassType,
+            ValidFrom = request.ValidFrom,
+            ValidTo = request.ValidTo,
             QRCode = Guid.NewGuid().ToString()
         };
 

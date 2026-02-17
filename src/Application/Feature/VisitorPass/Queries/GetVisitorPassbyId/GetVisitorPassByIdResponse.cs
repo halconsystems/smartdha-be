@@ -14,7 +14,7 @@ public class GetVisitorPassByIdResponse
     public string CNIC { get; set; } = string.Empty;
     public string VehicleLicensePlate { get; set; } = string.Empty;
     public int VehicleLicenseNo { get; set; }
-    public QuickPickType QuickPickType { get; set; }
+    public VisitorPassType VisitorPassType { get; set; }
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
     public DateTime ValidTill { get; set; }

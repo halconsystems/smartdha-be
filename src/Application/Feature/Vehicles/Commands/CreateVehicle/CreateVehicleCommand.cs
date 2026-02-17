@@ -20,5 +20,5 @@ public class CreateVehicleCommand : IRequest<CreateVehicleResponse>
     public string Model { get; set; } = string.Empty;
     public IFormFile? Attachment { get; set; }  
     public string? ETagId { get; set; }
-    public DateTime? ValidUpTo { get; set; }
+    public DateTime? ValidTo { get; set; }
 }
