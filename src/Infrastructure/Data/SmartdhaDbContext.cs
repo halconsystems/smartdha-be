@@ -20,7 +20,7 @@ public class SmartdhaDbContext : DbContext, ISmartdhaDbContext
     }
 
     public DbSet<Vehicle> Vehicles { get; set; }
-    public DbSet<LaggagePass> LaggagePasses { get; set; }
+    public DbSet<LuggagePass> LuggagePasses { get; set; }
     public DbSet<UserFamily> UserFamilies { get; set; }
     public DbSet<ResidentProperty> ResidentProperties { get; set; }
     public DbSet<Worker> Workers { get; set; }

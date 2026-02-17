@@ -5,27 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.UpdateLaggagePass;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.UpdateLuggagePass;
 
-public class UpdateLaggagePassCommandHandler
-    : IRequestHandler<UpdateLaggagePassCommand, UpdateLaggagePassResponse>
+public class UpdateLuggagePassCommandHandler
+    : IRequestHandler<UpdateLuggagePassCommand, UpdateLuggagePassResponse>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
 
-    public UpdateLaggagePassCommandHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    public UpdateLuggagePassCommandHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<UpdateLaggagePassResponse> Handle(UpdateLaggagePassCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateLuggagePassResponse> Handle(UpdateLuggagePassCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _smartdhaDbContext.LaggagePasses
+        var entity = await _smartdhaDbContext.LuggagePasses
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (entity == null)
-            throw new Exception("Laggage Pass Not Found");
+            throw new Exception("Luggage Pass Not Found");
 
         entity.Name = request.Name;
         entity.CNIC = request.CNIC;
@@ -38,9 +38,9 @@ public class UpdateLaggagePassCommandHandler
 
         await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-        return new UpdateLaggagePassResponse
+        return new UpdateLuggagePassResponse
         {
-            Message = "Laggage Pass Updated Successfully"
+            Message = "Luggage Pass Updated Successfully"
         };
     }
 }

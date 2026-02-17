@@ -5,23 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.CreateLaggagePass;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
 
-public class CreateLaggagePassCommandHandler
-    : IRequestHandler<CreateLaggagePassCommand, CreateLaggagePassResponse>
+public class CreateLuggagePassCommandHandler
+    : IRequestHandler<CreateLuggagePassCommand, CreateLuggagePassResponse>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
 
-    public CreateLaggagePassCommandHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    public CreateLuggagePassCommandHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<CreateLaggagePassResponse> Handle(CreateLaggagePassCommand request, CancellationToken cancellationToken)
+    public async Task<CreateLuggagePassResponse> Handle(CreateLuggagePassCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Domain.Entities.Smartdha.LaggagePass
+        var entity = new Domain.Entities.Smartdha.LuggagePass
         {
             Name = request.Name,
             CNIC = request.CNIC,
@@ -33,12 +33,12 @@ public class CreateLaggagePassCommandHandler
             QRCode = Guid.NewGuid().ToString()
         };
 
-        await _smartdhaDbContext.LaggagePasses.AddAsync(entity);
+        await _smartdhaDbContext.LuggagePasses.AddAsync(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new CreateLaggagePassResponse
+        return new CreateLuggagePassResponse
         {
-            Message = "Laggage Pass Created Successfully"
+            Message = "Luggage Pass Created Successfully"
         };
     }
 }

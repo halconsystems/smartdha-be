@@ -11,7 +11,7 @@ namespace DHAFacilitationAPIs.Application.Common.Interfaces;
 public interface ISmartdhaDbContext
 {
     DbSet<Vehicle> Vehicles { get; }
-    DbSet<LaggagePass> LaggagePasses { get; }
+    DbSet<LuggagePass> LuggagePasses { get; }
     DbSet<UserFamily> UserFamilies { get; }
     DbSet<ResidentProperty> ResidentProperties { get; set; }
     DbSet<Worker> Workers { get; set; }

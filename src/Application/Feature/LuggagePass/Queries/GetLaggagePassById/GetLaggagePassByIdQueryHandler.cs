@@ -5,29 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Queries.GetLaggagePassById;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassById;
 
-public class GetLaggagePassByIdQueryHandler
-    : IRequestHandler<GetLaggagePassByIdQuery, GetLaggagePassByIdResponse>
+public class GetLuggagePassByIdQueryHandler
+    : IRequestHandler<GetLuggagePassByIdQuery, GetLuggagePassByIdResponse>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
 
-    public GetLaggagePassByIdQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    public GetLuggagePassByIdQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<GetLaggagePassByIdResponse> Handle(GetLaggagePassByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetLuggagePassByIdResponse> Handle(GetLuggagePassByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _smartdhaDbContext.LaggagePasses
+        var entity = await _smartdhaDbContext.LuggagePasses
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (entity == null)
-            throw new Exception("Laggage Pass Not Found");
+            throw new Exception("Luggage Pass Not Found");
 
-        return new GetLaggagePassByIdResponse
+        return new GetLuggagePassByIdResponse
         {
             Id = entity.Id,
             Name = entity.Name,

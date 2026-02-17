@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.UpdateLaggagePass;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.UpdateLuggagePass;
 
-public class UpdateLaggagePassCommand : IRequest<UpdateLaggagePassResponse>
+public class UpdateLuggagePassCommand : IRequest<UpdateLuggagePassResponse>
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

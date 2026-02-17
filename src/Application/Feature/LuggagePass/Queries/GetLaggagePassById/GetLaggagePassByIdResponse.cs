@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.CreateLaggagePass;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassById;
 
-public class CreateLaggagePassCommand : IRequest<CreateLaggagePassResponse>
+public class GetLuggagePassByIdResponse
 {
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string CNIC { get; set; } = string.Empty;
     public string VehicleLicensePlate { get; set; } = string.Empty;
     public int VehicleLicenseNo { get; set; }
     public string Description { get; set; } = string.Empty;
-    public DateTime ValidityDate { get; set; }
+    public DateTime ValidFrom { get; set; }
+    public DateTime ValidTo { get; set; }
+    public string? QRCode { get; set; }
 }

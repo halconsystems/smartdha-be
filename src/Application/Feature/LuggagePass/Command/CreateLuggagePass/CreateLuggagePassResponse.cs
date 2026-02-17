@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.CreateLaggagePass;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
 
-public class CreateLaggagePassResponse
+public class CreateLuggagePassResponse
 {
     public string Message { get; set; } = string.Empty;
 }

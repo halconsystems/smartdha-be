@@ -4,26 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Queries.GetLaggagePassById;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassById;
 
-namespace DHAFacilitationAPIs.Application.Feature.LaggagePass.Queries.GetLaggagePassByList;
+namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassByList;
 
-public class GetAllLaggagePassQueryHandler
-    : IRequestHandler<GetAllLaggagePassQuery, List<GetLaggagePassByIdResponse>>
+public class GetAllLuggagePassQueryHandler
+    : IRequestHandler<GetAllLuggagePassQuery, List<GetLuggagePassByIdResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
 
-    public GetAllLaggagePassQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    public GetAllLuggagePassQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<List<GetLaggagePassByIdResponse>> Handle(GetAllLaggagePassQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetLuggagePassByIdResponse>> Handle(GetAllLuggagePassQuery request, CancellationToken cancellationToken)
     {
-        return await _smartdhaDbContext.LaggagePasses
-            .Select(x => new GetLaggagePassByIdResponse
+        return await _smartdhaDbContext.LuggagePasses
+            .Select(x => new GetLuggagePassByIdResponse
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -1,9 +1,9 @@
 ﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.CreateLaggagePass;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.DeleteLaggagePass;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Command.UpdateLaggagePass;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Queries.GetLaggagePassById;
-using DHAFacilitationAPIs.Application.Feature.LaggagePass.Queries.GetLaggagePassByList;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.DeleteLuggagePass;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.UpdateLuggagePass;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassById;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassByList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,27 +13,27 @@ namespace MobileAPI.Controllers;
 [Route("api/[controller]")]
 [ApiExplorerSettings(GroupName = "smartdha")]
 [ApiController]
-public class LaggagePassController : BaseApiController
+public class LuggagePassController : BaseApiController
 {
     private readonly IUser _loggedInUser;
     private readonly IMediator _mediator;
 
-    public LaggagePassController(IUser loggedInUser,IMediator mediator)
+    public LuggagePassController(IUser loggedInUser,IMediator mediator)
     {
         _mediator = mediator;
         _loggedInUser = loggedInUser;
     }
 
-    [HttpPost("create-laggagepass"), AllowAnonymous]
-    public async Task<IActionResult> Create(CreateLaggagePassCommand command)
+    [HttpPost("create-luggagepass"), AllowAnonymous]
+    public async Task<IActionResult> Create(CreateLuggagePassCommand command)
     {
         var result = await _mediator.Send(command);
 
         return Ok(result);
     }
 
-    [HttpPost("update-laggagepass"), AllowAnonymous]
-    public async Task<IActionResult> Update(Guid id, UpdateLaggagePassCommand command)
+    [HttpPost("update-luggagepass"), AllowAnonymous]
+    public async Task<IActionResult> Update(Guid id, UpdateLuggagePassCommand command)
     {
         if (id != command.Id)
             return BadRequest("Id mismatch");
@@ -42,10 +42,10 @@ public class LaggagePassController : BaseApiController
         return Ok(result);
     }
 
-    [HttpPost("delete-laggagepass"), AllowAnonymous]
+    [HttpPost("delete-luggagepass"), AllowAnonymous]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var command = new DeleteLaggagePassCommand { Id = id };
+        var command = new DeleteLuggagePassCommand { Id = id };
         var result = await _mediator.Send(command);
 
         return Ok(result);
@@ -54,7 +54,7 @@ public class LaggagePassController : BaseApiController
     [HttpGet("{id}"), AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var query = new GetLaggagePassByIdQuery { Id = id };
+        var query = new GetLuggagePassByIdQuery { Id = id };
         var result = await _mediator.Send(query);
 
         return Ok(result);
@@ -63,7 +63,7 @@ public class LaggagePassController : BaseApiController
     [HttpGet("getall"), AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        var query = new GetAllLaggagePassQuery();
+        var query = new GetAllLuggagePassQuery();
         var result = await _mediator.Send(query);
 
         return Ok(result);
