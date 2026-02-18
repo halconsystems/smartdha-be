@@ -49,12 +49,12 @@ public class UserFamilyController : BaseApiController
         var result = await _mediator.Send(request);
         return Ok(ApiResult<UpdateUserFamilyResponse>.Ok(result.Data!, "Family member updated successfully"));
     }
-    [HttpGet("get-all-users")]
+    [HttpPost("get-all-users")]
     //[Authorize(Roles = AllRoles.Member)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(GetAllUserFamilyQuery request)
     {
-        var result = await _mediator.Send(new GetAllUserFamilyQuery());
+        var result = await _mediator.Send(request);
         return Ok(ApiResult<List<GetAllUserFamilyQueryResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 

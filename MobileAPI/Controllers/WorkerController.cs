@@ -48,11 +48,11 @@ public class WorkerController : BaseApiController
         return Ok(ApiResult<UpdateWorkerResponse>.Ok(result.Data!, "Worker updated successfully"));
     }
 
-    [HttpGet("get-all-workers")]
+    [HttpPost("get-all-workers")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(GetAllWorkerQuery request)
     {
-        var result = await _mediator.Send(new GetAllWorkerQuery());
+        var result = await _mediator.Send(request);
         return Ok(ApiResult<List<GetAllWorkerQueryResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 

@@ -23,7 +23,7 @@ public class GetAllWorkerQueryHandler : IRequestHandler<GetAllWorkerQuery, Resul
 
     public async Task<Result<List<GetAllWorkerQueryResponse>>> Handle(GetAllWorkerQuery request, CancellationToken cancellationToken)
     {
-        var workers = await _smartdhaDbContext.Workers.Where(w=>w.IsActive == true && request.Id == _loggedInUser.Id).ToListAsync(cancellationToken);
+        var workers = await _smartdhaDbContext.Workers.Where(w=>w.IsActive == true && request.Id == w.CreatedBy).ToListAsync(cancellationToken);
 
         if (!workers.Any())
             return Result<List<GetAllWorkerQueryResponse>>

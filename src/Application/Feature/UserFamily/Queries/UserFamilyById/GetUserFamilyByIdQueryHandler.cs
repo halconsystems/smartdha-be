@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
 
@@ -35,7 +36,7 @@ public class GetUserFamilyByIdQueryHandler: IRequestHandler<GetUserFamilyByIdQue
             DOB = userData.DateOfBirth,
             Name = userData.Name,
             Phone = userData.PhoneNumber!,
-            Relation = (int)userData.Relation,
+            Relation = (RelationUserFamily)userData.Relation,
             CNIC = userData.Cnic!,
             Image = userData.ProfilePicture ?? string.Empty,
             ResidentCardNumber = userData.ResidentCardNumber!   

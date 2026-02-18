@@ -6,6 +6,7 @@ using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
 using DHAFacilitationAPIs.Domain.Entities;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFami
 
         public async Task<Result<List<GetAllUserFamilyQueryResponse>>> Handle(GetAllUserFamilyQuery request,CancellationToken cancellationToken)
         {
-            var users = await _smartdhaDbContext.UserFamilies.Where(u=>u.IsActive == true && request.Id == _loggedInUser.Id).ToListAsync(cancellationToken);
+            var users = await _smartdhaDbContext.UserFamilies.Where(u=>u.IsActive == true && request.Id == u.CreatedBy).ToListAsync(cancellationToken);
 
             if (!users.Any())
                 return Result<List<GetAllUserFamilyQueryResponse>>
@@ -36,7 +37,7 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFami
                 DOB = user.DateOfBirth,
                 Name = user.Name,
                 Phone = user.PhoneNumber!,
-                Relation = (int)user.Relation,
+                Relation = (RelationUserFamily)user.Relation,
                 CNIC = user.Cnic!,
                 Image = user.ProfilePicture ?? string.Empty,
                 ResidentCardNumber = user.ResidentCardNumber!
