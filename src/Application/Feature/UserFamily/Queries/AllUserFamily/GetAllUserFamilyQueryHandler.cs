@@ -15,16 +15,17 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFami
     {
         private readonly IApplicationDbContext _context;
         private readonly ISmartdhaDbContext _smartdhaDbContext;
-
-        public GetAllUserFamilyQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+        private readonly IUser _loggedInUser;
+        public GetAllUserFamilyQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext, IUser loggedInUser)
         {
             _context = context;
             _smartdhaDbContext = smartdhaDbContext;
+            _loggedInUser = loggedInUser;
         }
 
         public async Task<Result<List<GetAllUserFamilyQueryResponse>>> Handle(GetAllUserFamilyQuery request,CancellationToken cancellationToken)
         {
-            var users = await _smartdhaDbContext.UserFamilies.ToListAsync(cancellationToken);
+            var users = await _smartdhaDbContext.UserFamilies.Where(u=>u.IsActive == true && request.Id == _loggedInUser.Id).ToListAsync(cancellationToken);
 
             if (!users.Any())
                 return Result<List<GetAllUserFamilyQueryResponse>>

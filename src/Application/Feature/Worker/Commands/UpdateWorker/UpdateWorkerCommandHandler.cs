@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
+using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
@@ -46,10 +47,14 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
                 {
                 }
 
-                var newImagePath = await _fileStorage.SaveFileAsync(
-                    request.ProfilePicture,
-                    "uploads/smartdha/workers/profile",
-                    cancellationToken);
+                var newImagePath = await _fileStorage.SaveFileInternalAsync(
+                file: request.ProfilePicture,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/profile",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
 
                 entity.ProfilePicture = newImagePath;
             }
@@ -66,10 +71,14 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
                 {
                 }
 
-                var newCnicBackImagePath = await _fileStorage.SaveFileAsync(
-                    request.CnicBack,
-                    "uploads/smartdha/workers/cnic/back",
-                    cancellationToken);
+                var newCnicBackImagePath = await _fileStorage.SaveFileInternalAsync(
+                file: request.CnicBack,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/cnic/back",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
 
                 entity.CnicBack = newCnicBackImagePath;
             }
@@ -86,10 +95,14 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
                 {
                 }
 
-                var newCnicFrontImagePath = await _fileStorage.SaveFileAsync(
-                    request.CnicFront,
-                    "uploads/smartdha/workers/cnic/front",
-                    cancellationToken);
+                var newCnicFrontImagePath = await _fileStorage.SaveFileInternalAsync(
+                file: request.CnicFront,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/cnic/front",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
 
                 entity.CnicBack = newCnicFrontImagePath;
             }

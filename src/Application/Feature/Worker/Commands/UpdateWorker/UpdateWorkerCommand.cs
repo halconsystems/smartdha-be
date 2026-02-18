@@ -11,7 +11,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Worker.Commands.UpdateWorker;
 public class UpdateWorkerCommand : IRequest<Result<UpdateWorkerResponse>>
 {
     public Guid WorkerId { get; set; }
-    public JobType? JobType { get; set; }
+    public int JobType { get; set; }
     public string? FatherHusbandName { get; set; }
     public string? Name { get; set; }
     public string? PhoneNo { get; set; }

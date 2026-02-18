@@ -11,7 +11,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Worker.Commands.AddWorker;
 public class AddWorkerCommand : IRequest<Result<Guid>>
 {
     public required string Name { get; set; }
-    public JobType JobType { get; set; }
+    public int JobType { get; set; }
     public required string FatherHusbandName { get; set; }
     public required string PhoneNo { get; set; }
     public required string CNIC { get; set; }

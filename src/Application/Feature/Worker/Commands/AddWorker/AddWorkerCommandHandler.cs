@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -27,26 +28,46 @@ public class AddWorkerCommandHandler : IRequestHandler<AddWorkerCommand, Result<
     {
         try
         {
-            var profilePath = request.ProfilePicture != null ? await _fileStorage.SaveFileAsync(request.ProfilePicture,"uploads/smartdha/workers/profile", cancellationToken) : null;
+            var profilePath = request.ProfilePicture != null ? await _fileStorage.SaveFileInternalAsync(
+                file: request.ProfilePicture,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/profile",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images) : null;
 
-            var cnicFrontPath = request.CnicFront != null ? await _fileStorage.SaveFileAsync(
-                request.CnicFront,
-                "uploads/smartdha/workers/cnic/front",
-                cancellationToken) : null;
+            var cnicFrontPath = request.CnicFront != null ? await _fileStorage.SaveFileInternalAsync(
+                file: request.CnicFront,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/cnic/front",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images) : null;
 
-            var cnicBackPath = request.CnicBack != null ? await _fileStorage.SaveFileAsync(
-                request.CnicBack,
-                "uploads/smartdha/workers/cnic/back",
-                cancellationToken) : null;
+            var cnicBackPath = request.CnicBack != null ? await _fileStorage.SaveFileInternalAsync(
+                file: request.CnicBack,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/cnic/back",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images) : null;
 
-            var policeVerificationDocPath = request.PoliceVerificationAttachment != null ? await _fileStorage.SaveFileAsync(
-                request.PoliceVerificationAttachment,
-                "uploads/smartdha/workers/policeverification",
-                cancellationToken) : null;
+            var policeVerificationDocPath = request.PoliceVerificationAttachment != null ? await _fileStorage.SaveFileInternalAsync(
+                file: request.PoliceVerificationAttachment,
+                moduleFolder: FileStorageConstants.Modules.SmartDHA,
+                subFolder: "worker/policeVerification",
+                ct: cancellationToken,
+                maxBytes: FileStorageConstants.MaxSize.Image,
+                allowedExtensions: FileStorageConstants.Extensions.Images,
+                allowedMimeTypes: FileStorageConstants.MimeTypes.Images) : null;
+
             var entity = new Domain.Entities.Smartdha.Worker
             {
                 Name = request.Name,
-                JobType = request.JobType,
+                JobType = (JobType)request.JobType,
                 DateOfBirth = request.DOB.Date,
                 CNIC = request.CNIC,
                 FatherOrHusbandName = request.FatherHusbandName,
@@ -61,11 +82,8 @@ public class AddWorkerCommandHandler : IRequestHandler<AddWorkerCommand, Result<
 
             await _smartdhaDbContext.Workers.AddAsync(entity, cancellationToken);
             await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
-
             return Result<Guid>.Success(entity.Id);
         }
-        
-    
         catch (Exception ex)
         {
             return Result<Guid>.Failure(new[] { ex.Message});

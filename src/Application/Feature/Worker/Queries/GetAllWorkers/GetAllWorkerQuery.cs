@@ -8,4 +8,5 @@ using DHAFacilitationAPIs.Application.Common.Models;
 namespace DHAFacilitationAPIs.Application.Feature.Worker.Queries.GetAllWorkers;
 public class GetAllWorkerQuery : IRequest<Result<List<GetAllWorkerQueryResponse>>>
 {
+    public string Id { get; set; } = null!;
 }

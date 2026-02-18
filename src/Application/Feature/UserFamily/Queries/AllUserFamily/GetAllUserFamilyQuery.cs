@@ -11,4 +11,5 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFami
 
 public class GetAllUserFamilyQuery : IRequest<Result<List<GetAllUserFamilyQueryResponse>>>
 {
+    public string Id { get; set; } = null!;
 }

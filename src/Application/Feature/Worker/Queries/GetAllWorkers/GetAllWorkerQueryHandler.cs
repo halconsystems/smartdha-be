@@ -12,16 +12,18 @@ public class GetAllWorkerQueryHandler : IRequestHandler<GetAllWorkerQuery, Resul
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
+    private readonly IUser _loggedInUser;
 
-    public GetAllWorkerQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    public GetAllWorkerQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext, IUser loggedInUser)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
+        _loggedInUser = loggedInUser;
     }
 
     public async Task<Result<List<GetAllWorkerQueryResponse>>> Handle(GetAllWorkerQuery request, CancellationToken cancellationToken)
     {
-        var workers = await _smartdhaDbContext.Workers.ToListAsync(cancellationToken);
+        var workers = await _smartdhaDbContext.Workers.Where(w=>w.IsActive == true && request.Id == _loggedInUser.Id).ToListAsync(cancellationToken);
 
         if (!workers.Any())
             return Result<List<GetAllWorkerQueryResponse>>
