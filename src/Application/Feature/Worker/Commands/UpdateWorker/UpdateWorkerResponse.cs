@@ -10,7 +10,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Worker.Commands.UpdateWorker;
 public class UpdateWorkerResponse 
 {
     public Guid WorkerId { get; set; }
-    public JobType JobType { get; set; }
+    public JobType? JobType { get; set; }
     public  string? FatherHusbandName { get; set; }
     public  string? Name { get; set; }
     public  string? PhoneNo { get; set; }

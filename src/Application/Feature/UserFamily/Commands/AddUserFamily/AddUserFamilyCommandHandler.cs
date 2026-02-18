@@ -35,10 +35,6 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
             string? profileImagePath = null;
             if (request.ProfilePicture != null)
             {
-                //profileImagePath = await _fileStorage.SaveFileAsync(
-                //    request.ProfilePicture,
-                //    "uploads/smartdha/userfamily",
-                //    cancellationToken);
                 profileImagePath = await _fileStorage.SaveFileInternalAsync(
                 file: request.ProfilePicture,
                 moduleFolder: FileStorageConstants.Modules.SmartDHA,

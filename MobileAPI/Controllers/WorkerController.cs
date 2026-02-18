@@ -4,6 +4,7 @@ using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyC
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
 using DHAFacilitationAPIs.Application.Feature.Worker.Commands.AddWorker;
+using DHAFacilitationAPIs.Application.Feature.Worker.Commands.DeleteWorker;
 using DHAFacilitationAPIs.Application.Feature.Worker.Commands.UpdateWorker;
 using DHAFacilitationAPIs.Application.Feature.Worker.Queries.GetAllWorkers;
 using DHAFacilitationAPIs.Application.Feature.Worker.Queries.GetWorkerById;
@@ -27,24 +28,28 @@ public class WorkerController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpPost("add-worker"), Authorize(Roles = AllRoles.Member)]
+    [HttpPost("add-worker"), AllowAnonymous]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddWorker([FromForm] AddWorkerCommand request)
     {
         var result = await _mediator.Send(request);
+        if (!result.Succeeded)
+            return BadRequest(ApiResult<Guid>.Fail(result.Errors.First()));
         return Ok(ApiResult<Guid>.Ok(result.Data, "Worker added successfully"));
     }
 
-    [HttpPost("update-worker"), Authorize(Roles = AllRoles.Member)]
+    [HttpPost("update-worker"), /*Authorize(Roles = AllRoles.Member)*/ AllowAnonymous]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> UpdateWorker([FromForm] UpdateWorkerCommand request)
     {
         var result = await _mediator.Send(request);
+        if (!result.Succeeded)
+            return BadRequest(ApiResult<UpdateWorkerResponse>.Fail(result.Errors.First()));
         return Ok(ApiResult<UpdateWorkerResponse>.Ok(result.Data!, "Worker updated successfully"));
     }
 
     [HttpGet("get-all-workers")]
-    [Authorize(Roles = AllRoles.Member)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
         var result = await _mediator.Send(new GetAllWorkerQuery());
@@ -52,7 +57,8 @@ public class WorkerController : BaseApiController
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Roles = AllRoles.Member)]
+    //[Authorize(Roles = AllRoles.Member)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetWorkerByIdQuery { Id = id };
@@ -61,5 +67,14 @@ public class WorkerController : BaseApiController
             return BadRequest(ApiResult<string>.Fail(result.Errors.First()));
 
         return Ok(ApiResult<GetWorkerByIdResponse>.Ok(result.Data!, "Record fetched successfully"));
+    }
+
+    [HttpPost("delete-worker"), AllowAnonymous]
+    public async Task<IActionResult> DeleteWorker([FromBody] DeleteWorkerCommand request)
+    {
+        var result = await _mediator.Send(request);
+        if (!result.Succeeded)
+            return BadRequest(ApiResult<DeleteWorkerCommand>.Fail(result.Errors.First()));
+        return Ok(ApiResult<Guid>.Ok(result.Data, "Worker deleted successfully"));
     }
 }

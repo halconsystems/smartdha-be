@@ -113,7 +113,15 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
             entity.CNIC = request.CNIC!;
             entity.DateOfBirth = request.DOB.Date;
             entity.PoliceVerification = request.PoliceVerification;
-            await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+
+                await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error saving changes to the database: " + ex.Message);
+            }   
 
             response.WorkerId = entity.Id;
             response.Name = entity.Name;
@@ -122,8 +130,8 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
             response.DOB = entity.DateOfBirth;
             response.JobType = entity.JobType;
             response.ProfilePicture = entity.ProfilePicture;
-            response.ProfilePicture = entity.CnicFront;
-            response.ProfilePicture = entity.CnicBack;
+            response.CnicFront = entity.CnicFront;
+            response.CnicBack = entity.CnicBack;
             return Result<UpdateWorkerResponse>.Success(response);
         }
 

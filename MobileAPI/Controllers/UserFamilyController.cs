@@ -6,6 +6,8 @@ using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFamilyC
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.AllUserFamily;
 using DHAFacilitationAPIs.Application.Feature.UserFamily.Queries.UserFamilyById;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.DeleteUserFamilyCommand;
+using DHAFacilitationAPIs.Application.Feature.Worker.Commands.DeleteWorker;
 using DHAFacilitationAPIs.Domain.Constants;
 using DHAFacilitationAPIs.Infrastructure.Data.SQLite;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +29,7 @@ public class UserFamilyController : BaseApiController
         _mediator = mediator;
     }
 
-    [HttpPost("add-user-family"), Authorize(Roles = AllRoles.Member)]
+    [HttpPost("add-user-family"), /*Authorize(Roles = AllRoles.Member)*/ AllowAnonymous]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddUserFamily([FromForm] AddUserFamilyCommand request)
     {
@@ -40,7 +42,7 @@ public class UserFamilyController : BaseApiController
         return Ok(ApiResult<Guid>.Ok(result.Data, "Family member added successfully"));
     }
 
-    [HttpPost("update-user-family"), Authorize(Roles = AllRoles.Member)]
+    [HttpPost("update-user-family"), /*Authorize(Roles = AllRoles.Member)*/ AllowAnonymous]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> UpdateUserFamily([FromForm] UpdateUserFamilyCommand request)
     {
@@ -48,7 +50,8 @@ public class UserFamilyController : BaseApiController
         return Ok(ApiResult<UpdateUserFamilyResponse>.Ok(result.Data!, "Family member updated successfully"));
     }
     [HttpGet("get-all-users")]
-    [Authorize(Roles = AllRoles.Member)]
+    //[Authorize(Roles = AllRoles.Member)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
         var result = await _mediator.Send(new GetAllUserFamilyQuery());
@@ -56,7 +59,8 @@ public class UserFamilyController : BaseApiController
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Roles = AllRoles.Member)]
+    //[Authorize(Roles = AllRoles.Member)]
+    [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetUserFamilyByIdQuery { Id = id };
@@ -65,5 +69,13 @@ public class UserFamilyController : BaseApiController
             return BadRequest(ApiResult<string>.Fail(result.Errors.First()));
 
         return Ok(ApiResult<GetUserFamilybyIdQueryResponse>.Ok(result.Data!, "Record fetched successfully"));
+    }
+    [HttpPost("delete-user-family"), AllowAnonymous]
+    public async Task<IActionResult> DeleteUserFamily([FromBody] DeleteUserFamilyCommand request)
+    {
+        var result = await _mediator.Send(request);
+        if (!result.Succeeded)
+            return BadRequest(ApiResult<DeleteUserFamilyCommand>.Fail(result.Errors.First()));
+        return Ok(ApiResult<Guid>.Ok(result.Data, "user family deleted successfully"));
     }
 }

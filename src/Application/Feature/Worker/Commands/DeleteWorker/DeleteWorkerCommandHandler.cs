@@ -21,7 +21,7 @@ public class DeleteWorkerCommandHandler : IRequestHandler<DeleteWorkerCommand, R
         try
         {
             var entity = await _smartdhaContext.Workers
-                .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == command.Id && x.IsDeleted == false, cancellationToken);
 
             if (entity == null)
                 return Result<Guid>
