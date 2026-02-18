@@ -57,7 +57,6 @@ public class WorkerController : BaseApiController
     }
 
     [HttpGet("get-worker-by-id/{id:guid}")]
-    //[Authorize(Roles = AllRoles.Member)]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
