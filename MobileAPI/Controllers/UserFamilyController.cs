@@ -58,7 +58,7 @@ public class UserFamilyController : BaseApiController
         return Ok(ApiResult<List<GetAllUserFamilyQueryResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("get-user-by-id/{id:guid}")]
     //[Authorize(Roles = AllRoles.Member)]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
