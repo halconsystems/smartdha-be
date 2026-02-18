@@ -56,8 +56,7 @@ public class WorkerController : BaseApiController
         return Ok(ApiResult<List<GetAllWorkerQueryResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 
-    [HttpGet("{id:guid}")]
-    //[Authorize(Roles = AllRoles.Member)]
+    [HttpGet("get-worker-by-id/{id:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetById(Guid id)
     {
