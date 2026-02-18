@@ -13,15 +13,17 @@ public class GetAllVisitorPassQueryHandler
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
-    public GetAllVisitorPassQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext)
+    private readonly IUser _loggedInUser;
+    public GetAllVisitorPassQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext , IUser loggedInUser)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
+        _loggedInUser = loggedInUser;
     }
 
     public async Task<List<GetVisitorPassByIdResponse>> Handle(GetAllVisitorPassQuery request, CancellationToken cancellationToken)
     {
-        return await _smartdhaDbContext.VisitorPasses
+        return await _smartdhaDbContext.VisitorPasses.Where(x=>x.IsActive == true && request.Id == _loggedInUser.Id)
             .Select(x => new GetVisitorPassByIdResponse
             {
                 Id = x.Id,

@@ -9,4 +9,5 @@ namespace DHAFacilitationAPIs.Application.Feature.VisitorPass.Queries.GetVisitor
 
 public class GetAllVisitorPassQuery : IRequest<List<GetVisitorPassByIdResponse>>
 {
+    public string Id { get; set; }= string.Empty;
 }

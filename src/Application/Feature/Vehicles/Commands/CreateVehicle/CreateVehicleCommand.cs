@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
 
 namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.CreateVehicleCommandHandler;
 
-public class CreateVehicleCommand : IRequest<CreateVehicleResponse>
+public class CreateVehicleCommand : IRequest<Result<CreateVehicleResponse>>
 {
     public int LicenseNo { get; set; }
     public string License { get; set; } = string.Empty;

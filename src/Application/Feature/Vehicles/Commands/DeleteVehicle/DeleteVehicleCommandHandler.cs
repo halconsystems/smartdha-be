@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Command;
 using DHAFacilitationAPIs.Domain.Entities;
 using MediatR;
@@ -8,7 +9,7 @@ using MediatR;
 namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.DeleteVehicle
 {
     public class DeleteVehicleCommandHandler
-      : IRequestHandler<DeleteVehicleCommand, DeleteVehicleResponse>
+      : IRequestHandler<DeleteVehicleCommand, Result<DeleteVehicleResponse>>
     {
         private readonly ISmartdhaDbContext _smartdhaDbContext;
 
@@ -17,7 +18,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.DeleteVehicl
             _smartdhaDbContext = smartdhaDbContext;
         }
 
-        public async Task<DeleteVehicleResponse> Handle(
+        public async Task<Result<DeleteVehicleResponse>> Handle(
             DeleteVehicleCommand request,
             CancellationToken cancellationToken)
         {
@@ -26,11 +27,9 @@ namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.DeleteVehicl
 
             if (entity == null)
             {
-                return new DeleteVehicleResponse
-                {
-                    Success = false,
-                    Message = "Vehicle Not Found"
-                };
+                return Result<DeleteVehicleResponse>.Failure(
+    new[] { "Error deleting vehicle" });
+
             }
 
             entity.IsDeleted = true;
@@ -38,11 +37,13 @@ namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.DeleteVehicl
 
             await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-            return new DeleteVehicleResponse
-            {
-                Success = true,
-                Message = "Vehicle Deleted Successfully"
-            };
+            return Result<DeleteVehicleResponse>.Success(
+    new DeleteVehicleResponse
+    {
+        Success = true,
+        Message = "Vehicle Deleted Successfully"
+    });
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Property.Command;
 using DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Command.DeleteProperty;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Command;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
 {
     public class DeletePropertyCommandHandler
-     : IRequestHandler<DeletePropertyCommand, DeletepropertyResponse>
+     : IRequestHandler<DeletePropertyCommand, Result<DeletepropertyResponse>>
     {
         private readonly ISmartdhaDbContext _smartdhaDbContext;
 
@@ -20,7 +21,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
             _smartdhaDbContext = smartdhaDbContext;
         }
 
-        public async Task<DeletepropertyResponse> Handle(
+        public async Task<Result<DeletepropertyResponse>> Handle(
             DeletePropertyCommand request,
             CancellationToken cancellationToken)
         {
@@ -29,11 +30,9 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
 
             if (entity == null)
             {
-                return new DeletepropertyResponse
-                {
-                    Success = false,
-                    Message = "Property Not Found"
-                };
+                return Result<DeletepropertyResponse>.Failure(
+     new[] { "Error deleting property" });
+
             }
 
             entity.IsDeleted = true;
@@ -41,11 +40,13 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
 
             await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-            return new DeletepropertyResponse
-            {
-                Success = true,
-                Message = "Property Deleted Successfully"
-            };
+            return Result<DeletepropertyResponse>.Success(
+    new DeletepropertyResponse
+    {
+        Success = true,
+        Message = "Property Deleted Successfully"
+    });
+
         }
     }
 

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.UpdateLuggagePass;
 
 public class UpdateLuggagePassCommandHandler
-    : IRequestHandler<UpdateLuggagePassCommand, UpdateLuggagePassResponse>
+    : IRequestHandler<UpdateLuggagePassCommand, Result<UpdateLuggagePassResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -19,7 +20,7 @@ public class UpdateLuggagePassCommandHandler
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<UpdateLuggagePassResponse> Handle(UpdateLuggagePassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UpdateLuggagePassResponse>> Handle(UpdateLuggagePassCommand request, CancellationToken cancellationToken)
     {
         var entity = await _smartdhaDbContext.LuggagePasses
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -38,9 +39,11 @@ public class UpdateLuggagePassCommandHandler
 
         await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-        return new UpdateLuggagePassResponse
-        {
-            Message = "Luggage Pass Updated Successfully"
-        };
+        return Result<UpdateLuggagePassResponse>.Success(
+    new UpdateLuggagePassResponse
+    {
+        Message = "Luggage Pass Updated Successfully"
+    });
+
     }
 }

@@ -3,10 +3,11 @@ using MediatR;
 using DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Command.UpdateProperty;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Http;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.Property.Command
 {
-    public class UpdatePropertyCommand : IRequest<UpdatePropertyResponse>
+    public class UpdatePropertyCommand : IRequest<Result<UpdatePropertyResponse>>
     {
         public Guid Id { get; set; }
 

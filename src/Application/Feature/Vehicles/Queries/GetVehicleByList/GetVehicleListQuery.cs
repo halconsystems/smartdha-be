@@ -7,9 +7,9 @@ using DHAFacilitationAPIs.Domain.Entities;
 using MediatR;
 
 
-namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Queries;
+namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Queries.GetVehicleByList;
 
 public class GetVehicleListQuery : IRequest<List<Domain.Entities.Smartdha.Vehicle>>
 {
-    public Guid ApplicationUserId { get; set; }
+    public string Id { get; set; } = string.Empty;
 }

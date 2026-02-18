@@ -8,7 +8,5 @@ namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.CreateVehicl
 
 public class CreateVehicleResponse
 {
-    public string Message { get; set; } = "";
-    public bool Success { get; set; }
     public Guid Id { get; set; }
 }

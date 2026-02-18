@@ -40,6 +40,7 @@ builder.Services.Configure<FileStorageOptions>(
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
+builder.Services.AddScoped<IEnumService, EnumService>();
 
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
 

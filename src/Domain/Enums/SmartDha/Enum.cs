@@ -87,4 +87,17 @@ public enum VisitorPassType
     DayPass = 1,
     LongDay = 2,
 }
-
+public enum EnumType
+{
+    CategoryType = 1,
+    MemberType = 2,
+    Zone = 3,
+    RelationUserFamily = 4,
+    ResidenceStatusDha = 5,
+    Phase = 6,
+    PropertyTypeCommercial = 7,
+    PropertyTypeResidential = 8,
+    JobType = 9,
+    WorkerCardDeliveryType = 10,
+    VisitorPassType = 11
+}

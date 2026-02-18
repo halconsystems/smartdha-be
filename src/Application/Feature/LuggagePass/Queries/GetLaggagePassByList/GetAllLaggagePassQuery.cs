@@ -9,4 +9,5 @@ namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggage
 
 public class GetAllLuggagePassQuery : IRequest<List<GetLuggagePassByIdResponse>>
 {
+    public string Id { get; set; } =string.Empty;
 }

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.UpdateVisitorPass;
 
 public class UpdateVisitorPassCommandHandler
-    : IRequestHandler<UpdateVisitorPassCommand, UpdateVisitorPassResponse>
+    : IRequestHandler<UpdateVisitorPassCommand, Result<UpdateVisitorPassResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -18,7 +19,7 @@ public class UpdateVisitorPassCommandHandler
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<UpdateVisitorPassResponse> Handle(UpdateVisitorPassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UpdateVisitorPassResponse>> Handle(UpdateVisitorPassCommand request, CancellationToken cancellationToken)
     {
         var entity = await _smartdhaDbContext.VisitorPasses
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -36,9 +37,11 @@ public class UpdateVisitorPassCommandHandler
 
         await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-        return new UpdateVisitorPassResponse
-        {
-            Message = "Visitor Pass Updated Successfully"
-        };
+        return Result<UpdateVisitorPassResponse>.Success(
+     new UpdateVisitorPassResponse
+     {
+         Message = "Visitor Pass Updated Successfully"
+     });
+
     }
 }

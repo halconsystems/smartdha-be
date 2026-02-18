@@ -10,7 +10,7 @@ using MediatR;
 
 namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Command;
 
-public class DeleteVehicleCommand : IRequest<DeleteVehicleResponse>
+public class DeleteVehicleCommand : IRequest<Result<DeleteVehicleResponse>>
 {
     public Guid Id { get; set; }
 }

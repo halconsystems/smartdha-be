@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.DeleteLuggagePass;
 
 public class DeleteLuggagePassCommandHandler
-    : IRequestHandler<DeleteLuggagePassCommand, DeleteLuggagePassResponse>
+    : IRequestHandler<DeleteLuggagePassCommand, Result<DeleteLuggagePassResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -19,7 +20,7 @@ public class DeleteLuggagePassCommandHandler
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<DeleteLuggagePassResponse> Handle(DeleteLuggagePassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<DeleteLuggagePassResponse>> Handle(DeleteLuggagePassCommand request, CancellationToken cancellationToken)
     {
         var entity = await _smartdhaDbContext.LuggagePasses
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
@@ -30,9 +31,11 @@ public class DeleteLuggagePassCommandHandler
         _smartdhaDbContext.LuggagePasses.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new DeleteLuggagePassResponse
-        {
-            Message = "Luggage Pass Deleted Successfully"
-        };
+        return Result<DeleteLuggagePassResponse>.Success(
+     new DeleteLuggagePassResponse
+     {
+         Message = "Luggage Pass Deleted Successfully"
+     });
+
     }
 }

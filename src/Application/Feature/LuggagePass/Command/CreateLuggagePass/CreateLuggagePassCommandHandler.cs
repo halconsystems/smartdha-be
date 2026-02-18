@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 
 namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
 
 public class CreateLuggagePassCommandHandler
-    : IRequestHandler<CreateLuggagePassCommand, CreateLuggagePassResponse>
+    : IRequestHandler<CreateLuggagePassCommand, Result<CreateLuggagePassResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -19,7 +20,7 @@ public class CreateLuggagePassCommandHandler
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<CreateLuggagePassResponse> Handle(CreateLuggagePassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateLuggagePassResponse>> Handle(CreateLuggagePassCommand request, CancellationToken cancellationToken)
     {
         var entity = new Domain.Entities.Smartdha.LuggagePass
         {
@@ -36,9 +37,11 @@ public class CreateLuggagePassCommandHandler
         await _smartdhaDbContext.LuggagePasses.AddAsync(entity);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new CreateLuggagePassResponse
-        {
-            Message = "Luggage Pass Created Successfully"
-        };
+        return Result<CreateLuggagePassResponse>.Success(
+    new CreateLuggagePassResponse
+    {
+        Message = "Luggage Pass Created Successfully"
+    });
+
     }
 }

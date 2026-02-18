@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.UpdateVehicle.UpdateVecleCommandHandler;
 
-public class UpdateVehicleCommand : IRequest<UpdateVehicleResponse>
+public class UpdateVehicleCommand : IRequest<Result<UpdateVehicleResponse>>
 {
     public Guid Id { get; set; }
     public string Color { get; set; } = string.Empty;

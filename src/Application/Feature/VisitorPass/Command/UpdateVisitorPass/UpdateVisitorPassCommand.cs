@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.CreateVisitorPass;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.UpdateVisitorPass;
 
-public class UpdateVisitorPassCommand : IRequest<UpdateVisitorPassResponse>
+public class UpdateVisitorPassCommand : IRequest<Result<UpdateVisitorPassResponse>>
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

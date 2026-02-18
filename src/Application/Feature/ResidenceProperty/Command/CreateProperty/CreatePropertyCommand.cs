@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Command.CreateProperty;
 using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace DHAFacilitationAPIs.Application.Feature.Property.Command;
 
-public class CreatePropertyCommand : IRequest<CreatePropertyResponse>
+public class CreatePropertyCommand : IRequest<Result<CreatePropertyResponse>>
 {
     public int Category { get; set; }
     public int Type { get; set; }

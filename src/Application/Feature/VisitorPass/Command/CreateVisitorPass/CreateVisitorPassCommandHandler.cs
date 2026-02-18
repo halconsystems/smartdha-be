@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Entities.Smartdha;
+using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.CreateVisitorPass;
 
 public class CreateVisitorPassCommandHandler
-    : IRequestHandler<CreateVisitorPassCommand, CreateVisitorPassResponse>
+    : IRequestHandler<CreateVisitorPassCommand, Result<CreateVisitorPassResponse>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
@@ -20,7 +23,7 @@ public class CreateVisitorPassCommandHandler
         _smartdhaDbContext = smartdhaDbContext;
     }
 
-    public async Task<CreateVisitorPassResponse> Handle(CreateVisitorPassCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CreateVisitorPassResponse>> Handle(CreateVisitorPassCommand request, CancellationToken cancellationToken)
     {
         var entity = new Domain.Entities.Smartdha.VisitorPass
         {
@@ -28,7 +31,7 @@ public class CreateVisitorPassCommandHandler
             CNIC = request.CNIC,
             VehicleLicensePlate = request.VehicleLicensePlate,
             VehicleLicenseNo = request.VehicleLicenseNo,
-            VisitorPassType = request.VisitorPassType,
+            VisitorPassType = (VisitorPassType)request.VisitorPassType,
             ValidFrom = request.ValidFrom,
             ValidTo = request.ValidTo,
             QRCode = Guid.NewGuid().ToString()
@@ -37,9 +40,11 @@ public class CreateVisitorPassCommandHandler
         await _smartdhaDbContext.VisitorPasses.AddAsync(entity, cancellationToken);
         await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateVisitorPassResponse
-        {
-            Message = "Visitor Pass Created Successfully"
-        };
+        return Result<CreateVisitorPassResponse>.Success(
+     new CreateVisitorPassResponse
+     {
+         Message = "Visitor Pass Created Successfully"
+     });
+
     }
 }
