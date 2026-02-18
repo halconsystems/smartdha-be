@@ -16,6 +16,7 @@ public class ResidentProperty : BaseAuditableEntity
     public int Floor { get; set; }
     public int PlotNo { get; set; }
     public string Plot { get; set; } = string.Empty;
+    public DateTime? PropertyTagDate { get; set; }
     public ResidenceStatusDha PossessionType { get; set; }
     public string? ProofOfPossession { get; set; }
     public string? UtilityBillAttachment { get; set; } 
