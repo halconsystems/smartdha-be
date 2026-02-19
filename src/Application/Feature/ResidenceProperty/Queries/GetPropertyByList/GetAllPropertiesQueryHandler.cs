@@ -43,6 +43,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.Queries
 
                 var response = properties.Select(p => new GetAllPropertiesResponse
                 {
+                    serialNo = p.Ser,
                     Category = (CategoryType)p.Category,
                     Type = (PropertyType)p.Type,
                     Phase = (Phase)p.Phase,
@@ -70,6 +71,7 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.Queries
 
                 var response = properties.Select(p => new GetAllPropertiesResponse
                 {
+                    serialNo = p.Ser,
                     Category = (CategoryType)p.Category,
                     Type = (PropertyType)p.Type,
                     Phase = (Phase)p.Phase,

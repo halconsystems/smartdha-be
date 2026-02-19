@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using DHAFacilitationAPIs.Domain.Enums;
 
 namespace DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Queries.GetPropertyByList;
 
 public class GetAllPropertiesResponse
 {
+    public int serialNo { get; set; }   
     public CategoryType Category { get; set; }
     public PropertyType Type { get; set; }
     public Phase Phase { get; set; }
