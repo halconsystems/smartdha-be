@@ -17,4 +17,5 @@ public class GetVehicleListResponse
     public string Model { get; set; } = string.Empty;
     public string? ETagId { get; set; }
     public DateTime? ValidTo { get; set; }
+    public DateTime? ValidFrom { get; set; }
 }

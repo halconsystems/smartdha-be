@@ -44,7 +44,8 @@ public class GetVehicleListQueryHandler
             Make = vehicle.Make ?? string.Empty,
             Model = vehicle.Model ?? string.Empty,
             ETagId = vehicle.ETagId,
-            ValidTo = vehicle.ValidTo
+            ValidTo = vehicle.ValidTo,
+            ValidFrom = vehicle.ValidFrom
         }).ToList();
 
         return Result<List<GetVehicleListResponse>>.Success(response);
