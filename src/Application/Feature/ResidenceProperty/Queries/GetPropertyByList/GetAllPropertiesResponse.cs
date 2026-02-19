@@ -6,14 +6,14 @@ namespace DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Queries.GetP
 
 public class GetAllPropertiesResponse
 {
-    public int Category { get; set; }
-    public int Type { get; set; }
-    public int Phase { get; set; }
-    public int Zone { get; set; }
+    public CategoryType Category { get; set; }
+    public PropertyType Type { get; set; }
+    public Phase Phase { get; set; }
+    public Zone Zone { get; set; }
     public string StreetNo { get; set; } = string.Empty;
     public string Khayaban { get; set; } = string.Empty;
     public int Floor { get; set; }
     public int PlotNo { get; set; }
     public string Plot { get; set; } = string.Empty;
-    public int PossessionType { get; set; }
+    public ResidenceStatusDha PossessionType { get; set; }
 }

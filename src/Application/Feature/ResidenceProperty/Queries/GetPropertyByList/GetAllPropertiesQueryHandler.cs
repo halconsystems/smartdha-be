@@ -7,6 +7,7 @@ using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Property.Queries;
 using DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Queries.GetPropertyByList;
 using DHAFacilitationAPIs.Domain.Entities.Smartdha;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,16 +43,16 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.Queries
 
                 var response = properties.Select(p => new GetAllPropertiesResponse
                 {
-                    Category = (int)p.Category,
-                    Type = (int)p.Type,
-                    Phase = (int)p.Phase,
-                    Zone = (int)p.Zone,
+                    Category = (CategoryType)p.Category,
+                    Type = (PropertyType)p.Type,
+                    Phase = (Phase)p.Phase,
+                    Zone = (Zone)p.Zone,
                     StreetNo = p.StreetNo,
                     Khayaban = p.Khayaban,
                     Floor = p.Floor,
                     PlotNo = p.PlotNo,
                     Plot = p.Plot,
-                    PossessionType = (int)p.PossessionType
+                    PossessionType = (ResidenceStatusDha)p.PossessionType
                 }).ToList();
                 return Result<List<GetAllPropertiesResponse>>.Success(response);
             }
@@ -69,16 +70,16 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.Queries
 
                 var response = properties.Select(p => new GetAllPropertiesResponse
                 {
-                    Category = (int)p.Category,
-                    Type = (int)p.Type,
-                    Phase = (int)p.Phase,
-                    Zone = (int)p.Zone,
+                    Category = (CategoryType)p.Category,
+                    Type = (PropertyType)p.Type,
+                    Phase = (Phase)p.Phase,
+                    Zone = (Zone)p.Zone,
                     StreetNo = p.StreetNo,
                     Khayaban = p.Khayaban,
                     Floor = p.Floor,
                     PlotNo = p.PlotNo,
                     Plot = p.Plot,
-                    PossessionType = (int)p.PossessionType
+                    PossessionType = (ResidenceStatusDha)p.PossessionType
                 }).ToList();
                 return Result<List<GetAllPropertiesResponse>>.Success(response);
             }
