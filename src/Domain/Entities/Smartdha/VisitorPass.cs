@@ -15,4 +15,5 @@ public class VisitorPass : BaseAuditableEntity
     public DateTime  ValidTo { get; set; } 
     public DateTime  ValidFrom { get; set; } 
     public string?  QRCode { get; set; } 
+    public string?  PdfFilePath { get; set; } 
 }

@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="QuestPDF" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 

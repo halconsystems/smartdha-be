@@ -39,6 +39,15 @@ public interface IFileStorageService
      long maxBytes,
      string[] allowedExtensions,
      Dictionary<string, string[]> allowedMimeTypes);
+    Task<string> SaveFileByteInternalAsync(
+        byte[] fileBytes,
+        string fileName,
+        string moduleFolder,
+        string? subFolder,
+        CancellationToken ct,
+        long maxBytes,
+        string[] allowedExtensions,
+        Dictionary<string, string[]> allowedMimeTypes);
     Task<bool> DeleteFileAsync(string relativePath, CancellationToken ct);
     string GetPublicUrl(string relativePath, string? baseUrl = null);
     string GetPublicUrlOfComplaint(string relativePath, string? baseUrl = null);

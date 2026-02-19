@@ -9,6 +9,7 @@ using DHAFacilitationAPIs.Domain.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace DHAFacilitationAPIs.Infrastructure.Service;
@@ -708,6 +709,102 @@ public class FileStorageService : IFileStorageService
 
         return relativeUrl;
     }
+    public async Task<string> SaveFileByteInternalAsync(
+        byte[] fileBytes,
+        string fileName,
+        string moduleFolder,
+        string? subFolder,
+        CancellationToken ct,
+        long maxBytes,
+        string[] allowedExtensions,
+        Dictionary<string, string[]> allowedMimeTypes)
+    {
+        if (fileBytes == null || fileBytes.Length == 0)
+            throw new ArgumentException("Empty file.");
+
+        if (fileBytes.Length > maxBytes)
+            throw new InvalidOperationException(
+                $"File exceeds {maxBytes / (1024 * 1024)} MB limit.");
+
+        if (string.IsNullOrWhiteSpace(fileName))
+            throw new ArgumentException("FileName is required.");
+
+        var ext = Path.GetExtension(fileName).ToLowerInvariant();
+
+        if (string.IsNullOrWhiteSpace(ext) || !allowedExtensions.Contains(ext))
+            throw new InvalidOperationException($"Extension '{ext}' not allowed.");
+
+        // Validate MIME type
+        if (_mime.TryGetContentType(fileName, out var mappedType))
+        {
+            if (!allowedMimeTypes.TryGetValue(ext, out var validMimes) ||
+                !validMimes.Contains(mappedType, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    $"Invalid file type. Detected MIME: {mappedType}");
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(_opt.RootPath))
+            throw new InvalidOperationException("Storage RootPath not configured.");
+
+        // ========================
+        // PHYSICAL STORAGE
+        // ========================
+
+        var safeModule = moduleFolder.Trim().ToLowerInvariant();
+
+        //var basePhysical = Path.Combine(_opt.RootPath, safeModule);
+        var basePhysical = Path.Combine("C:\\Users\\Digital_Dividend\\Downloads\\DHA Facilitation APIs\\DHA Facilitation APIs\\MobileAPI\\wwwroot\\uploads", safeModule);
+
+        Directory.CreateDirectory(basePhysical);
+
+        var safeSubFolder = (subFolder ?? string.Empty)
+            .Trim()
+            .TrimStart('/', '\\');
+
+        if (safeSubFolder.Contains("..", StringComparison.Ordinal))
+            throw new InvalidOperationException("Invalid folder name.");
+
+        string absFolder = basePhysical;
+
+        if (!string.IsNullOrWhiteSpace(safeSubFolder))
+        {
+            var subParts = safeSubFolder
+                .Split('/', '\\', StringSplitOptions.RemoveEmptyEntries);
+
+            absFolder = Path.Combine(basePhysical, Path.Combine(subParts));
+        }
+
+        Directory.CreateDirectory(absFolder);
+
+        var uniqueFileName = $"{Guid.NewGuid():N}{ext}";
+        var absPath = Path.Combine(absFolder, uniqueFileName);
+
+        await File.WriteAllBytesAsync(absPath, fileBytes, ct);
+
+        // ========================
+        // RELATIVE URL
+        // ========================
+
+        var urlSegments = new List<string>
+    {
+        safeModule
+    };
+
+        if (!string.IsNullOrWhiteSpace(safeSubFolder))
+        {
+            urlSegments.AddRange(
+                safeSubFolder.Split('/', '\\', StringSplitOptions.RemoveEmptyEntries));
+        }
+
+        urlSegments.Add(uniqueFileName);
+
+        var relativeUrl = "/" + string.Join("/", urlSegments);
+
+        return relativeUrl;
+    }
+
     public string GetPublicUrl(string relativePath, string? baseUrl = null)
     {
 

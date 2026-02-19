@@ -18,6 +18,7 @@ using MobileAPI;
 using MobileAPI.Infrastructure;
 using MobileAPI.Middlewares;
 using MobileAPI.Services;
+using QuestPDF.Infrastructure;
 using Serilog;
 using Serilog.Events;
 using StackExchange.Redis;
@@ -78,6 +79,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 builder.Services.AddScoped<IEnumService, EnumService>();
+builder.Services.AddScoped<IFileCreationService, FileCreationService>();
+
 
 builder.Services.Configure<SmartPayOptions>(builder.Configuration.GetSection("SmartPay"));
 
@@ -238,7 +241,7 @@ app.UseStaticFiles(new StaticFileOptions
         Path.Combine(app.Environment.ContentRootPath, "wwwroot")),
     RequestPath = "/wwwroot"
 });
-
+QuestPDF.Settings.License = LicenseType.Community;
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();

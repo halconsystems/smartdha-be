@@ -54,6 +54,7 @@
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+    <PackageReference Include="QuestPDF" />
   </ItemGroup>
 
   <ItemGroup>

@@ -38,8 +38,15 @@ public class CreateVisitorPassCommandHandler
         };
 
         await _smartdhaDbContext.VisitorPasses.AddAsync(entity, cancellationToken);
-        await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
 
+            await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
         return Result<CreateVisitorPassResponse>.Success(
      new CreateVisitorPassResponse
      {

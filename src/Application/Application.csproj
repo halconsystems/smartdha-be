@@ -35,6 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="QuestPDF" />
   </ItemGroup>
 
   <ItemGroup>

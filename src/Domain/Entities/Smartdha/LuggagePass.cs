@@ -18,4 +18,5 @@ public class LuggagePass : BaseAuditableEntity
     public DateTime ValidFrom { get; set; }
     public string? QRCode { get; set; }
     public string? TagId { get; set; }
+    public string? PdfFilePath { get; set; }
 }
