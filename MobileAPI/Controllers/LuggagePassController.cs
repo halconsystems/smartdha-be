@@ -2,8 +2,8 @@
 using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
 using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.DeleteLuggagePass;
 using DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.UpdateLuggagePass;
+using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetAllLuggagePass;
 using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassById;
-using DHAFacilitationAPIs.Application.Feature.LuggagePass.Queries.GetLuggagePassByList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

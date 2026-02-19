@@ -3,7 +3,7 @@ using DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.CreateVisitorP
 using DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.DeleteVisitorPass;
 using DHAFacilitationAPIs.Application.Feature.VisitorPass.Command.UpdateVisitorPass;
 using DHAFacilitationAPIs.Application.Feature.VisitorPass.Queries.GetVisitorPassbyId;
-using DHAFacilitationAPIs.Application.Feature.VisitorPass.Queries.GetVisitorPassList;
+using DHAFacilitationAPIs.Application.Feature.VisitorPass.Queries.GetVisitorPassGroupedQuery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,11 +57,12 @@ public class VisitorPassController : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("getall"), AllowAnonymous]
+    [HttpGet("get-all-visitors"), AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        var query = new GetAllVisitorPassQuery();
+        var query = new GetVisitorPassGroupedQuery();
         var result = await _mediator.Send(query);
         return Ok(result);
     }
+
 }

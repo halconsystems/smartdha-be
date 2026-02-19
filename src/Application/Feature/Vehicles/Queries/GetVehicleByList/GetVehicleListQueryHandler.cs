@@ -1,33 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DHAFacilitationAPIs.Application.Common.Interfaces;
-using DHAFacilitationAPIs.Domain.Entities;
-using DHAFacilitationAPIs.Domain.Entities.Smartdha;
+﻿using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using MediatR;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace DHAFacilitationAPIs.Application.Feature.Vehicles.Queries.GetVehicleByList;
 
 public class GetVehicleListQueryHandler
-    : IRequestHandler<GetVehicleListQuery, List<Domain.Entities.Smartdha.Vehicle>>
+    : IRequestHandler<GetVehicleListQuery, Result<List<GetVehicleListResponse>>>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISmartdhaDbContext _smartdhaDbContext;
     private readonly IUser _loggedInUser;
 
-    public GetVehicleListQueryHandler(IApplicationDbContext context, ISmartdhaDbContext smartdhaDbContext, IUser loggedInUser)
+    public GetVehicleListQueryHandler(
+        IApplicationDbContext context,
+        ISmartdhaDbContext smartdhaDbContext,
+        IUser loggedInUser)
     {
         _context = context;
         _smartdhaDbContext = smartdhaDbContext;
         _loggedInUser = loggedInUser;
     }
 
-    public async Task<List<Domain.Entities.Smartdha.Vehicle>> Handle(GetVehicleListQuery request, CancellationToken cancellationtoken)
+    public async Task<Result<List<GetVehicleListResponse>>> Handle(
+        GetVehicleListQuery request,
+        CancellationToken cancellationToken)
     {
-        return await _smartdhaDbContext.Vehicles
-            .Where(x => x.IsActive == true && request.Id == _loggedInUser.Id).ToListAsync(cancellationtoken);
+        var vehicles = await _smartdhaDbContext.Vehicles.Where(v => v.IsActive == true
+                && v.CreatedBy == request.Id)
+    .ToListAsync(cancellationToken);
+
+
+        if (!vehicles.Any())
+            return Result<List<GetVehicleListResponse>>
+                .Failure(new[] { "No vehicles found" });
+
+        var response = vehicles.Select(vehicle => new GetVehicleListResponse
+        {
+            LicenseNo = vehicle.LicenseNo,
+            License = vehicle.License ?? string.Empty,
+            Year = vehicle.Year ?? string.Empty,
+            Color = vehicle.Color ?? string.Empty,
+            Make = vehicle.Make ?? string.Empty,
+            Model = vehicle.Model ?? string.Empty,
+            ETagId = vehicle.ETagId,
+            ValidTo = vehicle.ValidTo
+        }).ToList();
+
+        return Result<List<GetVehicleListResponse>>.Success(response);
     }
 }

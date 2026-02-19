@@ -1,11 +1,14 @@
 ﻿using Azure.Core;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
+using DHAFacilitationAPIs.Application.Common.Models;
 using DHAFacilitationAPIs.Application.Feature.Property.Command;
 using DHAFacilitationAPIs.Application.Feature.Property.Queries;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Command;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.CreateVehicleCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.UpdateVehicle.UpdateVecleCommandHandler;
 using DHAFacilitationAPIs.Application.Feature.Vehicles.Queries;
+using DHAFacilitationAPIs.Application.Feature.Vehicles.Queries.GetVehicleByList;
+using DHAFacilitationAPIs.Application.Feature.Worker.Queries.GetAllWorkers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +38,14 @@ public class VehicleController : BaseApiController
     {
         var result = await _mediator.Send(new GetVehicleByIdQuery { Id = id });
         return Ok(result);
+    }
+
+    [HttpPost("get-all-vehicles")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAll(GetVehicleListQuery request)
+    {
+        var result = await _mediator.Send(request);
+        return Ok(ApiResult<List<GetVehicleListResponse>>.Ok(result.Data!.ToList(), "Record fetched successfully"));
     }
 
     [HttpPost("update-vehicle"), AllowAnonymous]
