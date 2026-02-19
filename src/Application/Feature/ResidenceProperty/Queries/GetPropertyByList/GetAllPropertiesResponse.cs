@@ -6,8 +6,6 @@ namespace DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Queries.GetP
 
 public class GetAllPropertiesResponse
 {
-    public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
     public int Category { get; set; }
     public int Type { get; set; }
     public int Phase { get; set; }

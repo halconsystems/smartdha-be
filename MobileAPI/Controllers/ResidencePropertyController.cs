@@ -46,17 +46,17 @@ namespace MobileAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}"), AllowAnonymous]
+        [HttpGet("get-property-by-id/{id}"), AllowAnonymous]
         public async Task<IActionResult> GetProperty(Guid id)
         {
             var result = await _mediator.Send(new GetPropertyByIdQuery { Id = id });
             return Ok(result);
         }
 
-        [HttpGet("getall"), AllowAnonymous]
-        public async Task<IActionResult> GetAllProperties()
+        [HttpPost("get-all-properties"), AllowAnonymous]
+        public async Task<IActionResult> GetAllProperties(GetAllPropertiesQuery request)
         {
-            var result = await _mediator.Send(new GetAllPropertiesQuery());
+            var result = await _mediator.Send(request);
             return Ok(result);
         }
     }
