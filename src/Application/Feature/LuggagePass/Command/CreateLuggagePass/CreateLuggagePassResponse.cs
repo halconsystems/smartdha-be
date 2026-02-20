@@ -8,6 +8,7 @@ namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLugg
 
 public class CreateLuggagePassResponse
 {
+    public Guid Id { get; set; }
     public string Message { get; set; } = string.Empty;
 }
 

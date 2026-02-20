@@ -43,6 +43,7 @@ public class CreateVisitorPassCommandHandler
         return Result<CreateVisitorPassResponse>.Success(
      new CreateVisitorPassResponse
      {
+         Id = entity.Id,
          Message = "Visitor Pass Created Successfully"
      });
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DHAFacilitationAPIs.Application.Common.Interfaces;
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Application.Feature.Vehicles.Commands.CreateVehicleCommandHandler;
 
 namespace DHAFacilitationAPIs.Application.Feature.LuggagePass.Command.CreateLuggagePass;
 
@@ -34,14 +35,14 @@ public class CreateLuggagePassCommandHandler
             QRCode = Guid.NewGuid().ToString()
         };
 
-        await _smartdhaDbContext.LuggagePasses.AddAsync(entity);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _smartdhaDbContext.LuggagePasses.AddAsync(entity, cancellationToken);
+        await _smartdhaDbContext.SaveChangesAsync(cancellationToken); 
 
         return Result<CreateLuggagePassResponse>.Success(
-    new CreateLuggagePassResponse
-    {
-        Message = "Luggage Pass Created Successfully"
-    });
-
+            new CreateLuggagePassResponse
+            {
+                Id = entity.Id,  
+                Message = "Luggage Pass Created Successfully"
+            });
     }
 }

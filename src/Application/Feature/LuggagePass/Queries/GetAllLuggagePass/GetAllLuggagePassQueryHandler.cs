@@ -53,7 +53,7 @@ public class GetAllLuggagePassQueryHandler : IRequestHandler<GetAllLuggagePassQu
                 Name = x.Name,
                 CNIC = x.CNIC,
                 VehicleInfo = $"{x.VehicleLicensePlate}-{x.VehicleLicenseNo}",
-                VisitDetail = x.LuggagePassType,
+                LuggagePassType = x.LuggagePassType,
                 FromDate = x.ValidFrom,
                 ToDate = x.ValidTo
             }).ToList(),
@@ -64,7 +64,7 @@ public class GetAllLuggagePassQueryHandler : IRequestHandler<GetAllLuggagePassQu
                 Name = x.Name,
                 CNIC = x.CNIC,
                 VehicleInfo = $"{x.VehicleLicensePlate}-{x.VehicleLicenseNo}",
-                VisitDetail = x.LuggagePassType,
+                LuggagePassType = x.LuggagePassType,
                 FromDate = x.ValidFrom,
                 ToDate = x.ValidTo
             }).ToList()

@@ -13,7 +13,7 @@ public class LuggagePass : BaseAuditableEntity
     public string VehicleLicensePlate { get; set; } = string.Empty;
     public int VehicleLicenseNo { get; set; }
     public string Description  { get; set; } = string.Empty;
-    public VisitorPassType LuggagePassType  { get; set; } 
+    public  LuggagePassType LuggagePassType { get; set; } 
     public DateTime ValidTo { get; set; }
     public DateTime ValidFrom { get; set; }
     public string? QRCode { get; set; }

@@ -10,7 +10,6 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.AddUserFam
 
 public class AddUserFamilyCommand : IRequest<Result<Guid>>
 {
-    public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Relation { get; set; }
     public DateTime DOB { get; set; }

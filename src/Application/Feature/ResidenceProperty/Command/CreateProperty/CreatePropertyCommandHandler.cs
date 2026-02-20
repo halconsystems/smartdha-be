@@ -32,10 +32,19 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
         {
             try
             {
+                if (!Enum.IsDefined(typeof(CategoryType), request.Category) ||
+                    !Enum.IsDefined(typeof(PropertyType), request.Type) ||
+                    !Enum.IsDefined(typeof(Phase), request.Phase) ||
+                    !Enum.IsDefined(typeof(Zone), request.Zone) ||
+                    !Enum.IsDefined(typeof(ResidenceStatusDha), request.PossessionType))
+                {
+                    return Result<CreatePropertyResponse>.Failure(
+                        new[] { "Invalid enum value provided." });
+                }
+
                 string? proofOfPossessionPath = null;
                 string? utilityBillPath = null;
 
-                // Save Proof of Possession
                 if (request.ProofOfPossessionImage != null)
                 {
                     proofOfPossessionPath = await _fileStorage.SaveFileInternalAsync(
@@ -48,7 +57,6 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
                         allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
                 }
 
-                // Save Utility Bill
                 if (request.UtilityBillAttachment != null)
                 {
                     utilityBillPath = await _fileStorage.SaveFileInternalAsync(
@@ -77,21 +85,24 @@ namespace DHAFacilitationAPIs.Application.Feature.Property.CommandHandler
                     UtilityBillAttachment = utilityBillPath,
                 };
 
-                _smartdhaDbContext.ResidentProperties.Add(entity);
+                await _smartdhaDbContext.ResidentProperties.AddAsync(entity, cancellationToken);
                 await _smartdhaDbContext.SaveChangesAsync(cancellationToken);
 
+                // ✅ Success Response
                 return Result<CreatePropertyResponse>.Success(
                     new CreatePropertyResponse
                     {
-                        Id = entity.Id
+                        Id = entity.Id,
+                        Message = "Property Created Successfully"
                     });
             }
             catch (Exception ex)
             {
+                // ❗ Production me logging service use karna chahiye
                 Console.WriteLine(ex);
-                return Result<CreatePropertyResponse>.Failure(
-                new[] { "Error saving property" });
 
+                return Result<CreatePropertyResponse>.Failure(
+                    new[] { "An error occurred while saving the property." });
             }
         }
     }
