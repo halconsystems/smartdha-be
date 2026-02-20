@@ -8,6 +8,7 @@ using MediatR;
 namespace DHAFacilitationAPIs.Application.Feature.UserFamily.Commands.UpdateUserFamilyCommandHandler;
 
 using DHAFacilitationAPIs.Application.Common.Models;
+using DHAFacilitationAPIs.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
@@ -17,8 +18,8 @@ public class UpdateUserFamilyCommand : IRequest<Result<UpdateUserFamilyResponse>
         public string? Name { get; set; } 
         public string? PhoneNo { get; set; } 
         public string? CNIC { get; set; } 
-        public int Relation { get; set; }
-        public DateTime DOB { get; set; }
+        public RelationUserFamily? Relation { get; set; }
+        public DateTime? DOB { get; set; }
         public bool? IsActive { get; set; }
         public IFormFile? ProfilePicture { get; set; }
     

@@ -106,12 +106,12 @@ public class UpdateWorkerCommandHandler : IRequestHandler<UpdateWorkerCommand, R
 
                 entity.CnicBack = newCnicFrontImagePath;
             }
-            entity.Name = request.Name!;
-            entity.FatherOrHusbandName = request.FatherHusbandName!;
-            entity.JobType = (JobType)request.JobType!;
-            entity.PhoneNumber = request.PhoneNo!;
-            entity.CNIC = request.CNIC!;
-            entity.DateOfBirth = request.DOB.Date;
+            entity.Name = request.Name ?? entity.Name;
+            entity.FatherOrHusbandName = request.FatherHusbandName ?? entity.FatherOrHusbandName;
+            entity.JobType = request.JobType.HasValue ? (JobType)request.JobType.Value : entity.JobType;
+            entity.PhoneNumber = request.PhoneNo ?? entity.PhoneNumber;
+            entity.CNIC = request.CNIC ?? entity.CNIC;
+            entity.DateOfBirth = request.DOB?.Date ?? entity.DateOfBirth;
             entity.PoliceVerification = request.PoliceVerification;
             try
             {

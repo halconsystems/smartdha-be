@@ -650,7 +650,8 @@ public class FileStorageService : IFileStorageService
 
         var safeModule = moduleFolder.Trim().ToLowerInvariant();
 
-        var basePhysical = Path.Combine(_opt.RootPath, safeModule);
+        //var basePhysical = Path.Combine(_opt.RootPath, safeModule);
+        var basePhysical = Path.Combine("C:\\Users\\Digital_Dividend\\Downloads\\DHA Facilitation APIs\\DHA Facilitation APIs\\MobileAPI\\wwwroot\\uploads", safeModule);
         Directory.CreateDirectory(basePhysical);
 
         // Sanitize subfolder

@@ -67,11 +67,12 @@ namespace DHAFacilitationAPIs.Application.Feature.UserFamily.UserFamilyCommands.
                     entity.ProfilePicture = newImagePath;
                 }
 
-                entity.Name = request.Name ?? "";
-                entity.Relation = (RelationUserFamily)request.Relation;
-                entity.PhoneNumber = request.PhoneNo;
-                entity.Cnic = request.CNIC;
-                entity.DateOfBirth = request.DOB.Date;
+                entity.Name = request.Name ?? entity.Name;
+                entity.Relation = request.Relation.HasValue ? (RelationUserFamily)request.Relation.Value: entity.Relation; ;
+                entity.PhoneNumber = request.PhoneNo ?? entity.PhoneNumber;
+                entity.Cnic = request.CNIC ?? entity.Cnic;
+                entity.DateOfBirth = request.DOB?.Date ?? entity.DateOfBirth;
+                entity.LastModified = DateTime.Now;
                 await _smartDhaContext.SaveChangesAsync(cancellationToken);
 
                 response.Name = entity.Name;
