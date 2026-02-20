@@ -28,7 +28,7 @@ public class VehicleController : BaseApiController
     }
     [HttpPost("add-vehicle"), AllowAnonymous]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> Create(CreateVehicleCommand command)
+    public async Task<IActionResult> Create([FromForm] CreateVehicleCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
@@ -56,7 +56,7 @@ public class VehicleController : BaseApiController
     }
  
     [HttpPost("delete"), AllowAnonymous]
-    public async Task<IActionResult> Delete([FromBody] DeleteVehicleCommand request)
+    public async Task<IActionResult> Delete([FromForm] DeleteVehicleCommand request)
     {
         return Ok(await _mediator.Send(request));
 

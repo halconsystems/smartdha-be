@@ -44,13 +44,7 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
                 allowedExtensions: FileStorageConstants.Extensions.Images,
                 allowedMimeTypes: FileStorageConstants.MimeTypes.Images);
             }
-            string? createdBy = null;
-            if (request.UserId != Guid.Empty)
-            {
-                var appUser = await _userManager.FindByIdAsync(request.UserId.ToString());
-                if (appUser != null)
-                    createdBy = appUser.Id;
-            }
+           
             var entity = new Domain.Entities.Smartdha.UserFamily
             {
                 Name = request.Name,
@@ -60,8 +54,6 @@ public class AddUserFamilyCommandHandler : IRequestHandler<AddUserFamilyCommand,
                 FatherOrHusbandName = request.FatherName,
                 ProfilePicture = profileImagePath,
                 PhoneNumber = request.PhoneNo,
-                Created = DateTime.UtcNow,
-                CreatedBy = createdBy,
             };
 
             await _smartDhaContext.UserFamilies.AddAsync(entity, cancellationToken);

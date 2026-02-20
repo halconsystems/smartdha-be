@@ -9,7 +9,6 @@ namespace DHAFacilitationAPIs.Application.Feature.ResidenceProperty.Command.Crea
 public class CreatePropertyResponse
 {
     public string Message { get; set; } = string.Empty;
-    public bool Success { get; set; } = false;
     public Guid Id { get; set; } = Guid.Empty;
 }
 

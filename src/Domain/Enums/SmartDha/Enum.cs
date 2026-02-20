@@ -87,6 +87,11 @@ public enum VisitorPassType
     DayPass = 1,
     LongDay = 2,
 }
+public enum LuggagePassType
+{
+    DayPass = 1,
+    LongDay = 2,
+}
 public enum EnumType
 {
     CategoryType = 1,

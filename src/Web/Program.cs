@@ -176,12 +176,18 @@ app.UseExceptionHandler(builder =>
         }
     });
 });
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(app.Environment.ContentRootPath, "CBMS")),
-    RequestPath = "/CBMS"
-});
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        Path.Combine(app.Environment.ContentRootPath, "CBMS")),
+//    RequestPath = "/CBMS"
+//});
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        Path.Combine(app.Environment.ContentRootPath, "wwwroot")),
+//    RequestPath = "/wwwroot"
+//});
 app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();

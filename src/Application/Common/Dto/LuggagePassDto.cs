@@ -13,7 +13,7 @@ public class LuggagePassDto
     public string Name { get; set; } = string.Empty;
     public string CNIC { get; set; } = string.Empty;
     public string? VehicleInfo { get; set; }
-    public VisitorPassType? VisitDetail { get; set; }
-    public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
+    public LuggagePassType? LuggagePassType { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
 }
