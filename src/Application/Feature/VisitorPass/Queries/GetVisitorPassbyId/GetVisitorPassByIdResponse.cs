@@ -15,8 +15,7 @@ public class GetVisitorPassByIdResponse
     public string VehicleLicensePlate { get; set; } = string.Empty;
     public int VehicleLicenseNo { get; set; }
     public VisitorPassType VisitorPassType { get; set; }
-    public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
-    public DateTime ValidTill { get; set; }
+    public DateTime? ValidFrom { get; set; }
+    public DateTime? ValidTo { get; set; }
     public string? QRCode { get; set; }
 }

@@ -33,11 +33,6 @@ public class UserFamilyController : BaseApiController
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> AddUserFamily([FromForm] AddUserFamilyCommand request)
     {
-        if (!string.IsNullOrWhiteSpace(_loggedInUser?.Id) && Guid.TryParse(_loggedInUser.Id, out var uid))
-        {
-            request.UserId = uid;
-        }
-
         var result = await _mediator.Send(request);
         return Ok(ApiResult<Guid>.Ok(result.Data, "Family member added successfully"));
     }

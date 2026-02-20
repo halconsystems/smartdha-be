@@ -34,8 +34,8 @@ public class GetVisitorPassByIdQueryHandler
             VehicleLicensePlate = entity.VehicleLicensePlate,
             VehicleLicenseNo = entity.VehicleLicenseNo,
             VisitorPassType = entity.VisitorPassType,
-            FromDate = entity.ValidFrom,
-            ToDate = entity.ValidTo,
+            ValidFrom = entity.ValidFrom,
+            ValidTo = entity.ValidTo,
             QRCode = entity.QRCode
         };
     }

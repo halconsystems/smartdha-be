@@ -48,7 +48,7 @@ public class CreateVisitorPassCommandHandler
             throw new Exception(ex.ToString());
         }
         return Result<CreateVisitorPassResponse>.Success(
-     new CreateVisitorPassResponse
+    new CreateVisitorPassResponse
      {
          Id = entity.Id,
          Message = "Visitor Pass Created Successfully"

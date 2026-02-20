@@ -14,8 +14,8 @@ public class LuggagePass : BaseAuditableEntity
     public int VehicleLicenseNo { get; set; }
     public string Description  { get; set; } = string.Empty;
     public  LuggagePassType? LuggagePassType { get; set; } 
-    public DateTime? ValidTo { get; set; }
-    public DateTime? ValidFrom { get; set; }
+    public DateTime ValidTo { get; set; }
+    public DateTime ValidFrom { get; set; }
     public string? QRCode { get; set; }
     public string? TagId { get; set; }
     public string? PdfFilePath { get; set; }
