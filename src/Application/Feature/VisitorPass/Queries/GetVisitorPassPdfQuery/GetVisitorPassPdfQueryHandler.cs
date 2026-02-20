@@ -39,40 +39,32 @@ public class GetVisitorPassPdfUrlQueryHandler : IRequestHandler<GetVisitorPassPd
         if (entity == null)
             return Result<string>.Failure(new[] { "Visitor pass not found" });
 
-        if (string.IsNullOrEmpty(entity.PdfFilePath))
-        {
-            // Generate PDF bytes using full entity, not file path
-            var pdfBytes = _fileCreation.GenerateVisitorPassPdf(entity);
+        // ALWAYS generate new PDF
+        var pdfBytes = _fileCreation.GenerateVisitorPassPdf(entity);
 
-            // Generate file name
-            var fileName = $"visitorpass_receipt_{entity.Id}.pdf";
+        var fileName = $"visitorpass_receipt_{entity.Id}_{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
 
-            // Save file using storage service
-            var savedPath = await _fileStorage.SaveFileByteInternalAsync(
-                pdfBytes,
-                fileName,
-                moduleFolder: FileStorageConstants.Modules.SmartDHA,
-                subFolder: "visitorpass/receipt",
-                ct: cancellationToken,
-                maxBytes: FileStorageConstants.MaxSize.Document,
-                allowedExtensions: FileStorageConstants.Extensions.Documents,
-                allowedMimeTypes: FileStorageConstants.MimeTypes.Documents
-                );
+        var savedPath = await _fileStorage.SaveFileByteInternalAsync(
+            fileBytes: pdfBytes,
+            fileName: fileName,
+            moduleFolder: FileStorageConstants.Modules.SmartDHA,
+            subFolder: "visitorpass/receipt",
+            ct: cancellationToken,
+            maxBytes: FileStorageConstants.MaxSize.Document,
+            allowedExtensions: FileStorageConstants.Extensions.Documents,
+            allowedMimeTypes: FileStorageConstants.MimeTypes.Documents
+        );
 
-            // Save path in DB
-            entity.PdfFilePath = savedPath;
+        // Update DB with NEW path
+        entity.PdfFilePath = savedPath;
 
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        if (string.IsNullOrEmpty(entity.PdfFilePath))
-            return Result<string>.Failure(new[] { "PDF not available" });
+        await _context.SaveChangesAsync(cancellationToken);
 
         var httpContext = _httpContextAccessor.HttpContext;
 
         var baseUrl = $"{httpContext?.Request.Scheme}://{httpContext?.Request.Host}";
 
-        var pdfUrl = _fileStorage.GetPublicUrl(entity.PdfFilePath, baseUrl);
+        var pdfUrl = _fileStorage.GetPublicUrl(savedPath, baseUrl);
 
         return Result<string>.Success(pdfUrl);
     }
